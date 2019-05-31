@@ -8,12 +8,12 @@
 	<persistence-unit name="ALaCarte">
 		<description>aLaCarte</description>
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<class>ar.unsam.pds.alacarte.domain.carta.ItemCarta</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/aLaCarte" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/aLaCarte?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC" />
 			<property name="javax.persistence.jdbc.user" value="root" />
-			<!-- libuffa = Cuando lo seteo en mi compu paso el pass de "root" a "" -->
-			<property name="javax.persistence.jdbc.password" value="" />
+			<property name="javax.persistence.jdbc.password" value="root" />
 
 			<!-- propiedades de hibernate -->
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />

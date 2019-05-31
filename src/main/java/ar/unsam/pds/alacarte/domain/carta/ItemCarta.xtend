@@ -52,5 +52,9 @@ class ItemCarta {
 			it.estado = Estado.Creado
 		]
 	}
+	
+	def cambiarEstado(){
+		habilitado = !habilitado
+	}
 
 }

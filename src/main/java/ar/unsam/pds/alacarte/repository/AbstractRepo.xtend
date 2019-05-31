@@ -76,6 +76,23 @@ abstract class AbstractRepo<T> {
 			entityManager?.close
 		}
 	}
+	
+	def delete(T t){
+		val entityManager = generateEntityManager
+		try {
+			entityManager => [
+				transaction.begin
+				remove(t)
+				transaction.commit
+			]
+		} catch (PersistenceException e) {
+			e.printStackTrace
+			entityManager.transaction.rollback
+			throw new RuntimeException("Ocurrió un error, la operación no puede completarse", e)
+		} finally {
+			entityManager?.close
+		}
+	}
 
 	def generateEntityManager() {
 		entityManagerFactory.createEntityManager

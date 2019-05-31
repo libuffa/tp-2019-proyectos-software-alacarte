@@ -7,8 +7,9 @@ import org.uqbar.arena.bootstrap.CollectionBasedBootstrap
 
 class ALaCarteBootstrap extends CollectionBasedBootstrap {
 
+	Carta carta = Carta.instance
+
 	ItemCarta antiPasto
-	
 	ItemCarta milanesa
 	ItemCarta pizza
 
@@ -37,9 +38,9 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 			habilitado = true
 		]
 		
-		Carta.instance.create(antiPasto)
-		Carta.instance.create(milanesa)
-		Carta.instance.create(pizza)
+		carta.create(antiPasto)
+		carta.create(milanesa)
+		carta.create(pizza)
 	}
 
 }
