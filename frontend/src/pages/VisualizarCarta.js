@@ -24,6 +24,10 @@ export default class VisualizarCarta extends Component {
   }
 
   render() {
+    const { carta } = this.state
+    if (!carta) {
+      return (<p>Cargando..</p>)
+    }
     return (
       <div>
         <h1>ACA VA LA PAGINA DE VER CARTA</h1>
