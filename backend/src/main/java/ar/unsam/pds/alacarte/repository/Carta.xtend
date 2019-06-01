@@ -42,7 +42,6 @@ class Carta extends AbstractRepo<ItemCarta> {
 			val query = criteria.createQuery(entityType)
 			val camposItemCarta = query.from(entityType)
 			camposItemCarta.fetch("imagenes", JoinType.LEFT)
-//			camposUsuario.fetch("entradas", JoinType.LEFT)
 			query.select(camposItemCarta)
 			query.where(criteria.equal(camposItemCarta.get("id"), _id))
 			entityManager.createQuery(query).singleResult

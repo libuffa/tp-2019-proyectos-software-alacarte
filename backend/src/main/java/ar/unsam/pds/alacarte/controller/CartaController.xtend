@@ -29,50 +29,60 @@ class CartaController {
 			badRequest(e.message)
 		}
 	}
-
-	@Put("/carta")
-	def Result nuevoPlato(@Body String body) {
-		var nuevoPlato = body.fromJson(ItemCarta)
-		try {
-			carta.create(nuevoPlato)
-			return ok("El plato se añadió correctamente")
-		} catch(Exception e) {
-			badRequest(e.message)
-		} 
-	}
 	
-	@Post("/carta")
-	def Result actualizarPlato(@Body String body) {
-		var platoModificado = body.fromJson(ItemCarta)
+	@Get("/carta/:id/obtenerPlato")
+	def Result obteberItem() {
+		var platoSolicitado = carta.searchById(new Long(id))
 		try {
-			carta.update(platoModificado)
-			return ok("El plato se modificó correctamente")
-		} catch(Exception e) {
-			badRequest(e.message)
-		} 
-	}
-	
-	@Put("/carta/:id/eliminar")
-	def Result eliminarPlato() {
-		var platoAEliminar = carta.searchById(new Long(id))
-		try {
-			carta.delete(platoAEliminar)
-			return ok("El plato se eliminó correctamente")
+			return ok(platoSolicitado.toJson)
 		} catch(Exception e) {
 			badRequest(e.message)
 		}
 	}
-	
-	@Post("/carta/:id/cambiarEstado")
+
+	@Post("/carta/:id/cambiarEstadoPlato")
 	def Result cambiarEstadoPlato() {
 		var platoAModificar = carta.searchById(new Long(id))
 		try {
 			platoAModificar.cambiarEstado()
 			carta.update(platoAModificar)
-			return ok("Se cambió el estado del plato correctamente")
+			return ok()
 		} catch(Exception e) {
 			badRequest(e.message)
 		}
 	}
-
+	
+	@Put("/carta/crearPlato")
+	def Result nuevoPlato(@Body String body) {
+		var nuevoPlato = body.fromJson(ItemCarta)
+		try {
+			carta.create(nuevoPlato)
+			return ok()
+		} catch(Exception e) {
+			badRequest(e.message)
+		} 
+	}
+	
+	@Post("/carta/:id/modificarPlato")
+	def Result actualizarPlato(@Body String body) {
+		var platoModificado = body.fromJson(ItemCarta)
+		try {
+			carta.update(platoModificado)
+			return ok()
+		} catch(Exception e) {
+			badRequest(e.message)
+		} 
+	}
+	
+	@Put("/carta/:id/eliminarPlato")
+	def Result eliminarPlato() {
+		var platoAEliminar = carta.searchById(new Long(id))
+		try {
+			carta.delete(platoAEliminar)
+			return ok()
+		} catch(Exception e) {
+			badRequest(e.message)
+		}
+	}
+	
 }
