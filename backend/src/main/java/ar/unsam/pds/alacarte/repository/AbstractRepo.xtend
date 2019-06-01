@@ -80,11 +80,13 @@ abstract class AbstractRepo<T> {
 	def delete(T t){
 		val entityManager = generateEntityManager
 		try {
-			entityManager => [
-				transaction.begin
-				remove(t)
-				transaction.commit
-			]
+			entityManager.transaction.begin
+			if(entityManager.contains(t)){
+				entityManager.remove(t)
+			} else {
+				entityManager.remove(entityManager.merge(t))
+			}
+			entityManager.transaction.commit
 		} catch (PersistenceException e) {
 			e.printStackTrace
 			entityManager.transaction.rollback
