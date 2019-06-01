@@ -1,4 +1,4 @@
-package ar.unsam.pds.alacarte.domain.carta
+package domain
 
 enum Categoria {
 

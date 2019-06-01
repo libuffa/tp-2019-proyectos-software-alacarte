@@ -1,4 +1,4 @@
-package ar.unsam.pds.alacarte.domain.empleado
+package domain
 
 import javax.persistence.Column
 import javax.persistence.Entity

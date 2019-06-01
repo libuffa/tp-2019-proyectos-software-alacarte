@@ -1,13 +1,13 @@
-package ar.unsam.pds.alacarte.runnable
+package runnable
 
-import ar.unsam.pds.alacarte.domain.carta.Categoria
-import ar.unsam.pds.alacarte.domain.carta.ItemCarta
-import ar.unsam.pds.alacarte.repository.Carta
+import domain.Categoria
+import domain.ItemCarta
 import org.uqbar.arena.bootstrap.CollectionBasedBootstrap
+import repository.ItemCartaRepository
 
 class ALaCarteBootstrap extends CollectionBasedBootstrap {
 
-	Carta carta = Carta.instance
+	ItemCartaRepository carta = ItemCartaRepository.instance
 
 	ItemCarta antiPasto
 	ItemCarta milanesa

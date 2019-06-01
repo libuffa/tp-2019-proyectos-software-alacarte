@@ -1,4 +1,4 @@
-package ar.unsam.pds.alacarte.repository
+package repository
 
 import java.util.List
 import javax.persistence.EntityManagerFactory
@@ -8,7 +8,7 @@ import javax.persistence.criteria.CriteriaBuilder
 import javax.persistence.criteria.CriteriaQuery
 import javax.persistence.criteria.Root
 
-abstract class AbstractRepo<T> {
+abstract class AbstractRepository<T> {
 	
 	static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("ALaCarte")
 	

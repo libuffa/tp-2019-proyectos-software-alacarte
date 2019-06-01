@@ -1,6 +1,6 @@
-package ar.unsam.pds.alacarte.runnable
+package runnable
 
-import ar.unsam.pds.alacarte.controller.CartaController
+import controller.CartaController
 import org.uqbar.xtrest.api.XTRest
 
 class ALaCarteApp {

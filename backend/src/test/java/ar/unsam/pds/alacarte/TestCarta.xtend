@@ -1,21 +1,19 @@
 package ar.unsam.pds.alacarte
 
-import ar.unsam.pds.alacarte.domain.carta.Categoria
-import ar.unsam.pds.alacarte.domain.carta.ItemCarta
-import ar.unsam.pds.alacarte.domain.pedido.Pedido
-import ar.unsam.pds.alacarte.repository.Carta
-import java.sql.DriverManager
-import org.junit.After
+import domain.Categoria
+import domain.ItemCarta
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import repository.ItemCartaRepository
 
 class TestCarta {
 
 	ItemCarta antiPasto
-
 	ItemCarta milanesa
 	ItemCarta pizza
+
+	ItemCartaRepository carta = ItemCartaRepository.instance
 
 	@Before
 	def void init() {
@@ -41,9 +39,9 @@ class TestCarta {
 			habilitado = true
 		]
 
-		Carta.instance.create(antiPasto)
-		Carta.instance.create(milanesa)
-		Carta.instance.create(pizza)
+		carta.create(antiPasto)
+		carta.create(milanesa)
+		carta.create(pizza)
 
 	}
 
@@ -54,25 +52,25 @@ class TestCarta {
 //	}
 	@Test
 	def void probarTamanioCarta() {
-		Assert.assertEquals(1, Carta.instance.allInstances.size)
+		Assert.assertEquals(1, carta.allInstances.size)
 	}
 
 	@Test
 	def void probarPrecioMilanesa() {
-		Assert.assertEquals(100, Carta.instance.searchById(1).precioUnitario, 0.01)
+		Assert.assertEquals(100, carta.searchById(1).precioUnitario, 0.01)
 	}
 
 	@Test
 	def void probarPedirPedido() {
 		Assert.assertEquals(
 			"Sin sal por favor",
-			Carta.instance.searchById(1).pedirItem(2, "Sin sal por favor").comentarios
+			carta.searchById(1).pedirItem(2, "Sin sal por favor").comentarios
 		)
 	}
 
 	@Test
 	def void probarSearchByCategoria() {
-		val carta = Carta.instance.searchByCategoria(Categoria.PlatoPrincipal)
+		val carta = carta.searchByCategoria(Categoria.PlatoPrincipal)
 		println(carta)
 		Assert.assertEquals(Categoria.PlatoPrincipal, carta.map[item|item.categoria].get(0))
 	}

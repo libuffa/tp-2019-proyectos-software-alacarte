@@ -1,8 +1,7 @@
-package ar.unsam.pds.alacarte.controller
+package controller
 
-import ar.unsam.pds.alacarte.domain.carta.Categoria
-import ar.unsam.pds.alacarte.domain.carta.ItemCarta
-import ar.unsam.pds.alacarte.repository.Carta
+import domain.Categoria
+import domain.ItemCarta
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.xtrest.api.Result
 import org.uqbar.xtrest.api.annotation.Body
@@ -11,13 +10,14 @@ import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.api.annotation.Post
 import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.json.JSONUtils
+import repository.ItemCartaRepository
 
 @Controller
 @Accessors
 class CartaController {
 
 	extension JSONUtils = new JSONUtils
-	Carta carta = Carta.instance
+	ItemCartaRepository carta = ItemCartaRepository.instance
 
 	@Get("/carta/:categoria")
 	def Result usuario() {

@@ -1,7 +1,5 @@
-package ar.unsam.pds.alacarte.domain.carta
+package domain
 
-import ar.unsam.pds.alacarte.domain.pedido.Estado
-import ar.unsam.pds.alacarte.domain.pedido.Pedido
 import java.util.ArrayList
 import java.util.List
 import javax.persistence.CollectionTable

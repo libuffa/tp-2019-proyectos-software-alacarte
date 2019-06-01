@@ -1,6 +1,5 @@
-package ar.unsam.pds.alacarte.domain.pedido
+package domain
 
-import ar.unsam.pds.alacarte.domain.carta.ItemCarta
 import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors

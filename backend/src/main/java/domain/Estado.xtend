@@ -1,4 +1,4 @@
-package ar.unsam.pds.alacarte.domain.pedido
+package domain
 
 enum Estado {
 	

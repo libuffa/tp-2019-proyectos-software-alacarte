@@ -1,7 +1,7 @@
-package ar.unsam.pds.alacarte.repository
+package repository
 
-import ar.unsam.pds.alacarte.domain.carta.Categoria
-import ar.unsam.pds.alacarte.domain.carta.ItemCarta
+import domain.Categoria
+import domain.ItemCarta
 import javax.persistence.criteria.CriteriaBuilder
 import javax.persistence.criteria.CriteriaQuery
 import javax.persistence.criteria.JoinType
@@ -9,16 +9,16 @@ import javax.persistence.criteria.Root
 import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
-class Carta extends AbstractRepo<ItemCarta> {
+class ItemCartaRepository extends AbstractRepository<ItemCarta> {
 
-	static Carta instance
+	static ItemCartaRepository instance
 
 	private new() {
 	}
 
 	def static getInstance() {
 		if (instance === null) {
-			instance = new Carta
+			instance = new ItemCartaRepository
 		} else {
 			instance
 		}
