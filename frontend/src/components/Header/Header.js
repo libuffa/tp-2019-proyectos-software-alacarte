@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -12,7 +11,7 @@ export default function Header() {
           <MenuIcon />
         </IconButton>
         <Typography className="title" variant="h6">
-          A la Carte
+          A la Carte'
         </Typography>
       </Toolbar>
     </AppBar>
