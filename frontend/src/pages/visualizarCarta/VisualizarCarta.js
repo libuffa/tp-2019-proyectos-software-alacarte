@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { ServiceLocator } from "../services/ServiceLocator.js";
+import { ServiceLocator } from "../../services/ServiceLocator.js";
+import MenuSuperior from "../../components/MenuSuperior";
 
 export default class VisualizarCarta extends Component {
   constructor(props) {
@@ -7,13 +8,14 @@ export default class VisualizarCarta extends Component {
     this.state = {
       carta: null,
       selectedItem: null,
+      categoria: "Entrada",
     }
   }
-
+  
   componentDidMount() {
-    this.cargarCarta('PlatoPrincipal')
+    this.cargarCarta(this.state.categoria)
   }
-
+  
   cargarCarta(categoria) {
     ServiceLocator.ItemsCartaService.getItemsCartaPorCategoria(categoria)
     .then( (carta) => {
@@ -25,12 +27,13 @@ export default class VisualizarCarta extends Component {
 
   render() {
     const { carta } = this.state
+
     if (!carta) {
-      return (<p>Cargando..</p>)
+      return (<h3>Cargando..</h3>)
     }
     return (
       <div>
-        <h1>ACA VA LA PAGINA DE VER CARTA</h1>
+        <MenuSuperior></MenuSuperior>
       </div>
     )
   }
