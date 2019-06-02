@@ -25,12 +25,33 @@ class SesionController {
 		}
 	}
 	
+	@Get("/sesion")
+	def Result sesiones() {
+		try {
+			val sesiones = repoSesion.allInstances
+			return ok(sesiones.toJson)
+		} catch(Exception e) {
+			badRequest(e.message)
+		}
+	}
+	
 	@Get("/pedido/:id")
 	def Result pedido() {
 		try {
 			val _id = Integer.valueOf(id)
 			val sesion = repoSesion.searchById(_id)
 			val pedidos = sesion.pedidos
+			return ok(pedidos.toJson)
+		} catch(Exception e) {
+			badRequest(e.message)
+		}
+	}
+	
+	@Get("/pedido")
+	def Result pedidos() {
+		try {
+			val sesiones = repoSesion.allInstances
+			val pedidos = sesiones.map[pedidos]
 			return ok(pedidos.toJson)
 		} catch(Exception e) {
 			badRequest(e.message)

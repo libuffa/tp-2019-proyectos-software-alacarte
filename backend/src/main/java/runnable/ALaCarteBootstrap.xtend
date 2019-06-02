@@ -75,15 +75,25 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		repoMesas.create(mesa1)
 		repoEmpleado.create(claudia)
 		
+		pedido1 = new Pedido => [
+			itemCarta = milanesa
+			cantidad = 2
+		]
+		pedido2 = new Pedido => [
+			itemCarta = pizza
+			cantidad = 1
+		]
+		
 		sesion1 = new Sesion => [
 			mesa = repoMesas.searchExampleById(mesa1)
 			mozo = repoEmpleado.searchMozoExampleById(claudia)
+			pedidos = #[pedido1,pedido2]
 		]
 		
 		repoSesion.create(sesion1)
 		
-		sesion1.pedirItem(milanesa,2,"cocida")
-		sesion1.pedirItem(pizza,1,"")
+//		sesion1.pedirItem(milanesa,2,"cocida")
+//		sesion1.pedirItem(pizza,1,"")
 		
 	}
 

@@ -42,7 +42,9 @@ class ItemCarta {
 	@Column(name="imagenes")
 	List<String> imagenes = new ArrayList
 	
-	new(){}
+	new(){
+		imagenes = #[]
+	}
 	
 	def cambiarEstado(){
 		habilitado = !habilitado

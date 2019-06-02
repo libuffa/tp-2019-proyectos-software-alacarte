@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.OneToOne
 import org.eclipse.xtend.lib.annotations.Accessors
+import repository.ItemCartaRepository
 
 @Entity
 @Accessors
@@ -18,7 +19,7 @@ class Pedido {
 	@GeneratedValue
 	Long id
 	
-	@OneToOne(fetch=FetchType.LAZY)
+	@OneToOne(fetch=FetchType.EAGER)
 	ItemCarta itemCarta
 	
 	@Column
@@ -31,6 +32,13 @@ class Pedido {
 	@Column(length=20)
 	Estado estado
 	
-	new(){}
+	new(){
+		comentarios = ""
+		estado = Estado.Creado
+	}
+	
+	def getItemCarta() {
+		ItemCartaRepository.instance.searchExampleById(this.itemCarta)
+	}
 	
 }

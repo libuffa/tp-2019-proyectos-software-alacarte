@@ -23,6 +23,21 @@ class SesionRepository extends AbstractRepository<Sesion> {
 		}
 	}
 	
+//	override allInstances() {
+//		val entityManager = generateEntityManager
+//		try {
+//			val criteria = entityManager.criteriaBuilder
+//			val query = criteria.createQuery(entityType)
+//			val camposSesion = query.from(entityType)
+//			camposSesion.fetch("pedidos", JoinType.LEFT)
+//			val from = query.from(entityType)
+//			query.select(from)
+//			entityManager.createQuery(query).resultList
+//		} finally {
+//			entityManager?.close
+//		}
+//	}
+	
 	override getEntityType() {
 		Sesion
 	}
