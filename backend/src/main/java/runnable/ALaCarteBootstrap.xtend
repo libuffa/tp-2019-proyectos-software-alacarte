@@ -44,7 +44,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 			habilitado = true
 		]
 		milanesa = new ItemCarta => [
-			titulo = "Milanesa con fritas"
+			titulo = "Mila con fritas"
 			descripcion = "Lomo empanada con papas a la francesa"
 			categoria = Categoria.PlatoPrincipal
 			precioUnitario = 100.doubleValue
@@ -52,11 +52,12 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 			imagenes = #["https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg"]
 		]
 		pizza = new ItemCarta => [
-			titulo = "Pizza de muzzarella"
+			titulo = "Muzza"
 			descripcion = "Pizza con tomate y queso muzzarella"
 			categoria = Categoria.PlatoPrincipal
 			precioUnitario = 300.doubleValue
 			habilitado = true
+			imagenes= #["https://www.closetcooking.com/wp-content/uploads/2008/06/Shrimp-Scampi-Pizza-1200-3859.jpg"]
 		]
 		
 		carta.create(antiPasto)

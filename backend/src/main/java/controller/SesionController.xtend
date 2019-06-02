@@ -51,7 +51,7 @@ class SesionController {
 	def Result pedidos() {
 		try {
 			val sesiones = repoSesion.allInstances
-			val pedidos = sesiones.map[pedidos]
+			val pedidos = sesiones.map[pedidos].get(0)
 			return ok(pedidos.toJson)
 		} catch(Exception e) {
 			badRequest(e.message)
