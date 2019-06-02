@@ -41,14 +41,9 @@ class ItemCarta {
 	@CollectionTable(name="imagenes", joinColumns=@JoinColumn(name="itemCarta_Id"))
 	@Column(name="imagenes")
 	List<String> imagenes = new ArrayList
-
-	def pedirItem(Integer cantidad, String comentarios) {
-		new Pedido => [
-			it.itemCarta = this
-			it.cantidad = cantidad
-			it.comentarios = comentarios
-			it.estado = Estado.Creado
-		]
+	
+	new(){
+		imagenes = #[]
 	}
 	
 	def cambiarEstado(){

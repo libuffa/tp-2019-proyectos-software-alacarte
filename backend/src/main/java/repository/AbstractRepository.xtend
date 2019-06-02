@@ -101,5 +101,6 @@ abstract class AbstractRepository<T> {
 	}
 	
 	abstract def T searchById(long _id)
+	abstract def T searchExampleById(T t)
 	
 }
