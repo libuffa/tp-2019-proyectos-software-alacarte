@@ -50,6 +50,11 @@ class ItemCartaRepository extends AbstractRepository<ItemCarta> {
 		}
 	}
 	
+	override searchExampleById(ItemCarta itemCarta) {
+		val id = itemCarta.id
+		searchById(id)
+	}
+	
 	def searchByCategoria(Categoria categoria) {
 		val entityManager = generateEntityManager
 		try {
