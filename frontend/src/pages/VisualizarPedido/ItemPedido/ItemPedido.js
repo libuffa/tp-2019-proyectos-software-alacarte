@@ -20,11 +20,12 @@ export default class ItemPedido extends Component {
                     <ListItemText
                         secondary={this.props.pedido.cantidad}
                     />
+                    {/* ESTO VA PARA PEDIDOS CLIENTE, ESTE BRANCH TIENE PEDIDOS GENERICO
                     <ListItemText
                         primary={
                             <DeleteIcon />
                         }
-                    />
+                    /> */}
                 </ListItem>
             </List>
         )
