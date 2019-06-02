@@ -1,25 +1,25 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import VisualizarMesa from './pages/VisualizarMesa/VisualizarMesa';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Header from './components/Header/Header';
+import { Grid } from '@material-ui/core';
 
 function App() {
+  const props = { mesas: [{ id: 1, estado: "En curso" }, { id: 2, estado: "En curso" }, { id: 3, estado: "En curso" }] };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Grid container direction="column">
+      <Grid item xs>
+        <Header />
+      </Grid>
+
+      <Grid item xs>
+        <Router>
+          <Route path="/" exact render={() => <VisualizarMesa mesas={props.mesas} />} />
+        </Router>
+      </Grid>
+    </Grid>
   );
 }
 
