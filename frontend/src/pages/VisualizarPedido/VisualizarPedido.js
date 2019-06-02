@@ -5,7 +5,7 @@ import { Typography, Card, CardContent } from '@material-ui/core';
 import { SesionService } from '../../services/SesionService';
 import { Pedido } from '../../domain/Pedido';
 
-export default class VisualizarCarta extends Component {
+export default class VisualizarPedido extends Component {
 
     constructor(props) {
         super(props)
@@ -15,9 +15,7 @@ export default class VisualizarCarta extends Component {
 
     async componentWillMount() {
         try {
-            const pedidosJson = await this.service.getPedidos()
-            // const _pedidos = pedidosJson.map((pedidoJson) => Pedido.fromJson(pedidoJson))
-            // console.log(_pedidos)
+            const pedidosJson = await this.service.getPedidos();
             this.setState({
                 pedidos: pedidosJson.map((pedidoJson) => Pedido.fromJson(pedidoJson))
             })
@@ -41,5 +39,5 @@ export default class VisualizarCarta extends Component {
                 </List>
             </div>
         )
-      }
+    }
 }
