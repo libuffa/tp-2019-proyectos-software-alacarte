@@ -5,6 +5,7 @@ enum Categoria {
 	Entrada,
 	PlatoPrincipal,
 	Postre,
-	Bebida
+	Bebida,
+	Cafeteria
 
 }

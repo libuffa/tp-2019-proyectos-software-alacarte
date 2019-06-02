@@ -8,7 +8,8 @@ export default class VisualizarCarta extends Component {
     this.state = {
       carta: null,
       selectedItem: null,
-      categoria: "Entrada",
+      categoria: 'Entrada',
+      categorias: ["Entrada", "Plato Principal", "Bebida", "Postre", "Cafeteria"],
     }
   }
   
@@ -17,6 +18,7 @@ export default class VisualizarCarta extends Component {
   }
   
   cargarCarta(categoria) {
+    categoria = categoria.replace(/\s/g, '');
     ServiceLocator.ItemsCartaService.getItemsCartaPorCategoria(categoria)
     .then( (carta) => {
       this.setState({
@@ -25,15 +27,22 @@ export default class VisualizarCarta extends Component {
     })
   }
 
+  seleccionEnMenuSuperior = (categoria) => {
+    this.cargarCarta(categoria)
+  }
+
   render() {
-    const { carta } = this.state
+    const { carta, categorias } = this.state
 
     if (!carta) {
       return (<h3>Cargando..</h3>)
     }
     return (
       <div>
-        <MenuSuperior></MenuSuperior>
+        <MenuSuperior handlers={{onChange: this.seleccionEnMenuSuperior}} data={categorias}></MenuSuperior>
+        {carta.map( (itemCarta) => {
+          return <h3 key={itemCarta.id}>{itemCarta.titulo}</h3>
+        })}
       </div>
     )
   }
