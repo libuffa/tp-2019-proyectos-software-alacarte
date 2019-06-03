@@ -43,7 +43,7 @@ export default class VisualizarCarta extends Component {
     return (
       <div>
         <CssBaseline />
-        <MenuSuperior handlers={{onChange: this.seleccionEnMenuSuperior}} data={categorias}></MenuSuperior>
+        <MenuSuperior categorias={categorias}></MenuSuperior>
         <Container maxWidth="sm">
           {carta.map( (itemCarta) => {
             return <Grid container spacing={3}>
