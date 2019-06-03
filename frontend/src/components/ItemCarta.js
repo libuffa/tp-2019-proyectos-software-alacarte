@@ -1,26 +1,19 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    padding: theme.spacing(3, 2),
-  },
-}));
+export default class ItemCarta extends Component {
+  render() {
+    const { data } = this.props;
 
-function ItemCarta() {
-  const classes = useStyles();
-
-  return (
-    <div>
-      <Paper className={classes.root}>
-        <Typography variant="h5" component="h3">
-          Aca va a ir el titulo del plato.
-        </Typography>
-      </Paper>
-    </div>
-  );
+    return (
+      <div>
+        <Paper>
+          <Typography variant="h5" component="h3">
+            {data.titulo}
+          </Typography>
+        </Paper>
+      </div>
+    );
+  }
 }
-
-export default ItemCarta;

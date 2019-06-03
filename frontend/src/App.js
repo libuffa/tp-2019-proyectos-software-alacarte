@@ -1,12 +1,13 @@
 import React from 'react';
 import './App.css';
-import VisualizarCarta from "./pages/visualizarCarta/VisualizarCarta";
+import VisualizarCarta from './pages/visualizarCarta/VisualizarCarta';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <VisualizarCarta></VisualizarCarta>
-    </div>
+    <Router>
+      <Route path="/visualizarCarta" exact component={VisualizarCarta} />
+    </Router>
   );
 }
 
