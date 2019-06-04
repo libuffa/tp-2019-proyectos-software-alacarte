@@ -3,8 +3,10 @@ package controller
 import domain.Estado
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.xtrest.api.Result
+import org.uqbar.xtrest.api.annotation.Body
 import org.uqbar.xtrest.api.annotation.Controller
 import org.uqbar.xtrest.api.annotation.Get
+import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.json.JSONUtils
 import repository.SesionRepository
 
@@ -18,7 +20,7 @@ class SesionController {
 	@Get("/sesion/:id")
 	def Result sesion() {
 		try {
-			val _id = Integer.valueOf(id)
+			val _id = Long.valueOf(id)
 			val sesion = repoSesion.searchById(_id)
 			return ok(sesion.toJson)
 		} catch(Exception e) {
@@ -39,10 +41,10 @@ class SesionController {
 	@Get("/pedido/:id")
 	def Result pedido() {
 		try {
-			val _id = Integer.valueOf(id)
-			val sesion = repoSesion.searchById(_id)
-			val pedidos = sesion.pedidos
-			return ok(pedidos.toJson)
+			val _id = Long.valueOf(id)
+			val sesion = repoSesion.searchSesionByPedido(_id)
+			val pedido = sesion.pedidos.findFirst[pedido|pedido.id.equals(_id)]
+			return ok(pedido.toJson)
 		} catch(Exception e) {
 			badRequest(e.message)
 		}
@@ -76,6 +78,25 @@ class SesionController {
 		try {
 			return ok(Estado.values.toJson)
 		} catch(Exception e) {
+			badRequest(e.message)
+		}
+	}
+	
+	@Put("/pedido/cocina")
+	def Result siguienteEstado(@Body String body) {
+		try {
+			
+			val idPedido = Long.valueOf(body.getPropertyValue("id"))
+
+			if (idPedido === null) {
+				return badRequest('{ "error" : "pedido inexistente" }')
+			}
+
+			val sesion = repoSesion.searchSesionByPedido(idPedido)
+			sesion.cambiarEstado(idPedido)
+
+			ok('{"status" : "OK"}')
+		} catch (Exception e) {
 			badRequest(e.message)
 		}
 	}

@@ -14,4 +14,13 @@ export class SesionService {
     getPedidosCocina() {
         return client.get(`/pedido/cocina`).then(res => { return res.data })
     }
+
+    getEstados() {
+        return client.get(`/estado`).then(res => { return res.data })
+    }
+
+    cambiarEstadoPedido(data) {
+        return client.put('/pedido/cocina', data)
+    }
+
 }

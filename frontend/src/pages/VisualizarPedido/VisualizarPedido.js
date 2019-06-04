@@ -6,9 +6,9 @@ export default class VisualizarPedido extends Component {
 
   render() {
     return (
-      <List>
+      <div>
         {this.props.pedidos.map((pedido) => <ItemPedido key={pedido.id} pedido={pedido} item={this.props.item} />)}
-      </List>
+      </div>
     )
   }
 }

@@ -5,31 +5,27 @@ import { ListItem, ListItemAvatar, Avatar, ListItemText, List } from '@material-
 export default class ItemPedido extends Component {
 
   render() {
-    const listItem = (this.props.item)
+
     return (
-      <List >
-        <ListItem button alignItems="flex-end">
+        <div>
           <ListItemAvatar>
             <Avatar alt={this.props.pedido.itemCarta} src={this.props.pedido.itemCarta.imagenes[0]} />
           </ListItemAvatar>
           <ListItemText
             primary={this.props.pedido.itemCarta.titulo}
-          />
-          <ListItemText
             secondary={this.props.pedido.estado}
           />
           <ListItemText
             secondary={this.props.pedido.cantidad}
           />
-          {listItem}
+          {/* {this.props.item} */}
           {/* ESTO VA PARA PEDIDOS CLIENTE, ESTE BRANCH TIENE PEDIDOS GENERICO
                     <ListItemText
                         primary={
                             <DeleteIcon />
                         }
                     /> */}
-        </ListItem>
-      </List>
+        </div>
     )
   }
 }

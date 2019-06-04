@@ -9,36 +9,45 @@ import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.OneToOne
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.uqbar.commons.model.exceptions.UserException
 import repository.ItemCartaRepository
 
 @Entity
 @Accessors
 class Pedido {
-	
+
 	@Id
 	@GeneratedValue
 	Long id
-	
+
 	@OneToOne(fetch=FetchType.EAGER)
 	ItemCarta itemCarta
-	
+
 	@Column
 	Integer cantidad
-	
+
 	@Column(length=100)
 	String comentarios
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	Estado estado
-	
-	new(){
+
+	new() {
 		comentarios = ""
 		estado = Estado.Creado
 	}
-	
+
 	def getItemCarta() {
 		ItemCartaRepository.instance.searchExampleById(this.itemCarta)
 	}
-	
+
+	def siguienteEstado() {
+		switch estado {
+			case Estado.Creado: this.estado = Estado.EnCurso
+			case Estado.EnCurso: this.estado = Estado.Finalizado
+			default: null
+		}
+	}
+
 }
