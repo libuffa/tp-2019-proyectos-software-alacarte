@@ -3,6 +3,7 @@ import { ServiceLocator } from "../../services/ServiceLocator.js";
 import MenuSuperior from "../../components/MenuSuperior";
 import ListaItems from "../../components/ListaItems";
 import CssBaseline from '@material-ui/core/CssBaseline';
+import MenuInferior from '../../components/MenuInferior.js';
 
 export default class VisualizarCarta extends Component {
   constructor(props) {
@@ -55,6 +56,7 @@ export default class VisualizarCarta extends Component {
         <CssBaseline/>
         <MenuSuperior data={categorias} handlers={{onChange: this.seleccionEnMenuSuperior}}></MenuSuperior>
         <ListaItems data={carta} subData={this.subCategoriasCarta()} handlers={{onChange: this.seleccionItemCarta}}></ListaItems>
+        <MenuInferior handlers={{onChange: this.seleccionItemCarta}}></MenuInferior>
       </div>
     )
   }
