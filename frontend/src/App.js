@@ -4,6 +4,7 @@ import VisualizarMesa from './pages/VisualizarMesa/VisualizarMesa';
 import VisualizarPedido from './pages/VisualizarPedido/VisualizarPedido';
 import Header from './components/Header/Header';
 import './App.css';
+import VisualizarPedidoCocina from './pages/VisualizarPedido/VisualizarPedidoCocina';
 
 function App() {
   const props = {
@@ -15,6 +16,7 @@ function App() {
       <Header />
       <Router>
         <Route path="/" exact render={() => <VisualizarPedido pedidos={props.pedidos} />} />
+        <Route path="/cocina" exact render={() => <VisualizarPedidoCocina pedidos={props.pedidos} />} />
         <Route path="/mesas" exact render={() => <VisualizarMesa mesas={props.mesas} />} />
       </Router>
     </>

@@ -5,6 +5,7 @@ import { ListItem, ListItemAvatar, Avatar, ListItemText, List } from '@material-
 export default class ItemPedido extends Component {
 
   render() {
+    const listItem = (this.props.item)
     return (
       <List >
         <ListItem button alignItems="flex-end">
@@ -20,6 +21,7 @@ export default class ItemPedido extends Component {
           <ListItemText
             secondary={this.props.pedido.cantidad}
           />
+          {listItem}
           {/* ESTO VA PARA PEDIDOS CLIENTE, ESTE BRANCH TIENE PEDIDOS GENERICO
                     <ListItemText
                         primary={

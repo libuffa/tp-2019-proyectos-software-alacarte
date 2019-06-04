@@ -6,7 +6,12 @@ const client = axios.create({
 });
 
 export class SesionService {
+    
     getPedidos() {
         return client.get(`/pedido`).then(res => { return res.data })
+    }
+
+    getPedidosCocina() {
+        return client.get(`/pedido/cocina`).then(res => { return res.data })
     }
 }

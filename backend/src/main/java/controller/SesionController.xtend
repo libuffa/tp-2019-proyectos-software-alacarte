@@ -1,5 +1,6 @@
 package controller
 
+import domain.Estado
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.xtrest.api.Result
 import org.uqbar.xtrest.api.annotation.Controller
@@ -53,6 +54,27 @@ class SesionController {
 			val sesiones = repoSesion.allInstances
 			val pedidos = sesiones.map[pedidos].get(0)
 			return ok(pedidos.toJson)
+		} catch(Exception e) {
+			badRequest(e.message)
+		}
+	}
+	
+	@Get("/pedido/cocina")
+	def Result pedidosCocina() {
+		try {
+			val sesiones = repoSesion.allInstances
+			val pedidos = sesiones.map[pedidos].get(0)
+			val pedidosCocina = pedidos.filter[ pedido | !pedido.estado.equals(Estado.Finalizado) && pedido.itemCarta.noEsBebida ].toList
+			return ok(pedidosCocina.toJson)
+		} catch(Exception e) {
+			badRequest(e.message)
+		}
+	}
+	
+	@Get("/estado")
+	def Result estados() {
+		try {
+			return ok(Estado.values.toJson)
 		} catch(Exception e) {
 			badRequest(e.message)
 		}
