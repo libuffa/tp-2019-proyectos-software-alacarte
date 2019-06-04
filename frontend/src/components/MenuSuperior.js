@@ -26,8 +26,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function MenuSuperior(props) {
-  const { categorias } = props;
+export default function MenuSuperior(props) {
+  const { data, handlers } = props;
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -39,13 +39,11 @@ function MenuSuperior(props) {
     <div className={classes.root}>
       <AppBar position="static" color="default">
         <Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary" variant="scrollable" scrollButtons="auto">
-          {categorias.map( (categoria) => {
-            return <Tab label={categoria}/>
+          {data.map( (object) => {
+            return <Tab key={object} label={object} onClick={() => handlers.onChange(object)}/>
           })}
         </Tabs>
       </AppBar>
     </div>
   );
 }
-
-export default MenuSuperior();

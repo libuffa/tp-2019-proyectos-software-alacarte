@@ -30,6 +30,9 @@ class ItemCarta {
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	Categoria categoria
+	
+	@Column
+	String subCategoria
 
 	@Column
 	Double precioUnitario

@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 import { ServiceLocator } from "../../services/ServiceLocator.js";
 import MenuSuperior from "../../components/MenuSuperior";
-import ItemCarta from "../../components/ItemCarta";
-import Grid from '@material-ui/core/Grid';
+import ListaItems from "../../components/ListaItems";
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Container from '@material-ui/core/Container';
 
 export default class VisualizarCarta extends Component {
   constructor(props) {
@@ -30,8 +28,20 @@ export default class VisualizarCarta extends Component {
     })
   }
 
+  subCategoriasCarta() {
+    var subCategoriasMapeadoas = this.state.carta.map( (itemCarta) => { return itemCarta.subCategoria })
+    var subCategorias = new Set(subCategoriasMapeadoas)
+    var arraySubCategorias = []
+    subCategorias.forEach((subCategoria) => arraySubCategorias.push(subCategoria))
+    return arraySubCategorias
+  }
+
   seleccionEnMenuSuperior = (categoria) => {
     this.cargarCarta(categoria)
+  }
+
+  seleccionItemCarta = (itemCarta) => {
+    this.subCategoriasCarta()
   }
 
   render() {
@@ -42,17 +52,9 @@ export default class VisualizarCarta extends Component {
     }
     return (
       <div>
-        <CssBaseline />
-        <MenuSuperior categorias={categorias}></MenuSuperior>
-        <Container maxWidth="sm">
-          {carta.map( (itemCarta) => {
-            return <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <ItemCarta key={itemCarta.id} data={itemCarta}></ItemCarta>
-              </Grid>
-            </Grid>
-          })}
-        </Container>
+        <CssBaseline/>
+        <MenuSuperior data={categorias} handlers={{onChange: this.seleccionEnMenuSuperior}}></MenuSuperior>
+        <ListaItems data={carta} subData={this.subCategoriasCarta()} handlers={{onChange: this.seleccionItemCarta}}></ListaItems>
       </div>
     )
   }
