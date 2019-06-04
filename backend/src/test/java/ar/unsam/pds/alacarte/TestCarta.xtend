@@ -27,14 +27,14 @@ class TestCarta {
 		milanesa = new ItemCarta => [
 			titulo = "Milanesa con fritas"
 			descripcion = "Lomo empanada con papas a la francesa"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
 			precioUnitario = 100.doubleValue
 			habilitado = true
 		]
 		pizza = new ItemCarta => [
 			titulo = "Pizza de muzzarella"
 			descripcion = "Pizza con tomate y queso muzzarella"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
 			precioUnitario = 300.doubleValue
 			habilitado = true
 		]
@@ -70,9 +70,9 @@ class TestCarta {
 
 	@Test
 	def void probarSearchByCategoria() {
-		val carta = carta.searchByCategoria(Categoria.PlatoPrincipal)
+		val carta = carta.searchByCategoria(Categoria.Plato_Principal)
 		println(carta)
-		Assert.assertEquals(Categoria.PlatoPrincipal, carta.map[item|item.categoria].get(0))
+		Assert.assertEquals(Categoria.Plato_Principal, carta.map[item|item.categoria].get(0))
 	}
 
 }

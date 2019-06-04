@@ -1,10 +1,10 @@
 import React from 'react';
 import './App.css';
-import VisualizarCarta from './pages/visualizarCarta/VisualizarCarta';
+import EscanearQR from './pages/escanearQR/EscanearQR';
 
 function App() {
   return (
-    <VisualizarCarta></VisualizarCarta>
+    <EscanearQR></EscanearQR>
   );
 }
 
