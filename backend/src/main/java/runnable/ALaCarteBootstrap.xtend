@@ -86,7 +86,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 			categoria = Categoria.PlatoPrincipal
 			subCategoria = "Pizzas"
 			precioUnitario = 30322.doubleValue
-			habilitado = true
+			habilitado = false
 			imagenes = #["https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg"]
 		]
 		milanesa5 = new ItemCarta => [

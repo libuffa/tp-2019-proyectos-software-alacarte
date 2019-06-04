@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { ListItem, ListItemAvatar, Avatar, ListItemText, List, Grid, Paper } from '@material-ui/core';
+import { ListItem, ListItemAvatar, Avatar, ListItemText, List, Grid } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -33,14 +33,12 @@ export default function SimpleList(props) {
     <div className={classes.root}>
       {subData.map( (subCategoria) => {
         return  <List key={subCategoria} component="nav" aria-label="Secondary mailbox folders">
-                  <Grid key={subCategoria} container spacing={1}>
-                    <Grid key={subCategoria} item xs={12}>
-                      <Paper key={subCategoria} className={classes.paper}>{subCategoria}</Paper>
-                    </Grid>
-                  </Grid>
+                  <ListItem selected divider key={subCategoria}>
+                    <ListItemText primary={subCategoria}/>
+                  </ListItem>
                   {filtrarData(subCategoria).map( (object) => {
-                    return  <ListItem button key={object.id} onClick={() => handlers.onChange(object)}>
-                              <Grid container spacing={1}>
+                    return  <ListItem disabled={!object.habilitado} button key={object.id} onClick={() => handlers.onChange(object)}>
+                              <Grid container spacing={0}>
                                 <Grid item xs={2}>
                                   <ListItemAvatar>
                                     <Avatar alt={object.titulo} src={object.imagenes[0]} />
