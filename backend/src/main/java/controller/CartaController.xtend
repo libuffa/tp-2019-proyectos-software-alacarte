@@ -20,7 +20,7 @@ class CartaController {
 	ItemCartaRepository carta = ItemCartaRepository.instance
 
 	@Get("/carta/:categoria")
-	def Result usuario() {
+	def Result obtenerCarta() {
 		try {
 			val _categoria = Categoria.valueOf(categoria)
 			val items = carta.searchByCategoria(_categoria)
@@ -30,8 +30,17 @@ class CartaController {
 		}
 	}
 	
+	@Get("/carta/obtenerCategorias")
+	def Result obtenerCategorias() {
+		try {
+			return ok(Categoria.values.toJson)
+		} catch(Exception e) {
+			badRequest(e.message)
+		}
+	}
+	
 	@Get("/carta/:id/obtenerPlato")
-	def Result obteberItem() {
+	def Result obteberPlato() {
 		var platoSolicitado = carta.searchById(new Long(id))
 		try {
 			return ok(platoSolicitado.toJson)
@@ -53,7 +62,7 @@ class CartaController {
 	}
 	
 	@Put("/carta/crearPlato")
-	def Result nuevoPlato(@Body String body) {
+	def Result crearPlato(@Body String body) {
 		var nuevoPlato = body.fromJson(ItemCarta)
 		try {
 			carta.create(nuevoPlato)
@@ -64,7 +73,7 @@ class CartaController {
 	}
 	
 	@Post("/carta/:id/modificarPlato")
-	def Result actualizarPlato(@Body String body) {
+	def Result modificarPlato(@Body String body) {
 		var platoModificado = body.fromJson(ItemCarta)
 		try {
 			carta.update(platoModificado)
