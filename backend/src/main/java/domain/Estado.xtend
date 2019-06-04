@@ -2,7 +2,11 @@ package domain
 
 enum Estado {
 	
-	Creado,
+	Creado ,
+//	{
+//        override Estado next() {
+//            return EnCurso
+//        },
 	EnCurso,
 	Finalizado,
 	Cancelado

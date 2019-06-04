@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { ServiceLocator } from "../../services/ServiceLocator.js";
-import MenuSuperior from "../../components/MenuSuperior";
-import ListaItems from "../../components/ListaItems";
+import MenuSuperior from "../../components/menuSuperior/MenuSuperior";
+import ListaItems from "../../components/listaItems/ListaItems";
+import MenuInferior from '../../components/menuInferior/MenuInferior.js';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import MenuInferior from '../../components/MenuInferior.js';
 
 export default class VisualizarCarta extends Component {
   constructor(props) {
@@ -14,33 +14,33 @@ export default class VisualizarCarta extends Component {
       categorias: null,
     }
   }
-  
+
   componentDidMount() {
     this.cargarCarta('Entrada')
     this.cargarCategorias()
   }
-  
+
   cargarCarta(categoria) {
     categoria = categoria.replace(' ', '_');
     ServiceLocator.ItemsCartaService.getItemsCartaPorCategoria(categoria)
-    .then( (carta) => {
-      this.setState({
-        carta,
+      .then((carta) => {
+        this.setState({
+          carta,
+        })
       })
-    })
   }
 
   cargarCategorias() {
     ServiceLocator.ItemsCartaService.getCategorias()
-    .then( (categorias) => {
-      this.setState({
-        categorias,
+      .then((categorias) => {
+        this.setState({
+          categorias,
+        })
       })
-    })
   }
 
   subCategoriasCarta() {
-    var subCategoriasMapeadoas = this.state.carta.map( (itemCarta) => { return itemCarta.subCategoria })
+    var subCategoriasMapeadoas = this.state.carta.map((itemCarta) => { return itemCarta.subCategoria })
     var subCategorias = new Set(subCategoriasMapeadoas)
     var arraySubCategorias = []
     subCategorias.forEach((subCategoria) => arraySubCategorias.push(subCategoria))
@@ -55,22 +55,26 @@ export default class VisualizarCarta extends Component {
     this.subCategoriasCarta()
   }
 
+  verPedido = () => {
+    this.props.history.push('/pedido')
+  }
+
   render() {
     const { carta } = this.state
     var { categorias } = this.state
 
     if (!carta || !categorias) {
-      return (<h3>Cargando..</h3>)
+      return <div></div>
     } else {
-      categorias = categorias.map( (categoria) => categoria.replace('_', ' ') )
+      categorias = categorias.map((categoria) => categoria.replace('_', ' '))
     }
 
     return (
       <div>
-        <CssBaseline/>
-        <MenuSuperior data={categorias} handlers={{onChange: this.seleccionEnMenuSuperior}}></MenuSuperior>
-        <ListaItems data={carta} subData={this.subCategoriasCarta()} handlers={{onChange: this.seleccionItemCarta}}></ListaItems>
-        <MenuInferior handlers={{onChange: this.seleccionItemCarta}}></MenuInferior>
+        <CssBaseline />
+        <MenuSuperior data={categorias} handlers={{ onChange: this.seleccionEnMenuSuperior }}></MenuSuperior>
+        <ListaItems data={carta} subData={this.subCategoriasCarta()} handlers={{ onChange: this.seleccionItemCarta }}></ListaItems>
+        <MenuInferior handlers={{ onChange: this.verPedido }} boton="VER PEDIDO"></MenuInferior>
       </div>
     )
   }

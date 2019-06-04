@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function MenuInferior(props) {
-  const { handlers } = props;
+  const { handlers, boton } = props;
   const classes = useStyles();
 
   return (
@@ -21,7 +21,7 @@ export default function MenuInferior(props) {
       <AppBar position="fixed" color="primary" className={classes.appBar}>
         <Toolbar>
           <Button variant="outlined" color="inherit" onClick={() => handlers.onChange()}>
-            Ver Pedido
+            {boton}
           </Button>
         </Toolbar>
       </AppBar>
