@@ -20,11 +20,20 @@ class CartaController {
 	ItemCartaRepository carta = ItemCartaRepository.instance
 
 	@Get("/carta/:categoria")
-	def Result usuario() {
+	def Result obtenerCarta() {
 		try {
 			val _categoria = Categoria.valueOf(categoria)
 			val items = carta.searchByCategoria(_categoria)
 			return ok(items.toJson)
+		} catch(Exception e) {
+			badRequest(e.message)
+		}
+	}
+	
+	@Get("/carta/obtenerCategorias")
+	def Result obtenerCategorias() {
+		try {
+			return ok(Categoria.values.toJson)
 		} catch(Exception e) {
 			badRequest(e.message)
 		}

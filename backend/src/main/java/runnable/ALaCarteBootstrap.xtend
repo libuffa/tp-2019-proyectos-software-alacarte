@@ -39,7 +39,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		milanesa = new ItemCarta => [
 			titulo = "Milanesa con fritas"
 			descripcion = "Lomo empanada con papas a la francesa"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
 			subCategoria = "Carnes"
 			precioUnitario = 100.doubleValue
 			habilitado = true
@@ -48,7 +48,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		pizza = new ItemCarta => [
 			titulo = "Pizza de muzzarella"
 			descripcion = "Pizza con tomate y queso muzzarella"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
 			subCategoria = "Pizzas"
 			precioUnitario = 300.doubleValue
 			habilitado = true
@@ -56,7 +56,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		milanesa1 = new ItemCarta => [
 			titulo = "Milanesa con fritas"
 			descripcion = "Lomo empanada con papas a la francesa"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
 			subCategoria = "Carnes"
 			precioUnitario = 100.doubleValue
 			habilitado = true
@@ -65,7 +65,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		milanesa2 = new ItemCarta => [
 			titulo = "Milanesa con fritas"
 			descripcion = "Lomo empanada con papas a la francesa"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
 			subCategoria = "Carnes"
 			precioUnitario = 100.doubleValue
 			habilitado = true
@@ -74,7 +74,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		milanesa3 = new ItemCarta => [
 			titulo = "Milanesa con fritas"
 			descripcion = "Lomo empanada con papas a la francesa"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
 			subCategoria = "Carnes"
 			precioUnitario = 1500.doubleValue
 			habilitado = true
@@ -83,7 +83,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		milanesa4 = new ItemCarta => [
 			titulo = "Milanesa con fritas"
 			descripcion = "Lomo empanada con papas a la francesa"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
 			subCategoria = "Pizzas"
 			precioUnitario = 30322.doubleValue
 			habilitado = false
@@ -92,7 +92,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		milanesa5 = new ItemCarta => [
 			titulo = "Milanesa con fritas"
 			descripcion = "Lomo empanada con papas a la francesa"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
 			subCategoria = "Pizzas"
 			precioUnitario = 100.doubleValue
 			habilitado = true
@@ -101,7 +101,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		milanesa6 = new ItemCarta => [
 			titulo = "Milanesa con fritas"
 			descripcion = "Lomo empanada con papas a la francesa"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
 			subCategoria = "Pastas"
 			precioUnitario = 100.doubleValue
 			habilitado = true
@@ -110,7 +110,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		milanesa7 = new ItemCarta => [
 			titulo = "Milanesa con fritas"
 			descripcion = "Lomo empanada con papas a la francesa"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
 			subCategoria = "Pastas"
 			precioUnitario = 100.doubleValue
 			habilitado = true
@@ -119,7 +119,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		milanesa8 = new ItemCarta => [
 			titulo = "Milanesa con fritas"
 			descripcion = "Lomo empanada con papas a la francesa"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
 			subCategoria = "Pastas"
 			precioUnitario = 100.doubleValue
 			habilitado = true
@@ -128,7 +128,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		milanesa9 = new ItemCarta => [
 			titulo = "Milanesa con fritas"
 			descripcion = "Lomo empanada con papas a la francesa"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
 			subCategoria = "Pastas"
 			precioUnitario = 100.doubleValue
 			habilitado = true
@@ -137,7 +137,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		milanesa10 = new ItemCarta => [
 			titulo = "Milanesa con fritas"
 			descripcion = "Lomo empanada con papas a la francesa"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
 			subCategoria = "Pastas"
 			precioUnitario = 100.doubleValue
 			habilitado = true
@@ -146,7 +146,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		milanesa11 = new ItemCarta => [
 			titulo = "Milanesa con fritas"
 			descripcion = "Lomo empanada con papas a la francesa"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
 			subCategoria = "Carnes"
 			precioUnitario = 100.doubleValue
 			habilitado = true
@@ -155,7 +155,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		milanesa12 = new ItemCarta => [
 			titulo = "Milanesa con fritas"
 			descripcion = "Lomo empanada con papas a la francesa"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
 			subCategoria = "Minutas"
 			precioUnitario = 100.doubleValue
 			habilitado = true
@@ -164,7 +164,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		milanesa13 = new ItemCarta => [
 			titulo = "Milanesa con fritas"
 			descripcion = "Lomo empanada con papas a la francesa"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
 			subCategoria = "Minutas"
 			precioUnitario = 100.doubleValue
 			habilitado = true

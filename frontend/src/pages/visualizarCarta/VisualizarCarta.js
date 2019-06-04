@@ -11,20 +11,30 @@ export default class VisualizarCarta extends Component {
     this.state = {
       carta: null,
       selectedItem: null,
-      categorias: ["Entrada", "Plato Principal", "Bebida", "Postre", "Cafeteria"],
+      categorias: null,
     }
   }
   
   componentDidMount() {
     this.cargarCarta('Entrada')
+    this.cargarCategorias()
   }
   
   cargarCarta(categoria) {
-    categoria = categoria.replace(/\s/g, '');
+    categoria = categoria.replace(' ', '_');
     ServiceLocator.ItemsCartaService.getItemsCartaPorCategoria(categoria)
     .then( (carta) => {
       this.setState({
         carta,
+      })
+    })
+  }
+
+  cargarCategorias() {
+    ServiceLocator.ItemsCartaService.getCategorias()
+    .then( (categorias) => {
+      this.setState({
+        categorias,
       })
     })
   }
@@ -46,11 +56,15 @@ export default class VisualizarCarta extends Component {
   }
 
   render() {
-    const { carta, categorias } = this.state
+    const { carta } = this.state
+    var { categorias } = this.state
 
-    if (!carta) {
+    if (!carta || !categorias) {
       return (<h3>Cargando..</h3>)
+    } else {
+      categorias = categorias.map( (categoria) => categoria.replace('_', ' ') )
     }
+
     return (
       <div>
         <CssBaseline/>
