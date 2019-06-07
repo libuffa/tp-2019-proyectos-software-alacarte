@@ -3,8 +3,9 @@ package domain
 enum Categoria {
 
 	Entrada,
-	PlatoPrincipal,
+	Plato_Principal,
 	Postre,
-	Bebida
+	Bebida,
+	Cafeteria
 
 }
