@@ -6,7 +6,10 @@ import './Header.scss';
 
 function Header(props) {
   const { location } = props;
-  const path = location.pathname.replace(/\//g, '').toUpperCase();
+  let pageName = location.pathname.replace(/\//g, '').toLowerCase();
+  if (pageName.length > 0)
+    pageName = pageName[0].toUpperCase() + pageName.substr(1);
+
   return (
     <AppBar position="static">
       <Toolbar>
@@ -14,7 +17,7 @@ function Header(props) {
           <MenuIcon />
         </IconButton>
         <Typography className="title" variant="h6">
-          A la Carte' - {path}
+          A la Carte'{" - " + pageName}
         </Typography>
       </Toolbar>
     </AppBar>
