@@ -1,12 +1,9 @@
 import axios from "axios"
-import { API_URL } from "./Config";
 
-const client = axios.create({
-    baseURL: API_URL
-});
+const client = axios.create()
 
 export class SesionService {
-    getPedidos() {
-        return client.get(`/pedido`).then(res => { return res.data })
-    }
+  getPedidos() {
+    return client.get(`/pedido`).then(res => { return res.data })
+  }
 }

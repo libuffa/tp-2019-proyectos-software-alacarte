@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { ListItem, ListItemAvatar, Avatar, ListItemText, List, Grid } from '@material-ui/core';
+import { ListItem, ListItemAvatar, Avatar, ListItemText, List, Grid, ListItemSecondaryAction, Switch } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -14,8 +14,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function ListaItems(props) {
-  const { data, subData, handlers } = props;
+export default function ListaItemsEmpleado(props) {
+  const { data, subData, handlers, disableFunction } = props;
   const classes = useStyles();
 
   function filtrarData(subCategoria) {
@@ -37,23 +37,23 @@ export default function ListaItems(props) {
             <ListItemText primary={subCategoria} />
           </ListItem>
           {filtrarData(subCategoria).map((object) => {
-            if (object.habilitado) {
-              return <ListItem button key={object.id} onClick={() => handlers.onChange(object)}>
-                <Grid container spacing={0}>
-                  <Grid item xs={2}>
-                    <ListItemAvatar>
-                      <Avatar alt={object.titulo} src={object.imagenes[0]} />
-                    </ListItemAvatar>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <ListItemText primary={object.titulo} />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <ListItemText primary={"$" + object.precioUnitario} />
-                  </Grid>
+            return <ListItem button key={object.id} onClick={() => handlers.onChange(object)}>
+              <Grid container spacing={0}>
+                <Grid item xs={2}>
+                  <ListItemAvatar>
+                    <Avatar alt={object.titulo} src={object.imagenes[0]} />
+                  </ListItemAvatar>
                 </Grid>
-              </ListItem>
-            }
+                <Grid item xs={8}>
+                  <ListItemText primary={object.titulo} />
+                </Grid>
+                <Grid item xs={2}>
+                  <ListItemSecondaryAction>
+                    <Switch onChange={() => disableFunction.onChange(object.id)} checked={object.habilitado} />
+                  </ListItemSecondaryAction>
+                </Grid>
+              </Grid>
+            </ListItem>
           })}
         </List>
       })}
