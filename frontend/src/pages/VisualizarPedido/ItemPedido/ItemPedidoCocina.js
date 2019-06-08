@@ -13,27 +13,6 @@ export default class ItemPedidoCocina extends Component {
     }
   }
 
-  async cambioEstado() {
-    try {
-      const res = await ServiceLocator.SesionService.cambiarEstadoPedido(this.state.pedido)
-      let error = ""
-      error = await res.statusText
-
-      if (res.status !== 200) {
-        throw error
-      }
-
-      await this.actualizarPedido()
-
-    } catch (e) {
-      this.errorHandler(e)
-    }
-  }
-
-  cambiarEstadoPedido() {
-    this.cambioEstado()
-  }
-
   async actualizarPedido() {
     try {
       const pedidoJson = await ServiceLocator.SesionService.getPedido(this.state.pedido.id)
@@ -65,8 +44,8 @@ export default class ItemPedidoCocina extends Component {
           primary={
             <Button
               onClick={() => {
-                this.cambiarEstadoPedido()
-                this.props.handlers.onChange()
+                this.props.handlers.onChange(this.state.pedido)
+                this.actualizarPedido()
               }}
               name="avanzar"
               size="small"
