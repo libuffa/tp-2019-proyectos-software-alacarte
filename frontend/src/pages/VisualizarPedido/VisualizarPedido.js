@@ -41,23 +41,6 @@ export default class VisualizarPedido extends Component {
       .reduce((a, b) => a + b)
   }
 
-  async actualizarPedidos(errorMessage) {
-    try {
-      const error = await errorMessage
-      if (error) {
-        throw error
-      }
-
-      const pedidosJson = await ServiceLocator.SesionService.getPedidos()
-      this.setState({
-        pedidos: pedidosJson.map((pedidoJson) => Pedido.fromJson(pedidoJson)),
-      })
-
-    } catch (e) {
-      this.generarError(e)
-    }
-  }
-
   snackbarOpen() {
     return this.state.errorMessage
   }
@@ -68,8 +51,33 @@ export default class VisualizarPedido extends Component {
     })
   }
 
-  actualizar = (errorMessage) => {
-    this.actualizarPedidos(errorMessage)
+  actualizar = (pedido) => {
+    this.bajarPedido(pedido)
+  }
+
+  async bajarPedido(pedido) {
+    try {
+      const res = await ServiceLocator.SesionService.bajaPedido(pedido)
+      let error = ""
+      error = await res.statusText
+
+      if (res.status !== 200) {
+        throw error
+      }
+
+      this.setState({
+        errorMessage: ""
+      })
+
+      const pedidosJson = await ServiceLocator.SesionService.getPedidos()
+      this.setState({
+        pedidos: pedidosJson.map((pedidoJson) => Pedido.fromJson(pedidoJson)),
+      })
+
+    } catch (e) {
+      const mensaje = await e.response.data
+      this.generarError(mensaje)
+    }
   }
 
   render() {

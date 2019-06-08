@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { ListItem, ListItemAvatar, Avatar, ListItemText } from '@material-ui/core';
 import DeleteIcon from "@material-ui/icons/Delete"
-import { ServiceLocator } from '../../../services/ServiceLocator';
 
 export default class ItemPedido extends Component {
 
@@ -10,28 +9,6 @@ export default class ItemPedido extends Component {
     this.state = {
       pedido: this.props.pedido
     }
-  }
-
-  async bajaPedido() {
-    try {
-      const res = await ServiceLocator.SesionService.bajaPedido(this.state.pedido)
-      let error = ""
-      error = await res.statusText
-
-      if (res.status !== 200) {
-        throw error
-      }
-
-    } catch (e) {
-      const mensaje = await e.response.data
-      this.generarError(mensaje)
-    }
-  }
-
-  generarError(errorMessage) {
-    this.setState({
-      errorMessage: errorMessage.toString()
-    })
   }
 
   validarBaja() {
@@ -58,8 +35,8 @@ export default class ItemPedido extends Component {
           primary={
             <DeleteIcon
               onClick={() => {
-                this.bajaPedido()
-                this.props.handlers.onChange(this.state.errorMessage)
+                // this.bajaPedido()
+                this.props.handlers.onChange(this.state.pedido)
               }} />
           }
         />
