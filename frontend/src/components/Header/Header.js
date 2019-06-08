@@ -7,6 +7,7 @@ import './Header.scss';
 function Header(props) {
   const { location } = props;
   let pageName = location.pathname.replace(/\//g, '').toLowerCase();
+  pageName = pageName.replace(/[0-9]/g, '').toLowerCase();
   if (pageName.length > 0)
     pageName = pageName[0].toUpperCase() + pageName.substr(1);
 

@@ -1,6 +1,5 @@
 package domain
 
-import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
@@ -34,7 +33,7 @@ class Pedido {
 	Estado estado
 
 	@Column
-	LocalDateTime fechaBaja
+	Boolean cancelado = false
 
 	new() {
 		comentarios = ""
@@ -51,10 +50,6 @@ class Pedido {
 			case Estado.EnCurso: this.estado = Estado.Finalizado
 			default: null
 		}
-	}
-
-	def pedidoDadoDeBaja() {
-		fechaBaja !== null
 	}
 
 }

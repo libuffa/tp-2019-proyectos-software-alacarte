@@ -7,6 +7,14 @@ const client = axios.create({
 
 export class SesionService {
     
+    getSesiones() {
+        return client.get(`/sesion`).then(res => { return res.data })
+    }
+    
+    getSesion(id) {
+        return client.get(`/sesion/` + id).then(res => { return res.data })
+    }
+    
     getPedidos() {
         return client.get(`/pedido`).then(res => { return res.data })
     }
@@ -29,6 +37,10 @@ export class SesionService {
 
     bajaPedido(data) {
         return client.put('/pedido/baja', data)
+    }
+
+    pedirCuenta(id) {
+        return client.put('/pedido/cuenta/' + id)
     }
 
 }

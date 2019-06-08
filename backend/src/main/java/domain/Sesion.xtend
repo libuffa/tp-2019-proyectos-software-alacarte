@@ -1,8 +1,10 @@
 package domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 import domain.empleado.Mozo
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.ArrayList
 import java.util.List
 import javax.persistence.CascadeType
@@ -34,11 +36,18 @@ class Sesion {
 	@OneToOne(fetch=FetchType.LAZY)
 	@JsonIgnore Mozo mozo
 
+//	Para mi manejando fecha baja es mas optimo, porque sabes cuando realizo el pedido y cuando se fue
+//	@Column
+//	Boolean habilitado
+	
 	@Column
-	Boolean habilitado
+	@JsonIgnore LocalDateTime fechaAlta
+	
+	@Column
+	@JsonIgnore LocalDateTime fechaBaja
 	
 	new(){
-		habilitado = true
+		fechaAlta = LocalDateTime.now
 	}
 
 	def pedirItem(ItemCarta itemCarta, Integer cantidad, String comentarios) {
@@ -64,15 +73,44 @@ class Sesion {
 	def bajaPedido(Long idPedido) {
 		val pedido = pedidos.findFirst[pedido | pedido.id.equals(idPedido)]
 		if (pedido.estado.equals(Estado.Creado)) {
-			pedido.fechaBaja = LocalDateTime.now
+			pedido.cancelado = true
 			SesionRepository.instance.update(this)
 		} else {
-			throw new UserException("No puede dar de baja un pedido ya iniciado")
+			throw new UserException('{ "error" : "no se puede cancelar un pedido en curso" }')
 		}
 	}
 	
+	@JsonIgnore
 	def getPedidosActivos() {
-		pedidos.filter[pedido | !pedido.pedidoDadoDeBaja ].toList
+		pedidos.filter[pedido | !pedido.cancelado ].toList
 	}
-
+	
+	def pedirCuenta() {
+		fechaBaja = LocalDateTime.now
+		SesionRepository.instance.update(this)
+	}
+	
+	def sesionActiva() {
+		fechaBaja === null
+	}
+	
+	@JsonProperty("fechaAlta")
+	def getFechaAltaAsString() {
+		getFechaHora(this.fechaAlta)
+	}
+	
+	@JsonProperty("fechaBaja")
+	def getFechaBajaAsString() {
+		if(this.fechaBaja !== null) {
+			getFechaHora(this.fechaBaja)
+		} else {
+			null
+		}
+	}
+	
+	def getFechaHora(LocalDateTime fechaHora) {
+		val formatterDateTime = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+		formatterDateTime.format(fechaHora)
+	}
+	
 }

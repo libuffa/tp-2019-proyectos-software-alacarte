@@ -12,10 +12,10 @@ function App() {
     <Router>
       <Header />
       <Switch>
-        <Route path="/pedido" exact component={VisualizarPedido} />
+        <Route path="/pedido/:id" exact component={VisualizarPedido} />
         <Route path="/cocina" exact component={VisualizarPedidoCocina} />
         <Route path="/mesas" exact component={VisualizarMesa} />
-        <Route path="/carta" exact component={VisualizarCarta} />
+        <Route path="/carta/:id" exact component={VisualizarCarta} />
         <Route component={Redirect} />
       </Switch>
     </Router>
@@ -23,7 +23,7 @@ function App() {
 }
 
 function Redirect(props) {
-  props.history.push('/carta')
+  props.history.push('/carta/1')
   return (
     <h1>Cargando..</h1>
   )

@@ -22,6 +22,11 @@ class SesionController {
 		try {
 			val _id = Long.valueOf(id)
 			val sesion = repoSesion.searchById(_id)
+			
+//			if(!sesion.sesionActiva) {
+//				return badRequest('{ "error" : "sesion no activa" }')
+//			}
+			
 			return ok(sesion.toJson)
 		} catch(Exception e) {
 			badRequest(e.message)
@@ -32,6 +37,7 @@ class SesionController {
 	def Result sesiones() {
 		try {
 			val sesiones = repoSesion.allInstances
+//			val sesionesActivas = sesiones.filter[sesion | sesion.sesionActiva ].toList
 			return ok(sesiones.toJson)
 		} catch(Exception e) {
 			badRequest(e.message)
@@ -43,6 +49,11 @@ class SesionController {
 		try {
 			val _id = Long.valueOf(id)
 			val sesion = repoSesion.searchSesionByPedido(_id)
+			
+			if(!sesion.sesionActiva) {
+				return badRequest('{ "error" : "ya pediste la cuenta" }')
+			}
+			
 			val pedido = sesion.pedidosActivos.findFirst[pedido|pedido.id.equals(_id)]
 			return ok(pedido.toJson)
 		} catch(Exception e) {
@@ -54,7 +65,8 @@ class SesionController {
 	def Result pedidos() {
 		try {
 			val sesiones = repoSesion.allInstances
-			val pedidos = sesiones.map[pedidosActivos].get(0)
+			val sesionesActivas = sesiones.filter[sesion | sesion.sesionActiva ].toList
+			val pedidos = sesionesActivas.map[pedidosActivos].get(0)
 			return ok(pedidos.toJson)
 		} catch(Exception e) {
 			badRequest(e.message)
@@ -65,7 +77,8 @@ class SesionController {
 	def Result pedidosCocina() {
 		try {
 			val sesiones = repoSesion.allInstances
-			val pedidos = sesiones.map[pedidosActivos].get(0)
+			val sesionesActivas = sesiones.filter[sesion | sesion.sesionActiva ].toList
+			val pedidos = sesionesActivas.map[pedidosActivos].get(0)
 			val pedidosCocina = pedidos.filter[ pedido | !pedido.estado.equals(Estado.Finalizado) && pedido.itemCarta.noEsBebida ].toList
 			return ok(pedidosCocina.toJson)
 		} catch(Exception e) {
@@ -112,7 +125,35 @@ class SesionController {
 			}
 
 			val sesion = repoSesion.searchSesionByPedido(idPedido)
+			
+			if(!sesion.sesionActiva) {
+				return badRequest('{ "error" : "pedido pertenece a una sesion no activa" }')
+			}
+			
 			sesion.bajaPedido(idPedido)
+
+			ok('{"status" : "OK"}')
+		} catch (Exception e) {
+			badRequest(e.message)
+		}
+	}
+	
+	@Put("/pedido/cuenta/:id")
+	def Result pedirCuenta() {
+		try {
+			
+			val _id = Long.valueOf(id) 
+			val sesion =repoSesion.searchById(_id)
+
+			if (sesion === null) {
+				return badRequest('{ "error" : "sesion inexistente" }')
+			}
+			
+			if(!sesion.sesionActiva) {
+				return badRequest('{ "error" : "sesion no activa" }')
+			}
+			
+			sesion.pedirCuenta()
 
 			ok('{"status" : "OK"}')
 		} catch (Exception e) {

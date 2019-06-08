@@ -11,13 +11,9 @@ export default class ItemPedido extends Component {
     }
   }
 
-  validarBaja() {
-    return this.state.pedido.habilitado
-  }
-
   render() {
     return (
-      <ListItem button >
+      <ListItem button disabled={this.props.disabled} >
         <ListItemAvatar>
           <Avatar src={this.state.pedido.itemCarta.imagenes[0]} />
         </ListItemAvatar>
@@ -31,11 +27,9 @@ export default class ItemPedido extends Component {
           secondary={this.state.pedido.cantidad}
         />
         <ListItemText
-          // disabled={!this.validarBaja()}
           primary={
             <DeleteIcon
               onClick={() => {
-                // this.bajaPedido()
                 this.props.handlers.onChange(this.state.pedido)
               }} />
           }
