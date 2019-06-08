@@ -15,8 +15,9 @@ export default class ItemPedidoCocina extends Component {
 
   async actualizarPedido() {
     try {
-      const pedidoJson = await ServiceLocator.SesionService.getPedido(this.state.pedido.id)
-      console.log(pedidoJson)
+      let pedidoJson
+      pedidoJson = await ServiceLocator.SesionService.getPedido(this.state.pedido.id)
+      pedidoJson = await ServiceLocator.SesionService.getPedido(this.state.pedido.id)
       this.setState({
         pedido: Pedido.fromJson(pedidoJson)
       })
