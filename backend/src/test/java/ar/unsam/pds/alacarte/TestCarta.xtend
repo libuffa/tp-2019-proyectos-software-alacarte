@@ -10,7 +10,6 @@ class TestCarta {
 
 	ALaCarteBootstrap bootstrap
 	
-	
 	@Before
 	def void init() {
 		bootstrap = new ALaCarteBootstrap()
@@ -30,8 +29,8 @@ class TestCarta {
 
 	@Test
 	def void probarSearchByCategoria() {
-		val carta = bootstrap.carta.searchByCategoria(Categoria.PlatoPrincipal)
-		Assert.assertEquals(Categoria.PlatoPrincipal, carta.map[item|item.categoria].get(0))
+		val carta = bootstrap.carta.searchByCategoria(Categoria.Plato_Principal)
+		Assert.assertEquals(Categoria.Plato_Principal, carta.map[item|item.categoria].get(0))
 	}
 	
 	@Test

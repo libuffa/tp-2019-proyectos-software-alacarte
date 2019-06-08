@@ -27,7 +27,20 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 	ItemCarta pizza
 	ItemCarta asado
 	ItemCarta cocaCola
-
+	ItemCarta milanesa1
+	ItemCarta milanesa2
+	ItemCarta milanesa3
+	ItemCarta milanesa4
+	ItemCarta milanesa5
+	ItemCarta milanesa6
+	ItemCarta milanesa7
+	ItemCarta milanesa8
+	ItemCarta milanesa9
+	ItemCarta milanesa10
+	ItemCarta milanesa11
+	ItemCarta milanesa12
+	ItemCarta milanesa13
+	
 	Pedido pedido1
 	Pedido pedido2
 	Pedido pedido3
@@ -45,13 +58,16 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 			titulo = "Antipasto"
 			descripcion = "Quesito, salame y otros"
 			categoria = Categoria.Entrada
+			subCategoria = "Picadas"
 			precioUnitario = 80.doubleValue
+			imagenes = #["https://www.landolakes.com/RecipeManagementSystem/media/Recipe-Media-Files/Recipes/Retail/x17/16556-marinated-antipasto-platter-600x600.jpg?ext=.jpg"]
 			habilitado = true
 		]
 		milanesa = new ItemCarta => [
 			titulo = "Mila con fritas"
 			descripcion = "Lomo empanada con papas a la francesa"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
+			subCategoria = "Carnes"
 			precioUnitario = 100.doubleValue
 			habilitado = true
 			imagenes = #["https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg"]
@@ -59,7 +75,8 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		pizza = new ItemCarta => [
 			titulo = "Muzza"
 			descripcion = "Pizza con tomate y queso muzzarella"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
+			subCategoria = "Pizzas"
 			precioUnitario = 300.doubleValue
 			habilitado = true
 			imagenes = #["https://www.closetcooking.com/wp-content/uploads/2008/06/Shrimp-Scampi-Pizza-1200-3859.jpg"]
@@ -75,14 +92,144 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		asado = new ItemCarta => [
 			titulo = "Asado"
 			descripcion = "Tira de asado"
-			categoria = Categoria.PlatoPrincipal
+			categoria = Categoria.Plato_Principal
 			precioUnitario = 400.doubleValue
 			habilitado = true
 			imagenes = #["http://www.primeranota.cl/web/wp-content/uploads/2018/10/asado-de-tira-1024x682.jpg"]
 		]
-
+		milanesa1 = new ItemCarta => [
+			titulo = "Milanesa con fritas"
+			descripcion = "Lomo empanada con papas a la francesa"
+			categoria = Categoria.Plato_Principal
+			subCategoria = "Carnes"
+			precioUnitario = 100.doubleValue
+			habilitado = true
+			imagenes = #["https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg"]
+		]
+		milanesa2 = new ItemCarta => [
+			titulo = "Milanesa con fritas"
+			descripcion = "Lomo empanada con papas a la francesa"
+			categoria = Categoria.Plato_Principal
+			subCategoria = "Carnes"
+			precioUnitario = 100.doubleValue
+			habilitado = true
+			imagenes = #["https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg"]
+		]
+		milanesa3 = new ItemCarta => [
+			titulo = "Milanesa con fritas"
+			descripcion = "Lomo empanada con papas a la francesa"
+			categoria = Categoria.Plato_Principal
+			subCategoria = "Carnes"
+			precioUnitario = 1500.doubleValue
+			habilitado = true
+			imagenes = #["https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg"]
+		]
+		milanesa4 = new ItemCarta => [
+			titulo = "Milanesa con fritas"
+			descripcion = "Lomo empanada con papas a la francesa"
+			categoria = Categoria.Plato_Principal
+			subCategoria = "Pizzas"
+			precioUnitario = 30322.doubleValue
+			habilitado = false
+			imagenes = #["https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg"]
+		]
+		milanesa5 = new ItemCarta => [
+			titulo = "Milanesa con fritas"
+			descripcion = "Lomo empanada con papas a la francesa"
+			categoria = Categoria.Plato_Principal
+			subCategoria = "Pizzas"
+			precioUnitario = 100.doubleValue
+			habilitado = true
+			imagenes = #["https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg"]
+		]
+		milanesa6 = new ItemCarta => [
+			titulo = "Milanesa con fritas"
+			descripcion = "Lomo empanada con papas a la francesa"
+			categoria = Categoria.Plato_Principal
+			subCategoria = "Pastas"
+			precioUnitario = 100.doubleValue
+			habilitado = true
+			imagenes = #["https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg"]
+		]
+		milanesa7 = new ItemCarta => [
+			titulo = "Milanesa con fritas"
+			descripcion = "Lomo empanada con papas a la francesa"
+			categoria = Categoria.Plato_Principal
+			subCategoria = "Pastas"
+			precioUnitario = 100.doubleValue
+			habilitado = true
+			imagenes = #["https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg"]
+		]
+		milanesa8 = new ItemCarta => [
+			titulo = "Milanesa con fritas"
+			descripcion = "Lomo empanada con papas a la francesa"
+			categoria = Categoria.Plato_Principal
+			subCategoria = "Pastas"
+			precioUnitario = 100.doubleValue
+			habilitado = true
+			imagenes = #["https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg"]
+		]
+		milanesa9 = new ItemCarta => [
+			titulo = "Milanesa con fritas"
+			descripcion = "Lomo empanada con papas a la francesa"
+			categoria = Categoria.Plato_Principal
+			subCategoria = "Pastas"
+			precioUnitario = 100.doubleValue
+			habilitado = true
+			imagenes = #["https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg"]
+		]
+		milanesa10 = new ItemCarta => [
+			titulo = "Milanesa con fritas"
+			descripcion = "Lomo empanada con papas a la francesa"
+			categoria = Categoria.Plato_Principal
+			subCategoria = "Pastas"
+			precioUnitario = 100.doubleValue
+			habilitado = true
+			imagenes = #["https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg"]
+		]
+		milanesa11 = new ItemCarta => [
+			titulo = "Milanesa con fritas"
+			descripcion = "Lomo empanada con papas a la francesa"
+			categoria = Categoria.Plato_Principal
+			subCategoria = "Carnes"
+			precioUnitario = 100.doubleValue
+			habilitado = true
+			imagenes = #["https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg"]
+		]
+		milanesa12 = new ItemCarta => [
+			titulo = "Milanesa con fritas"
+			descripcion = "Lomo empanada con papas a la francesa"
+			categoria = Categoria.Plato_Principal
+			subCategoria = "Minutas"
+			precioUnitario = 100.doubleValue
+			habilitado = true
+			imagenes = #["https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg"]
+		]
+		milanesa13 = new ItemCarta => [
+			titulo = "Milanesa con fritas"
+			descripcion = "Lomo empanada con papas a la francesa"
+			categoria = Categoria.Plato_Principal
+			subCategoria = "Minutas"
+			precioUnitario = 100.doubleValue
+			habilitado = true
+			imagenes = #["https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg"]
+		]
+		
 		carta.create(antiPasto)
 		carta.create(milanesa)
+		carta.create(milanesa1)
+		carta.create(milanesa2)
+		carta.create(milanesa3)
+		carta.create(milanesa4)
+		carta.create(milanesa5)
+		carta.create(milanesa6)
+		carta.create(milanesa7)
+		carta.create(milanesa8)
+		carta.create(milanesa9)
+		carta.create(milanesa10)
+		carta.create(milanesa11)
+		carta.create(milanesa12)
+		carta.create(milanesa13)
 		carta.create(pizza)
 		carta.create(cocaCola)
 		carta.create(asado)
