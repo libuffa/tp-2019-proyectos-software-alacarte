@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { ServiceLocator } from "../../services/ServiceLocator.js";
 import MenuSuperior from "../../components/menuSuperior/MenuSuperior";
 import ListaItemsEmpleado from "../../components/listaItemsEmpleado/ListaItemsEmpleado";
-import MenuInferior from '../../components/menuInferior/MenuInferior.js';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 export default class VisualizarCartaEmpleado extends Component {
@@ -60,7 +59,7 @@ export default class VisualizarCartaEmpleado extends Component {
   cambiarEstadoItemCarta = (itemCartaId) => {
     ServiceLocator.ItemsCartaService.updateEstadoItem(itemCartaId)
       .then((resultado) => {
-        if (resultado == "True") {
+        if (resultado === "True") {
           this.cargarCarta(this.state.categoria)
         }
       })

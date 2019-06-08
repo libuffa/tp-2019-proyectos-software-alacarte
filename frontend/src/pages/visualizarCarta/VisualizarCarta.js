@@ -4,6 +4,7 @@ import MenuSuperior from "../../components/menuSuperior/MenuSuperior";
 import ListaItems from "../../components/listaItems/ListaItems";
 import MenuInferior from '../../components/menuInferior/MenuInferior.js';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import './VisualizarCarta.scss';
 
 export default class VisualizarCarta extends Component {
   constructor(props) {
@@ -72,8 +73,10 @@ export default class VisualizarCarta extends Component {
     return (
       <div>
         <CssBaseline />
-        <MenuSuperior data={categorias} handlers={{ onChange: this.seleccionEnMenuSuperior }}></MenuSuperior>
-        <ListaItems data={carta} subData={this.subCategoriasCarta()} handlers={{ onChange: this.seleccionItemCarta }}></ListaItems>
+        <div className="contenedorLista">
+          <MenuSuperior data={categorias} handlers={{ onChange: this.seleccionEnMenuSuperior }}></MenuSuperior>
+          <ListaItems data={carta} subData={this.subCategoriasCarta()} handlers={{ onChange: this.seleccionItemCarta }}></ListaItems>
+        </div>
         <MenuInferior handlers={{ onChange: this.verPedido }} boton="VER PEDIDO"></MenuInferior>
       </div>
     )
