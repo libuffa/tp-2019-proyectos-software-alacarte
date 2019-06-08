@@ -27,4 +27,8 @@ export class SesionService {
         return client.put('/pedido/cocina', data)
     }
 
+    bajaPedido(data) {
+        return client.put('/pedido/baja', data)
+    }
+
 }

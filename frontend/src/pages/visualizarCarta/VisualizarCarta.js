@@ -4,6 +4,7 @@ import MenuSuperior from "../../components/menuSuperior/MenuSuperior";
 import ListaItems from "../../components/listaItems/ListaItems";
 import MenuInferior from '../../components/menuInferior/MenuInferior.js';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import CartIcon from '@material-ui/icons/ListAlt';
 
 export default class VisualizarCarta extends Component {
   constructor(props) {
@@ -69,12 +70,20 @@ export default class VisualizarCarta extends Component {
       categorias = categorias.map((categoria) => categoria.replace('_', ' '))
     }
 
+    const menuButtons = {
+      firstButton:{
+        onChange: this.verPedido,
+        name: "Ver Pedido",
+        icon: (<CartIcon />)
+      },
+    }
+
     return (
       <div>
         <CssBaseline />
         <MenuSuperior data={categorias} handlers={{ onChange: this.seleccionEnMenuSuperior }}></MenuSuperior>
         <ListaItems data={carta} subData={this.subCategoriasCarta()} handlers={{ onChange: this.seleccionItemCarta }}></ListaItems>
-        <MenuInferior handlers={{ onChange: this.verPedido }} boton="VER PEDIDO"></MenuInferior>
+        <MenuInferior menuButtons={menuButtons}></MenuInferior>
       </div>
     )
   }

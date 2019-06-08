@@ -48,7 +48,7 @@ export default class ItemPedidoCocina extends Component {
 
   errorHandler(errorMessage) {
     throw errorMessage
-}
+  }
 
   render() {
 

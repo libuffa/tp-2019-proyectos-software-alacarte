@@ -43,7 +43,7 @@ class SesionController {
 		try {
 			val _id = Long.valueOf(id)
 			val sesion = repoSesion.searchSesionByPedido(_id)
-			val pedido = sesion.pedidos.findFirst[pedido|pedido.id.equals(_id)]
+			val pedido = sesion.pedidosActivos.findFirst[pedido|pedido.id.equals(_id)]
 			return ok(pedido.toJson)
 		} catch(Exception e) {
 			badRequest(e.message)
@@ -54,7 +54,7 @@ class SesionController {
 	def Result pedidos() {
 		try {
 			val sesiones = repoSesion.allInstances
-			val pedidos = sesiones.map[pedidos].get(0)
+			val pedidos = sesiones.map[pedidosActivos].get(0)
 			return ok(pedidos.toJson)
 		} catch(Exception e) {
 			badRequest(e.message)
@@ -65,7 +65,7 @@ class SesionController {
 	def Result pedidosCocina() {
 		try {
 			val sesiones = repoSesion.allInstances
-			val pedidos = sesiones.map[pedidos].get(0)
+			val pedidos = sesiones.map[pedidosActivos].get(0)
 			val pedidosCocina = pedidos.filter[ pedido | !pedido.estado.equals(Estado.Finalizado) && pedido.itemCarta.noEsBebida ].toList
 			return ok(pedidosCocina.toJson)
 		} catch(Exception e) {
@@ -94,6 +94,25 @@ class SesionController {
 
 			val sesion = repoSesion.searchSesionByPedido(idPedido)
 			sesion.cambiarEstado(idPedido)
+
+			ok('{"status" : "OK"}')
+		} catch (Exception e) {
+			badRequest(e.message)
+		}
+	}
+	
+	@Put("/pedido/baja")
+	def Result bajaPedido(@Body String body) {
+		try {
+			
+			val idPedido = Long.valueOf(body.getPropertyValue("id"))
+
+			if (idPedido === null) {
+				return badRequest('{ "error" : "pedido inexistente" }')
+			}
+
+			val sesion = repoSesion.searchSesionByPedido(idPedido)
+			sesion.bajaPedido(idPedido)
 
 			ok('{"status" : "OK"}')
 		} catch (Exception e) {

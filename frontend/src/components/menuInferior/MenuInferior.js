@@ -1,8 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import { Button } from '@material-ui/core';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 
 
 const useStyles = makeStyles(theme => ({
@@ -13,17 +13,37 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function MenuInferior(props) {
-  const { handlers, boton } = props;
+  const { menuButtons } = props;
   const classes = useStyles();
+  const secondButton = (menuButtons.secondButton) && (
+    <BottomNavigationAction
+      label={menuButtons.secondButton.name}
+      icon={menuButtons.secondButton.icon}
+      onClick={() => menuButtons.secondButton.onChange()}
+    />
+  )
+  const thirdButton = (menuButtons.thirdButton) && (
+    <BottomNavigationAction
+      label={menuButtons.thirdButton.name}
+      icon={menuButtons.thirdButton.icon}
+      onClick={() => menuButtons.thirdButton.onChange()}
+    />
+  )
 
   return (
     <React.Fragment>
       <AppBar position="fixed" color="primary" className={classes.appBar}>
-        <Toolbar>
-          <Button variant="outlined" color="inherit" onClick={() => handlers.onChange()}>
-            {boton}
-          </Button>
-        </Toolbar>
+        <BottomNavigation
+          showLabels
+        >
+          <BottomNavigationAction
+            label={menuButtons.firstButton.name}
+            icon={menuButtons.firstButton.icon}
+            onClick={() => menuButtons.firstButton.onChange()}
+          />
+          {secondButton}
+          {thirdButton}
+        </BottomNavigation>
       </AppBar>
     </React.Fragment>
   );

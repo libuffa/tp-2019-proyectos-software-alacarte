@@ -1,5 +1,6 @@
 package domain
 
+import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
@@ -9,7 +10,6 @@ import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.OneToOne
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.uqbar.commons.model.exceptions.UserException
 import repository.ItemCartaRepository
 
 @Entity
@@ -33,6 +33,9 @@ class Pedido {
 	@Column(length=20)
 	Estado estado
 
+	@Column
+	LocalDateTime fechaBaja
+
 	new() {
 		comentarios = ""
 		estado = Estado.Creado
@@ -48,6 +51,10 @@ class Pedido {
 			case Estado.EnCurso: this.estado = Estado.Finalizado
 			default: null
 		}
+	}
+
+	def pedidoDadoDeBaja() {
+		fechaBaja !== null
 	}
 
 }
