@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import List from '@material-ui/core/List';
-import ItemPedido from './ItemPedido/ItemPedido';
+import ItemPedido from './ItemPedido/ItemPedidoCocina';
 
 export default class VisualizarPedido extends Component {
 

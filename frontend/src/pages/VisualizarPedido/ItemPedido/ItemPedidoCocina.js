@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Button, ListItemAvatar, Avatar, ListItemText, List } from '@material-ui/core';
+import { Button, ListItemAvatar, Avatar, ListItemText, ListItem } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight'
-//import DeleteIcon from "@material-ui/icons/Delete"
+import { ServiceLocator } from '../../../services/ServiceLocator';
+import { Pedido } from '../../../domain/Pedido';
 
-export default class ItemPedido extends Component {
+export default class ItemPedidoCocina extends Component {
 
   constructor(props) {
     super(props)
@@ -14,15 +15,15 @@ export default class ItemPedido extends Component {
 
   async cambioEstado() {
     try {
-      const res = await this.service.cambiarEstadoPedido(this.state.pedido)
+      const res = await ServiceLocator.SesionService.cambiarEstadoPedido(this.state.pedido)
       let error = ""
-      await res.text().then(data => error = data)
+      error = await res.statusText
 
       if (res.status !== 200) {
         throw error
       }
 
-      this.actualizarPedidos()
+      await this.actualizarPedido()
 
     } catch (e) {
       this.errorHandler(e)
@@ -33,10 +34,26 @@ export default class ItemPedido extends Component {
     this.cambioEstado()
   }
 
+  async actualizarPedido() {
+    try {
+      const pedidoJson = await ServiceLocator.SesionService.getPedido(this.state.pedido.id)
+      console.log(pedidoJson)
+      this.setState({
+        pedido: Pedido.fromJson(pedidoJson)
+      })
+    } catch (e) {
+      this.errorHandler(e)
+    }
+  }
+
+  errorHandler(errorMessage) {
+    throw errorMessage
+}
+
   render() {
 
     return (
-      <div>
+      <ListItem>
         <ListItemAvatar>
           <Avatar alt={this.state.pedido.itemCarta} src={this.state.pedido.itemCarta.imagenes[0]} />
         </ListItemAvatar>
@@ -47,7 +64,10 @@ export default class ItemPedido extends Component {
         <ListItemText
           primary={
             <Button
-              onClick={() => this.cambiarEstadoPedido()}
+              onClick={() => {
+                this.cambiarEstadoPedido()
+                this.props.handlers.onChange()
+              }}
               name="avanzar"
               size="small"
               variant="outlined"
@@ -56,15 +76,7 @@ export default class ItemPedido extends Component {
               <ArrowRightIcon />
             </Button>
           } />
-
-        {/* {this.props.item} */}
-        {/* ESTO VA PARA PEDIDOS CLIENTE, ESTE BRANCH TIENE PEDIDOS GENERICO
-                    <ListItemText
-                        primary={
-                            <DeleteIcon />
-                        }
-                    /> */}
-      </div>
+      </ListItem>
     )
   }
 }

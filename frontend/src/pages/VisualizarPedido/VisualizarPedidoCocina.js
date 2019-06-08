@@ -1,16 +1,13 @@
 import React, { Component } from 'react'
-import { FormControl, InputLabel, Select, Input, Card, CardContent, Typography, MenuItem, Button, List, ListItem } from '@material-ui/core';
-import VisualizarPedido from './VisualizarPedido';
-import { SesionService } from '../../services/SesionService';
+import { Card, CardContent, Typography, List } from '@material-ui/core';
 import { Pedido } from '../../domain/Pedido';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight'
-import ItemPedido from './ItemPedido/ItemPedido';
+import ItemPedido from './ItemPedido/ItemPedidoCocina';
+import { ServiceLocator } from '../../services/ServiceLocator';
 
 export default class VisualizarPedidoCocina extends Component {
 
     constructor(props) {
         super(props)
-        this.service = new SesionService()
         this.state = {
             pedidos: []
         }
@@ -18,7 +15,7 @@ export default class VisualizarPedidoCocina extends Component {
 
     async componentWillMount() {
         try {
-            const pedidosJson = await this.service.getPedidosCocina()
+            const pedidosJson = await ServiceLocator.SesionService.getPedidosCocina()
             this.setState({
                 pedidos: pedidosJson.map((pedidoJson) => Pedido.fromJson(pedidoJson))
             })
@@ -33,7 +30,7 @@ export default class VisualizarPedidoCocina extends Component {
 
     async actualizarPedidos() {
         try {
-            const pedidosJson = await this.service.getPedidosCocina()
+            const pedidosJson = await ServiceLocator.SesionService.getPedidosCocina()
             this.setState({
                 pedidos: pedidosJson.map((pedidoJson) => Pedido.fromJson(pedidoJson)),
             })
@@ -42,7 +39,7 @@ export default class VisualizarPedidoCocina extends Component {
         }
     }
 
-    actualizarPedidos = () => {
+    actualizar = () => {
         this.actualizarPedidos()
     }
 
@@ -54,9 +51,7 @@ export default class VisualizarPedidoCocina extends Component {
                     <CardContent><Typography variant="subtitle1">Pedidos Cocina</Typography></CardContent>
                 </Card>
                 <List>
-                    <ListItem button alignItems="flex-end">
-                        {this.state.pedidos.map((pedido) => <ItemPedido key={pedido.id} pedido={pedido} handler={ this.actualizarPedidos} />)}
-                    </ListItem>
+                    {this.state.pedidos.map((pedido) => <ItemPedido key={pedido.id} pedido={pedido} handlers={{ onChange: this.actualizar }}/>)}
                 </List>
             </div>
         )
