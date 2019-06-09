@@ -5,7 +5,7 @@ import { Typography, Card, CardContent, Snackbar } from '@material-ui/core';
 import { ServiceLocator } from "../../services/ServiceLocator.js";
 import MenuInferior from '../../components/menuInferior/MenuInferior';
 import CartIcon from '@material-ui/icons/ListAlt';
-import CheckIcon from '@material-ui/icons/Check';
+import MoneyIcon from '@material-ui/icons/AttachMoney';
 import GamesIcon from '@material-ui/icons/Games';
 import './VisualizarPedido.scss';
 import { Pedido } from '../../domain/Pedido';
@@ -28,7 +28,6 @@ export default class VisualizarPedido extends Component {
   cargarPedidos() {
     ServiceLocator.SesionService.getSesion(this.props.match.params.id)
       .then((sesion) => {
-        console.log(sesion)
         const pedidos = sesion.pedidos.filter((pedido) => !pedido.cancelado)
         const idSesion = sesion.id
         const fechaBaja = sesion.fechaBaja
@@ -128,7 +127,7 @@ export default class VisualizarPedido extends Component {
       thirdButton: {
         onChange: this.pedirCuenta,
         name: "Pedir Cuenta",
-        icon: (<CheckIcon />)
+        icon: (<MoneyIcon />)
       }
     }
 
