@@ -21,14 +21,15 @@ export default class VisualizarPedido extends Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.cargarPedidos()
   }
 
   cargarPedidos() {
     ServiceLocator.SesionService.getSesion(this.props.match.params.id)
       .then((sesion) => {
-        const pedidos = sesion.pedidos.filter((pedido) => !pedido.cancelado )
+        console.log(sesion)
+        const pedidos = sesion.pedidos.filter((pedido) => !pedido.cancelado)
         const idSesion = sesion.id
         const fechaBaja = sesion.fechaBaja
         this.setState({
@@ -87,24 +88,15 @@ export default class VisualizarPedido extends Component {
     }
   }
 
-  async pidiendoCuenta() {
-    try {
-      const res = await ServiceLocator.SesionService.pedirCuenta(this.state.idSesion)
-      let error = ""
-      error = await res.statusText
-
-      if (res.status !== 200) {
-        throw error
-      }
-
-      this.setState({
-        errorMessage: ""
+  pidiendoCuenta() {
+    ServiceLocator.SesionService.pedirCuenta(this.state.idSesion)
+      .then((respuesta) => {
+        if (respuesta.status === 200) {
+          this.cargarPedidos()
+        }
+      }).catch(error => {
+        this.generarError(error.response.data.error)
       })
-
-    } catch (e) {
-      const mensaje = await e.response.data.error
-      this.generarError(mensaje)
-    }
   }
 
   pedirCuenta = () => {
@@ -116,7 +108,7 @@ export default class VisualizarPedido extends Component {
   }
 
   render() {
-    const { pedidos } = this.state;
+    const { pedidos, errorMessage } = this.state
 
     if (!pedidos) {
       return <div></div>
@@ -146,12 +138,12 @@ export default class VisualizarPedido extends Component {
           <CardContent><Typography variant="subtitle1">Tu Pedido</Typography></CardContent>
         </Card>
         <List >
-          {pedidos.map((pedido) => { 
-            return <ItemPedido 
-                    key={pedido.id} 
-                    pedido={pedido} 
-                    handlers={{ onChange: this.actualizar }} 
-                    disabled={this.validarSesion()} />
+          {pedidos.map((pedido) => {
+            return <ItemPedido
+              key={pedido.id}
+              pedido={pedido}
+              handlers={{ onChange: this.actualizar }}
+              disabled={this.validarSesion()} />
           })}
         </List>
         <Card>
@@ -168,10 +160,10 @@ export default class VisualizarPedido extends Component {
             <MenuInferior menuButtons={menuButtons} />
           </CardContent>
         </Card>
-        <Snackbar
-          open={this.snackbarOpen()}
-          message={this.state.errorMessage}
-          autoHideDuration="4" />
+        <Snackbar 
+          open={this.snackbarOpen()} 
+          message={errorMessage} 
+          autoHideDuration={4} />
       </div>
     )
   }

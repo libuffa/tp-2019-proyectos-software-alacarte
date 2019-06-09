@@ -7,6 +7,7 @@ import org.uqbar.xtrest.api.annotation.Body
 import org.uqbar.xtrest.api.annotation.Controller
 import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.api.annotation.Put
+import org.uqbar.xtrest.api.annotation.Post
 import org.uqbar.xtrest.json.JSONUtils
 import repository.SesionRepository
 
@@ -15,18 +16,18 @@ import repository.SesionRepository
 class SesionController {
 	
 	extension JSONUtils = new JSONUtils
-	SesionRepository repoSesion = SesionRepository.instance
+	SesionRepository repositorioSesion = SesionRepository.instance
 
 	@Get("/sesion/:id")
 	def Result sesion() {
 		try {
 			val _id = Long.valueOf(id)
-			val sesion = repoSesion.searchById(_id)
 			
 //			if(!sesion.sesionActiva) {
 //				return badRequest('{ "error" : "sesion no activa" }')
 //			}
 			
+			val sesion = repositorioSesion.searchById(_id)
 			return ok(sesion.toJson)
 		} catch(Exception e) {
 			badRequest(e.message)
@@ -36,8 +37,8 @@ class SesionController {
 	@Get("/sesion")
 	def Result sesiones() {
 		try {
-			val sesiones = repoSesion.allInstances
 //			val sesionesActivas = sesiones.filter[sesion | sesion.sesionActiva ].toList
+			val sesiones = repositorioSesion.allInstances
 			return ok(sesiones.toJson)
 		} catch(Exception e) {
 			badRequest(e.message)
@@ -48,7 +49,7 @@ class SesionController {
 	def Result pedido() {
 		try {
 			val _id = Long.valueOf(id)
-			val sesion = repoSesion.searchSesionByPedido(_id)
+			val sesion = repositorioSesion.searchSesionByPedido(_id)
 			
 			if(!sesion.sesionActiva) {
 				return badRequest('{ "error" : "ya pediste la cuenta" }')
@@ -64,9 +65,10 @@ class SesionController {
 	@Get("/pedido")
 	def Result pedidos() {
 		try {
-			val sesiones = repoSesion.allInstances
+			val sesiones = repositorioSesion.allInstances
 			val sesionesActivas = sesiones.filter[sesion | sesion.sesionActiva ].toList
 			val pedidos = sesionesActivas.map[pedidosActivos].get(0)
+			
 			return ok(pedidos.toJson)
 		} catch(Exception e) {
 			badRequest(e.message)
@@ -76,7 +78,7 @@ class SesionController {
 	@Get("/pedido/cocina")
 	def Result pedidosCocina() {
 		try {
-			val sesiones = repoSesion.allInstances
+			val sesiones = repositorioSesion.allInstances
 			val sesionesActivas = sesiones.filter[sesion | sesion.sesionActiva ].toList
 			val pedidos = sesionesActivas.map[pedidosActivos].get(0)
 			val pedidosCocina = pedidos.filter[ pedido | !pedido.estado.equals(Estado.Finalizado) && pedido.itemCarta.noEsBebida ].toList
@@ -105,7 +107,7 @@ class SesionController {
 				return badRequest('{ "error" : "pedido inexistente" }')
 			}
 
-			val sesion = repoSesion.searchSesionByPedido(idPedido)
+			val sesion = repositorioSesion.searchSesionByPedido(idPedido)
 			sesion.cambiarEstado(idPedido)
 
 			ok('{"status" : "OK"}')
@@ -124,7 +126,7 @@ class SesionController {
 				return badRequest('{ "error" : "pedido inexistente" }')
 			}
 
-			val sesion = repoSesion.searchSesionByPedido(idPedido)
+			val sesion = repositorioSesion.searchSesionByPedido(idPedido)
 			
 			if(!sesion.sesionActiva) {
 				return badRequest('{ "error" : "pedido pertenece a una sesion no activa" }')
@@ -143,7 +145,7 @@ class SesionController {
 		try {
 			
 			val _id = Long.valueOf(id) 
-			val sesion =repoSesion.searchById(_id)
+			val sesion =repositorioSesion.searchById(_id)
 
 			if (sesion === null) {
 				return badRequest('{ "error" : "sesion inexistente" }')
@@ -161,4 +163,14 @@ class SesionController {
 		}
 	}
 	
+	@Post("/pedido/:id/cambiarEstado")
+	def Result cambiarEstado() {
+		try {
+			val idPedido = new Long(id)
+			repositorioSesion.searchSesionByPedido(idPedido).cambiarEstado(idPedido)
+			return ok('{"status" : "True"}')
+		} catch (Exception e) {
+			return badRequest(e.message)
+		}
+	}
 }

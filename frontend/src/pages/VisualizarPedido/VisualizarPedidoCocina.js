@@ -1,59 +1,77 @@
 import React, { Component } from 'react'
-import { Card, CardContent, Typography, List } from '@material-ui/core';
-import { Pedido } from '../../domain/Pedido';
+import { Card, CardContent, Typography, List, Snackbar } from '@material-ui/core';
 import ItemPedido from './ItemPedido/ItemPedidoCocina';
 import { ServiceLocator } from '../../services/ServiceLocator';
 
 export default class VisualizarPedidoCocina extends Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            pedidos: []
-        }
+  constructor(props) {
+    super(props)
+    this.state = {
+      pedidos: null,
     }
+  }
 
-    async componentWillMount() {
-        try {
-            const pedidosJson = await ServiceLocator.SesionService.getPedidosCocina()
-            this.setState({
-                pedidos: pedidosJson.map((pedidoJson) => Pedido.fromJson(pedidoJson))
-            })
-        } catch (e) {
-            this.errorHandler(e)
-        }
+  componentDidMount() {
+    this.cargarPedidos()
+  }
+
+  cargarPedidos() {
+    ServiceLocator.SesionService.getPedidosCocina()
+      .then((pedidos) => {
+        this.setState({
+          pedidos,
+        })
+      })
+  }
+
+  cambiarEstadoPedido(idPedido) {
+    try {
+      ServiceLocator.SesionService.cambiarEstadoPedido(idPedido)
+        .then((respuesta) => {
+          if (respuesta.status === "True") {
+            this.cargarPedidos()
+          }
+        })
+    } catch (error) {
+      this.generarError(error.response.data)
     }
+  }
 
-    errorHandler(errorMessage) {
-        throw errorMessage
+  actualizarEstadoPedido = (idPedido) => {
+    this.cambiarEstadoPedido(idPedido)
+  }
+
+  snackbarOpen() {
+    return this.state.errorMessage
+  }
+
+  generarError(errorMessage) {
+    this.setState({
+      errorMessage: errorMessage
+    })
+  }
+
+  render() {
+    const { pedidos, errorMessage } = this.state
+
+    if (!pedidos) {
+      return <div></div>
     }
-
-    async actualizarPedidos() {
-        try {
-            const pedidosJson = await ServiceLocator.SesionService.getPedidosCocina()
-            this.setState({
-                pedidos: pedidosJson.map((pedidoJson) => Pedido.fromJson(pedidoJson)),
-            })
-        } catch (e) {
-            this.errorHandler(e)
-        }
-    }
-
-    actualizar = () => {
-        this.actualizarPedidos()
-    }
-
-    render() {
-
-        return (
-            <div>
-                <Card>
-                    <CardContent><Typography variant="subtitle1">Pedidos Cocina</Typography></CardContent>
-                </Card>
-                <List>
-                    {this.state.pedidos.map((pedido) => <ItemPedido key={pedido.id} pedido={pedido} handlers={{ onChange: this.actualizar }}/>)}
-                </List>
-            </div>
-        )
-    }
+    return (
+      <div>
+        <Card>
+          <CardContent><Typography variant="subtitle1">Pedidos Cocina</Typography></CardContent>
+        </Card>
+        <List>
+          {pedidos.map((pedido) => {
+            return <ItemPedido 
+                      key={pedido.id} 
+                      pedido={pedido} 
+                      handlers={{ onChange: this.actualizarEstadoPedido }} />
+          })}
+        </List>
+        <Snackbar open={this.snackbarOpen()} message={errorMessage} autoHideDuration={4} />
+      </div>
+    )
+  }
 }

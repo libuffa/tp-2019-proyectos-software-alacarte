@@ -46,8 +46,8 @@ class Pedido {
 
 	def siguienteEstado() {
 		switch estado {
-			case Estado.Creado: this.estado = Estado.EnCurso
-			case Estado.EnCurso: this.estado = Estado.Finalizado
+			case Estado.Creado: this.estado = Estado.En_Curso
+			case Estado.En_Curso: this.estado = Estado.Finalizado
 			default: null
 		}
 	}

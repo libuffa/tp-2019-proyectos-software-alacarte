@@ -249,7 +249,8 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		pedido1 = new Pedido => [
 			itemCarta = milanesa
 			cantidad = 2
-			estado = Estado.EnCurso
+			comentarios = "Sin sal"
+			estado = Estado.En_Curso
 		]
 		pedido2 = new Pedido => [
 			itemCarta = pizza
@@ -262,19 +263,30 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		pedido4 = new Pedido => [
 			itemCarta = asado
 			cantidad = 1
-			estado = Estado.Finalizado
+			comentarios = "bien cocido"
+			estado = Estado.Creado
 		]
 
 		sesion1 = new Sesion => [
 			mesa = repoMesas.searchExampleById(mesa1)
 			mozo = repoEmpleado.searchMozoExampleById(claudia)
-			pedidos = #[pedido1, pedido2, pedido3, pedido4]
+			pedidos = #[
+				pedido1, pedido2, pedido3, pedido4, createPedido(milanesa1,1), createPedido(milanesa2,2),
+				createPedido(milanesa3,3)
+			]
 		]
 
 		repoSesion.create(sesion1)
 
 //		sesion1.pedirItem(milanesa,2,"cocida")
 //		sesion1.pedirItem(pizza,1,"")
+	}
+	
+	def createPedido(ItemCarta itemCarta, int cantidad) {
+		new Pedido => [
+			it.itemCarta = itemCarta
+			it.cantidad = cantidad
+		]
 	}
 
 }
