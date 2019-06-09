@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { ListItem, ListItemAvatar, Avatar, ListItemText, List, Grid, ListItemSecondaryAction, Switch } from '@material-ui/core';
+import { ListItem, ListItemAvatar, Avatar, ListItemText, List, ListItemSecondaryAction, Switch, Divider, ListSubheader } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,27 +32,21 @@ export default function ListaItemsEmpleado(props) {
   return (
     <div className={classes.root}>
       {subData.map((subCategoria) => {
-        return <List key={subCategoria} component="nav" aria-label="Secondary mailbox folders">
-          <ListItem selected divider key={subCategoria}>
+        return <List key={subCategoria}>
+          <Divider />
+          <ListSubheader disableSticky color="inherit" key={subCategoria}>
             <ListItemText primary={subCategoria} />
-          </ListItem>
+          </ListSubheader>
+          <Divider />
           {filtrarData(subCategoria).map((object) => {
             return <ListItem button key={object.id} onClick={() => handlers.onChange(object)}>
-              <Grid container spacing={0}>
-                <Grid item xs={2}>
-                  <ListItemAvatar>
-                    <Avatar alt={object.titulo} src={object.imagenes[0]} />
-                  </ListItemAvatar>
-                </Grid>
-                <Grid item xs={8}>
-                  <ListItemText primary={object.titulo} />
-                </Grid>
-                <Grid item xs={2}>
-                  <ListItemSecondaryAction>
-                    <Switch onChange={() => disableFunction.onChange(object.id)} checked={object.habilitado} />
-                  </ListItemSecondaryAction>
-                </Grid>
-              </Grid>
+              <ListItemAvatar>
+                <Avatar src={object.imagenes[0]} />
+              </ListItemAvatar>
+              <ListItemText primary={object.titulo} />
+              <ListItemSecondaryAction>
+                <Switch onChange={() => disableFunction.onChange(object.id)} checked={object.habilitado} />
+              </ListItemSecondaryAction>
             </ListItem>
           })}
         </List>

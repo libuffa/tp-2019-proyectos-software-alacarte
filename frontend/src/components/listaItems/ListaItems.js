@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { ListItem, ListItemAvatar, Avatar, ListItemText, List, Grid } from '@material-ui/core';
+import { ListItem, ListItemAvatar, Avatar, ListItemText, List, ListItemSecondaryAction, ListSubheader, Divider } from '@material-ui/core';
+import './ListaItems.scss';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,26 +33,22 @@ export default function ListaItems(props) {
   return (
     <div className={classes.root}>
       {subData.map((subCategoria) => {
-        return <List key={subCategoria} component="nav" aria-label="Secondary mailbox folders">
-          <ListItem selected divider key={subCategoria}>
+        return <List key={subCategoria}>
+          <Divider />
+          <ListSubheader disableSticky color="inherit" key={subCategoria}>
             <ListItemText primary={subCategoria} />
-          </ListItem>
+          </ListSubheader>
+          <Divider />
           {filtrarData(subCategoria).map((object) => {
             if (object.habilitado) {
               return <ListItem button key={object.id} onClick={() => handlers.onChange(object)}>
-                <Grid container spacing={0}>
-                  <Grid item xs={2}>
-                    <ListItemAvatar>
-                      <Avatar alt={object.titulo} src={object.imagenes[0]} />
-                    </ListItemAvatar>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <ListItemText primary={object.titulo} />
-                  </Grid>
-                  <Grid item xs={2}>
-                    <ListItemText primary={"$" + object.precioUnitario} />
-                  </Grid>
-                </Grid>
+                <ListItemAvatar>
+                  <Avatar src={object.imagenes[0]} />
+                </ListItemAvatar>
+                <ListItemText primary={object.titulo} />
+                <ListItemSecondaryAction>
+                  <ListItemText primary={<div className="precio">${object.precioUnitario}</div>} />
+                </ListItemSecondaryAction>
               </ListItem>
             }
             return <div></div>
