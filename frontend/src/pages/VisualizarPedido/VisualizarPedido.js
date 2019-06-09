@@ -13,7 +13,7 @@ export default class VisualizarPedido extends Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.cargarPedidos()
   }
 

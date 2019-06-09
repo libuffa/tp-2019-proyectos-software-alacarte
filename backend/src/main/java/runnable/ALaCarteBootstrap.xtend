@@ -249,7 +249,8 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		pedido1 = new Pedido => [
 			itemCarta = milanesa
 			cantidad = 2
-			estado = Estado.EnCurso
+			comentarios = "Sin sal"
+			estado = Estado.En_Curso
 		]
 		pedido2 = new Pedido => [
 			itemCarta = pizza
@@ -262,7 +263,8 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 		pedido4 = new Pedido => [
 			itemCarta = asado
 			cantidad = 1
-			estado = Estado.Finalizado
+			comentarios = "bien cocido"
+			estado = Estado.Creado
 		]
 
 		sesion1 = new Sesion => [

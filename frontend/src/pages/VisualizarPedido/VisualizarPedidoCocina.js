@@ -1,94 +1,74 @@
 import React, { Component } from 'react'
 import { Card, CardContent, Typography, List, Snackbar } from '@material-ui/core';
-import { Pedido } from '../../domain/Pedido';
 import ItemPedido from './ItemPedido/ItemPedidoCocina';
 import { ServiceLocator } from '../../services/ServiceLocator';
 
 export default class VisualizarPedidoCocina extends Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            pedidos: []
-        }
+  constructor(props) {
+    super(props)
+    this.state = {
+      pedidos: null,
     }
+  }
 
-    async componentWillMount() {
-        try {
-            this.actualizarPedidos()
-        } catch (e) {
-            const mensaje = await e.response.data
-            this.generarError(mensaje)
-        }
-    }
+  componentDidMount() {
+    this.cargarPedidos()
+  }
 
-    actualizar = (pedido) => {
-        this.avanzarPedido(pedido)
-    }
-
-    async avanzarPedido(pedido) {
-        try {
-            const res = await ServiceLocator.SesionService.cambiarEstadoPedido(pedido)
-            let error = ""
-            error = await res.statusText
-
-            if (res.status !== 200) {
-                throw error
-            }
-
-            this.actualizarPedidos()
-            
-        } catch (e) {
-            const mensaje = await e.response.data
-            this.generarError(mensaje)
-        }
-    }
-    
-    async actualizarPedidos() {
-        try {
-            
-            this.setState({
-                errorMessage: ""
-            })
-            
-            const pedidosJson = await ServiceLocator.SesionService.getPedidosCocina()
-            this.setState({
-                pedidos: pedidosJson.map((pedidoJson) => Pedido.fromJson(pedidoJson)),
-            })
-            console.log(this.state.pedidos)
-
-        } catch (e) {
-            const mensaje = await e.response.data
-            this.generarError(mensaje)
-        }
-    }
-
-    snackbarOpen() {
-        return this.state.errorMessage
-    }
-
-    generarError(errorMessage) {
+  cargarPedidos() {
+    ServiceLocator.SesionService.getPedidosCocina()
+      .then((pedidos) => {
         this.setState({
-            errorMessage: errorMessage
+          pedidos,
         })
-    }
+      })
+  }
 
-    render() {
-
-        return (
-            <div>
-                <Card>
-                    <CardContent><Typography variant="subtitle1">Pedidos Cocina</Typography></CardContent>
-                </Card>
-                <List>
-                    {this.state.pedidos.map((pedido) => 
-                    <ItemPedido key={pedido.id} pedido={pedido} handlers={{ onChange: this.actualizar }} />)}
-                </List>
-                <Snackbar
-                    open={this.snackbarOpen()}
-                    message={this.state.errorMessage}
-                    autoHideDuration="4" />
-            </div>
-        )
+  cambiarEstadoPedido(idPedido) {
+    try {
+      ServiceLocator.SesionService.cambiarEstadoPedido(idPedido)
+        .then((respuesta) => {
+          if (respuesta.status === "True") {
+            this.cargarPedidos()
+          }
+        })
+    } catch (error) {
+      this.generarError(error.response.data)
     }
+  }
+
+  actualizarEstadoPedido = (idPedido) => {
+    this.cambiarEstadoPedido(idPedido)
+  }
+
+  snackbarOpen() {
+    return this.state.errorMessage
+  }
+
+  generarError(errorMessage) {
+    this.setState({
+      errorMessage: errorMessage
+    })
+  }
+
+  render() {
+    const { pedidos, errorMessage } = this.state
+
+    if (!pedidos) {
+      return <div></div>
+    }
+    return (
+      <div>
+        <Card>
+          <CardContent><Typography variant="subtitle1">Pedidos Cocina</Typography></CardContent>
+        </Card>
+        <List>
+          {pedidos.map((pedido) => {
+            return <ItemPedido key={pedido.id} pedido={pedido} handlers={{ onChange: this.actualizarEstadoPedido }} />
+          })}
+        </List>
+        <Snackbar open={this.snackbarOpen()} message={errorMessage} autoHideDuration={4} />
+      </div>
+    )
+  }
 }
