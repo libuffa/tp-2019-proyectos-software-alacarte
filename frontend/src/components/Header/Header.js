@@ -17,7 +17,7 @@ function Header(props) {
           <MenuIcon />
         </IconButton>
         <Typography className="title" variant="h6">
-          A la Carte'{" - " + pageName}
+          A la Carte{" - " + pageName}
         </Typography>
       </Toolbar>
     </AppBar>

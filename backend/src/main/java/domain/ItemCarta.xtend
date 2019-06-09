@@ -52,5 +52,9 @@ class ItemCarta {
 	def cambiarEstado(){
 		habilitado = !habilitado
 	}
+	
+	def noEsBebida() {
+		!categoria.equals(Categoria.Bebida)
+	}
 
 }

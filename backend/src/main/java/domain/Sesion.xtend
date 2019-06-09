@@ -30,7 +30,7 @@ class Sesion {
 	@JsonIgnore Mesa mesa
 
 	@OneToOne(fetch=FetchType.LAZY)
-	Mozo mozo
+	@JsonIgnore Mozo mozo
 
 	@Column
 	Boolean habilitado
@@ -48,6 +48,16 @@ class Sesion {
 		]
 		this.pedidos.add(pedido)
 		SesionRepository.instance.update(this)
+	}
+	
+	def cambiarEstado(Long idPedido) {
+		pedidos.findFirst[pedido | pedido.id.equals(idPedido)].siguienteEstado
+		SesionRepository.instance.update(this)
+		return true
+	}
+	
+	def contienePedido(Long id) {
+		pedidos.exists[pedido | pedido.id.equals(id)]
 	}
 
 }

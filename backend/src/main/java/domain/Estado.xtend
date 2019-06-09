@@ -7,7 +7,7 @@ enum Estado {
 //        override Estado next() {
 //            return EnCurso
 //        },
-	EnCurso,
+	En_Curso,
 	Finalizado,
 	Cancelado
 	

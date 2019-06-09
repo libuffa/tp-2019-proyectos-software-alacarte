@@ -68,4 +68,10 @@ class SesionRepository extends AbstractRepository<Sesion> {
 		searchById(id)
 	}
 	
+	def searchSesionByPedido(Long id) {
+		val sesiones = this.allInstances
+		val sesion = sesiones.findFirst[ sesion | sesion.contienePedido(id)]
+		sesion
+	}
+	
 }
