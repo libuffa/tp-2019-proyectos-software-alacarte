@@ -4,6 +4,7 @@ import MenuSuperior from "../../components/menuSuperior/MenuSuperior";
 import ListaItems from "../../components/listaItems/ListaItems";
 import MenuInferior from '../../components/menuInferior/MenuInferior.js';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import CartIcon from '@material-ui/icons/ListAlt';
 
 export default class VisualizarCarta extends Component {
   constructor(props) {
@@ -12,12 +13,28 @@ export default class VisualizarCarta extends Component {
       carta: null,
       selectedItem: null,
       categorias: null,
+      idSesion: this.props.match.params.id
     }
   }
 
   componentDidMount() {
     this.cargarCarta('Entrada')
     this.cargarCategorias()
+    if(this.props.match.params.id == 1) {
+      this.cargarSesion()
+    }
+  }
+
+  cargarSesion() {
+    ServiceLocator.SesionService.getSesiones()
+      .then((sesiones) => {
+        const sesion = sesiones[0]
+        const idSesion = sesion.id
+        console.log(idSesion)
+        this.setState({
+          idSesion,
+        })
+      })
   }
 
   cargarCarta(categoria) {
@@ -56,7 +73,7 @@ export default class VisualizarCarta extends Component {
   }
 
   verPedido = () => {
-    this.props.history.push('/pedido')
+    this.props.history.push('/pedido/' + this.state.idSesion)
   }
 
   render() {
@@ -69,12 +86,23 @@ export default class VisualizarCarta extends Component {
       categorias = categorias.map((categoria) => categoria.replace('_', ' '))
     }
 
+    const menuButtons = {
+      firstButton:{
+        onChange: this.verPedido,
+        name: "Ver Pedido",
+        icon: (<CartIcon />)
+      },
+    }
+
     return (
       <div>
         <CssBaseline />
         <MenuSuperior data={categorias} handlers={{ onChange: this.seleccionEnMenuSuperior }}></MenuSuperior>
-        <ListaItems data={carta} subData={this.subCategoriasCarta()} handlers={{ onChange: this.seleccionItemCarta }}></ListaItems>
-        <MenuInferior handlers={{ onChange: this.verPedido }} boton="VER PEDIDO"></MenuInferior>
+        <ListaItems 
+          data={carta} 
+          subData={this.subCategoriasCarta()} 
+          handlers={{ onChange: this.seleccionItemCarta }}></ListaItems>
+        <MenuInferior menuButtons={menuButtons}></MenuInferior>
       </div>
     )
   }

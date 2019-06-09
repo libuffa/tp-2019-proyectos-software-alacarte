@@ -22,9 +22,9 @@ export default class ItemPedidoCocina extends Component {
               secondary={"Cantidad: " + pedido.cantidad} />
           </Grid>
           <Grid item xs={5}>
-            <ListItemText primary={
+            <ListItemText secondary={
               <IconButton disabled>
-                <div className="contenedorEstado">{pedido.estado.replace('_', ' ').toLowerCase()}</div>
+                <div className="contenedorEstado">{pedido.estado.replace('_', ' ')}</div>
               </IconButton>
             } />
             <ListItemText primary={

@@ -9,23 +9,21 @@ import VisualizarPedidoCocina from './pages/VisualizarPedido/VisualizarPedidoCoc
 
 function App() {
   return (
-    <div>
-      <Router>
-        <Header />
-        <Switch>
-          <Route path="/pedido" exact component={VisualizarPedido} />
-          <Route path="/cocina" exact component={VisualizarPedidoCocina} />
-          <Route path="/mesas" exact component={VisualizarMesa} />
-          <Route path="/carta" exact component={VisualizarCarta} />
-          <Route component={Redirect} />
-        </Switch>
-      </Router>
-    </div>
+    <Router>
+      <Header />
+      <Switch>
+        <Route path="/pedido/:id" exact component={VisualizarPedido} />
+        <Route path="/cocina" exact component={VisualizarPedidoCocina} />
+        <Route path="/mesas" exact component={VisualizarMesa} />
+        <Route path="/carta/:id" exact component={VisualizarCarta} />
+        <Route component={Redirect} />
+      </Switch>
+    </Router>
   );
 }
 
 function Redirect(props) {
-  props.history.push('/carta')
+  props.history.push('/carta/1')
   return (
     <h1>Cargando..</h1>
   )

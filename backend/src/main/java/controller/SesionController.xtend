@@ -3,8 +3,10 @@ package controller
 import domain.Estado
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.xtrest.api.Result
+import org.uqbar.xtrest.api.annotation.Body
 import org.uqbar.xtrest.api.annotation.Controller
 import org.uqbar.xtrest.api.annotation.Get
+import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.api.annotation.Post
 import org.uqbar.xtrest.json.JSONUtils
 import repository.SesionRepository
@@ -20,6 +22,11 @@ class SesionController {
 	def Result sesion() {
 		try {
 			val _id = Long.valueOf(id)
+			
+//			if(!sesion.sesionActiva) {
+//				return badRequest('{ "error" : "sesion no activa" }')
+//			}
+			
 			val sesion = repositorioSesion.searchById(_id)
 			return ok(sesion.toJson)
 		} catch(Exception e) {
@@ -30,6 +37,7 @@ class SesionController {
 	@Get("/sesion")
 	def Result sesiones() {
 		try {
+//			val sesionesActivas = sesiones.filter[sesion | sesion.sesionActiva ].toList
 			val sesiones = repositorioSesion.allInstances
 			return ok(sesiones.toJson)
 		} catch(Exception e) {
@@ -42,7 +50,12 @@ class SesionController {
 		try {
 			val _id = Long.valueOf(id)
 			val sesion = repositorioSesion.searchSesionByPedido(_id)
-			val pedido = sesion.pedidos.findFirst[pedido|pedido.id.equals(_id)]
+			
+			if(!sesion.sesionActiva) {
+				return badRequest('{ "error" : "ya pediste la cuenta" }')
+			}
+			
+			val pedido = sesion.pedidosActivos.findFirst[pedido|pedido.id.equals(_id)]
 			return ok(pedido.toJson)
 		} catch(Exception e) {
 			badRequest(e.message)
@@ -53,7 +66,9 @@ class SesionController {
 	def Result pedidos() {
 		try {
 			val sesiones = repositorioSesion.allInstances
-			val pedidos = sesiones.map[pedidos].get(0)
+			val sesionesActivas = sesiones.filter[sesion | sesion.sesionActiva ].toList
+			val pedidos = sesionesActivas.map[pedidosActivos].get(0)
+			
 			return ok(pedidos.toJson)
 		} catch(Exception e) {
 			badRequest(e.message)
@@ -64,7 +79,8 @@ class SesionController {
 	def Result pedidosCocina() {
 		try {
 			val sesiones = repositorioSesion.allInstances
-			val pedidos = sesiones.map[pedidos].get(0)
+			val sesionesActivas = sesiones.filter[sesion | sesion.sesionActiva ].toList
+			val pedidos = sesionesActivas.map[pedidosActivos].get(0)
 			val pedidosCocina = pedidos.filter[ pedido | !pedido.estado.equals(Estado.Finalizado) && pedido.itemCarta.noEsBebida ].toList
 			return ok(pedidosCocina.toJson)
 		} catch(Exception e) {
@@ -77,6 +93,72 @@ class SesionController {
 		try {
 			return ok(Estado.values.toJson)
 		} catch(Exception e) {
+			badRequest(e.message)
+		}
+	}
+	
+	@Put("/pedido/cocina")
+	def Result siguienteEstado(@Body String body) {
+		try {
+			
+			val idPedido = Long.valueOf(body.getPropertyValue("id"))
+
+			if (idPedido === null) {
+				return badRequest('{ "error" : "pedido inexistente" }')
+			}
+
+			val sesion = repositorioSesion.searchSesionByPedido(idPedido)
+			sesion.cambiarEstado(idPedido)
+
+			ok('{"status" : "OK"}')
+		} catch (Exception e) {
+			badRequest(e.message)
+		}
+	}
+	
+	@Put("/pedido/baja")
+	def Result bajaPedido(@Body String body) {
+		try {
+			
+			val idPedido = Long.valueOf(body.getPropertyValue("id"))
+
+			if (idPedido === null) {
+				return badRequest('{ "error" : "pedido inexistente" }')
+			}
+
+			val sesion = repositorioSesion.searchSesionByPedido(idPedido)
+			
+			if(!sesion.sesionActiva) {
+				return badRequest('{ "error" : "pedido pertenece a una sesion no activa" }')
+			}
+			
+			sesion.bajaPedido(idPedido)
+
+			ok('{"status" : "OK"}')
+		} catch (Exception e) {
+			badRequest(e.message)
+		}
+	}
+	
+	@Put("/pedido/cuenta/:id")
+	def Result pedirCuenta() {
+		try {
+			
+			val _id = Long.valueOf(id) 
+			val sesion =repositorioSesion.searchById(_id)
+
+			if (sesion === null) {
+				return badRequest('{ "error" : "sesion inexistente" }')
+			}
+			
+			if(!sesion.sesionActiva) {
+				return badRequest('{ "error" : "sesion no activa" }')
+			}
+			
+			sesion.pedirCuenta()
+
+			ok('{"status" : "OK"}')
+		} catch (Exception e) {
 			badRequest(e.message)
 		}
 	}

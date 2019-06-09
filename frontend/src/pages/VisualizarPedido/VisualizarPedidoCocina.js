@@ -64,7 +64,10 @@ export default class VisualizarPedidoCocina extends Component {
         </Card>
         <List>
           {pedidos.map((pedido) => {
-            return <ItemPedido key={pedido.id} pedido={pedido} handlers={{ onChange: this.actualizarEstadoPedido }} />
+            return <ItemPedido 
+                      key={pedido.id} 
+                      pedido={pedido} 
+                      handlers={{ onChange: this.actualizarEstadoPedido }} />
           })}
         </List>
         <Snackbar open={this.snackbarOpen()} message={errorMessage} autoHideDuration={4} />

@@ -32,6 +32,9 @@ class Pedido {
 	@Column(length=20)
 	Estado estado
 
+	@Column
+	Boolean cancelado = false
+
 	new() {
 		comentarios = ""
 		estado = Estado.Creado
