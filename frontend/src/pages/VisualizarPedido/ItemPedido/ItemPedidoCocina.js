@@ -19,7 +19,7 @@ export default class ItemPedidoCocina extends Component {
                   <Error color="error" fontSize="small" />
                 </div>
               }
-              secondary={"Cantidad " + pedido.cantidad} />
+              secondary={"Cantidad: " + pedido.cantidad} />
           </Grid>
           <Grid item xs={5}>
             <ListItemText primary={
