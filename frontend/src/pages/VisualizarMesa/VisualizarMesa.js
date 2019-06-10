@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import List from '@material-ui/core/List';
 import ItemMesa from './ItemMesa/ItemMesa';
-import { ServiceLocator } from './../../services/ServiceLocator';
+import { ServiceLocator } from '../../services/ServiceLocator';
 
-export default class VisualizarMesas extends Component {
+export default class VisualizarMesa extends Component {
 
   constructor(props) {
     super(props)
