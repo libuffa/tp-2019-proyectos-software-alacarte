@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
 import List from '@material-ui/core/List';
-import ItemPedido from './ItemPedido/ItemPedido';
 import { Typography, Card, CardContent, Snackbar } from '@material-ui/core';
-import { ServiceLocator } from "../../services/ServiceLocator.js";
-import MenuInferior from '../../components/menuInferior/MenuInferior';
+import { ServiceLocator } from "../../../services/ServiceLocator.js";
+import MenuInferior from '../../../components/menuInferior/MenuInferior';
 import CartIcon from '@material-ui/icons/ListAlt';
 import MoneyIcon from '@material-ui/icons/AttachMoney';
 import GamesIcon from '@material-ui/icons/Games';
 import './VisualizarPedido.scss';
-import { Pedido } from '../../domain/Pedido';
+import { Pedido } from '../../../domain/Pedido';
+import DialogConfirmacion from '../../../components/Dialog/DialogConfirmacion';
+import ItemPedido from '../../../components/Item/ItemPedido/ItemPedido.js';
 
 export default class VisualizarPedido extends Component {
 
@@ -17,7 +18,8 @@ export default class VisualizarPedido extends Component {
     this.state = {
       idSesion: null,
       pedidos: null,
-      fechaBaja: null
+      fechaBaja: null,
+      open: false,
     }
   }
 
@@ -100,10 +102,24 @@ export default class VisualizarPedido extends Component {
 
   pedirCuenta = () => {
     this.pidiendoCuenta()
+    this.open()
   }
 
   validarSesion() {
     return this.state.fechaBaja !== null
+  }
+
+  open = () => {
+    if(this.state.open) {
+      this.setState({
+        open: false
+      })
+    } else {
+      this.setState({
+        open: true
+      })
+    }
+    return this.state.open
   }
 
   render() {
@@ -120,12 +136,12 @@ export default class VisualizarPedido extends Component {
         icon: (<CartIcon />)
       },
       secondButton: {
-        onChange: this.verCarta,
+        onChange: null,
         name: "Jugar Juego",
         icon: (<GamesIcon />)
       },
       thirdButton: {
-        onChange: this.pedirCuenta,
+        onChange: this.open,
         name: "Pedir Cuenta",
         icon: (<MoneyIcon />)
       }
@@ -159,6 +175,12 @@ export default class VisualizarPedido extends Component {
             <MenuInferior menuButtons={menuButtons} />
           </CardContent>
         </Card>
+        <DialogConfirmacion 
+          titulo={"Pedir Cuenta"}
+          descripcion={"¿Estas seguro que deseas pedir la cuenta?"}
+          handlers={{ onChange: this.pedirCuenta, open: this.open }}
+          open={this.state.open}
+        />
         <Snackbar 
           open={this.snackbarOpen()} 
           message={errorMessage} 

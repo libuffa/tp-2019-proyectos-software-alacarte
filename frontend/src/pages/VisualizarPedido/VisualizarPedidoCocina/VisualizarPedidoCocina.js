@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Card, CardContent, Typography, List, Snackbar } from '@material-ui/core';
-import ItemPedido from './ItemPedido/ItemPedidoCocina';
-import { ServiceLocator } from '../../services/ServiceLocator';
+import { ServiceLocator } from '../../../services/ServiceLocator';
+import ItemPedidoCocina from '../../../components/Item/ItemPedidoCocina/ItemPedidoCocina';
 
 export default class VisualizarPedidoCocina extends Component {
   constructor(props) {
@@ -64,7 +64,7 @@ export default class VisualizarPedidoCocina extends Component {
         </Card>
         <List>
           {pedidos.map((pedido) => {
-            return <ItemPedido 
+            return <ItemPedidoCocina
                       key={pedido.id} 
                       pedido={pedido} 
                       handlers={{ onChange: this.actualizarEstadoPedido }} />
