@@ -136,7 +136,7 @@ export default class VisualizarPedido extends Component {
         icon: (<CartIcon />)
       },
       secondButton: {
-        onChange: null,
+        onChange: this.verCarta,
         name: "Jugar Juego",
         icon: (<GamesIcon />)
       },
