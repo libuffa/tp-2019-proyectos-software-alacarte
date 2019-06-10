@@ -41,7 +41,7 @@ export default function ListaItems(props) {
           <Divider />
           {filtrarData(subCategoria).map((object) => {
             if (object.habilitado) {
-              return <ListItem button key={object.id} onClick={() => handlers.onChange(object)}>
+              return <ListItem button key={object.id} onClick={() => handlers.onChange(object.id)}>
                 <ListItemAvatar>
                   <Avatar src={object.imagenes[0]} />
                 </ListItemAvatar>

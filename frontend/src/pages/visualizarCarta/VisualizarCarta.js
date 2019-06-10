@@ -3,7 +3,6 @@ import { ServiceLocator } from "../../services/ServiceLocator.js";
 import MenuSuperior from "../../components/menuSuperior/MenuSuperior";
 import ListaItems from "../../components/listaItems/ListaItems";
 import MenuInferior from '../../components/menuInferior/MenuInferior.js';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import './VisualizarCarta.scss';
 
 export default class VisualizarCarta extends Component {
@@ -52,8 +51,11 @@ export default class VisualizarCarta extends Component {
     this.cargarCarta(categoria)
   }
 
-  seleccionItemCarta = (itemCarta) => {
-    this.subCategoriasCarta()
+  seleccionItemCarta = (idItemCarta) => {
+    this.props.history.push({
+      pathname: '/detalleItemCarta',
+      state: { idItem: idItemCarta }
+    })
   }
 
   verPedido = () => {
@@ -72,7 +74,6 @@ export default class VisualizarCarta extends Component {
 
     return (
       <div>
-        <CssBaseline />
         <div className="contenedorLista">
           <MenuSuperior data={categorias} handlers={{ onChange: this.seleccionEnMenuSuperior }}></MenuSuperior>
           <ListaItems data={carta} subData={this.subCategoriasCarta()} handlers={{ onChange: this.seleccionItemCarta }}></ListaItems>
