@@ -20,7 +20,7 @@ export default class VisualizarCarta extends Component {
   componentDidMount() {
     this.cargarCarta('Entrada')
     this.cargarCategorias()
-    if (this.props.match.params.id == 1) {
+    if (this.props.match.params.id === 1) {
       this.cargarSesion()
     }
   }

@@ -3,6 +3,7 @@ import { ServiceLocator } from "../../services/ServiceLocator.js";
 import PasadorDeImagenes from '../../components/pasadorDeImagenes/PasadorDeImagenes.js';
 import CuerpoItem from '../../components/cuerpoItem/CuerpoItem.js';
 import MenuInferior from '../../components/menuInferior/MenuInferior.js';
+import CartIcon from '@material-ui/icons/ListAlt';
 import './DetalleItemCarta.scss';
 
 export default class DetalleItemCarta extends Component {
@@ -52,6 +53,14 @@ export default class DetalleItemCarta extends Component {
   render() {
     const { itemCarta, cantidad, comentario } = this.state;
 
+    const menuButtons = {
+      firstButton: {
+        onChange: this.verPedido,
+        name: "Ver Pedido",
+        icon: (<CartIcon />)
+      },
+    }
+
     if (!itemCarta) {
       return <div></div>
     }
@@ -66,7 +75,7 @@ export default class DetalleItemCarta extends Component {
           handlersComentario={{ onChange: this.modificarComentario }}
         />
       </div>
-      <MenuInferior handlers={{ onChange: this.verPedido }} boton="VER PEDIDO" />
+      <MenuInferior menuButtons={menuButtons}></MenuInferior>
     </div>
   }
 }

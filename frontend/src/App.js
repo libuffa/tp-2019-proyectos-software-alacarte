@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import VisualizarMesa from './pages/VisualizarMesas/VisualizarMesas';
-import VisualizarPedido from './pages/VisualizarPedido/VisualizarPedido';
+import VisualizarMesa from './pages/VisualizarMesa/VisualizarMesa';
+import VisualizarPedido from './pages/VisualizarPedido/VisualizarPedido/VisualizarPedido';
 import VisualizarCarta from './pages/visualizarCarta/VisualizarCarta';
 import VisualizarCartaEmpleado from './pages/visualizarCartaEmpleado/VisualizarCartaEmpleado';
 import DetalleItemCarta from './pages/detalleItemCarta/DetalleItemCarta';
