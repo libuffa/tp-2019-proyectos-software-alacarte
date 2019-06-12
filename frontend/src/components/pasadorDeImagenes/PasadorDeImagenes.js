@@ -18,14 +18,19 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function PasadorDeImagenes(props) {
-  const { imagenes } = props;
+  var { imagenes } = props;
   const classes = useStyles();
+  const imagenesPorDefecto = ["https://media.istockphoto.com/vectors/knife-plate-and-fork-cutlery-vector-retro-illustration-of-a-hand-vector-id871919954", "https://media.istockphoto.com/vectors/knife-plate-and-fork-cutlery-vector-retro-illustration-of-a-hand-vector-id871919954", "https://media.istockphoto.com/vectors/knife-plate-and-fork-cutlery-vector-retro-illustration-of-a-hand-vector-id871919954"];
 
+
+  if (imagenes.length === 0) {
+    imagenes = imagenesPorDefecto;
+  }
   return (
     <div className={classes.root}>
       <GridList className={classes.gridList} cols={1}>
         {imagenes.map((imagen) => (
-          <GridListTile key={imagen}>
+          <GridListTile key={Math.random()}>
             <img src={imagen} alt={imagen} />
           </GridListTile>
         ))}

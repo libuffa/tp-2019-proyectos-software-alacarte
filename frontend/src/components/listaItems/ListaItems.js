@@ -42,7 +42,7 @@ export default function ListaItems(props) {
           {filtrarData(subCategoria).map((object) => {
             if (object.habilitado) {
               return <ListItem button key={object.id} onClick={() => handlers.onChange(object.id)}>
-                <ListItemAvatar>
+                <ListItemAvatar >
                   <Avatar src={object.imagenes[0]} />
                 </ListItemAvatar>
                 <ListItemText primary={object.titulo} />
@@ -51,7 +51,7 @@ export default function ListaItems(props) {
                 </ListItemSecondaryAction>
               </ListItem>
             }
-            return <div></div>
+            return <div key={object.id}></div>
           })}
         </List>
       })}
