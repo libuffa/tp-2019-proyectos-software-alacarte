@@ -55,7 +55,7 @@ class CartaController {
 		try {
 			platoAModificar.cambiarEstado()
 			carta.update(platoAModificar)
-			return ok()
+			return ok("True")
 		} catch(Exception e) {
 			badRequest(e.message)
 		}

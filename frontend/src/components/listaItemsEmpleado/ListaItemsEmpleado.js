@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { ListItem, ListItemAvatar, Avatar, ListItemText, List, ListItemSecondaryAction, ListSubheader, Divider } from '@material-ui/core';
-import './ListaItems.scss';
+import { ListItem, ListItemAvatar, Avatar, ListItemText, List, ListItemSecondaryAction, Switch, Divider, ListSubheader } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -15,8 +14,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function ListaItems(props) {
-  const { data, subData, handlers } = props;
+export default function ListaItemsEmpleado(props) {
+  const { data, subData, handlers, disableFunction } = props;
   const classes = useStyles();
 
   function filtrarData(subCategoria) {
@@ -40,18 +39,15 @@ export default function ListaItems(props) {
           </ListSubheader>
           <Divider />
           {filtrarData(subCategoria).map((object) => {
-            if (object.habilitado) {
-              return <ListItem button key={object.id} onClick={() => handlers.onChange(object.id)}>
-                <ListItemAvatar >
-                  <Avatar src={object.imagenes[0]} />
-                </ListItemAvatar>
-                <ListItemText primary={object.titulo} />
-                <ListItemSecondaryAction>
-                  <ListItemText primary={<div className="precio">${object.precioUnitario}</div>} />
-                </ListItemSecondaryAction>
-              </ListItem>
-            }
-            return <div key={object.id}></div>
+            return <ListItem button key={object.id} onClick={() => handlers.onChange(object)}>
+              <ListItemAvatar>
+                <Avatar src={object.imagenes[0]} />
+              </ListItemAvatar>
+              <ListItemText primary={object.titulo} />
+              <ListItemSecondaryAction>
+                <Switch onChange={() => disableFunction.onChange(object.id)} checked={object.habilitado} />
+              </ListItemSecondaryAction>
+            </ListItem>
           })}
         </List>
       })}
