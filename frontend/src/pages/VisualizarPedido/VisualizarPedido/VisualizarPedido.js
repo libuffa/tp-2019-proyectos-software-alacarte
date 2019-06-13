@@ -151,7 +151,8 @@ export default class VisualizarPedido extends Component {
       thirdButton: {
         onChange: this.open,
         name: "Pedir Cuenta",
-        icon: (<MoneyIcon />)
+        icon: (<MoneyIcon />),
+        disabled: this.state.pideCuenta
       }
     }
 
@@ -175,8 +176,8 @@ export default class VisualizarPedido extends Component {
               {
                 (this.state.pideCuenta) &&
                   <Tooltip
-                    title="Ya se ha pedido la cuenta.. ¿Desea cancelar el pedido?"
-                    aria-label="Ya se ha pedido la cuenta.. ¿Desea cancelar el pedido?">
+                    title="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?"
+                    aria-label="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?">
                 <IconButton onClick={ () => this.pidiendoCuenta()}>
                     <Error color="error" fontSize="small" />
                 </IconButton>
