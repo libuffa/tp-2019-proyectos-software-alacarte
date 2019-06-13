@@ -26,9 +26,10 @@ export default function MenuInferior(props) {
     <BottomNavigationAction
       label={menuButtons.thirdButton.name}
       icon={menuButtons.thirdButton.icon}
-      onClick={() => menuButtons.thirdButton.onChange()}
+      onClick={() => {menuButtons.thirdButton.onChange()}}
     />
   )
+
 
   return (
     <React.Fragment>

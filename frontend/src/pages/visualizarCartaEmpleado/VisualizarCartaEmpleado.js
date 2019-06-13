@@ -1,40 +1,23 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { ServiceLocator } from "../../services/ServiceLocator.js";
 import MenuSuperior from "../../components/menuSuperior/MenuSuperior";
-import ListaItems from "../../components/listaItems/ListaItems";
-import MenuInferior from '../../components/menuInferior/MenuInferior.js';
-import CartIcon from '@material-ui/icons/ListAlt';
-import './VisualizarCarta.scss';
+import ListaItemsEmpleado from "../../components/listaItemsEmpleado/ListaItemsEmpleado";
+import CssBaseline from '@material-ui/core/CssBaseline';
 
-export default class VisualizarCarta extends Component {
+export default class VisualizarCartaEmpleado extends Component {
   constructor(props) {
     super(props)
     this.state = {
       carta: null,
       selectedItem: null,
       categorias: null,
-      idSesion: this.props.match.params.id,
+      categoria: 'Entrada',
     }
   }
 
   componentDidMount() {
-    this.cargarCarta('Entrada')
+    this.cargarCarta(this.state.categoria)
     this.cargarCategorias()
-    if (this.props.match.params.id === 1) {
-      this.cargarSesion()
-    }
-  }
-
-  cargarSesion() {
-    ServiceLocator.SesionService.getSesiones()
-      .then((sesiones) => {
-        const sesion = sesiones[0]
-        const idSesion = sesion.id
-        console.log(idSesion)
-        this.setState({
-          idSesion,
-        })
-      })
   }
 
   cargarCarta(categoria) {
@@ -43,6 +26,7 @@ export default class VisualizarCarta extends Component {
       .then((carta) => {
         this.setState({
           carta,
+          categoria,
         })
       })
   }
@@ -68,15 +52,21 @@ export default class VisualizarCarta extends Component {
     this.cargarCarta(categoria)
   }
 
-  seleccionItemCarta = (idItemCarta) => {
-    this.props.history.push({
-      pathname: '/detalleItemCarta',
-      state: { idItem: idItemCarta }
-    })
+  seleccionItemCarta = (itemCarta) => {
+    this.subCategoriasCarta()
+  }
+
+  cambiarEstadoItemCarta = (itemCartaId) => {
+    ServiceLocator.ItemsCartaService.updateEstadoItem(itemCartaId)
+      .then((resultado) => {
+        if (resultado === "True") {
+          this.cargarCarta(this.state.categoria)
+        }
+      })
   }
 
   verPedido = () => {
-    this.props.history.push('/pedido/' + this.state.idSesion)
+    this.props.history.push('/pedido')
   }
 
   render() {
@@ -89,21 +79,11 @@ export default class VisualizarCarta extends Component {
       categorias = categorias.map((categoria) => categoria.replace('_', ' '))
     }
 
-    const menuButtons = {
-      firstButton: {
-        onChange: this.verPedido,
-        name: "Ver Pedido",
-        icon: (<CartIcon />)
-      },
-    }
-
     return (
       <div>
-        <div className="contenedorLista">
-          <MenuSuperior data={categorias} handlers={{ onChange: this.seleccionEnMenuSuperior }}></MenuSuperior>
-          <ListaItems data={carta} subData={this.subCategoriasCarta()} handlers={{ onChange: this.seleccionItemCarta }}></ListaItems>
-        </div>
-        <MenuInferior menuButtons={menuButtons}></MenuInferior>
+        <CssBaseline />
+        <MenuSuperior data={categorias} handlers={{ onChange: this.seleccionEnMenuSuperior }}></MenuSuperior>
+        <ListaItemsEmpleado data={carta} subData={this.subCategoriasCarta()} handlers={{ onChange: this.seleccionItemCarta }} disableFunction={{ onChange: this.cambiarEstadoItemCarta }}></ListaItemsEmpleado>
       </div>
     )
   }

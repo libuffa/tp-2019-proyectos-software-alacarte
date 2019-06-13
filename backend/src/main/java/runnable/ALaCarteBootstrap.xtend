@@ -85,6 +85,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 			titulo = "Coca Cola"
 			descripcion = "Bebida sabor cola"
 			categoria = Categoria.Bebida
+			subCategoria = "Gaseosas"
 			precioUnitario = 80.doubleValue
 			habilitado = true
 			imagenes = #["https://images-na.ssl-images-amazon.com/images/I/5156FefjlqL._SX425_.jpg"]
@@ -93,6 +94,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 			titulo = "Asado"
 			descripcion = "Tira de asado"
 			categoria = Categoria.Plato_Principal
+			subCategoria = "Carnes"
 			precioUnitario = 400.doubleValue
 			habilitado = true
 			imagenes = #["http://www.primeranota.cl/web/wp-content/uploads/2018/10/asado-de-tira-1024x682.jpg"]

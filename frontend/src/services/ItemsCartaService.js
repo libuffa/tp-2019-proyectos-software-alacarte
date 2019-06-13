@@ -10,4 +10,12 @@ export class ItemsCartaService {
   getCategorias() {
     return client.get(`/carta/obtenerCategorias`).then(res => { return res.data })
   }
+
+  getItemCarta(idItemCarta) {
+    return client.get(`/carta/${idItemCarta}/obtenerPlato`).then(res => { return res.data })
+  }
+
+  updateEstadoItem(id) {
+    return client.post(`/carta/${id}/cambiarEstadoPlato`).then(res => { return res.data })
+  }
 }
