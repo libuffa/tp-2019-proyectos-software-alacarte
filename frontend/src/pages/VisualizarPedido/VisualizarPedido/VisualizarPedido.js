@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import List from '@material-ui/core/List';
-import { Typography, Card, CardContent, Snackbar } from '@material-ui/core';
+import { Typography, Card, CardContent, Snackbar, Tooltip, IconButton } from '@material-ui/core';
 import { ServiceLocator } from "../../../services/ServiceLocator.js";
 import MenuInferior from '../../../components/menuInferior/MenuInferior';
 import CartIcon from '@material-ui/icons/ListAlt';
@@ -10,6 +10,8 @@ import './VisualizarPedido.scss';
 import { Pedido } from '../../../domain/Pedido';
 import DialogConfirmacion from '../../../components/Dialog/DialogConfirmacion';
 import ItemPedido from '../../../components/Item/ItemPedido/ItemPedido.js';
+import { Sesion } from '../../../domain/Sesion.js';
+import Error from '@material-ui/icons/Error';
 
 export default class VisualizarPedido extends Component {
 
@@ -20,6 +22,8 @@ export default class VisualizarPedido extends Component {
       pedidos: null,
       fechaBaja: null,
       open: false,
+      pideCuenta: true,
+      sesion: {},
     }
   }
 
@@ -29,14 +33,16 @@ export default class VisualizarPedido extends Component {
 
   cargarPedidos() {
     ServiceLocator.SesionService.getSesion(this.props.match.params.id)
-      .then((sesion) => {
-        const pedidos = sesion.pedidos.filter((pedido) => !pedido.cancelado)
-        const idSesion = sesion.id
-        const fechaBaja = sesion.fechaBaja
+      .then((sesionJSON) => {
+        const sesion = Sesion.fromJson(sesionJSON)
+        return sesion
+      }).then((_sesion) => {
         this.setState({
-          pedidos,
-          idSesion,
-          fechaBaja,
+          pedidos: _sesion.pedidos.filter((pedido) => !pedido.cancelado),
+          sesion: _sesion,
+          idSesion: _sesion.id,
+          fechaBaja: _sesion.fechaBaja,
+          pideCuenta: _sesion.pideCuenta,
         })
       })
   }
@@ -94,6 +100,10 @@ export default class VisualizarPedido extends Component {
       .then((respuesta) => {
         if (respuesta.status === 200) {
           this.cargarPedidos()
+          this.setState({
+            pideCuenta: !this.state.pideCuenta,
+            errorMessage: ""
+          })
         }
       }).catch(error => {
         this.generarError(error.response.data.error)
@@ -101,8 +111,8 @@ export default class VisualizarPedido extends Component {
   }
 
   pedirCuenta = () => {
-    this.pidiendoCuenta()
-    this.open()
+      this.pidiendoCuenta()
+      this.open()
   }
 
   validarSesion() {
@@ -110,16 +120,14 @@ export default class VisualizarPedido extends Component {
   }
 
   open = () => {
-    if(this.state.open) {
-      this.setState({
-        open: false
-      })
+    if (this.state.pideCuenta) {
+      this.generarError("Ya se ha pedido la cuenta")
     } else {
       this.setState({
-        open: true
+        open: !this.state.open
       })
+      return this.state.open
     }
-    return this.state.open
   }
 
   render() {
@@ -136,14 +144,15 @@ export default class VisualizarPedido extends Component {
         icon: (<CartIcon />)
       },
       secondButton: {
-        onChange: this.verCarta,
+        onChange: null,
         name: "Jugar Juego",
         icon: (<GamesIcon />)
       },
       thirdButton: {
         onChange: this.open,
         name: "Pedir Cuenta",
-        icon: (<MoneyIcon />)
+        icon: (<MoneyIcon />),
+        disabled: this.state.pideCuenta
       }
     }
 
@@ -164,6 +173,16 @@ export default class VisualizarPedido extends Component {
         <Card>
           <CardContent>
             <Typography className="precioFinal" variant="subtitle1">
+              {
+                (this.state.pideCuenta) &&
+                  <Tooltip
+                    title="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?"
+                    aria-label="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?">
+                <IconButton onClick={ () => this.pidiendoCuenta()}>
+                    <Error color="error" fontSize="small" />
+                </IconButton>
+                  </Tooltip>
+              }
               Precio final: {new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: 'USD'
@@ -175,15 +194,15 @@ export default class VisualizarPedido extends Component {
             <MenuInferior menuButtons={menuButtons} />
           </CardContent>
         </Card>
-        <DialogConfirmacion 
+        <DialogConfirmacion
           titulo={"Pedir Cuenta"}
           descripcion={"¿Estas seguro que deseas pedir la cuenta?"}
           handlers={{ onChange: this.pedirCuenta, open: this.open }}
           open={this.state.open}
         />
-        <Snackbar 
-          open={this.snackbarOpen()} 
-          message={errorMessage} 
+        <Snackbar
+          open={this.snackbarOpen()}
+          message={errorMessage}
           autoHideDuration={4} />
       </div>
     )

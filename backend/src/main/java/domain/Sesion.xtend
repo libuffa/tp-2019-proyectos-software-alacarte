@@ -36,9 +36,8 @@ class Sesion {
 	@OneToOne(fetch=FetchType.LAZY)
 	@JsonIgnore Mozo mozo
 
-//	Para mi manejando fecha baja es mas optimo, porque sabes cuando realizo el pedido y cuando se fue
-//	@Column
-//	Boolean habilitado
+	@Column
+	Boolean pideCuenta = false
 	
 	@Column
 	@JsonIgnore LocalDateTime fechaAlta
@@ -87,7 +86,7 @@ class Sesion {
 	}
 	
 	def pedirCuenta() {
-		fechaBaja = LocalDateTime.now
+		this.pideCuenta = !this.pideCuenta
 		SesionRepository.instance.update(this)
 	}
 	
