@@ -1,21 +1,40 @@
 import React from 'react'
-import { AppBar, Toolbar, IconButton, Typography, Drawer } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
+import { Typography, Drawer, List, ListItem, IconButton } from '@material-ui/core';
 
-function Sidenav(props) {
+export default function Sidenav(props) {
 
-    const { open } = props;
-    const sidenav = <div></div>
+    const { open, history, handlers } = props;
+    console.log(props)  
 
     return (
         <Drawer
-            open={open} onClose={open}>
+            open={open} onClose={handlers.onChange}>
             <div
                 tabIndex={0}
                 role="button"
-                onClick={open}
-                onKeyDown={open}>
-                {sidenav}
+                onClick={open}>
+                <div className="side-nav">
+                    <br />
+                    <List>
+                        <ListItem >
+                            <IconButton onClick={handlers.onClick}>
+                                <Typography
+                                    variant="subtitle2"
+                                    color="primary">
+                                    Ver Carta
+                                </Typography>
+                            </IconButton>
+                        </ListItem>
+                        <br />
+                        <ListItem onClick={() => history.push('/mesa')}>
+                            <Typography
+                                variant="subtitle2"
+                                color="primary">
+                                Ver mesas
+                             </Typography>
+                        </ListItem>
+                    </List>
+                </div>
             </div>
         </Drawer>
     );

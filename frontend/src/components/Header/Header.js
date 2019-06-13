@@ -3,25 +3,46 @@ import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import MenuIcon from '@material-ui/icons/Menu';
 import './Header.scss';
+import {Sidenav} from '../Sidenav/Sidenav';
 
 function Header(props) {
-  const { location } = props;
+  const [open, setOpen] = React.useState(false);
+  const { location, history } = props;
   let pageName = location.pathname.replace(/\//g, '').toLowerCase();
   pageName = pageName.replace(/[0-9]/g, '').toLowerCase();
   if (pageName.length > 0)
     pageName = pageName[0].toUpperCase() + pageName.substr(1);
 
+  function handleClickOpen() {
+    setOpen(true);
+  }
+
+  const handleClose = value => {
+    setOpen(false);
+  };
+
+  const handleButton = () => {
+    history.push("/cartaEmpleado")
+  }
+
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <IconButton className="menuButton" color="inherit" aria-label="Menu">
-          <MenuIcon />
-        </IconButton>
-        <Typography className="title" variant="h6">
-          A la Carte{" - " + pageName}
-        </Typography>
-      </Toolbar>
-    </AppBar>
+    <div>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            className="menuButton"
+            color="inherit"
+            aria-label="Menu"
+            onClick={handleClickOpen}>
+            <MenuIcon />
+          </IconButton>
+          <Typography className="title" variant="h6">
+            A la Carte{" - " + pageName}
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Sidenav open={open} history={history} handlers={{ onChange: handleClose, onClick: handleButton }} />
+    </div>
   );
 };
 
