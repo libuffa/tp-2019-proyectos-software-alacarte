@@ -32,7 +32,7 @@ export default class VisualizarPedido extends Component {
   }
 
   cargarPedidos() {
-    ServiceLocator.SesionService.getSesion(this.props.match.params.id)
+    ServiceLocator.SesionService.getSesion()
       .then((sesionJSON) => {
         const sesion = Sesion.fromJson(sesionJSON)
         return sesion
@@ -111,8 +111,8 @@ export default class VisualizarPedido extends Component {
   }
 
   pedirCuenta = () => {
-      this.pidiendoCuenta()
-      this.open()
+    this.pidiendoCuenta()
+    this.open()
   }
 
   validarSesion() {
@@ -175,13 +175,13 @@ export default class VisualizarPedido extends Component {
             <Typography className="precioFinal" variant="subtitle1">
               {
                 (this.state.pideCuenta) &&
-                  <Tooltip
-                    title="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?"
-                    aria-label="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?">
-                <IconButton onClick={ () => this.pidiendoCuenta()}>
+                <Tooltip
+                  title="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?"
+                  aria-label="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?">
+                  <IconButton onClick={() => this.pidiendoCuenta()}>
                     <Error color="error" fontSize="small" />
-                </IconButton>
-                  </Tooltip>
+                  </IconButton>
+                </Tooltip>
               }
               Precio final: {new Intl.NumberFormat('en-US', {
                 style: 'currency',

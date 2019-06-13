@@ -18,6 +18,17 @@ class SesionController {
 	extension JSONUtils = new JSONUtils
 	SesionRepository repositorioSesion = SesionRepository.instance
 
+	@Post("/sesion/iniciarSesion")
+	def Result iniciarSesion(@Body String body) {
+		var id = Long.valueOf(body.getPropertyValue("idSesion"))
+		try{
+			repositorioSesion.searchById(id)
+			return ok("True")
+		}catch(Exception e) {
+			badRequest("La sesion no existe o esta inactiva")
+		}
+	}
+
 	@Get("/sesion/:id")
 	def Result sesion() {
 		try {

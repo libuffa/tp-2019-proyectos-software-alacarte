@@ -1,3 +1,4 @@
+import { ControllerDeSesion } from '../controller/ControllerDeSesion.js'
 import axios from "axios"
 
 const client = axios.create()
@@ -8,8 +9,8 @@ export class SesionService {
     return client.get(`/sesion`).then(res => { return res.data })
   }
 
-  getSesion(id) {
-    return client.get(`/sesion/` + id).then(res => { return res.data })
+  getSesion() {
+    return client.get(`/sesion/${ControllerDeSesion.getSesionActiva()}`).then(res => { return res.data })
   }
 
   getPedidos() {
@@ -17,7 +18,7 @@ export class SesionService {
   }
 
   getPedido(id) {
-    return client.get(`/pedido/${id}`).then(res => { return res.data })
+    return client.get(`/pedido/${ControllerDeSesion.getSesionActiva()}`).then(res => { return res.data })
   }
 
   getPedidosCocina() {
@@ -38,5 +39,15 @@ export class SesionService {
 
   cambiarEstadoPedido(id) {
     return client.post(`/pedido/${id}/cambiarEstado`).then(res => { return res.data })
+  }
+
+  iniciarSesion(data) {
+    return client.post('/sesion/iniciarSesion', data, { timeout: 10000 })
+      .then(res => { return res.data })
+      .catch(error => { console.error({ error }) })
+  }
+
+  cerrarSesion(data) {
+    return client.post('/sesion/cerrarSesion', data).then(res => { return res.data })
   }
 }
