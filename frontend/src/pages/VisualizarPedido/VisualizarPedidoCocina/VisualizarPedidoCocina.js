@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Card, CardContent, Typography, List, Snackbar } from '@material-ui/core';
 import { ServiceLocator } from '../../../services/ServiceLocator';
 import ItemPedidoCocina from '../../../components/Item/ItemPedidoCocina/ItemPedidoCocina';
+import ListaItemsCocina from '../../../components/listaItemsCocina/ListaItemsCocina';
 
 export default class VisualizarPedidoCocina extends Component {
   constructor(props) {
@@ -61,17 +62,7 @@ export default class VisualizarPedidoCocina extends Component {
     }
     return (
       <div>
-        <Card>
-          <CardContent><Typography variant="subtitle1">Pedidos Cocina</Typography></CardContent>
-        </Card>
-        <List>
-          {pedidos.map((pedido) => {
-            return <ItemPedidoCocina
-              key={pedido.id}
-              pedido={pedido}
-              handlers={{ onChange: this.actualizarEstadoPedido }} />
-          })}
-        </List>
+        <ListaItemsCocina pedidos={pedidos} handlers={{ onChange: this.actualizarEstadoPedido }} />
         <Snackbar open={this.snackbarOpen()} message={errorMessage} autoHideDuration={4} />
       </div>
     )
