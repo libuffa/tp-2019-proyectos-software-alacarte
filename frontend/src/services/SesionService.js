@@ -9,8 +9,12 @@ export class SesionService {
     return client.get(`/sesion`).then(res => { return res.data })
   }
 
-  getSesion() {
+  getSesionActiva() {
     return client.get(`/sesion/${ControllerDeSesion.getSesionActiva()}`).then(res => { return res.data })
+  }
+
+  getSesion(id) {
+    return client.get(`/sesion/${id}`).then(res => { return res.data })
   }
 
   getPedidos() {
@@ -39,6 +43,10 @@ export class SesionService {
 
   cambiarEstadoPedido(id) {
     return client.post(`/pedido/${id}/cambiarEstado`).then(res => { return res.data })
+  }
+
+  generarPedido(data) {
+    return client.put(`/pedido/generarPedido`, data).then(res => { return res.data })
   }
 
   iniciarSesion(data) {

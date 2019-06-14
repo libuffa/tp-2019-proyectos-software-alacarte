@@ -32,7 +32,7 @@ export default class VisualizarPedido extends Component {
   }
 
   cargarPedidos() {
-    ServiceLocator.SesionService.getSesion()
+    ServiceLocator.SesionService.getSesionActiva()
       .then((sesionJSON) => {
         const sesion = Sesion.fromJson(sesionJSON)
         return sesion

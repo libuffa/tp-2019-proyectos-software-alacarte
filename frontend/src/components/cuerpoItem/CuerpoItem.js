@@ -9,7 +9,7 @@ import CuadroDeTexto from '../../components/cuadroDeTexto/CuadroDeTexto.js';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: theme.spacing(3, 2),
+    padding: theme.spacing(1, 2),
   },
   divider: {
     padding: theme.spacing(2, 0),
@@ -90,7 +90,7 @@ export default function CuerpoItem(props) {
           <Grid item xs={12}>
             <Typography variant="h6">Aclaración</Typography>
           </Grid>
-          <Grid className={classes.divider} item xs={12}>
+          <Grid item xs={12}>
             <CuadroDeTexto handlers={handlersComentario} />
           </Grid>
         </Grid>

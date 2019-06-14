@@ -20,7 +20,7 @@ function RouterPrincipal() {
           <Route path="/pedido/:id" exact component={VisualizarPedido} />
           <Route path="/cocina" exact component={VisualizarPedidoCocina} />
           <Route path="/mesa" exact component={VisualizarMesa} />
-          <Route path="/carta/:id" exact component={VisualizarCarta} />
+          <Route path="/carta" exact component={VisualizarCarta} />
           <Route path="/detalleItemCarta" exact component={DetalleItemCarta} />
           <Route path="/cartaEmpleado" exact component={VisualizarCartaEmpleado} />
           <Route path="/escanearQR" exact component={EscanearQR} />
@@ -32,7 +32,7 @@ function RouterPrincipal() {
 }
 
 function Redirect(props) {
-  props.history.push('/carta/1')
+  props.history.push('/carta')
   return (
     <h1>Cargando..</h1>
   )

@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { ServiceLocator } from "../../services/ServiceLocator.js";
 import PasadorDeImagenes from '../../components/pasadorDeImagenes/PasadorDeImagenes.js';
 import CuerpoItem from '../../components/cuerpoItem/CuerpoItem.js';
-import MenuInferior from '../../components/menuInferior/MenuInferior.js';
-import CartIcon from '@material-ui/icons/ListAlt';
+import Botones from '../../components/botones/Botones';
 import './DetalleItemCarta.scss';
+import { ControllerDeSesion } from '../../controller/ControllerDeSesion.js'
 
 export default class DetalleItemCarta extends Component {
   constructor(props) {
@@ -42,40 +42,44 @@ export default class DetalleItemCarta extends Component {
   modificarComentario = (texto) => {
     if (texto !== null && texto !== "") {
       this.setState({ comentario: texto })
-      console.log("se va a guardar esto: " + texto)
     }
   }
 
-  verPedido = () => {
-    this.props.history.push('/pedido')
+  verCarta = () => {
+    this.props.history.push('/carta')
+  }
+
+  agregarAPedido = () => {
+    ServiceLocator.SesionService.generarPedido({
+      "idSesion": ControllerDeSesion.getSesionActiva(),
+      "cantidad": this.state.cantidad,
+      "comentario": this.state.comentario,
+      "idItem": this.state.itemCarta.id
+    }).then(resultado => {
+      if (resultado === "True") {
+        this.props.history.push(`/pedido/${ControllerDeSesion.getSesionActiva()}`)
+      } else {
+        console.log(resultado)
+      }
+    })
   }
 
   render() {
     const { itemCarta, cantidad, comentario } = this.state;
 
-    const menuButtons = {
-      firstButton: {
-        onChange: this.verPedido,
-        name: "Ver Pedido",
-        icon: (<CartIcon />)
-      },
-    }
-
     if (!itemCarta) {
       return <div></div>
     }
     return <div>
-      <div className="contenedor">
-        <PasadorDeImagenes imagenes={itemCarta.imagenes} />
-        <CuerpoItem
-          itemCarta={itemCarta}
-          cantidad={cantidad}
-          comentario={comentario}
-          handlersCantidad={{ onChange: this.modificarCantidad }}
-          handlersComentario={{ onChange: this.modificarComentario }}
-        />
-      </div>
-      <MenuInferior menuButtons={menuButtons}></MenuInferior>
+      <PasadorDeImagenes imagenes={itemCarta.imagenes} />
+      <CuerpoItem
+        itemCarta={itemCarta}
+        cantidad={cantidad}
+        comentario={comentario}
+        handlersCantidad={{ onChange: this.modificarCantidad }}
+        handlersComentario={{ onChange: this.modificarComentario }}
+      />
+      <Botones handlersVolver={{ onChange: this.verCarta }} handlersAgregarAPedido={{ onChange: this.agregarAPedido }} />
     </div>
   }
 }

@@ -103,7 +103,7 @@ export default class VisualizarCarta extends Component {
           <MenuSuperior data={categorias} handlers={{ onChange: this.seleccionEnMenuSuperior }}></MenuSuperior>
           <ListaItems data={carta} subData={this.subCategoriasCarta()} handlers={{ onChange: this.seleccionItemCarta }}></ListaItems>
         </div>
-        <MenuInferior menuButtons={menuButtons}></MenuInferior>
+        <MenuInferior menuButtons={menuButtons} ></MenuInferior>
       </div>
     )
   }
