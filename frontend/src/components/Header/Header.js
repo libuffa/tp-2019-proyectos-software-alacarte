@@ -3,7 +3,7 @@ import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import MenuIcon from '@material-ui/icons/Menu';
 import './Header.scss';
-import {Sidenav} from '../Sidenav/Sidenav';
+import { Sidenav } from '../Sidenav/Sidenav';
 
 function Header(props) {
   const [open, setOpen] = React.useState(false);
@@ -41,7 +41,7 @@ function Header(props) {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Sidenav open={open} history={history} handlers={{ onChange: handleClose, onClick: handleButton }} />
+      <Sidenav open={open} history={history} handlers={{ onChange: handleClose }} />
     </div>
   );
 };
