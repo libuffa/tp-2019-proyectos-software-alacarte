@@ -35,7 +35,7 @@ export default function MenuInferior(props) {
 
 
   return (
-    <React.Fragment className="contenedor">
+    <React.Fragment>
       <AppBar position="fixed" color="primary" className={classes.appBar}>
         <BottomNavigation
           showLabels
