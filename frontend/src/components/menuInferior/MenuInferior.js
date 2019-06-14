@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import './MenuInferior.scss';
 
 
 const useStyles = makeStyles(theme => ({
@@ -34,7 +35,7 @@ export default function MenuInferior(props) {
 
 
   return (
-    <React.Fragment>
+    <React.Fragment className="contenedor">
       <AppBar position="fixed" color="primary" className={classes.appBar}>
         <BottomNavigation
           showLabels

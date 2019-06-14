@@ -10,6 +10,7 @@ import './App.css';
 import VisualizarPedidoCocina from './pages/VisualizarPedido/VisualizarPedidoCocina/VisualizarPedidoCocina';
 import { ControllerDeSesion } from './controller/ControllerDeSesion';
 import EscanearQR from './pages/escanearQR/EscanearQR';
+import { Paper } from '@material-ui/core';
 
 function RouterPrincipal() {
   return (
@@ -55,9 +56,9 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <Paper square elevation={2} className="contenedor">
         {(this.state.sesionActiva && <RouterPrincipal></RouterPrincipal>) || <EscanearQR iniciarSesion={this.handleAbrirSesion}></EscanearQR>}
-      </div>
+      </Paper>
     )
   }
 }

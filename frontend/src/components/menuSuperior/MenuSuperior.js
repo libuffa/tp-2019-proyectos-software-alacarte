@@ -23,10 +23,10 @@ export default function MenuSuperior(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="default">
+      <AppBar elevation={0} position="static" color="default">
         <Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary" variant="scrollable" scrollButtons="auto">
-          {data.map( (object) => {
-            return <Tab key={object} label={object} onClick={() => handlers.onChange(object)}/>
+          {data.map((object) => {
+            return <Tab key={object} label={object} onClick={() => handlers.onChange(object)} />
           })}
         </Tabs>
       </AppBar>
