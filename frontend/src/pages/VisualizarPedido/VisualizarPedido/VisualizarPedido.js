@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import List from '@material-ui/core/List';
 import { Typography, Card, CardContent, Snackbar, Tooltip, IconButton } from '@material-ui/core';
 import { ServiceLocator } from "../../../services/ServiceLocator.js";
 import MenuInferior from '../../../components/menuInferior/MenuInferior';
@@ -8,8 +7,8 @@ import MoneyIcon from '@material-ui/icons/AttachMoney';
 import GamesIcon from '@material-ui/icons/Games';
 import './VisualizarPedido.scss';
 import { Pedido } from '../../../domain/Pedido';
+import ListaItemsPedido from '../../../components/listaItemsPedido/ListaItemsPedido.js';
 import DialogConfirmacion from '../../../components/Dialog/DialogConfirmacion';
-import ItemPedido from '../../../components/Item/ItemPedido/ItemPedido.js';
 import { Sesion } from '../../../domain/Sesion.js';
 import Error from '@material-ui/icons/Error';
 
@@ -159,18 +158,11 @@ export default class VisualizarPedido extends Component {
 
     return (
       <div>
-        <Card>
-          <CardContent><Typography variant="subtitle1">Tu Pedido</Typography></CardContent>
-        </Card>
-        <List >
-          {pedidos.map((pedido) => {
-            return <ItemPedido
-              key={pedido.id}
-              pedido={pedido}
-              handlers={{ onChange: this.actualizar }}
-              disabled={this.validarSesion()} />
-          })}
-        </List>
+        <ListaItemsPedido
+          pedidos={pedidos}
+          handlers={{ onChange: this.actualizar }}
+          disabled={this.validarSesion()}
+        />
         <Card>
           <CardContent>
             <Typography className="precioFinal" variant="subtitle1">
@@ -204,7 +196,7 @@ export default class VisualizarPedido extends Component {
         <Snackbar
           open={this.snackbarOpen()}
           message={errorMessage}
-          autoHideDuration={4} />
+          autoHideDuration={4000} />
       </div>
     )
   }
