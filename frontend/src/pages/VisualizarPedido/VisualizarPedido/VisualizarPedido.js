@@ -48,6 +48,7 @@ export default class VisualizarPedido extends Component {
   }
 
   verCarta = () => {
+    clearInterval(this.state.timer)
     this.props.history.push('/carta/' + this.props.match.params.id)
   }
 
