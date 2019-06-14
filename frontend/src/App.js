@@ -5,6 +5,7 @@ import VisualizarPedido from './pages/VisualizarPedido/VisualizarPedido/Visualiz
 import VisualizarCarta from './pages/visualizarCarta/VisualizarCarta';
 import VisualizarCartaEmpleado from './pages/visualizarCartaEmpleado/VisualizarCartaEmpleado';
 import DetalleItemCarta from './pages/detalleItemCarta/DetalleItemCarta';
+import DetalleItemPedido from './pages/detalleItemPedido/DetalleItemPedido';
 import Header from './components/Header/Header';
 import './App.css';
 import VisualizarPedidoCocina from './pages/VisualizarPedido/VisualizarPedidoCocina/VisualizarPedidoCocina';
@@ -18,11 +19,12 @@ function RouterPrincipal() {
       <div>
         <Header />
         <Switch>
-          <Route path="/pedido/:id" exact component={VisualizarPedido} />
+          <Route path="/pedido" exact component={VisualizarPedido} />
           <Route path="/cocina" exact component={VisualizarPedidoCocina} />
           <Route path="/mesa" exact component={VisualizarMesa} />
           <Route path="/carta" exact component={VisualizarCarta} />
           <Route path="/detalleItemCarta" exact component={DetalleItemCarta} />
+          <Route path="/detalleItemPedido" exact component={DetalleItemPedido} />
           <Route path="/cartaEmpleado" exact component={VisualizarCartaEmpleado} />
           <Route path="/escanearQR" exact component={EscanearQR} />
           <Route component={Redirect} />
@@ -56,9 +58,9 @@ class App extends Component {
 
   render() {
     return (
-      <Paper square elevation={2} className="contenedor">
+      <div className="contenedor">
         {(this.state.sesionActiva && <RouterPrincipal></RouterPrincipal>) || <EscanearQR iniciarSesion={this.handleAbrirSesion}></EscanearQR>}
-      </Paper>
+      </div>
     )
   }
 }

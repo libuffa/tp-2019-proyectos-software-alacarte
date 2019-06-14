@@ -3,32 +3,19 @@ import { ServiceLocator } from "../../services/ServiceLocator.js";
 import PasadorDeImagenes from '../../components/pasadorDeImagenes/PasadorDeImagenes.js';
 import CuerpoItem from '../../components/cuerpoItem/CuerpoItem.js';
 import Botones from '../../components/botones/Botones';
-import './DetalleItemCarta.scss';
+import './DetalleItemPedido.scss';
 import { ControllerDeSesion } from '../../controller/ControllerDeSesion.js'
 
-export default class DetalleItemCarta extends Component {
+export default class DetalleItemPedido extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      cantidad: 1,
-      comentario: "",
-      itemCarta: null,
-      idItemCarta: this.props.location.state.idItem,
+      cantidad: this.props.location.state.pedido.cantidad,
+      comentario: this.props.location.state.pedido.comentarios,
+      itemCarta: this.props.location.state.pedido.itemCarta,
       history: this.props.location.state.history,
+      pedido: this.props.location.state.pedido
     }
-  }
-
-  componentDidMount() {
-    this.cargarItemCarta(this.state.idItemCarta)
-  }
-
-  cargarItemCarta(idItemCarta) {
-    ServiceLocator.ItemsCartaService.getItemCarta(idItemCarta)
-      .then((itemCarta) => {
-        this.setState({
-          itemCarta,
-        })
-      })
   }
 
   modificarCantidad = (modificador) => {
@@ -45,16 +32,17 @@ export default class DetalleItemCarta extends Component {
     }
   }
 
-  verCarta = () => {
-    this.props.history.push('/carta')
+  verPedido = () => {
+    this.props.history.push('/pedido')
   }
 
-  agregarAPedido = () => {
-    ServiceLocator.SesionService.generarPedido({
+  actualizarPedido = () => {
+    ServiceLocator.SesionService.actualizarPedido({
       "idSesion": ControllerDeSesion.getSesionActiva(),
+      "idPedido": this.state.pedido.id,
+      "idItem": this.state.itemCarta.id,
       "cantidad": this.state.cantidad,
       "comentario": this.state.comentario,
-      "idItem": this.state.itemCarta.id
     }).then(resultado => {
       if (resultado === "True") {
         this.props.history.push(`/pedido`)
@@ -65,21 +53,30 @@ export default class DetalleItemCarta extends Component {
   }
 
   render() {
-    const { itemCarta, cantidad, comentario } = this.state;
+    const { itemCarta, cantidad, comentario, pedido } = this.state;
 
     if (!itemCarta) {
       return <div></div>
     }
     return <div>
-      <PasadorDeImagenes imagenes={itemCarta.imagenes} />
+      <PasadorDeImagenes
+        imagenes={itemCarta.imagenes}
+      />
       <CuerpoItem
         itemCarta={itemCarta}
         cantidad={cantidad}
-        comentario={comentario}
         handlersCantidad={{ onChange: this.modificarCantidad }}
         handlersComentario={{ onChange: this.modificarComentario }}
+        comentario={comentario}
+        disabled={pedido.estado !== "Creado"}
       />
-      <Botones text1="volver" text2="pedir" handlersVolver={{ onChange: this.verCarta }} handlersAgregarAPedido={{ onChange: this.agregarAPedido }} />
+      <Botones
+        disabled={pedido.estado !== "Creado"}
+        text1="volver"
+        text2="modificar"
+        handlersVolver={{ onChange: this.verPedido }}
+        handlersAgregarAPedido={{ onChange: this.actualizarPedido }}
+      />
     </div>
   }
 }

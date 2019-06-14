@@ -51,6 +51,28 @@ class SesionController {
 			badRequest("La sesion no existe o esta inactiva")
 		}
 	}
+	
+	@Post("/pedido/actualizarPedido")
+	def Result actualizarPedido(@Body String body) {
+		var idSesion = Long.valueOf(body.getPropertyValue("idSesion"))
+		var idPedido = Long.valueOf(body.getPropertyValue("idPedido"))
+		var comentario = body.getPropertyValue("comentario")
+		var cantidad = Integer.valueOf(body.getPropertyValue("cantidad"))
+		
+		try{
+			val sesion = repositorioSesion.searchById(idSesion)
+			var pedido = sesion.getPedido(idPedido)
+			if(pedido.estado.equals(Estado.Creado)){
+				pedido.cantidad = cantidad
+				pedido.comentarios = comentario
+				repositorioSesion.update(sesion)
+				return ok("True")
+			}
+			return ok("No fue posible modificar el plato")
+		}catch(Exception e) {
+			badRequest("La sesion no existe o esta inactiva")
+		}
+	}
 
 	@Get("/sesion/:id")
 	def Result sesion() {

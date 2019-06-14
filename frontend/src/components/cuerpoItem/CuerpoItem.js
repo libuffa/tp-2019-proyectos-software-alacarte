@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function CuerpoItem(props) {
-  const { itemCarta, cantidad, handlersCantidad, handlersComentario } = props;
+  const { itemCarta, cantidad, handlersCantidad, handlersComentario, comentario, disabled } = props;
   const classes = useStyles();
 
   return (
@@ -71,7 +71,7 @@ export default function CuerpoItem(props) {
           <Grid className={classes.divider} item xs={12}><Divider variant="fullWidth"></Divider></Grid>
           <Grid item xs={4}>
             <Paper elevation={0} className={classes.button}>
-              <Fab disabled={cantidad === 1 ? true : false} color="secondary" onClick={() => handlersCantidad.onChange(-1)}>
+              <Fab disabled={cantidad === 1 ? true : false || disabled} color="secondary" onClick={() => handlersCantidad.onChange(-1)}>
                 <Typography variant="h5">-</Typography>
               </Fab>
             </Paper>
@@ -81,7 +81,7 @@ export default function CuerpoItem(props) {
           </Grid>
           <Grid item xs={4}>
             <Paper elevation={0} className={classes.button}>
-              <Fab color="primary" onClick={() => handlersCantidad.onChange(1)}>
+              <Fab disabled={disabled} color="primary" onClick={() => handlersCantidad.onChange(1)}>
                 <Typography variant="h5">+</Typography>
               </Fab>
             </Paper>
@@ -91,7 +91,7 @@ export default function CuerpoItem(props) {
             <Typography variant="h6">Aclaración</Typography>
           </Grid>
           <Grid item xs={12}>
-            <CuadroDeTexto handlers={handlersComentario} />
+            <CuadroDeTexto disabled={disabled} comentarioPrevio={comentario} handlers={handlersComentario} />
           </Grid>
         </Grid>
       </Paper>

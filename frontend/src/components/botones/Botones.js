@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function IconLabelButtons(props) {
-  const { handlersVolver, handlersAgregarAPedido } = props;
+  const { handlersVolver, handlersAgregarAPedido, text1, text2, disabled } = props;
   const classes = useStyles();
 
   return (
@@ -45,15 +45,15 @@ export default function IconLabelButtons(props) {
         <Grid item xs={6} className={classes.noBorder}>
           <div className={classes.buttonContainer}>
             <Button variant="contained" color="primary" className={classes.button} onClick={() => handlersVolver.onChange()}>
-              Volver
+              {text1}
               <CartIcon className={classes.rightIcon} />
             </Button>
           </div>
         </Grid>
         <Grid item xs={6} className={classes.noBorder}>
           <div className={classes.buttonContainer}>
-            <Button variant="contained" color="primary" className={classes.button} onClick={() => handlersAgregarAPedido.onChange()}>
-              Pedir
+            <Button disabled={disabled} variant="contained" color="primary" className={classes.button} onClick={() => handlersAgregarAPedido.onChange()}>
+              {text2}
               <LocalDining className={classes.rightIcon} />
             </Button>
           </div>

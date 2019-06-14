@@ -11,6 +11,7 @@ import ListaItemsPedido from '../../../components/listaItemsPedido/ListaItemsPed
 import DialogConfirmacion from '../../../components/Dialog/DialogConfirmacion';
 import { Sesion } from '../../../domain/Sesion.js';
 import Error from '@material-ui/icons/Error';
+import { ControllerDeSesion } from '../../../controller/ControllerDeSesion.js';
 
 export default class VisualizarPedido extends Component {
 
@@ -49,7 +50,15 @@ export default class VisualizarPedido extends Component {
 
   verCarta = () => {
     clearInterval(this.state.timer)
-    this.props.history.push('/carta/' + this.props.match.params.id)
+    this.props.history.push('/carta')
+  }
+
+  verDetalleItemPedido = (pedido) => {
+    clearInterval(this.state.timer)
+    this.props.history.push({
+      pathname: '/detalleItemPedido',
+      state: { pedido: pedido }
+    })
   }
 
   getPrecioTotal() {
@@ -97,7 +106,7 @@ export default class VisualizarPedido extends Component {
   }
 
   pidiendoCuenta() {
-    ServiceLocator.SesionService.pedirCuenta(this.state.idSesion)
+    ServiceLocator.SesionService.pedirCuenta(ControllerDeSesion.getSesionActiva())
       .then((respuesta) => {
         if (respuesta.status === 200) {
           this.cargarPedidos()
@@ -162,6 +171,7 @@ export default class VisualizarPedido extends Component {
         <ListaItemsPedido
           pedidos={pedidos}
           handlers={{ onChange: this.actualizar }}
+          handlersDetalleItemPedido={{ onChange: this.verDetalleItemPedido }}
           disabled={this.validarSesion()}
         />
         <Card>

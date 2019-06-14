@@ -79,10 +79,15 @@ class Sesion {
 			throw new UserException('{ "error" : "no se puede cancelar un pedido en curso" }')
 		}
 	}
-	
+
 	@JsonIgnore
 	def getPedidosActivos() {
 		pedidos.filter[pedido | !pedido.cancelado ].toList
+	}
+	
+	@JsonIgnore
+	def getPedido(Long id) {
+		this.pedidos.findFirst[pedido | pedido.id.equals(id)]
 	}
 	
 	def pedirCuenta() {
