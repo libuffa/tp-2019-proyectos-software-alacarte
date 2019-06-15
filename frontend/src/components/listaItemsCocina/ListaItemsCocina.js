@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function ListaItemsCocina(props) {
   const classes = useStyles();
-  const { pedidos, handlers } = props
+  const { pedidos, handlers, handlersDetalleItem } = props
 
   if (pedidos === null) {
     return <div></div>
@@ -39,7 +39,7 @@ export default function ListaItemsCocina(props) {
           <Divider />
           {pedidos.map((pedido) => {
             return (
-              <ListItem key={pedido.id} button>
+              <ListItem key={pedido.id} button onClick={() => handlersDetalleItem.onChange(pedido)}>
                 <ListItemText
                   primary={pedido.comentarios === "" ?
                     pedido.itemCarta.titulo :

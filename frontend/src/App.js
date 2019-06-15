@@ -9,6 +9,7 @@ import DetalleItemPedido from './pages/detalleItemPedido/DetalleItemPedido';
 import Header from './components/Header/Header';
 import './App.css';
 import VisualizarPedidoCocina from './pages/VisualizarPedido/VisualizarPedidoCocina/VisualizarPedidoCocina';
+import DetalleItemPedidoCocina from './pages/detalleItemPedidoCocina/DetalleItemPedidoCocina';
 import { ControllerDeSesion } from './controller/ControllerDeSesion';
 import EscanearQR from './pages/escanearQR/EscanearQR';
 
@@ -24,6 +25,7 @@ function RouterPrincipal() {
           <Route path="/carta" exact component={VisualizarCarta} />
           <Route path="/detalleItemCarta" exact component={DetalleItemCarta} />
           <Route path="/detalleItemPedido" exact component={DetalleItemPedido} />
+          <Route path="/detalleItemPedidoCocina" exact component={DetalleItemPedidoCocina} />
           <Route path="/cartaEmpleado" exact component={VisualizarCartaEmpleado} />
           <Route path="/escanearQR" exact component={EscanearQR} />
           <Route component={Redirect} />

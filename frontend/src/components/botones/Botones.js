@@ -4,8 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 import CartIcon from '@material-ui/icons/ListAlt';
 import LocalDining from '@material-ui/icons/LocalDining';
-
-
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -36,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function IconLabelButtons(props) {
-  const { handlersVolver, handlersAgregarAPedido, text1, text2, disabled } = props;
+  const { handlersVolver, handlersAgregarAPedido, text1, text2, disabled, eliminar } = props;
   const classes = useStyles();
 
   return (
@@ -54,7 +53,10 @@ export default function IconLabelButtons(props) {
           <div className={classes.buttonContainer}>
             <Button disabled={disabled} variant="contained" color="primary" className={classes.button} onClick={() => handlersAgregarAPedido.onChange()}>
               {text2}
-              <LocalDining className={classes.rightIcon} />
+              {eliminar ?
+                <DeleteIcon className={classes.rightIcon} /> :
+                <LocalDining className={classes.rightIcon} />
+              }
             </Button>
           </div>
         </Grid>

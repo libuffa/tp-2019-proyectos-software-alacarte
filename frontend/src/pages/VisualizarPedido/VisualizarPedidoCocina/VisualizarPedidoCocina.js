@@ -42,6 +42,14 @@ export default class VisualizarPedidoCocina extends Component {
     this.cambiarEstadoPedido(idPedido)
   }
 
+  verDetalleItemPedido = (pedido) => {
+    clearInterval(this.state.timer)
+    this.props.history.push({
+      pathname: '/detalleItemPedidoCocina',
+      state: { pedido: pedido }
+    })
+  }
+
   snackbarOpen() {
     return this.state.errorMessage
   }
@@ -61,7 +69,7 @@ export default class VisualizarPedidoCocina extends Component {
     }
     return (
       <div>
-        <ListaItemsCocina pedidos={pedidos} handlers={{ onChange: this.actualizarEstadoPedido }} />
+        <ListaItemsCocina pedidos={pedidos} handlers={{ onChange: this.actualizarEstadoPedido }} handlersDetalleItem={{ onChange: this.verDetalleItemPedido }} />
         <Snackbar open={this.snackbarOpen()} message={errorMessage} autoHideDuration={4} />
       </div>
     )

@@ -71,11 +71,11 @@ export default class DetalleItemPedido extends Component {
         disabled={pedido.estado !== "Creado"}
       />
       <Botones
-        disabled={pedido.estado !== "Creado"}
         text1="volver"
         text2="modificar"
         handlersVolver={{ onChange: this.verPedido }}
         handlersAgregarAPedido={{ onChange: this.actualizarPedido }}
+        disabled={pedido.estado !== "Creado"}
       />
     </div>
   }
