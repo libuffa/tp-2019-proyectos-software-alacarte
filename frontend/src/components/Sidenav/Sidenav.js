@@ -13,17 +13,21 @@ export function Sidenav(props) {
         switch (opcion) {
             case 'carta':
                 return {
-                    // onClick: history.push('/cartaEmpleado'),
+                    onClick: '/cartaEmpleado',
                     description: 'ver Carta'
                 }
-                break;
+
+            case 'pedidoCocinero':
+                return {
+                    onClick: '/cocina',
+                    description: 'ver Pedidos'
+                }
 
             default:
                 return {
-                    // onClick: history.push('/mesa'),
+                    onClick: '/mesa',
                     description: 'ver Mesa'
                 }
-                break;
         }
     }
 
@@ -69,9 +73,10 @@ export function Sidenav(props) {
                                 <IconButton >
                                     <Typography
                                         variant="subtitle2"
-                                        color="primary">
+                                        color="primary"
+                                        onClick={() => history.push(menu.onClick)}>
                                         {menu.description}
-                                </Typography>
+                                    </Typography>
                                 </IconButton>
                             </ListItem>
                         })}
