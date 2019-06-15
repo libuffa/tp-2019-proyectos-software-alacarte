@@ -13,6 +13,9 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'center',
     color: theme.palette.text.primary,
   },
+  lista: {
+    padding: theme.spacing(0, 0),
+  },
 }));
 
 export default function ListaItems(props) {
@@ -33,27 +36,31 @@ export default function ListaItems(props) {
   return (
     <div className={classes.root}>
       {subData.map((subCategoria) => {
-        return <List key={subCategoria}>
-          <Divider />
-          <ListSubheader disableSticky color="inherit" key={subCategoria}>
-            <ListItemText primary={subCategoria} />
-          </ListSubheader>
-          <Divider />
-          {filtrarData(subCategoria).map((object) => {
-            if (object.habilitado) {
-              return <ListItem button key={object.id} onClick={() => handlers.onChange(object.id)}>
-                <ListItemAvatar >
-                  <Avatar src={object.imagenes[0]} />
-                </ListItemAvatar>
-                <ListItemText primary={object.titulo} />
-                <ListItemSecondaryAction>
-                  <ListItemText primary={<div className="precio">${object.precioUnitario}</div>} />
-                </ListItemSecondaryAction>
-              </ListItem>
-            }
-            return <div key={object.id}></div>
-          })}
-        </List>
+        return (
+          <List className={classes.lista} key={subCategoria}>
+            <Divider />
+            <ListSubheader disableSticky color="inherit" key={subCategoria}>
+              <ListItemText primary={subCategoria} />
+            </ListSubheader>
+            <Divider />
+            {filtrarData(subCategoria).map((object) => {
+              if (object.habilitado) {
+                return (
+                  <ListItem button key={object.id} onClick={() => handlers.onChange(object.id)}>
+                    <ListItemAvatar >
+                      <Avatar src={object.imagenes[0]} />
+                    </ListItemAvatar>
+                    <ListItemText primary={object.titulo} />
+                    <ListItemSecondaryAction>
+                      <ListItemText primary={<div className="precio">${object.precioUnitario}</div>} />
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                )
+              }
+              return <div key={object.id}></div>
+            })}
+          </List>
+        )
       })}
     </div>
   );

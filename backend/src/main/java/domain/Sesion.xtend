@@ -36,9 +36,8 @@ class Sesion {
 	@OneToOne(fetch=FetchType.LAZY)
 	@JsonIgnore Mozo mozo
 
-//	Para mi manejando fecha baja es mas optimo, porque sabes cuando realizo el pedido y cuando se fue
-//	@Column
-//	Boolean habilitado
+	@Column
+	Boolean pideCuenta = false
 	
 	@Column
 	@JsonIgnore LocalDateTime fechaAlta
@@ -80,14 +79,19 @@ class Sesion {
 			throw new UserException('{ "error" : "no se puede cancelar un pedido en curso" }')
 		}
 	}
-	
+
 	@JsonIgnore
 	def getPedidosActivos() {
 		pedidos.filter[pedido | !pedido.cancelado ].toList
 	}
 	
+	@JsonIgnore
+	def getPedido(Long id) {
+		this.pedidos.findFirst[pedido | pedido.id.equals(id)]
+	}
+	
 	def pedirCuenta() {
-		fechaBaja = LocalDateTime.now
+		this.pideCuenta = !this.pideCuenta
 		SesionRepository.instance.update(this)
 	}
 	

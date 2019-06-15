@@ -1,31 +1,45 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardActions from '@material-ui/core/CardActions';
+import React, { Component } from "react";
+import { ServiceLocator } from "../../services/ServiceLocator.js";
 
-const useStyles = makeStyles(theme => ({
-  media: {
-    height: 0,
-    paddingTop: '56.25%', // 16:9
-  },
-}));
-
-
-export default function RecipeReviewCard(props) {
-  const classes = useStyles();
-  const [value, setValue] = React.useState(false);
-
-  function handleChange(event, newValue) {
-    setValue(newValue);
+export default class Login extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      sesion: "",
+    }
   }
 
-  return (
-    <Card>
-      <CardHeader title="Escanea el código QR para poder empezar a pedir!"/>
-      <CardMedia className={classes.media} image={value}/>
-      <CardActions><input value={value} onChange={handleChange} type="file" name="foto" id="foto" class="SubirFoto" accept="image/*" capture="camera" /></CardActions>
-    </Card>
-  );
+  handleChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value
+    })
+  }
+
+  handleEnviar = event => {
+    const { sesion } = this.state
+    ServiceLocator.SesionService.iniciarSesion({ idSesion: sesion })
+      .then(respuesta => {
+        if (respuesta === "True") {
+          this.props.iniciarSesion(sesion)
+        } else {
+          console.log(respuesta)
+        }
+      })
+  }
+
+  render() {
+    return (
+      <div>
+        <span>Escanear QR (aca en teoria se va a mandar el codigo que se lea del qr qu  va a tener que coincidir con una sesion de la base)</span>
+        <input
+          id="sesion"
+          name="sesion"
+          type="text"
+          value={this.state.value}
+          onChange={this.handleChange}
+          placeholder="sesion" />
+        <button onClick={this.handleEnviar}>ENTRAR</button>
+      </div>
+    );
+  }
 }

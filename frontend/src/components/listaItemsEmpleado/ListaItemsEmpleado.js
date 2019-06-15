@@ -12,6 +12,9 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'center',
     color: theme.palette.text.primary,
   },
+  lista: {
+    padding: theme.spacing(0, 0),
+  }
 }));
 
 export default function ListaItemsEmpleado(props) {
@@ -32,7 +35,7 @@ export default function ListaItemsEmpleado(props) {
   return (
     <div className={classes.root}>
       {subData.map((subCategoria) => {
-        return <List key={subCategoria}>
+        return <List className={classes.lista} key={subCategoria}>
           <Divider />
           <ListSubheader disableSticky color="inherit" key={subCategoria}>
             <ListItemText primary={subCategoria} />

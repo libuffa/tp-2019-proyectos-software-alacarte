@@ -10,9 +10,9 @@ const useStyles = makeStyles(theme => ({
 
 export default function OutlinedTextFields(props) {
   const classes = useStyles();
-  const { handlers } = props;
+  const { handlers, comentarioPrevio, disabled } = props;
   const [value, setValue] = React.useState({
-    comentario: "",
+    comentario: comentarioPrevio,
   });
 
   const handleChange = comentario => event => {
@@ -24,6 +24,7 @@ export default function OutlinedTextFields(props) {
     <form className={classes.textField} autoComplete="off">
       <TextField
         id="comentario"
+        disabled={disabled}
         value={value.comentario}
         onChange={handleChange('comentario')}
         multiline

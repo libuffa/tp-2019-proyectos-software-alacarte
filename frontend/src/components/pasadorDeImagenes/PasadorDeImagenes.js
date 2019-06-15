@@ -28,7 +28,7 @@ export default function PasadorDeImagenes(props) {
   }
   return (
     <div className={classes.root}>
-      <GridList className={classes.gridList} cols={1}>
+      <GridList className={classes.gridList} spacing={0} cols={1}>
         {imagenes.map((imagen) => (
           <GridListTile key={Math.random()}>
             <img src={imagen} alt={imagen} />

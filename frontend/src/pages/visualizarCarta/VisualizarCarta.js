@@ -13,28 +13,12 @@ export default class VisualizarCarta extends Component {
       carta: null,
       selectedItem: null,
       categorias: null,
-      idSesion: this.props.match.params.id,
     }
   }
 
   componentDidMount() {
     this.cargarCarta('Entrada')
     this.cargarCategorias()
-    if (this.props.match.params.id === 1) {
-      this.cargarSesion()
-    }
-  }
-
-  cargarSesion() {
-    ServiceLocator.SesionService.getSesiones()
-      .then((sesiones) => {
-        const sesion = sesiones[0]
-        const idSesion = sesion.id
-        console.log(idSesion)
-        this.setState({
-          idSesion,
-        })
-      })
   }
 
   cargarCarta(categoria) {
@@ -76,7 +60,7 @@ export default class VisualizarCarta extends Component {
   }
 
   verPedido = () => {
-    this.props.history.push('/pedido/' + this.state.idSesion)
+    this.props.history.push('/pedido')
   }
 
   render() {
@@ -103,7 +87,7 @@ export default class VisualizarCarta extends Component {
           <MenuSuperior data={categorias} handlers={{ onChange: this.seleccionEnMenuSuperior }}></MenuSuperior>
           <ListaItems data={carta} subData={this.subCategoriasCarta()} handlers={{ onChange: this.seleccionItemCarta }}></ListaItems>
         </div>
-        <MenuInferior menuButtons={menuButtons}></MenuInferior>
+        <MenuInferior menuButtons={menuButtons} ></MenuInferior>
       </div>
     )
   }

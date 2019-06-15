@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import './MenuInferior.scss';
 
 
 const useStyles = makeStyles(theme => ({
@@ -20,15 +21,18 @@ export default function MenuInferior(props) {
       label={menuButtons.secondButton.name}
       icon={menuButtons.secondButton.icon}
       onClick={() => menuButtons.secondButton.onChange()}
+      disabled={(!menuButtons.secondButton.disabled) ? false : true}
     />
   )
   const thirdButton = (menuButtons.thirdButton) && (
     <BottomNavigationAction
       label={menuButtons.thirdButton.name}
       icon={menuButtons.thirdButton.icon}
-      onClick={() => menuButtons.thirdButton.onChange()}
+      onClick={() => { menuButtons.thirdButton.onChange() }}
+      disabled={(!menuButtons.thirdButton.disabled) ? false : true}
     />
   )
+
 
   return (
     <React.Fragment>
@@ -40,6 +44,7 @@ export default function MenuInferior(props) {
             label={menuButtons.firstButton.name}
             icon={menuButtons.firstButton.icon}
             onClick={() => menuButtons.firstButton.onChange()}
+            disabled={(!menuButtons.firstButton.disabled) ? false : true}
           />
           {secondButton}
           {thirdButton}

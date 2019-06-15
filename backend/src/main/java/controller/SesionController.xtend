@@ -6,9 +6,10 @@ import org.uqbar.xtrest.api.Result
 import org.uqbar.xtrest.api.annotation.Body
 import org.uqbar.xtrest.api.annotation.Controller
 import org.uqbar.xtrest.api.annotation.Get
-import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.api.annotation.Post
+import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.json.JSONUtils
+import repository.ItemCartaRepository
 import repository.SesionRepository
 
 @Controller
@@ -17,6 +18,61 @@ class SesionController {
 	
 	extension JSONUtils = new JSONUtils
 	SesionRepository repositorioSesion = SesionRepository.instance
+	ItemCartaRepository carta = ItemCartaRepository.instance
+
+	@Post("/sesion/iniciarSesion")
+	def Result iniciarSesion(@Body String body) {
+		var id = Long.valueOf(body.getPropertyValue("idSesion"))
+		try{
+			repositorioSesion.searchById(id)
+			return ok("True")
+		}catch(Exception e) {
+			badRequest("La sesion no existe o esta inactiva")
+		}
+	}
+	
+	@Put("/pedido/generarPedido")
+	def Result generarPedido(@Body String body) {
+		var idSesion = Long.valueOf(body.getPropertyValue("idSesion"))
+		var idItem = Long.valueOf(body.getPropertyValue("idItem"))
+		var comentario = body.getPropertyValue("comentario")
+		var cantidad = Integer.valueOf(body.getPropertyValue("cantidad"))
+		
+		try{
+			val sesion = repositorioSesion.searchById(idSesion)
+			val itemCarta = carta.searchById(idItem)
+			if(itemCarta.habilitado){
+				sesion.pedirItem(itemCarta, cantidad, comentario)
+				repositorioSesion.update(sesion)
+				return ok("True")
+			}
+			return ok("El plato que desea no se encuentra disponible")
+		}catch(Exception e) {
+			badRequest("La sesion no existe o esta inactiva")
+		}
+	}
+	
+	@Post("/pedido/actualizarPedido")
+	def Result actualizarPedido(@Body String body) {
+		var idSesion = Long.valueOf(body.getPropertyValue("idSesion"))
+		var idPedido = Long.valueOf(body.getPropertyValue("idPedido"))
+		var comentario = body.getPropertyValue("comentario")
+		var cantidad = Integer.valueOf(body.getPropertyValue("cantidad"))
+		
+		try{
+			val sesion = repositorioSesion.searchById(idSesion)
+			var pedido = sesion.getPedido(idPedido)
+			if(pedido.estado.equals(Estado.Creado)){
+				pedido.cantidad = cantidad
+				pedido.comentarios = comentario
+				repositorioSesion.update(sesion)
+				return ok("True")
+			}
+			return ok("No fue posible modificar el plato")
+		}catch(Exception e) {
+			badRequest("La sesion no existe o esta inactiva")
+		}
+	}
 
 	@Get("/sesion/:id")
 	def Result sesion() {

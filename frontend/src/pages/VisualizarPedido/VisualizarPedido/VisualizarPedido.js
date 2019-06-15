@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import List from '@material-ui/core/List';
-import { Typography, Card, CardContent, Snackbar } from '@material-ui/core';
+import { Typography, Card, CardContent, Snackbar, Tooltip, IconButton } from '@material-ui/core';
 import { ServiceLocator } from "../../../services/ServiceLocator.js";
 import MenuInferior from '../../../components/menuInferior/MenuInferior';
 import CartIcon from '@material-ui/icons/ListAlt';
@@ -8,18 +7,24 @@ import MoneyIcon from '@material-ui/icons/AttachMoney';
 import GamesIcon from '@material-ui/icons/Games';
 import './VisualizarPedido.scss';
 import { Pedido } from '../../../domain/Pedido';
+import ListaItemsPedido from '../../../components/listaItemsPedido/ListaItemsPedido.js';
 import DialogConfirmacion from '../../../components/Dialog/DialogConfirmacion';
-import ItemPedido from '../../../components/Item/ItemPedido/ItemPedido.js';
+import { Sesion } from '../../../domain/Sesion.js';
+import Error from '@material-ui/icons/Error';
+import { ControllerDeSesion } from '../../../controller/ControllerDeSesion.js';
 
 export default class VisualizarPedido extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
+      timer: setInterval(() => { this.cargarPedidos(); }, 30000),
       idSesion: null,
       pedidos: null,
       fechaBaja: null,
       open: false,
+      pideCuenta: true,
+      sesion: {},
     }
   }
 
@@ -28,21 +33,32 @@ export default class VisualizarPedido extends Component {
   }
 
   cargarPedidos() {
-    ServiceLocator.SesionService.getSesion(this.props.match.params.id)
-      .then((sesion) => {
-        const pedidos = sesion.pedidos.filter((pedido) => !pedido.cancelado)
-        const idSesion = sesion.id
-        const fechaBaja = sesion.fechaBaja
+    ServiceLocator.SesionService.getSesionActiva()
+      .then((sesionJSON) => {
+        const sesion = Sesion.fromJson(sesionJSON)
+        return sesion
+      }).then((_sesion) => {
         this.setState({
-          pedidos,
-          idSesion,
-          fechaBaja,
+          pedidos: _sesion.pedidos.filter((pedido) => !pedido.cancelado),
+          sesion: _sesion,
+          idSesion: _sesion.id,
+          fechaBaja: _sesion.fechaBaja,
+          pideCuenta: _sesion.pideCuenta,
         })
       })
   }
 
   verCarta = () => {
-    this.props.history.push('/carta/' + this.props.match.params.id)
+    clearInterval(this.state.timer)
+    this.props.history.push('/carta')
+  }
+
+  verDetalleItemPedido = (pedido) => {
+    clearInterval(this.state.timer)
+    this.props.history.push({
+      pathname: '/detalleItemPedido',
+      state: { pedido: pedido }
+    })
   }
 
   getPrecioTotal() {
@@ -90,10 +106,14 @@ export default class VisualizarPedido extends Component {
   }
 
   pidiendoCuenta() {
-    ServiceLocator.SesionService.pedirCuenta(this.state.idSesion)
+    ServiceLocator.SesionService.pedirCuenta(ControllerDeSesion.getSesionActiva())
       .then((respuesta) => {
         if (respuesta.status === 200) {
           this.cargarPedidos()
+          this.setState({
+            pideCuenta: !this.state.pideCuenta,
+            errorMessage: ""
+          })
         }
       }).catch(error => {
         this.generarError(error.response.data.error)
@@ -110,16 +130,14 @@ export default class VisualizarPedido extends Component {
   }
 
   open = () => {
-    if(this.state.open) {
-      this.setState({
-        open: false
-      })
+    if (this.state.pideCuenta) {
+      this.generarError("Ya se ha pedido la cuenta")
     } else {
       this.setState({
-        open: true
+        open: !this.state.open
       })
+      return this.state.open
     }
-    return this.state.open
   }
 
   render() {
@@ -136,34 +154,39 @@ export default class VisualizarPedido extends Component {
         icon: (<CartIcon />)
       },
       secondButton: {
-        onChange: this.verCarta,
+        onChange: null,
         name: "Jugar Juego",
         icon: (<GamesIcon />)
       },
       thirdButton: {
         onChange: this.open,
         name: "Pedir Cuenta",
-        icon: (<MoneyIcon />)
+        icon: (<MoneyIcon />),
+        disabled: this.state.pideCuenta
       }
     }
 
     return (
       <div>
-        <Card>
-          <CardContent><Typography variant="subtitle1">Tu Pedido</Typography></CardContent>
-        </Card>
-        <List >
-          {pedidos.map((pedido) => {
-            return <ItemPedido
-              key={pedido.id}
-              pedido={pedido}
-              handlers={{ onChange: this.actualizar }}
-              disabled={this.validarSesion()} />
-          })}
-        </List>
+        <ListaItemsPedido
+          pedidos={pedidos}
+          handlers={{ onChange: this.actualizar }}
+          handlersDetalleItemPedido={{ onChange: this.verDetalleItemPedido }}
+          disabled={this.validarSesion()}
+        />
         <Card>
           <CardContent>
             <Typography className="precioFinal" variant="subtitle1">
+              {
+                (this.state.pideCuenta) &&
+                <Tooltip
+                  title="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?"
+                  aria-label="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?">
+                  <IconButton onClick={() => this.pidiendoCuenta()}>
+                    <Error color="error" fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              }
               Precio final: {new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: 'USD'
@@ -175,16 +198,16 @@ export default class VisualizarPedido extends Component {
             <MenuInferior menuButtons={menuButtons} />
           </CardContent>
         </Card>
-        <DialogConfirmacion 
+        <DialogConfirmacion
           titulo={"Pedir Cuenta"}
           descripcion={"¿Estas seguro que deseas pedir la cuenta?"}
           handlers={{ onChange: this.pedirCuenta, open: this.open }}
           open={this.state.open}
         />
-        <Snackbar 
-          open={this.snackbarOpen()} 
-          message={errorMessage} 
-          autoHideDuration={4} />
+        <Snackbar
+          open={this.snackbarOpen()}
+          message={errorMessage}
+          autoHideDuration={4000} />
       </div>
     )
   }
