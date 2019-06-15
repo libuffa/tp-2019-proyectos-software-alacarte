@@ -6,8 +6,10 @@ import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.xtrest.api.Result
+import org.uqbar.xtrest.api.annotation.Body
 import org.uqbar.xtrest.api.annotation.Controller
 import org.uqbar.xtrest.api.annotation.Get
+import org.uqbar.xtrest.api.annotation.Post
 import org.uqbar.xtrest.json.JSONUtils
 import repository.EmpleadoRepository
 
@@ -18,14 +20,35 @@ class EmpleadoController {
 	extension JSONUtils = new JSONUtils
 	EmpleadoRepository repoEmpleados = EmpleadoRepository.instance
 
+	@Post("/empleado/iniciarSesion")
+	def Result iniciarSesion(@Body String body) {
+		val nombreUsuario = body.getPropertyValue("nombreUsuario")
+		val contraseña = body.getPropertyValue("contraseña")
+		try{
+			val empleado = repoEmpleados.searchByString(nombreUsuario)
+			
+			if(empleado === null) {
+				return badRequest('{ "error" : "usuario inexistente" }')
+			}
+			
+			if(!empleado.contraseña.equals(contraseña)) {
+				return badRequest('{ "error" : "contraseña incorrecta" }')
+			}
+			return ok(empleado.toJson)
+		}catch(Exception e) {
+			badRequest(e.message)
+		}
+	}
+
 	@Get("/empleado/:id")
 	def Result getEmpleado() {
 		try {
 			val _id = Long.valueOf(id)
-			val empleado = repoEmpleados.searchById(_id)
+			var empleado = repoEmpleados.searchById(_id)
 			
 			if(empleado === null) {
-				return badRequest('{ "error" : "usuario inexistente" }')
+				empleado = repoEmpleados.allInstances.get(0)
+//				return badRequest('{ "error" : "usuario inexistente" }')
 			}
 			
 			return ok(empleado.toJson)
@@ -34,7 +57,7 @@ class EmpleadoController {
 		}
 	}
 
-	@Get("/empleado/menu/:id")
+	@Get("/empleado/:id/menu")
 	def Result getMenuEmpleado() {
 		try {
 			val _id = Long.valueOf(id)

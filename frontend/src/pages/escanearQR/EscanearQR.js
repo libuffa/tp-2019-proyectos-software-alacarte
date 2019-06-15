@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { ServiceLocator } from "../../services/ServiceLocator.js";
 
-export default class Login extends Component {
+export default class EscanearQR extends Component {
   constructor(props) {
     super(props)
     this.state = {
       sesion: "",
     }
+    console.log(props)
   }
 
   handleChange = event => {

@@ -4,30 +4,30 @@ import PersonIcon from '@material-ui/icons/PersonPin'
 
 export function Sidenav(props) {
 
-    const { open, history, handlers } = props;
+    const { open, history, handlers, empleado, opcionesMenu } = props;
     console.log(props)
 
-    const opciones = ['carta', 'mesa']
-
-    const optionSwitch = (opcion) => {
-        switch (opcion) {
-            case 'carta':
-                return {
-                    onClick: '/cartaEmpleado',
-                    description: 'ver Carta'
-                }
-
-            case 'pedidoCocinero':
-                return {
-                    onClick: '/cocina',
-                    description: 'ver Pedidos'
-                }
-
-            default:
-                return {
-                    onClick: '/mesa',
-                    description: 'ver Mesa'
-                }
+    const optionSwitch = (opcionesMenu) => {
+        if(opcionesMenu) {
+            switch (opcionesMenu) {
+                case 'carta':
+                    return {
+                        onClick: '/carta/empleado',
+                        description: 'ver Carta'
+                    }
+    
+                case 'pedidoCocinero':
+                    return {
+                        onClick: '/pedido/cocina',
+                        description: 'ver Pedidos'
+                    }
+    
+                default:
+                    return {
+                        onClick: '/mesa',
+                        description: 'ver Mesa'
+                    }
+            }
         }
     }
 
@@ -48,18 +48,22 @@ export function Sidenav(props) {
                                 justify="center">
 
                                 <Grid item xd={6} >
+                                    <br />
                                     <PersonIcon fontSize="large" />
                                 </Grid>
 
                                 <Grid item xs={6}>
-
+                                    <br />
                                     <Grid item xs={12}>
-                                        <Typography color="inherit" variant="body2" gutterBottom >Lautaro Buffa</Typography>
+                                        <Typography 
+                                            color="inherit" 
+                                            variant="body2" 
+                                            gutterBottom >{((empleado) && empleado.nombre) + ' ' + ((empleado) && empleado.apellido)}</Typography>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <Typography color="inherit" variant="caption">buffalautaro@gmail.com</Typography>
+                                        <Typography color="inherit" variant="caption">{((empleado) && empleado.email)}</Typography>
                                     </Grid>
-
+                                    <br />
                                 </Grid>
 
                             </Grid>
@@ -67,7 +71,7 @@ export function Sidenav(props) {
                         <br />
                     </AppBar>
                     <List>
-                        {opciones.map((opcion) => {
+                        {(opcionesMenu) && opcionesMenu.map((opcion) => {
                             const menu = optionSwitch(opcion)
                             return <ListItem >
                                 <IconButton >
