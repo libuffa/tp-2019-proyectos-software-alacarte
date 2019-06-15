@@ -11,7 +11,6 @@ import './App.css';
 import VisualizarPedidoCocina from './pages/VisualizarPedido/VisualizarPedidoCocina/VisualizarPedidoCocina';
 import { ControllerDeSesion } from './controller/ControllerDeSesion';
 import EscanearQR from './pages/escanearQR/EscanearQR';
-import { Paper } from '@material-ui/core';
 
 function RouterPrincipal() {
   return (
