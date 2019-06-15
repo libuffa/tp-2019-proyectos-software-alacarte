@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from "@material-ui/icons/Delete";
-import { ListItem, IconButton, Typography, ListItemAvatar, Avatar, ListItemText, List, ListItemSecondaryAction, Divider, ListSubheader } from '@material-ui/core';
+import { ListItem, IconButton, Typography, ListItemAvatar, Avatar, ListItemText, List, ListItemSecondaryAction, ListSubheader } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,11 +31,11 @@ export default function ListaItemsCocina(props) {
     return (
       <div className={classes.root}>
         <List className={classes.lista}>
-          <Divider />
+          <div className="dividerLista" />
           <ListSubheader disableSticky color="inherit" key={-1}>
             <ListItemText primary="Tu Pedido" />
           </ListSubheader>
-          <Divider />
+          <div className="dividerLista" />
           {pedidos.map((pedido) => {
             return (
               <ListItem key={pedido.id} button disabled={disabled} onClick={() => handlersDetalleItemPedido.onChange(pedido)}>

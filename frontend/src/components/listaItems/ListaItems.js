@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { ListItem, ListItemAvatar, Avatar, ListItemText, List, ListItemSecondaryAction, ListSubheader, Divider } from '@material-ui/core';
+import { ListItem, ListItemAvatar, Avatar, ListItemText, List, ListItemSecondaryAction, ListSubheader } from '@material-ui/core';
 import './ListaItems.scss';
 
 const useStyles = makeStyles(theme => ({
@@ -38,11 +38,11 @@ export default function ListaItems(props) {
       {subData.map((subCategoria) => {
         return (
           <List className={classes.lista} key={subCategoria}>
-            <Divider />
+            <div className="dividerLista" />
             <ListSubheader disableSticky color="inherit" key={subCategoria}>
               <ListItemText primary={subCategoria} />
             </ListSubheader>
-            <Divider />
+            <div className="dividerLista" />
             {filtrarData(subCategoria).map((object) => {
               if (object.habilitado) {
                 return (

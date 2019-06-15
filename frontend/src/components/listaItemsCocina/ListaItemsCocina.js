@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled';
 import Error from '@material-ui/icons/Error';
-import { ListItem, IconButton, Typography, ListItemText, List, ListItemSecondaryAction, Divider, ListSubheader } from '@material-ui/core';
+import { ListItem, IconButton, Typography, ListItemText, List, ListItemSecondaryAction, ListSubheader } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,11 +32,11 @@ export default function ListaItemsCocina(props) {
     return (
       <div className={classes.root}>
         <List className={classes.lista}>
-          <Divider />
+          <div className="dividerLista" />
           <ListSubheader disableSticky color="inherit" key={-1}>
             <ListItemText primary="Pedidos Cocina" />
           </ListSubheader>
-          <Divider />
+          <div className="dividerLista" />
           {pedidos.map((pedido) => {
             return (
               <ListItem key={pedido.id} button onClick={() => handlersDetalleItem.onChange(pedido)}>
