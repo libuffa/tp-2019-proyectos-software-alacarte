@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { ServiceLocator } from "../../services/ServiceLocator.js";
 import PasadorDeImagenes from '../../components/pasadorDeImagenes/PasadorDeImagenes.js';
-import CuerpoItem from '../../components/cuerpoItem/CuerpoItem.js';
-import Botones from '../../components/botones/Botones';
-import './DetalleItemPedido.scss';
 import { ControllerDeSesion } from '../../controller/ControllerDeSesion.js'
+import { ServiceLocator } from "../../services/ServiceLocator.js";
+import './DetalleItemPedido.scss';
+import ContenedorCuerpoItem from '../../components/contenedorCuerpoItem/ContenedorCuerpoItem.js';
 
 export default class DetalleItemPedido extends Component {
   constructor(props) {
@@ -36,13 +35,13 @@ export default class DetalleItemPedido extends Component {
     this.props.history.push('/pedido')
   }
 
-  actualizarPedido = () => {
+  actualizarPedido = (cantidad, comentario) => {
     ServiceLocator.SesionService.actualizarPedido({
       "idSesion": ControllerDeSesion.getSesionActiva(),
       "idPedido": this.state.pedido.id,
       "idItem": this.state.itemCarta.id,
-      "cantidad": this.state.cantidad,
-      "comentario": this.state.comentario,
+      "cantidad": cantidad,
+      "comentario": comentario,
     }).then(resultado => {
       if (resultado === "True") {
         this.props.history.push(`/pedido`)
@@ -53,7 +52,8 @@ export default class DetalleItemPedido extends Component {
   }
 
   render() {
-    const { itemCarta, cantidad, comentario, pedido } = this.state;
+    const { itemCarta, pedido } = this.state;
+    const { cantidad, comentario } = this.state;
 
     if (!itemCarta) {
       return <div></div>
@@ -62,17 +62,12 @@ export default class DetalleItemPedido extends Component {
       <PasadorDeImagenes
         imagenes={itemCarta.imagenes}
       />
-      <CuerpoItem
-        itemCarta={itemCarta}
+      <ContenedorCuerpoItem
+        texto1="volver"
+        texto2="modificar"
         cantidad={cantidad}
-        handlersCantidad={{ onChange: this.modificarCantidad }}
-        handlersComentario={{ onChange: this.modificarComentario }}
         comentario={comentario}
-        disabled={pedido.estado !== "Creado"}
-      />
-      <Botones
-        text1="volver"
-        text2="modificar"
+        itemCarta={itemCarta}
         handlersVolver={{ onChange: this.verPedido }}
         handlersAgregarAPedido={{ onChange: this.actualizarPedido }}
         disabled={pedido.estado !== "Creado"}
