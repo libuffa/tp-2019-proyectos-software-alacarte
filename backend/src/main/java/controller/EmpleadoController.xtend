@@ -22,10 +22,11 @@ class EmpleadoController {
 
 	@Post("/empleado/iniciarSesion")
 	def Result iniciarSesion(@Body String body) {
-		val nombreUsuario = body.getPropertyValue("nombreUsuario")
-		val contraseña = body.getPropertyValue("contraseña")
 		try{
+			val nombreUsuario = body.getPropertyValue("nombreUsuario")
+			val contraseña = body.getPropertyValue("contraseña")
 			val empleado = repoEmpleados.searchByString(nombreUsuario)
+			println(empleado)
 			
 			if(empleado === null) {
 				return badRequest('{ "error" : "usuario inexistente" }')
@@ -34,6 +35,8 @@ class EmpleadoController {
 			if(!empleado.contraseña.equals(contraseña)) {
 				return badRequest('{ "error" : "contraseña incorrecta" }')
 			}
+			
+			println(empleado)
 			return ok(empleado.toJson)
 		}catch(Exception e) {
 			badRequest(e.message)

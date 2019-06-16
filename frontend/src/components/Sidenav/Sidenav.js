@@ -5,7 +5,6 @@ import PersonIcon from '@material-ui/icons/PersonPin'
 export function Sidenav(props) {
 
     const { open, history, handlers, empleado, opcionesMenu } = props;
-    console.log(props)
 
     const optionSwitch = (opcionesMenu) => {
         if(opcionesMenu) {

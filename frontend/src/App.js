@@ -13,12 +13,15 @@ import { ControllerDeSesion } from './controller/ControllerDeSesion';
 import EscanearQR from './pages/escanearQR/EscanearQR';
 import Login from './pages/Login/Login';
 import { ControllerDeEmpleado } from './controller/ControllerDeEmpleado';
+import { ServiceLocator } from './services/ServiceLocator';
 
-function RouterPrincipal() {
+function RouterPrincipal(props) {
+  const { empleado, opcionesMenu } = props
+
   return (
     <Router>
       <div>
-        <Header sidenav={true} />
+        <Header empleado={empleado} opcionesMenu={opcionesMenu} />
         <Switch>
           <Route path="/pedido" exact component={VisualizarPedido} />
           <Route path="/pedido/cocina" exact component={VisualizarPedidoCocina} />
@@ -39,7 +42,7 @@ function RouterCliente() {
   return (
     <Router>
       <div>
-        <Header sidenav={false} />
+        <Header />
         <Switch>
           <Route path="/pedido" exact component={VisualizarPedido} />
           <Route path="/carta" exact component={VisualizarCarta} />
@@ -95,7 +98,29 @@ class App extends Component {
     super(props)
     this.state = {
       sesionActiva: ControllerDeSesion.getSesionActiva(),
-      sesionEmpleadoActiva: ControllerDeEmpleado.getSesionActiva()
+      sesionEmpleadoActiva: ControllerDeEmpleado.getSesionActiva(),
+      empleado: null,
+      opcionesMenu: null,
+    }
+  }
+
+  componentDidMount() {
+    this.abrirSesionEmpleado()
+  }
+
+  async abrirSesionEmpleado() {
+    if (ControllerDeEmpleado.getSesionActiva()) {
+      try {
+        const empleado = await ServiceLocator.EmpleadoService.getEmpleado()
+        const opcionesMenu = await ServiceLocator.EmpleadoService.getMenuEmpleado()
+
+        this.setState({
+          empleado: empleado,
+          opcionesMenu: opcionesMenu,
+        })
+      } catch (error) {
+        console.error({ error })
+      }
     }
   }
 
@@ -116,13 +141,15 @@ class App extends Component {
   render() {
     return (
       <div className="contenedor">
-        {(this.state.sesionActiva && <RouterCliente></RouterCliente>)
-          || (this.state.sesionEmpleadoActiva && <RouterPrincipal></RouterPrincipal>)
+        {(this.state.sesionActiva && <RouterCliente ></RouterCliente>)
+          || (this.state.sesionEmpleadoActiva && <RouterPrincipal
+                                                    empleado={this.state.empleado}
+                                                    opcionesMenu={this.state.opcionesMenu}></RouterPrincipal>)
           || <RouterInicial
               iniciarSesion={{
                 sesion: this.handleAbrirSesion,
                 empleado: this.handleAbrirSesionEmpleado
-                }}></RouterInicial>}
+              }}></RouterInicial>}
       </div>
     )
   }

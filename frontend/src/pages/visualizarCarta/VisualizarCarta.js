@@ -54,7 +54,7 @@ export default class VisualizarCarta extends Component {
 
   seleccionItemCarta = (idItemCarta) => {
     this.props.history.push({
-      pathname: '/detalleItemCarta',
+      pathname: '/detalle/item/carta',
       state: { idItem: idItemCarta }
     })
   }

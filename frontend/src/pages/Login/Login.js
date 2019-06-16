@@ -57,14 +57,11 @@ class Login extends Component {
         console.log(this.state)
         const { usuario, pass } = this.state
         ServiceLocator.EmpleadoService.iniciarSesion({ nombreUsuario: usuario, contraseña: pass })
-            .then(respuesta => {
-                if (respuesta === "True") {
-                    console.log("pasa por aca")
-                    this.props.iniciarSesion(respuesta.id)
-                } else {
+            .then((respuesta) => {
                     console.log(respuesta)
-                }
+                    this.props.iniciarSesion(respuesta.id)
             })
+            .catch(error => { console.error({ error }) })
     }
 
     handleChange = event => {

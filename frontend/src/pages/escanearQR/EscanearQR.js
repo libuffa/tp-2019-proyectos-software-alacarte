@@ -7,7 +7,6 @@ export default class EscanearQR extends Component {
     this.state = {
       sesion: "",
     }
-    console.log(props)
   }
 
   handleChange = event => {

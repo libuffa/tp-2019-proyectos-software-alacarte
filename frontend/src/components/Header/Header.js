@@ -5,38 +5,24 @@ import MenuIcon from '@material-ui/icons/Menu';
 import './Header.scss';
 import { Sidenav } from '../Sidenav/Sidenav';
 import { ServiceLocator } from '../../services/ServiceLocator';
+import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 
-function getEmpleado() {
-  ServiceLocator.EmpleadoService.getEmpleado()
-    .then((empleado) => {
-      return empleado
-    })
-    .catch((error) => { return error })
-}
 
-function getMenuEmpleado() {
-  ServiceLocator.EmpleadoService.getMenuEmpleado()
-    .then((opcionesMenu) => {
-      return opcionesMenu
-    })
-    .catch((error) => { return error })
+
+async function getMenuEmpleado() {
+  if(ControllerDeEmpleado.getSesionActiva()) {
+    try {
+      const res = await ServiceLocator.EmpleadoService.getMenuEmpleado()
+      return res
+    } catch (error) {
+      console.error({error})
+    }
+  }
 }
 
 function Header(props) {
   const [open, setOpen] = React.useState(false);
-  const { location, history, sidenav } = props;
-  const [state, setState] = React.useState({
-    empleado: getEmpleado(),
-    opcionesMenu:  getMenuEmpleado(),
-    open: false,
-  });
-
-  // if(sidenav) {
-  //   setState({
-  //     empleado: getEmpleado(),
-  //     opcionesMenu: getMenuEmpleado()
-  //   })
-  // }
+  const { location, history, empleado, opcionesMenu } = props;
 
   let pageName = location.pathname.replace(/\//g, ' ').toLowerCase();
   pageName = pageName.replace(/[0-9]/g, '').toLowerCase();
@@ -51,18 +37,18 @@ function Header(props) {
     setOpen(false);
   };
 
-
   return (
     <div>
       <AppBar position="static">
         <Toolbar>
-          {(sidenav) &&
+          {
+            (opcionesMenu) &&
             (<IconButton
               className="menuButton"
               color="inherit"
               aria-label="Menu"
               onClick={handleClickOpen}>
-              <MenuIcon empleado={state.empleado} opcionesMenu={state.opcionesMenu} />
+              <MenuIcon />
             </IconButton>)
           }
           <Typography className="title" variant="h6">
@@ -70,7 +56,11 @@ function Header(props) {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Sidenav open={open} history={history} handlers={{ onChange: handleClose }} />
+      <Sidenav 
+        open={open} 
+        history={history} 
+        handlers={{ onChange: handleClose }}
+        empleado={empleado} opcionesMenu={opcionesMenu} />
     </div>
   );
 };

@@ -8,7 +8,7 @@ export class EmpleadoService {
     iniciarSesion(data) {
         return client.post('/empleado/iniciarSesion', data, { timeout: 10000 })
             .then(res => { return res.data })
-            .catch(error => { console.error({ error }) })
+                .catch(error => { console.error({ error }) })
     }
 
     cerrarSesion(data) {
@@ -20,6 +20,6 @@ export class EmpleadoService {
     }
 
     getMenuEmpleado() {
-        return client.get(`/empleado/menu/${ControllerDeEmpleado.getSesionActiva()}`).then(res => { return res.data })
+        return client.get(`/empleado/${ControllerDeEmpleado.getSesionActiva()}/menu`).then(res => { return res.data })
     }
 }
