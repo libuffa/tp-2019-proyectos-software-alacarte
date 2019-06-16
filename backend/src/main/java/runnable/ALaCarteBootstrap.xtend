@@ -8,14 +8,13 @@ import domain.Pedido
 import domain.Sesion
 import domain.empleado.Mozo
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.uqbar.arena.bootstrap.CollectionBasedBootstrap
 import repository.EmpleadoRepository
 import repository.ItemCartaRepository
 import repository.MesaRepository
 import repository.SesionRepository
 
 @Accessors
-class ALaCarteBootstrap extends CollectionBasedBootstrap {
+class ALaCarteBootstrap {
 
 	ItemCartaRepository carta = ItemCartaRepository.instance
 	SesionRepository repoSesion = SesionRepository.instance
@@ -52,7 +51,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 
 	Sesion sesion1
 
-	override run() {
+	def run() {
 
 		antiPasto = new ItemCarta => [
 			titulo = "Antipasto"
