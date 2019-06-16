@@ -139,10 +139,12 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.state.sesionEmpleadoActiva)
+    console.log(this.state.sesionActiva)
     return (
       <div className="contenedor">
         {(this.state.sesionActiva && <RouterCliente ></RouterCliente>)
-          || (this.state.sesionEmpleadoActiva && <RouterPrincipal
+          || ((this.state.sesionEmpleadoActiva) && <RouterPrincipal
                                                     empleado={this.state.empleado}
                                                     opcionesMenu={this.state.opcionesMenu}></RouterPrincipal>)
           || <RouterInicial

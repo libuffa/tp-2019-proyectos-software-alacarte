@@ -1,17 +1,19 @@
 import React from 'react'
-import { Typography, Drawer, List, ListItem, IconButton, Grid, AppBar } from '@material-ui/core';
+import { Typography, Drawer, List, ListItem, IconButton, Grid, AppBar, Container, Divider } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/PersonPin'
 import CartIcon from '@material-ui/icons/LocalLibrary';
 import PedidoIcon from '@material-ui/icons/RestaurantMenu';
 import MesaIcon from '@material-ui/icons/Layers';
+import PersonOutlined from '@material-ui/icons/PersonOutline';
 import './Sidenav.scss'
+import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 
 export function Sidenav(props) {
 
     const { open, history, handlers, empleado, opcionesMenu } = props;
 
     const optionSwitch = (opcionesMenu) => {
-        if(opcionesMenu) {
+        if (opcionesMenu) {
             switch (opcionesMenu) {
                 case 'carta':
                     return {
@@ -19,14 +21,14 @@ export function Sidenav(props) {
                         description: 'ver Carta',
                         icon: (<CartIcon />)
                     }
-    
+
                 case 'pedidoCocinero':
                     return {
                         onClick: '/pedido/cocina',
                         description: 'ver Pedidos',
                         icon: (<PedidoIcon />)
                     }
-    
+
                 default:
                     return {
                         onClick: '/mesa',
@@ -35,6 +37,11 @@ export function Sidenav(props) {
                     }
             }
         }
+    }
+
+    const logOut = () => {
+        ControllerDeEmpleado.cerrarSesionActiva()
+        history.push('/login')
     }
 
     return (
@@ -61,9 +68,9 @@ export function Sidenav(props) {
                                 <Grid item xs={6}>
                                     <br />
                                     <Grid item xs={12}>
-                                        <Typography 
-                                            color="inherit" 
-                                            variant="body2" 
+                                        <Typography
+                                            color="inherit"
+                                            variant="body2"
                                             gutterBottom >{((empleado) && empleado.nombre) + ' ' + ((empleado) && empleado.apellido)}</Typography>
                                     </Grid>
                                     <Grid item xs={12}>
@@ -80,11 +87,10 @@ export function Sidenav(props) {
                         {(opcionesMenu) && opcionesMenu.map((opcion) => {
                             const menu = optionSwitch(opcion)
                             return <ListItem >
-                                <IconButton >
+                                <IconButton onClick={() => history.push(menu.onClick)}>
                                     <Typography
                                         variant="subtitle2"
-                                        color="primary"
-                                        onClick={() => history.push(menu.onClick)}>
+                                        color="primary">
                                         {menu.icon}
                                         {' ' + menu.description}
                                     </Typography>
@@ -93,6 +99,16 @@ export function Sidenav(props) {
                         })}
                     </List>
                 </div>
+                <footer >
+                    <Divider />
+                    <Container maxWidth="sm">
+                        <IconButton onClick={() => logOut()}>
+                            <Typography
+                                variant="subtitle2"
+                                color="primary"><PersonOutlined /> Cerrar Sesión</Typography>
+                        </IconButton>
+                    </Container>
+                </footer>
             </div>
         </Drawer>
     );

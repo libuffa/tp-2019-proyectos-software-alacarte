@@ -6,5 +6,9 @@ export const ControllerDeEmpleado = {
     setSesionActiva: (empleado) => {
       sessionStorage.setItem('employeeLoggedIn', empleado)
     },
+
+    cerrarSesionActiva: () => {
+      sessionStorage.removeItem('employeeLoggedIn')
+    }
   
   }
