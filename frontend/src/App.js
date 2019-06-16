@@ -30,6 +30,7 @@ function RouterPrincipal(props) {
           <Route path="/carta" exact component={VisualizarCarta} />
           <Route path="/detalle/item/carta" exact component={DetalleItemCarta} />
           <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
+          <Route path="/detalle/item/pedido/cocina" exact component={DetalleItemPedidoCocina} />
           <Route path="/carta/empleado" exact component={VisualizarCartaEmpleado} />
           <Route path="/escanearQR" exact component={EscanearQR} />
           <Route component={RedirectPrincipal} />
@@ -146,13 +147,13 @@ class App extends Component {
       <div className="contenedor">
         {(this.state.sesionActiva && <RouterCliente ></RouterCliente>)
           || ((this.state.sesionEmpleadoActiva) && <RouterPrincipal
-                                                    empleado={this.state.empleado}
-                                                    opcionesMenu={this.state.opcionesMenu}></RouterPrincipal>)
+            empleado={this.state.empleado}
+            opcionesMenu={this.state.opcionesMenu}></RouterPrincipal>)
           || <RouterInicial
-              iniciarSesion={{
-                sesion: this.handleAbrirSesion,
-                empleado: this.handleAbrirSesionEmpleado
-              }}></RouterInicial>}
+            iniciarSesion={{
+              sesion: this.handleAbrirSesion,
+              empleado: this.handleAbrirSesionEmpleado
+            }}></RouterInicial>}
       </div>
     )
   }

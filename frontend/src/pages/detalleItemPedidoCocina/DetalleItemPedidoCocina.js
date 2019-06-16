@@ -18,7 +18,7 @@ export default class DetalleItemPedidoCocina extends Component {
   }
 
   verPedidoCocina = () => {
-    this.props.history.push('/cocina')
+    this.props.history.push('/pedido/cocina')
   }
 
   eliminarPedido = () => {
@@ -27,7 +27,7 @@ export default class DetalleItemPedidoCocina extends Component {
         if (respuesta.status !== 200) {
           console.log(respuesta.error)
         } else {
-          this.props.history.push('/cocina')
+          this.props.history.push('/pedido/cocina')
         }
       })
   }
