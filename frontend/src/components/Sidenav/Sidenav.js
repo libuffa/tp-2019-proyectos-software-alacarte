@@ -1,6 +1,10 @@
 import React from 'react'
 import { Typography, Drawer, List, ListItem, IconButton, Grid, AppBar } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/PersonPin'
+import CartIcon from '@material-ui/icons/LocalLibrary';
+import PedidoIcon from '@material-ui/icons/RestaurantMenu';
+import MesaIcon from '@material-ui/icons/Layers';
+import './Sidenav.scss'
 
 export function Sidenav(props) {
 
@@ -12,19 +16,22 @@ export function Sidenav(props) {
                 case 'carta':
                     return {
                         onClick: '/carta/empleado',
-                        description: 'ver Carta'
+                        description: 'ver Carta',
+                        icon: (<CartIcon />)
                     }
     
                 case 'pedidoCocinero':
                     return {
                         onClick: '/pedido/cocina',
-                        description: 'ver Pedidos'
+                        description: 'ver Pedidos',
+                        icon: (<PedidoIcon />)
                     }
     
                 default:
                     return {
                         onClick: '/mesa',
-                        description: 'ver Mesa'
+                        description: 'ver Mesa',
+                        icon: (<MesaIcon />)
                     }
             }
         }
@@ -78,7 +85,8 @@ export function Sidenav(props) {
                                         variant="subtitle2"
                                         color="primary"
                                         onClick={() => history.push(menu.onClick)}>
-                                        {menu.description}
+                                        {menu.icon}
+                                        {' ' + menu.description}
                                     </Typography>
                                 </IconButton>
                             </ListItem>
