@@ -1,17 +1,14 @@
 import React, { Component } from 'react'
-import { ServiceLocator } from "../../services/ServiceLocator.js";
 import PasadorDeImagenes from '../../components/pasadorDeImagenes/PasadorDeImagenes.js';
-import CuerpoItem from '../../components/cuerpoItem/CuerpoItem.js';
-import Botones from '../../components/botones/Botones';
-import './DetalleItemCarta.scss';
 import { ControllerDeSesion } from '../../controller/ControllerDeSesion.js'
+import { ServiceLocator } from "../../services/ServiceLocator.js";
+import './DetalleItemCarta.scss';
+import ContenedorCuerpoItem from '../../components/contenedorCuerpoItem/ContenedorCuerpoItem.js';
 
 export default class DetalleItemCarta extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      cantidad: 1,
-      comentario: "",
       itemCarta: null,
       idItemCarta: this.props.location.state.idItem,
       history: this.props.location.state.history,
@@ -31,29 +28,15 @@ export default class DetalleItemCarta extends Component {
       })
   }
 
-  modificarCantidad = (modificador) => {
-    if (this.state.cantidad + modificador <= 1) {
-      this.setState({ cantidad: 1 })
-    } else {
-      this.setState({ cantidad: (this.state.cantidad + modificador) })
-    }
-  }
-
-  modificarComentario = (texto) => {
-    if (texto !== null && texto !== "") {
-      this.setState({ comentario: texto })
-    }
-  }
-
   verCarta = () => {
     this.props.history.push('/carta')
   }
 
-  agregarAPedido = () => {
+  agregarAPedido = (cantidad, comentario) => {
     ServiceLocator.SesionService.generarPedido({
       "idSesion": ControllerDeSesion.getSesionActiva(),
-      "cantidad": this.state.cantidad,
-      "comentario": this.state.comentario,
+      "cantidad": cantidad,
+      "comentario": comentario,
       "idItem": this.state.itemCarta.id
     }).then(resultado => {
       if (resultado === "True") {
@@ -65,21 +48,24 @@ export default class DetalleItemCarta extends Component {
   }
 
   render() {
-    const { itemCarta, cantidad, comentario } = this.state;
+    const { itemCarta } = this.state;
 
     if (!itemCarta) {
       return <div></div>
     }
     return <div>
-      <PasadorDeImagenes imagenes={itemCarta.imagenes} />
-      <CuerpoItem
-        itemCarta={itemCarta}
-        cantidad={cantidad}
-        comentario={comentario}
-        handlersCantidad={{ onChange: this.modificarCantidad }}
-        handlersComentario={{ onChange: this.modificarComentario }}
+      <PasadorDeImagenes
+        imagenes={itemCarta.imagenes}
       />
-      <Botones text1="volver" text2="pedir" handlersVolver={{ onChange: this.verCarta }} handlersAgregarAPedido={{ onChange: this.agregarAPedido }} />
+      <ContenedorCuerpoItem
+        texto1="volver"
+        texto2="pedir"
+        cantidad={1}
+        comentario=""
+        itemCarta={itemCarta}
+        handlersVolver={{ onChange: this.verCarta }}
+        handlersAgregarAPedido={{ onChange: this.agregarAPedido }}
+      />
     </div>
   }
 }

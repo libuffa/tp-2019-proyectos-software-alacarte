@@ -9,6 +9,7 @@ import DetalleItemPedido from './pages/detalleItemPedido/DetalleItemPedido';
 import Header from './components/Header/Header';
 import './App.css';
 import VisualizarPedidoCocina from './pages/VisualizarPedido/VisualizarPedidoCocina/VisualizarPedidoCocina';
+import DetalleItemPedidoCocina from './pages/detalleItemPedidoCocina/DetalleItemPedidoCocina';
 import { ControllerDeSesion } from './controller/ControllerDeSesion';
 import EscanearQR from './pages/escanearQR/EscanearQR';
 import Login from './pages/Login/Login';

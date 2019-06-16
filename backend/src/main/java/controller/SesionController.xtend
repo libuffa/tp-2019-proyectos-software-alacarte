@@ -175,24 +175,18 @@ class SesionController {
 	@Put("/pedido/baja")
 	def Result bajaPedido(@Body String body) {
 		try {
-			
 			val idPedido = Long.valueOf(body.getPropertyValue("id"))
-
 			if (idPedido === null) {
 				return badRequest('{ "error" : "pedido inexistente" }')
 			}
-
 			val sesion = repositorioSesion.searchSesionByPedido(idPedido)
-			
 			if(!sesion.sesionActiva) {
 				return badRequest('{ "error" : "pedido pertenece a una sesion no activa" }')
 			}
-			
 			sesion.bajaPedido(idPedido)
-
-			ok('{"status" : "OK"}')
+			return ok('{"status" : "OK"}')
 		} catch (Exception e) {
-			badRequest(e.message)
+			return badRequest(e.message)
 		}
 	}
 	

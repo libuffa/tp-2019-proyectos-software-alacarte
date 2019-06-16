@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { Grid, Divider } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import Fab from '@material-ui/core/Fab';
 import './CuerpoItem.scss';
 import CuadroDeTexto from '../../components/cuadroDeTexto/CuadroDeTexto.js';
@@ -45,17 +45,21 @@ export default function CuerpoItem(props) {
             </Typography>
           </Grid>
           <Grid item xs={9}>
-            <Typography variant="h5" >
+            <Typography color="textSecondary" variant="h5" >
               {itemCarta.subCategoria.replace('_', ' ')}
             </Typography>
           </Grid>
-          <Grid className={classes.divider} item xs={12}><Divider variant="fullWidth"></Divider></Grid>
+          <Grid item xs={12}>
+            <div className="divider" />
+          </Grid>
           <Grid item xs={12}>
             <Typography variant="h6">
               {itemCarta.descripcion}
             </Typography>
           </Grid>
-          <Grid className={classes.divider} item xs={12}><Divider variant="fullWidth"></Divider></Grid>
+          <Grid item xs={12}>
+            <div className="divider" />
+          </Grid>
           <Grid item xs={9} >
             <Typography variant="h6">
               Precio:
@@ -68,7 +72,9 @@ export default function CuerpoItem(props) {
               </Typography>
             </div>
           </Grid>
-          <Grid className={classes.divider} item xs={12}><Divider variant="fullWidth"></Divider></Grid>
+          <Grid item xs={12}>
+            <div className="divider" />
+          </Grid>
           <Grid item xs={4}>
             <Paper elevation={0} className={classes.button}>
               <Fab disabled={cantidad === 1 ? true : false || disabled} color="secondary" onClick={() => handlersCantidad.onChange(-1)}>
@@ -86,7 +92,9 @@ export default function CuerpoItem(props) {
               </Fab>
             </Paper>
           </Grid>
-          <Grid className={classes.divider} item xs={12}><Divider variant="fullWidth"></Divider></Grid>
+          <Grid item xs={12}>
+            <div className="divider" />
+          </Grid>
           <Grid item xs={12}>
             <Typography variant="h6">Aclaración</Typography>
           </Grid>
