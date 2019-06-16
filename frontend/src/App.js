@@ -87,7 +87,7 @@ function RedirectCliente(props) {
 }
 
 function RedirectInicial(props) {
-  props.history.push('/escanearQR')
+  props.history.push('/login')
   return (
     <h1>Cargando..</h1>
   )

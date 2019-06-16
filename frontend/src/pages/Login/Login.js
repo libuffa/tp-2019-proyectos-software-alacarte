@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { ServiceLocator } from '../../services/ServiceLocator';
 import { withStyles } from '@material-ui/styles';
-import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
+import './Login.scss';
 
 const styles = makeStyles(theme => ({
     '@global': {
@@ -29,7 +29,7 @@ const styles = makeStyles(theme => ({
         alignItems: 'center',
     },
     avatar: {
-        margin: theme.spacing(1),
+        margin: theme.spacing(3, 0, 2),
         backgroundColor: theme.palette.secondary.main,
     },
     form: {
@@ -50,40 +50,40 @@ class Login extends Component {
             usuario: "",
             pass: "",
         }
-        console.log(ControllerDeEmpleado.getSesionActiva())
     }
 
-    handleEnviar = event => {
-        console.log(this.state)
+    handleEnviar = () => {
         const { usuario, pass } = this.state
         ServiceLocator.EmpleadoService.iniciarSesion({ nombreUsuario: usuario, contraseña: pass })
             .then((respuesta) => {
-                    console.log(respuesta)
-                    this.props.iniciarSesion(respuesta.id)
+                console.log(respuesta)
+                this.props.iniciarSesion(respuesta.id)
             })
             .catch(error => { console.error({ error }) })
     }
 
     handleChange = event => {
         this.setState({
-          [event.target.name]: event.target.value
+            [event.target.name]: event.target.value
         })
-      }
+    }
 
     render() {
-        const {classes} = this.props;
+        const { classes } = this.props;
 
         return (
             <Container component="main" maxWidth="xs" >
                 <CssBaseline />
                 <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
+                    <div align='center' >
+                        <Avatar className={classes.avatar}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                    </div>
+                    <Typography align='center' component="h1" variant="h5">
                         Login a La Carte
                     </Typography>
-                    <form className={classes.form} noValidate>
+                    <form className={classes.form} >
                         <TextField
                             variant="outlined"
                             margin="normal"
@@ -99,7 +99,6 @@ class Login extends Component {
                         <TextField
                             variant="outlined"
                             margin="normal"
-                            required
                             fullWidth
                             name="pass"
                             label="pass"
