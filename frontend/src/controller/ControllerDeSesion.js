@@ -6,4 +6,9 @@ export const ControllerDeSesion = {
   setSesionActiva: (sesion) => {
     sessionStorage.setItem('userLoggedIn', sesion)
   },
+
+  cerrarSesionActiva: () => {
+    sessionStorage.removeItem('userLoggedIn')
+  }
+
 }

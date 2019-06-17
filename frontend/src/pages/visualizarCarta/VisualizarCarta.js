@@ -3,7 +3,7 @@ import { ServiceLocator } from "../../services/ServiceLocator.js";
 import MenuSuperior from "../../components/menuSuperior/MenuSuperior";
 import ListaItems from "../../components/listaItems/ListaItems";
 import MenuInferior from '../../components/menuInferior/MenuInferior.js';
-import CartIcon from '@material-ui/icons/ListAlt';
+import PedidoIcon from '@material-ui/icons/RestaurantMenu';
 import './VisualizarCarta.scss';
 
 export default class VisualizarCarta extends Component {
@@ -54,7 +54,7 @@ export default class VisualizarCarta extends Component {
 
   seleccionItemCarta = (idItemCarta) => {
     this.props.history.push({
-      pathname: '/detalleItemCarta',
+      pathname: '/detalle/item/carta',
       state: { idItem: idItemCarta }
     })
   }
@@ -77,7 +77,7 @@ export default class VisualizarCarta extends Component {
       firstButton: {
         onChange: this.verPedido,
         name: "Ver Pedido",
-        icon: (<CartIcon />)
+        icon: (<PedidoIcon />)
       },
     }
 

@@ -6,6 +6,7 @@ import domain.ItemCarta
 import domain.Mesa
 import domain.Pedido
 import domain.Sesion
+import domain.empleado.Cocinero
 import domain.empleado.Mozo
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.arena.bootstrap.CollectionBasedBootstrap
@@ -49,6 +50,7 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 	Mesa mesa1
 
 	Mozo claudia
+	Cocinero pepe
 
 	Sesion sesion1
 
@@ -244,9 +246,17 @@ class ALaCarteBootstrap extends CollectionBasedBootstrap {
 			contraseña = ""
 			email = "cmorales@yahoo.com"
 		]
+		pepe = new Cocinero => [
+			nombreUsuario = "pepe"
+			nombre = "Roberto"
+			apellido = "Garcia"
+			contraseña = "1234"
+			email = "pepegarcia@gmail.com"
+		]
 
 		repoMesas.create(mesa1)
 		repoEmpleado.create(claudia)
+		repoEmpleado.create(pepe)
 
 		pedido1 = new Pedido => [
 			itemCarta = milanesa

@@ -56,7 +56,7 @@ export default class VisualizarPedido extends Component {
   verDetalleItemPedido = (pedido) => {
     clearInterval(this.state.timer)
     this.props.history.push({
-      pathname: '/detalleItemPedido',
+      pathname: '/detalle/item/pedido',
       state: { pedido: pedido }
     })
   }

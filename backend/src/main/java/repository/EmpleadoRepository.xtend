@@ -71,4 +71,18 @@ class EmpleadoRepository extends AbstractRepository<Empleado> {
 		searchMozoById(id)
 	}
 	
+	def searchByString(String nombreUsuario) {
+		val entityManager = generateEntityManager
+        try {
+            val criteria = entityManager.criteriaBuilder
+            val query = criteria.createQuery(entityType)
+            val camposUsuario = query.from(entityType)
+            query.select(camposUsuario)
+            query.where(criteria.equal(camposUsuario.get("nombreUsuario"), nombreUsuario))
+            entityManager.createQuery(query).singleResult
+        } finally {
+            entityManager?.close
+        }
+	}
+	
 }
