@@ -10,12 +10,12 @@ import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 
 
 async function getMenuEmpleado() {
-  if(ControllerDeEmpleado.getSesionActiva()) {
+  if (ControllerDeEmpleado.getSesionActiva()) {
     try {
       const res = await ServiceLocator.EmpleadoService.getMenuEmpleado()
       return res
     } catch (error) {
-      console.error({error})
+      console.error({ error })
     }
   }
 }
@@ -56,10 +56,10 @@ function Header(props) {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Sidenav 
-        open={open} 
-        history={history} 
-        handlers={{ onChange: handleClose }}
+      <Sidenav
+        open={open}
+        history={history}
+        handlers={{ onChange: handleClose}}
         empleado={empleado} opcionesMenu={opcionesMenu} />
     </div>
   );

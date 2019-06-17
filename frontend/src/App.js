@@ -75,7 +75,7 @@ function RouterInicial(props) {
 }
 
 function RedirectPrincipal(props) {
-  props.history.push('/mesa')
+  props.history.push('/carta/empleado')
   return (
     <h1>Cargando..</h1>
   )

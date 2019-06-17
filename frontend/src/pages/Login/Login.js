@@ -15,6 +15,7 @@ import Container from '@material-ui/core/Container';
 import { ServiceLocator } from '../../services/ServiceLocator';
 import { withStyles } from '@material-ui/styles';
 import './Login.scss';
+import { Snackbar } from '@material-ui/core';
 
 const styles = makeStyles(theme => ({
     '@global': {
@@ -49,17 +50,27 @@ class Login extends Component {
         this.state = {
             usuario: "",
             pass: "",
+            errorMessage: "",
         }
     }
 
     handleEnviar = () => {
         const { usuario, pass } = this.state
-        ServiceLocator.EmpleadoService.iniciarSesion({ nombreUsuario: usuario, contraseña: pass })
-            .then((respuesta) => {
-                console.log(respuesta)
-                this.props.iniciarSesion(respuesta.id)
-            })
-            .catch(error => { console.error({ error }) })
+        if(usuario) {
+            ServiceLocator.EmpleadoService.iniciarSesion({ nombreUsuario: usuario, contraseña: pass })
+                .then((respuesta) => {
+                    console.log(respuesta)
+                    if(respuesta) {
+                        this.props.iniciarSesion(respuesta.id)
+                    } else {
+                        throw respuesta
+                    }
+                })
+                .catch(error => { 
+                    console.log( error ) 
+                    this.generarError(error)
+                })
+        }
     }
 
     handleChange = event => {
@@ -68,8 +79,19 @@ class Login extends Component {
         })
     }
 
+    snackbarOpen() {
+        return this.state.errorMessage
+    }
+
+    generarError(errorMessage) {
+        this.setState({
+            errorMessage: errorMessage
+        })
+    }
+
     render() {
         const { classes } = this.props;
+        const { errorMessage } = this.state
 
         return (
             <Container component="main" maxWidth="xs" >
@@ -135,6 +157,10 @@ class Login extends Component {
                         </Grid> */}
                     </form>
                 </div>
+                <Snackbar
+                    open={this.snackbarOpen()}
+                    message={errorMessage}
+                    autoHideDuration={4000} />
             </Container>
         );
 
