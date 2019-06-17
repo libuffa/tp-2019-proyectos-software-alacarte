@@ -4,21 +4,21 @@ import { withRouter } from 'react-router';
 import MenuIcon from '@material-ui/icons/Menu';
 import './Header.scss';
 import { Sidenav } from '../Sidenav/Sidenav';
-import { ServiceLocator } from '../../services/ServiceLocator';
-import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
+// import { ServiceLocator } from '../../services/ServiceLocator';
+// import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 
 
 
-async function getMenuEmpleado() {
-  if (ControllerDeEmpleado.getSesionActiva()) {
-    try {
-      const res = await ServiceLocator.EmpleadoService.getMenuEmpleado()
-      return res
-    } catch (error) {
-      console.error({ error })
-    }
-  }
-}
+// async function getMenuEmpleado() {
+//   if (ControllerDeEmpleado.getSesionActiva()) {
+//     try {
+//       const res = await ServiceLocator.EmpleadoService.getMenuEmpleado()
+//       return res
+//     } catch (error) {
+//       console.error({ error })
+//     }
+//   }
+// }
 
 function Header(props) {
   const [open, setOpen] = React.useState(false);
@@ -59,7 +59,7 @@ function Header(props) {
       <Sidenav
         open={open}
         history={history}
-        handlers={{ onChange: handleClose}}
+        handlers={{ onChange: handleClose }}
         empleado={empleado} opcionesMenu={opcionesMenu} />
     </div>
   );

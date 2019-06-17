@@ -3,8 +3,6 @@ import { ServiceLocator } from "../../services/ServiceLocator.js";
 import MenuSuperior from "../../components/menuSuperior/MenuSuperior";
 import ListaItemsEmpleado from "../../components/listaItemsEmpleado/ListaItemsEmpleado";
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado.js';
-import { ControllerDeSesion } from '../../controller/ControllerDeSesion.js';
 
 export default class VisualizarCartaEmpleado extends Component {
   constructor(props) {

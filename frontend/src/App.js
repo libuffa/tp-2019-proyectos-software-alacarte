@@ -89,7 +89,7 @@ function RedirectCliente(props) {
 }
 
 function RedirectInicial(props) {
-  props.history.push('/login')
+  props.history.push('/escanearQR')
   return (
     <h1>Cargando..</h1>
   )
@@ -145,15 +145,13 @@ class App extends Component {
     console.log(this.state.sesionActiva)
     return (
       <div className="contenedor">
-        {(this.state.sesionActiva && <RouterCliente ></RouterCliente>)
-          || ((this.state.sesionEmpleadoActiva) && <RouterPrincipal
-            empleado={this.state.empleado}
-            opcionesMenu={this.state.opcionesMenu}></RouterPrincipal>)
-          || <RouterInicial
-            iniciarSesion={{
-              sesion: this.handleAbrirSesion,
-              empleado: this.handleAbrirSesionEmpleado
-            }}></RouterInicial>}
+        {
+          (this.state.sesionActiva && <RouterCliente />)
+          ||
+          (this.state.sesionEmpleadoActiva && <RouterPrincipal empleado={this.state.empleado} opcionesMenu={this.state.opcionesMenu} />)
+          ||
+          (<RouterInicial iniciarSesion={{ sesion: this.handleAbrirSesion, empleado: this.handleAbrirSesionEmpleado }} />)
+        }
       </div>
     )
   }
