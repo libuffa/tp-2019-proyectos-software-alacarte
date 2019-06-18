@@ -3,6 +3,8 @@ import { ServiceLocator } from "../../services/ServiceLocator.js";
 import MenuSuperior from "../../components/menuSuperior/MenuSuperior";
 import ListaItemsEmpleado from "../../components/listaItemsEmpleado/ListaItemsEmpleado";
 import CssBaseline from '@material-ui/core/CssBaseline';
+import MenuInferior from '../../components/menuInferior/MenuInferior.js';
+import Menu from '@material-ui/icons/Menu';
 
 export default class VisualizarCartaEmpleado extends Component {
   constructor(props) {
@@ -68,13 +70,21 @@ export default class VisualizarCartaEmpleado extends Component {
       })
   }
 
-  verPedido = () => {
-    this.props.history.push('/pedido')
+  verMenu = () => {
+    this.props.history.push('/menu/empleado')
   }
 
   render() {
     const { carta } = this.state
     var { categorias } = this.state
+
+    const menuButtons = {
+      firstButton: {
+        onChange: this.verMenu,
+        name: "Ver Menu",
+        icon: (<Menu/>)
+      },
+    }
 
     if (!carta || !categorias) {
       return <div></div>
@@ -87,6 +97,7 @@ export default class VisualizarCartaEmpleado extends Component {
         <CssBaseline />
         <MenuSuperior data={categorias} handlers={{ onChange: this.seleccionEnMenuSuperior }}></MenuSuperior>
         <ListaItemsEmpleado data={carta} subData={this.subCategoriasCarta()} handlers={{ onChange: this.seleccionItemCarta }} disableFunction={{ onChange: this.cambiarEstadoItemCarta }}></ListaItemsEmpleado>
+        <MenuInferior menuButtons={menuButtons} />
       </div>
     )
   }

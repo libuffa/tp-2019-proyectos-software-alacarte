@@ -16,6 +16,7 @@ import Login from './pages/Login/Login';
 import { ControllerDeEmpleado } from './controller/ControllerDeEmpleado';
 import { ServiceLocator } from './services/ServiceLocator';
 import DetalleItemCartaEmpleado from './pages/detalleItemCartaEmpleado/DetalleItemCartaEmpleado';
+import MenuEmpleado from './pages/menuEmpleado/MenuEmpleado';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -27,12 +28,13 @@ function RouterPrincipal(props) {
         <Switch>
           <Route path="/pedido" exact component={VisualizarPedido} />
           <Route path="/pedido/cocina" exact component={VisualizarPedidoCocina} />
-          <Route path="/mesa" exact component={VisualizarMesa} />
+          <Route path="/mesas" exact component={VisualizarMesa} />
           <Route path="/carta" exact component={VisualizarCarta} />
           <Route path="/detalle/item/carta/empleado" exact component={DetalleItemCartaEmpleado} />
           <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
           <Route path="/detalle/item/pedido/cocina" exact component={DetalleItemPedidoCocina} />
           <Route path="/carta/empleado" exact component={VisualizarCartaEmpleado} />
+          <Route path="/menu/empleado" exact component={MenuEmpleado} />
           <Route path="/escanearQR" exact component={EscanearQR} />
           <Route component={RedirectPrincipal} />
         </Switch>
@@ -76,7 +78,7 @@ function RouterInicial(props) {
 }
 
 function RedirectPrincipal(props) {
-  props.history.push('/carta/empleado')
+  props.history.push('/menu/empleado')
   return (
     <h1>Cargando..</h1>
   )

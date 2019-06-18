@@ -11,149 +11,149 @@ import DialogConfirmacion from '../Dialog/DialogConfirmacion';
 
 export function Sidenav(props) {
 
-    const { open, history, handlers, empleado, opcionesMenu } = props;
-    const [openDialog, setOpenDialog] = React.useState(false);
+  const { open, history, handlers, empleado, opcionesMenu } = props;
+  const [openDialog, setOpenDialog] = React.useState(false);
 
-    function handleClickOpen() {
-        setOpenDialog(true);
+  function handleClickOpen() {
+    setOpenDialog(true);
+  }
+
+  const handleClose = value => {
+    setOpenDialog(false);
+  };
+
+  const optionSwitch = (opcionesMenu) => {
+    if (opcionesMenu) {
+      switch (opcionesMenu) {
+        case 'carta':
+          return {
+            onClick: '/carta/empleado',
+            description: 'ver Carta',
+            icon: (<CartIcon />)
+          }
+
+        case 'pedidoCocinero':
+          return {
+            onClick: '/pedido/cocina',
+            description: 'ver Pedidos',
+            icon: (<PedidoIcon />)
+          }
+
+        default:
+          return {
+            onClick: '/mesas',
+            description: 'ver Mesa',
+            icon: (<MesaIcon />)
+          }
+      }
     }
+  }
 
-    const handleClose = value => {
-        setOpenDialog(false);
-    };
+  const logOut = () => {
+    ControllerDeEmpleado.cerrarSesionActiva()
+    window.location.reload();
+  }
 
-    const optionSwitch = (opcionesMenu) => {
-        if (opcionesMenu) {
-            switch (opcionesMenu) {
-                case 'carta':
-                    return {
-                        onClick: '/carta/empleado',
-                        description: 'ver Carta',
-                        icon: (<CartIcon />)
-                    }
+  return (
+    <div>
+      <Drawer
+        open={open} onClose={handlers.onChange}>
+        <div
+          tabIndex={0}
+          role="button"
+          onClick={handlers.onChange}>
+          <div className="side-nav">
+            <AppBar position="static">
+              <br />
+              <Grid container spacing={16}>
+                <Grid item xs={12}
+                  container
+                  direction="row"
+                  justify="center">
 
-                case 'pedidoCocinero':
-                    return {
-                        onClick: '/pedido/cocina',
-                        description: 'ver Pedidos',
-                        icon: (<PedidoIcon />)
-                    }
+                  <Grid item xd={6} >
+                    <br />
+                    <PersonIcon fontSize="large" />
+                  </Grid>
 
-                default:
-                    return {
-                        onClick: '/mesa',
-                        description: 'ver Mesa',
-                        icon: (<MesaIcon />)
-                    }
-            }
-        }
-    }
+                  <Grid item xs={6}>
+                    <br />
+                    <Grid item xs={12}>
+                      <Typography
+                        color="inherit"
+                        variant="body2"
+                        gutterBottom >{((empleado) && empleado.nombre) + ' ' + ((empleado) && empleado.apellido)}</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography color="inherit" variant="caption">{((empleado) && empleado.email)}</Typography>
+                    </Grid>
+                    <br />
+                  </Grid>
 
-    const logOut = () => {
-        ControllerDeEmpleado.cerrarSesionActiva()
-        window.location.reload();
-    }
-
-    return (
-        <div>
-            <Drawer
-                open={open} onClose={handlers.onChange}>
-                <div
-                    tabIndex={0}
-                    role="button"
-                    onClick={handlers.onChange}>
-                    <div className="side-nav">
-                        <AppBar position="static">
-                            <br />
-                            <Grid container spacing={16}>
-                                <Grid item xs={12}
-                                    container
-                                    direction="row"
-                                    justify="center">
-
-                                    <Grid item xd={6} >
-                                        <br />
-                                        <PersonIcon fontSize="large" />
-                                    </Grid>
-
-                                    <Grid item xs={6}>
-                                        <br />
-                                        <Grid item xs={12}>
-                                            <Typography
-                                                color="inherit"
-                                                variant="body2"
-                                                gutterBottom >{((empleado) && empleado.nombre) + ' ' + ((empleado) && empleado.apellido)}</Typography>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Typography color="inherit" variant="caption">{((empleado) && empleado.email)}</Typography>
-                                        </Grid>
-                                        <br />
-                                    </Grid>
-
-                                </Grid>
-                            </Grid>
-                            <br />
-                        </AppBar>
-                        <List>
-                            {(opcionesMenu) && opcionesMenu.map((opcion) => {
-                                const menu = optionSwitch(opcion)
-                                return <ListItem key={menu.description} >
-                                    <IconButton onClick={() => history.push(menu.onClick)}>
-                                        <Typography
-                                            variant="subtitle2"
-                                            color="primary">
-                                            <Grid container spacing={16}>
-                                                <Grid item xs={12}
-                                                    container
-                                                    direction="row"
-                                                    justify="center">
-                                                    <Grid item xd={6} >
-                                                        {menu.icon}
-                                                    </Grid>
-                                                    <Grid item xd={6} >
-                                                        {' ' + menu.description}
-                                                    </Grid>
-                                                </Grid>
-                                            </Grid>
-                                        </Typography>
-                                    </IconButton>
-                                </ListItem>
-                            })}
-                        </List>
-                    </div>
-                    <footer >
-                        <Divider />
-                        <Container maxWidth="sm">
-                            <IconButton onClick={handleClickOpen}>
-                                <Typography
-                                    variant="subtitle2"
-                                    color="primary">
-                                    <Grid container spacing={16}>
-                                        <Grid item xs={12}
-                                            container
-                                            direction="row"
-                                            justify="center">
-                                            <Grid item xd={6} >
-                                                <PersonOutlined />
-                                            </Grid>
-                                            <Grid item xd={6} >
-                                                {" Cerrar Sesión"}
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Typography>
-                            </IconButton>
-                        </Container>
-                    </footer>
-                </div>
-            </Drawer>
-            <DialogConfirmacion
-                titulo={"Cerrar sesión"}
-                descripcion={"¿Estas seguro que deseas cerrar tu sesión?"}
-                handlers={{ onChange: logOut, open: handleClose }}
-                open={openDialog}
-            />
+                </Grid>
+              </Grid>
+              <br />
+            </AppBar>
+            <List>
+              {(opcionesMenu) && opcionesMenu.map((opcion) => {
+                const menu = optionSwitch(opcion)
+                return <ListItem key={menu.description} >
+                  <IconButton onClick={() => history.push(menu.onClick)}>
+                    <Typography
+                      variant="subtitle2"
+                      color="primary">
+                      <Grid container spacing={16}>
+                        <Grid item xs={12}
+                          container
+                          direction="row"
+                          justify="center">
+                          <Grid item xd={6} >
+                            {menu.icon}
+                          </Grid>
+                          <Grid item xd={6} >
+                            {' ' + menu.description}
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Typography>
+                  </IconButton>
+                </ListItem>
+              })}
+            </List>
+          </div>
+          <footer >
+            <Divider />
+            <Container maxWidth="sm">
+              <IconButton onClick={handleClickOpen}>
+                <Typography
+                  variant="subtitle2"
+                  color="primary">
+                  <Grid container spacing={16}>
+                    <Grid item xs={12}
+                      container
+                      direction="row"
+                      justify="center">
+                      <Grid item xd={6} >
+                        <PersonOutlined />
+                      </Grid>
+                      <Grid item xd={6} >
+                        {" Cerrar Sesión"}
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Typography>
+              </IconButton>
+            </Container>
+          </footer>
         </div>
+      </Drawer>
+      <DialogConfirmacion
+        titulo={"Cerrar sesión"}
+        descripcion={"¿Estas seguro que deseas cerrar tu sesión?"}
+        handlers={{ onChange: logOut, open: handleClose }}
+        open={openDialog}
+      />
+    </div>
 
-    );
+  );
 };

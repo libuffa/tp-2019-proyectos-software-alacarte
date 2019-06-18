@@ -75,7 +75,7 @@ class EmpleadoController {
 			var List<String> opciones = new ArrayList
 			
 			switch tipoEmpleado {
-				case Mozo: opciones = #["carta","mesaMozo"]
+				case Mozo: opciones = #["carta","mesas"]
 				case Cocinero: opciones = #["carta","pedidoCocinero"]
 				default: opciones = #["carta","mesaAdm","empleado"]
 			}
