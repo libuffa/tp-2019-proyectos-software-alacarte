@@ -15,6 +15,7 @@ import EscanearQR from './pages/escanearQR/EscanearQR';
 import Login from './pages/Login/Login';
 import { ControllerDeEmpleado } from './controller/ControllerDeEmpleado';
 import { ServiceLocator } from './services/ServiceLocator';
+import DetalleItemCartaEmpleado from './pages/detalleItemCartaEmpleado/DetalleItemCartaEmpleado';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -28,7 +29,7 @@ function RouterPrincipal(props) {
           <Route path="/pedido/cocina" exact component={VisualizarPedidoCocina} />
           <Route path="/mesa" exact component={VisualizarMesa} />
           <Route path="/carta" exact component={VisualizarCarta} />
-          <Route path="/detalle/item/carta" exact component={DetalleItemCarta} />
+          <Route path="/detalle/item/carta/empleado" exact component={DetalleItemCartaEmpleado} />
           <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
           <Route path="/detalle/item/pedido/cocina" exact component={DetalleItemPedidoCocina} />
           <Route path="/carta/empleado" exact component={VisualizarCartaEmpleado} />

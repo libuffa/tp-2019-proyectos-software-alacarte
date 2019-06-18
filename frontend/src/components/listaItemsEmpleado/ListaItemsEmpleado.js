@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { ListItem, ListItemAvatar, Avatar, ListItemText, List, ListItemSecondaryAction, Switch, ListSubheader } from '@material-ui/core';
+import { ListItem, ListItemAvatar, Avatar, ListItemText, List, ListItemSecondaryAction, ListSubheader, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ListaItemsEmpleado(props) {
-  const { data, subData, handlers, disableFunction } = props;
+  const { data, subData, handlers } = props;
   const classes = useStyles();
 
   function filtrarData(subCategoria) {
@@ -46,9 +46,23 @@ export default function ListaItemsEmpleado(props) {
               <ListItemAvatar>
                 <Avatar src={object.imagenes[0]} />
               </ListItemAvatar>
-              <ListItemText primary={object.titulo} />
+              <ListItemText
+                primary={
+                  <Typography color={object.habilitado ? "textPrimary" : "textSecondary"}>
+                    {object.titulo}
+                  </Typography>
+                }
+              />
               <ListItemSecondaryAction>
-                <Switch onChange={() => disableFunction.onChange(object.id)} checked={object.habilitado} />
+                <ListItemText
+                  primary={
+                    <div className="precio">
+                      <Typography color={object.habilitado ? "textPrimary" : "textSecondary"} >
+                        ${object.precioUnitario}
+                      </Typography>
+                    </div>
+                  }
+                />
               </ListItemSecondaryAction>
             </ListItem>
           })}

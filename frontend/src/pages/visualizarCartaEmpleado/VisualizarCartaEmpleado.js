@@ -53,7 +53,10 @@ export default class VisualizarCartaEmpleado extends Component {
   }
 
   seleccionItemCarta = (itemCarta) => {
-    this.subCategoriasCarta()
+    this.props.history.push({
+      pathname: '/detalle/item/carta/empleado',
+      state: { itemCarta: itemCarta }
+    })
   }
 
   cambiarEstadoItemCarta = (itemCartaId) => {
