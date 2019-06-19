@@ -29,11 +29,11 @@ function RouterPrincipal(props) {
           <Route path="/pedido" exact component={VisualizarPedido} />
           <Route path="/pedido/cocina" exact component={VisualizarPedidoCocina} />
           <Route path="/mesas" exact component={VisualizarMesa} />
-          <Route path="/carta" exact component={VisualizarCarta} />
+          <Route path="/carta/cliente" exact component={VisualizarCarta} />
           <Route path="/detalle/item/carta/empleado" exact component={DetalleItemCartaEmpleado} />
           <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
           <Route path="/detalle/item/pedido/cocina" exact component={DetalleItemPedidoCocina} />
-          <Route path="/carta/empleado" exact component={VisualizarCartaEmpleado} />
+          <Route path="/carta" exact component={VisualizarCartaEmpleado} />
           <Route path="/menu/empleado" exact component={MenuEmpleado} />
           <Route path="/escanearQR" exact component={EscanearQR} />
           <Route component={RedirectPrincipal} />
