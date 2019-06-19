@@ -1,14 +1,9 @@
-import { axios } from 'axios';
-import { baseUrl } from "./_config";
+import axios from "axios"
+
+const client = axios.create()
 
 export default class MesaService {
-  async getMesas() {
-    try {
-      let resp = await axios.get(`${baseUrl}/mesas`);
-      return resp.data;
-    }
-    catch (exception) {
-      alert(exception.message);
-    }
+  getMesas() {
+    return client.get(`/mesas`).then(res => { return res.data })
   }
 }

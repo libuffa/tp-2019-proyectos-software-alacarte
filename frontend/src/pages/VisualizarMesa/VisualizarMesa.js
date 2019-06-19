@@ -1,27 +1,54 @@
 import React, { Component } from 'react'
-import List from '@material-ui/core/List';
-import ItemMesa from './ItemMesa/ItemMesa';
 import { ServiceLocator } from '../../services/ServiceLocator';
+import ListaMesasMozo from '../../components/listaMesasMozo/ListaMesasMozo';
+import MenuInferior from '../../components/menuInferior/MenuInferior.js';
+import Menu from '@material-ui/icons/Menu';
 
 export default class VisualizarMesa extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { mesas: [] };
+    this.state = {
+      mesas: null,
+    };
   }
 
-  componentDidMount = async () => {
-    let mesas = await ServiceLocator.mesaService.getMesas();
-    this.setState({ mesas });
+  componentDidMount() {
+    this.cargarMesas()
+  }
+
+  cargarMesas() {
+    ServiceLocator.mesaService.getMesas()
+      .then((respuesta) => {
+        this.setState({
+          mesas: respuesta,
+        })
+      })
+  }
+
+  verMenu = () => {
+    this.props.history.push('/menu/empleado')
   }
 
   render() {
     const { mesas } = this.state;
-    
+
+    const menuButtons = {
+      firstButton: {
+        onChange: this.verMenu,
+        name: "Ver Menu",
+        icon: (<Menu />)
+      },
+    }
+
+    if (!mesas) {
+      return <div></div>
+    }
     return (
-      <List>
-        {mesas.map(mesa => <ItemMesa key={mesa.id} mesa={mesa} />)}
-      </List>
+      <div>
+        <ListaMesasMozo mesas={mesas} />
+        <MenuInferior menuButtons={menuButtons} />
+      </div>
     )
   }
 }
