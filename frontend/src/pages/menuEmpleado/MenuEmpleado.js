@@ -30,7 +30,19 @@ export default class MenuEmpleado extends Component {
   }
 
   irA = (opcion) => {
-    this.props.history.push(`/${opcion}`)
+    var ruta = null
+    switch (opcion) {
+      case 'carta':
+        ruta = 'carta/empleado'
+        break
+      case 'mesas':
+        ruta = 'mesas'
+        break
+      default:
+        ruta = 'carta/empleado'
+        break
+    }
+    this.props.history.push(`/${ruta}`)
   }
 
   render() {
