@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { ServiceLocator } from "../../services/ServiceLocator.js";
-import { Typography, Container } from "@material-ui/core";
+import { Typography, Container, CardContent, CardHeader, Card } from "@material-ui/core";
 import QrReader from 'react-qr-reader';
 
 
@@ -54,17 +54,17 @@ export default class EscanearQR extends Component {
     }
 
     return (
-      <Container component="main" maxWidth="xs" >
-        <Typography align='center' component="h1" variant="h5">
-          Login a La Carte
-                    </Typography>
+      <Card>
+      <CardHeader title="Escanea el código QR para poder empezar a pedir!"/>
+      <CardContent>
         <QrReader
           delay={this.state.delay}
           style={previewStyle}
           onError={this.handleError}
           onScan={this.handleScan}
         />
-      </Container>
+      </CardContent>
+    </Card>
     );
   }
 }
