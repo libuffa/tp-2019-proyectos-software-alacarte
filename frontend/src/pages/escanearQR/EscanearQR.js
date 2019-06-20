@@ -1,12 +1,18 @@
 import React, { Component } from "react";
 import { ServiceLocator } from "../../services/ServiceLocator.js";
+import { Typography, Container } from "@material-ui/core";
+import QrReader from 'react-qr-reader';
+
 
 export default class EscanearQR extends Component {
   constructor(props) {
     super(props)
     this.state = {
       sesion: "",
+      delay: 100,
+      result: 'No result',
     }
+    this.handleScan = this.handleScan.bind(this)
   }
 
   handleChange = event => {
@@ -15,31 +21,50 @@ export default class EscanearQR extends Component {
     })
   }
 
-  handleEnviar = event => {
+  handleEnviar = () => {
     const { sesion } = this.state
-    ServiceLocator.SesionService.iniciarSesion({ idSesion: sesion })
-      .then(respuesta => {
-        if (respuesta === "True") {
-          this.props.iniciarSesion(sesion)
-        } else {
-          console.log(respuesta)
-        }
+    if (this.props.iniciarSesion) {
+      ServiceLocator.SesionService.iniciarSesion({ idSesion: sesion })
+        .then(respuesta => {
+          if (respuesta === "True") {
+            this.props.iniciarSesion(sesion)
+          } else {
+            console.log(respuesta)
+          }
+        })
+    }
+  }
+
+  handleScan = data => {
+    if (data) {
+      this.setState({
+        sesion: data
       })
+      this.handleEnviar()
+    }
+  }
+  handleError = err => {
+    console.error(err)
   }
 
   render() {
+    const previewStyle = {
+      height: 240,
+      width: 320,
+    }
+
     return (
-      <div>
-        <span>Escanear QR (aca en teoria se va a mandar el codigo que se lea del qr qu  va a tener que coincidir con una sesion de la base)</span>
-        <input
-          id="sesion"
-          name="sesion"
-          type="text"
-          value={this.state.value}
-          onChange={this.handleChange}
-          placeholder="sesion" />
-        <button onClick={this.handleEnviar}>ENTRAR</button>
-      </div>
+      <Container component="main" maxWidth="xs" >
+        <Typography align='center' component="h1" variant="h5">
+          Login a La Carte
+                    </Typography>
+        <QrReader
+          delay={this.state.delay}
+          style={previewStyle}
+          onError={this.handleError}
+          onScan={this.handleScan}
+        />
+      </Container>
     );
   }
 }

@@ -53,7 +53,7 @@ function RouterCliente() {
           <Route path="/carta" exact component={VisualizarCarta} />
           <Route path="/detalle/item/carta" exact component={DetalleItemCarta} />
           <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
-          <Route path="/escanearQR" exact component={EscanearQR} />
+          <Route path="/escanear/qr" exact component={EscanearQR} />
           <Route component={RedirectCliente} />
         </Switch>
       </div>
@@ -69,7 +69,7 @@ function RouterInicial(props) {
       <div>
         <Switch>
           <Route path="/login" render={() => <Login iniciarSesion={iniciarSesion.empleado} />} />
-          <Route path="/escanearQR" render={() => <EscanearQR iniciarSesion={iniciarSesion.sesion} />} />
+          <Route path="/escanear/qr" render={() => <EscanearQR iniciarSesion={iniciarSesion.sesion} />} />
           <Route component={RedirectInicial} />
         </Switch>
       </div>
@@ -92,7 +92,7 @@ function RedirectCliente(props) {
 }
 
 function RedirectInicial(props) {
-  props.history.push('/escanearQR')
+  props.history.push('/escanear/qr')
   return (
     <h1>Cargando..</h1>
   )
