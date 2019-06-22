@@ -61,7 +61,6 @@ class ItemCartaRepository extends AbstractRepository<ItemCarta> {
 			val criteria = entityManager.criteriaBuilder
 			val query = criteria.createQuery(entityType)
 			val camposItemCarta = query.from(entityType)
-			camposItemCarta.fetch("imagenes", JoinType.LEFT)
 			query.select(camposItemCarta)
 			query.where(criteria.equal(camposItemCarta.get("categoria"), categoria))
 			entityManager.createQuery(query).resultList
