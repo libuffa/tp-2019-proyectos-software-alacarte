@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.JoinColumn
 import org.eclipse.xtend.lib.annotations.Accessors
+import javax.persistence.FetchType
 
 @Entity
 @Accessors
@@ -40,14 +41,8 @@ class ItemCarta {
 	@Column
 	Boolean habilitado
 
-	@ElementCollection
-	@CollectionTable(name="imagenes", joinColumns=@JoinColumn(name="itemCarta_Id"))
-	@Column(name="imagenes")
-	List<String> imagenes = new ArrayList
-	
-	new(){
-		imagenes = #[]
-	}
+	@ElementCollection(fetch=FetchType.EAGER)
+	List<String> imagenes = new ArrayList<String>();
 	
 	def cambiarEstado(){
 		habilitado = !habilitado
