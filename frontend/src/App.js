@@ -53,7 +53,6 @@ function RouterCliente() {
           <Route path="/carta" exact component={VisualizarCarta} />
           <Route path="/detalle/item/carta" exact component={DetalleItemCarta} />
           <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
-          <Route path="/escanear/qr" exact component={EscanearQR} />
           <Route component={RedirectCliente} />
         </Switch>
       </div>
