@@ -61,7 +61,7 @@ class ALaCarteBootstrap {
 			categoria = Categoria.Entrada
 			subCategoria = "Picadas"
 			precioUnitario = 80.doubleValue
-			imagenes = #["https://www.landolakes.com/RecipeManagementSystem/media/Recipe-Media-Files/Recipes/Retail/x17/16556-marinated-antipasto-platter-600x600.jpg?ext=.jpg"]
+			imagenes = #["https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg","https://www.landolakes.com/RecipeManagementSystem/media/Recipe-Media-Files/Recipes/Retail/x17/16556-marinated-antipasto-platter-600x600.jpg?ext=.jpg"]
 			habilitado = true
 		]
 		milanesa = new ItemCarta => [
