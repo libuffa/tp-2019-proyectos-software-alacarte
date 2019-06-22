@@ -63,6 +63,20 @@ class SesionRepository extends AbstractRepository<Sesion> {
 		}
 	}
 	
+	def searchWithMesa() {
+		val entityManager = generateEntityManager
+		try {
+			val criteria = entityManager.criteriaBuilder
+			val query = criteria.createQuery(entityType)
+			val from = query.from(entityType)
+			from.fetch("mesa", JoinType.LEFT)
+			query.select(from)
+			entityManager.createQuery(query).resultList
+		} finally {
+			entityManager?.close
+		}
+	}
+	
 	override searchExampleById(Sesion sesion) {
 		val id = sesion.id
 		searchById(id)

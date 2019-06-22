@@ -43,7 +43,7 @@ class Sesion {
 	@JsonIgnore LocalDateTime fechaAlta
 	
 	@Column
-	@JsonIgnore LocalDateTime fechaBaja
+	@JsonIgnore LocalDateTime fechaBaja = null
 	
 	new(){
 		fechaAlta = LocalDateTime.now

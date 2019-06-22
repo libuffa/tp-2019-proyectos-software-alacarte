@@ -47,6 +47,12 @@ class ALaCarteBootstrap {
 	Pedido pedido4
 
 	Mesa mesa1
+	Mesa mesa2
+	Mesa mesa3
+	Mesa mesa4
+	Mesa mesa5
+	Mesa mesa6
+	Mesa mesa7
 
 	Mozo claudia
 	Cocinero pepe
@@ -238,6 +244,13 @@ class ALaCarteBootstrap {
 		carta.create(asado)
 
 		mesa1 = new Mesa
+		mesa2 = new Mesa
+		mesa3 = new Mesa
+		mesa4 = new Mesa
+		mesa5 = new Mesa
+		mesa6 = new Mesa
+		mesa7 = new Mesa
+
 		claudia = new Mozo => [
 			nombreUsuario = "clauMorales"
 			nombre = "Claudia"
@@ -254,6 +267,12 @@ class ALaCarteBootstrap {
 		]
 
 		repoMesas.create(mesa1)
+		repoMesas.create(mesa2)
+		repoMesas.create(mesa3)
+		repoMesas.create(mesa4)
+		repoMesas.create(mesa5)
+		repoMesas.create(mesa6)
+		repoMesas.create(mesa7)
 		repoEmpleado.create(claudia)
 		repoEmpleado.create(pepe)
 

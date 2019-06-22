@@ -14,21 +14,20 @@ export default class ContenedorCuerpoItemMozo extends Component {
   }
 
   cambiarEstadoItemCarta = () => {
-    this.setState({
-      estado: !this.state.estado,
-    })
-  }
-
-  verCarta = () => {
     ServiceLocator.ItemsCartaService.updateEstadoItem(this.props.itemCarta.id)
       .then((resultado) => {
         if (resultado === "True") {
-          this.props.history.push('/carta/empleado');
+          this.setState({
+            estado: !this.state.estado
+          })
         } else {
           console.log("Error en el servidor");
-          this.props.history.push('/carta/empleado');
         }
       })
+  }
+
+  verCarta = () => {
+    this.props.history.push('/carta');
   }
 
   render() {

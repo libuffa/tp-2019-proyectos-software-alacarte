@@ -12,6 +12,8 @@ import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.api.annotation.Post
 import org.uqbar.xtrest.json.JSONUtils
 import repository.EmpleadoRepository
+import repository.MesaRepository
+import repository.SesionRepository
 
 @Controller
 @Accessors
@@ -19,6 +21,8 @@ class EmpleadoController {
 
 	extension JSONUtils = new JSONUtils
 	EmpleadoRepository repoEmpleados = EmpleadoRepository.instance
+	MesaRepository repoMesas = MesaRepository.instance
+	SesionRepository repoSesiones = SesionRepository.instance
 
 	@Post("/empleado/iniciarSesion")
 	def Result iniciarSesion(@Body String body) {
@@ -86,4 +90,13 @@ class EmpleadoController {
 		}
 	}
 
+	@Get("/mesas")
+	def Result getMesas() {
+		try{
+			val mesas = repoMesas.allInstances()
+			return ok(mesas.toJson)
+		}catch(Exception e) {
+			badRequest(e.message)
+		}
+	}
 }

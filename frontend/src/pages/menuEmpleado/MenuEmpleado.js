@@ -33,7 +33,7 @@ export default class MenuEmpleado extends Component {
     var ruta = null
     switch (opcion) {
       case 'carta':
-        ruta = 'carta/empleado'
+        ruta = 'carta'
         break
       case 'mesas':
         ruta = 'mesas'

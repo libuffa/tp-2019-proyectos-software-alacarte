@@ -34,7 +34,6 @@ class MesaRepository extends AbstractRepository<Mesa> {
 			val criteria = entityManager.criteriaBuilder
 			val query = criteria.createQuery(entityType)
 			val camposMesa = query.from(entityType)
-//			camposItemCarta.fetch("imagenes", JoinType.LEFT)
 			query.select(camposMesa)
 			query.where(criteria.equal(camposMesa.get("id"), _id))
 			entityManager.createQuery(query).singleResult
