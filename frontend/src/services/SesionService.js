@@ -21,8 +21,8 @@ export class SesionService {
     return client.get(`/pedido`).then(res => { return res.data })
   }
 
-  getPedido() {
-    return client.get(`/pedido/${ControllerDeSesion.getSesionActiva()}`).then(res => { return res.data })
+  getPedido(id) {
+    return client.get(`/pedido/${id}`).then(res => { return res.data })
   }
 
   getPedidosCocina() {

@@ -18,6 +18,7 @@ import EscanearQR from './pages/escanearQR/EscanearQR';
 import Header from './components/Header/Header';
 import Login from './pages/Login/Login';
 import './App.css';
+import VisualizarPedidoMozo from './pages/visualizarPedidoMozo/VisualizarPedidoMozo';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -27,7 +28,7 @@ function RouterPrincipal(props) {
       <div>
         <Header empleado={empleado} opcionesMenu={opcionesMenu} />
         <Switch>
-          <Route path="/pedido" exact component={VisualizarPedido} />
+          <Route path="/pedido" exact component={VisualizarPedidoMozo} />
           <Route path="/pedido/cocina" exact component={VisualizarPedidoCocina} />
           <Route path="/mesas" exact component={VisualizarMesas} />
           <Route path="/detalle/mesa" exact component={DetalleMesa} />
@@ -35,6 +36,8 @@ function RouterPrincipal(props) {
           <Route path="/detalle/item/carta/empleado" exact component={DetalleItemCartaEmpleado} />
           <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
           <Route path="/detalle/item/pedido/cocina" exact component={DetalleItemPedidoCocina} />
+          <Route path="/detalle/item/carta" exact component={DetalleItemCarta} />
+          <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
           <Route path="/carta" exact component={VisualizarCartaEmpleado} />
           <Route path="/menu/empleado" exact component={MenuEmpleado} />
           <Route path="/escanearQR" exact component={EscanearQR} />
@@ -150,7 +153,9 @@ class App extends Component {
     return (
       <div className="contenedor">
         {
-          (this.state.sesionActiva && <RouterCliente />)
+          (this.state.sesionActiva && !this.state.sesionEmpleadoActiva && <RouterCliente />)
+          ||
+          (this.state.sesionActiva && this.state.sesionEmpleadoActiva && <RouterPrincipal empleado={this.state.empleado} opcionesMenu={this.state.opcionesMenu} />)
           ||
           (this.state.sesionEmpleadoActiva && <RouterPrincipal empleado={this.state.empleado} opcionesMenu={this.state.opcionesMenu} />)
           ||

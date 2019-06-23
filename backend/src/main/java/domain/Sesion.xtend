@@ -38,6 +38,9 @@ class Sesion {
 	
 	@Column
 	Long idMozo
+	
+	@Column
+	Long idMesa
 
 	@Column
 	Boolean pideCuenta = false

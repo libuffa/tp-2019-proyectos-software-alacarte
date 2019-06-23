@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function CuerpoMesa(props) {
-  const { mesa, mozo } = props;
+  const { mesa, mozo, verPedido } = props;
   const classes = useStyles();
 
   return (
@@ -83,7 +83,7 @@ export default function CuerpoMesa(props) {
             <div className="divider" />
           </Grid>
           <Grid item xs={12}>
-            <Button className={classes.boton} disabled={mesa.sesion ? false : true} variant="contained" color="primary">
+            <Button onClick={() => verPedido.onChange(mesa.sesion.id)} className={classes.boton} disabled={mesa.sesion ? false : true} variant="contained" color="primary">
               <Typography color="inherit" variant="h6">
                 {"Ver pedido"}
               </Typography>

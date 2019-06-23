@@ -4,6 +4,7 @@ import MenuInferior from '../../components/menuInferior/MenuInferior';
 import CartIcon from '@material-ui/icons/ListAlt';
 import CuerpoMesa from '../../components/cuerpoMesa/CuerpoMesa';
 import { ServiceLocator } from '../../services/ServiceLocator';
+import { ControllerDeSesion } from '../../controller/ControllerDeSesion';
 
 export default class DetalleMesa extends Component {
   constructor(props) {
@@ -34,6 +35,12 @@ export default class DetalleMesa extends Component {
       })
   }
 
+  verPedido = (idSesion) => {
+    console.log("ESTA ES LA SESION QUE VA " + idSesion)
+    ControllerDeSesion.setSesionActiva(idSesion)
+    this.props.history.push('/pedido')
+  }
+
   render() {
     const { mesa, mozo } = this.state
 
@@ -51,7 +58,7 @@ export default class DetalleMesa extends Component {
         <ListItemText primary={"Mesa " + mesa.id} />
       </ListSubheader>
       <div className="dividerLista" />
-      <CuerpoMesa mesa={mesa} mozo={mozo} />
+      <CuerpoMesa mesa={mesa} mozo={mozo} verPedido={{ onChange: this.verPedido }} />
       <MenuInferior menuButtons={menuButtons} />
     </div>
   }

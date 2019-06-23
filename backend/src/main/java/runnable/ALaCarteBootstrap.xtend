@@ -312,6 +312,7 @@ class ALaCarteBootstrap {
 			mesa = repoMesas.searchExampleById(mesa2)
 			mozo = repoEmpleado.searchMozoExampleById(monica)
 			idMozo = monica.id
+			idMesa = mesa2.id
 			pedidos = #[]
 		]
 
@@ -319,6 +320,7 @@ class ALaCarteBootstrap {
 			mesa = repoMesas.searchExampleById(mesa1)
 			mozo = repoEmpleado.searchMozoExampleById(claudia)
 			idMozo = claudia.id
+			idMesa = mesa1.id
 			pedidos = #[
 				pedido1, pedido2, pedido3, pedido4, createPedido(milanesa1,1), createPedido(milanesa2,2),
 				createPedido(milanesa3,3)
