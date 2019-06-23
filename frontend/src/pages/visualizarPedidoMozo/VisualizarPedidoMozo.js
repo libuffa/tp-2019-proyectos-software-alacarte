@@ -5,7 +5,6 @@ import MenuInferior from '../../components/menuInferior/MenuInferior';
 import CartIcon from '@material-ui/icons/ListAlt';
 import MoneyIcon from '@material-ui/icons/AttachMoney';
 import ArrowBack from '@material-ui/icons/ArrowBack';
-import { Pedido } from '../../domain/Pedido';
 import ListaItemsPedido from '../../components/listaItemsPedido/ListaItemsPedido.js';
 import DialogConfirmacion from '../../components/Dialog/DialogConfirmacion';
 import { Sesion } from '../../domain/Sesion.js';
@@ -100,10 +99,7 @@ export default class VisualizarPedidoMozo extends Component {
         errorMessage: ""
       })
 
-      const pedidosJson = await ServiceLocator.SesionService.getPedidos()
-      this.setState({
-        pedidos: pedidosJson.map((pedidoJson) => Pedido.fromJson(pedidoJson)),
-      })
+      this.cargarPedidos()
 
     } catch (e) {
       const mensaje = await e.response.data.error
