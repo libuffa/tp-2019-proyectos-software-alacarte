@@ -38,8 +38,11 @@ export default class MenuEmpleado extends Component {
       case 'mesas':
         ruta = 'mesas'
         break
+      case 'pedidos':
+        ruta = 'pedido/cocina'
+        break
       default:
-        ruta = 'carta/empleado'
+        ruta = 'carta'
         break
     }
     this.props.history.push(`/${ruta}`)

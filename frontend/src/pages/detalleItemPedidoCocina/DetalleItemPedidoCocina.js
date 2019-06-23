@@ -33,7 +33,7 @@ export default class DetalleItemPedidoCocina extends Component {
   }
 
   render() {
-    const { itemCarta, cantidad, comentario } = this.state;
+    const { itemCarta, cantidad, comentario, pedido } = this.state;
 
     if (!itemCarta) {
       return <div></div>
@@ -52,7 +52,7 @@ export default class DetalleItemPedidoCocina extends Component {
         text2="eliminar"
         handlersVolver={{ onChange: this.verPedidoCocina }}
         handlersAgregarAPedido={{ onChange: this.eliminarPedido }}
-        disabled={false}
+        disabled={pedido.estado === "En_Curso"}
         eliminar={true}
       />
     </div>
