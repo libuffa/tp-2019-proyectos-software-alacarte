@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Error from '@material-ui/icons/Error';
+import MoneyIcon from '@material-ui/icons/AttachMoney';
 import { ListItem, ListItemAvatar, ListItemText, List, ListSubheader, Typography, ListItemSecondaryAction, IconButton } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -45,13 +46,16 @@ export default function ListaMesasMozo(props) {
                 </Typography>
               </ListItemAvatar>
               <ListItemText secondary={mesa.sesion ? "Ocupada" : "Disponible"} />
-              <ListItemSecondaryAction>
-                {mesa.sesion ? mesa.sesion.pideCuenta ?
+              {mesa.sesion ? mesa.sesion.pideCuenta ?
+                <MoneyIcon color="error" fontSize="large" /> : "" : ""
+              }
+              {mesa.sesion ? mesa.sesion.pideCuenta ?
+                <ListItemSecondaryAction>
                   <IconButton edge="end" >
                     <Error color="error" fontSize="large" />
-                  </IconButton> : "" : ""
-                }
-              </ListItemSecondaryAction>
+                  </IconButton>
+                </ListItemSecondaryAction> : "" : ""
+              }
             </ListItem>
           )
         })}
