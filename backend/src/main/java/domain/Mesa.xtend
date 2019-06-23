@@ -15,11 +15,15 @@ class Mesa {
 	@GeneratedValue
 	Long id
 	
-	@JsonProperty("habilitada")
-	def getHabilitada() {
+	@JsonProperty("sesion")
+	def getSesion() {
 		val sesiones = SesionRepository.instance.searchWithMesa()
 		val sesionesDeMesa = sesiones.filter[sesion | sesion.mesa.id == this.id]
-		return sesionesDeMesa.filter[sesion | sesion.fechaBaja === null].size() == 0
+		if(sesionesDeMesa.filter[sesion | sesion.fechaBaja === null].size() == 0){
+			return null
+		} else {
+			return sesionesDeMesa.filter[sesion | sesion.fechaBaja === null].head()
+		}
 	}
 	
 }

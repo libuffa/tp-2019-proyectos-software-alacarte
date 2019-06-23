@@ -4,7 +4,7 @@ import ListaMesasMozo from '../../components/listaMesasMozo/ListaMesasMozo';
 import MenuInferior from '../../components/menuInferior/MenuInferior.js';
 import Menu from '@material-ui/icons/Menu';
 
-export default class VisualizarMesa extends Component {
+export default class VisualizarMesas extends Component {
 
   constructor(props) {
     super(props)

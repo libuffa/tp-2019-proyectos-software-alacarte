@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import VisualizarMesa from './pages/VisualizarMesa/VisualizarMesa';
+import VisualizarMesas from './pages/visualizarMesas/VisualizarMesas';
 import VisualizarPedido from './pages/VisualizarPedido/VisualizarPedido/VisualizarPedido';
 import VisualizarCarta from './pages/visualizarCarta/VisualizarCarta';
 import VisualizarCartaEmpleado from './pages/visualizarCartaEmpleado/VisualizarCartaEmpleado';
 import DetalleItemCarta from './pages/detalleItemCarta/DetalleItemCarta';
 import DetalleItemPedido from './pages/detalleItemPedido/DetalleItemPedido';
 import Header from './components/Header/Header';
-import './App.css';
 import VisualizarPedidoCocina from './pages/VisualizarPedido/VisualizarPedidoCocina/VisualizarPedidoCocina';
 import DetalleItemPedidoCocina from './pages/detalleItemPedidoCocina/DetalleItemPedidoCocina';
 import { ControllerDeSesion } from './controller/ControllerDeSesion';
@@ -17,6 +16,7 @@ import { ControllerDeEmpleado } from './controller/ControllerDeEmpleado';
 import { ServiceLocator } from './services/ServiceLocator';
 import DetalleItemCartaEmpleado from './pages/detalleItemCartaEmpleado/DetalleItemCartaEmpleado';
 import MenuEmpleado from './pages/menuEmpleado/MenuEmpleado';
+import './App.css';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -28,7 +28,7 @@ function RouterPrincipal(props) {
         <Switch>
           <Route path="/pedido" exact component={VisualizarPedido} />
           <Route path="/pedido/cocina" exact component={VisualizarPedidoCocina} />
-          <Route path="/mesas" exact component={VisualizarMesa} />
+          <Route path="/mesas" exact component={VisualizarMesas} />
           <Route path="/carta/cliente" exact component={VisualizarCarta} />
           <Route path="/detalle/item/carta/empleado" exact component={DetalleItemCartaEmpleado} />
           <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
