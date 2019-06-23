@@ -30,6 +30,13 @@ export default class VisualizarMesas extends Component {
     this.props.history.push('/menu/empleado')
   }
 
+  verDetalleMesa = (mesa) => {
+    this.props.history.push({
+      pathname: '/detalle/mesa',
+      state: { mesa: mesa }
+    })
+  }
+
   render() {
     const { mesas } = this.state;
 
@@ -46,7 +53,7 @@ export default class VisualizarMesas extends Component {
     }
     return (
       <div>
-        <ListaMesasMozo mesas={mesas} />
+        <ListaMesasMozo mesas={mesas} handlers={{ onChange: this.verDetalleMesa }} />
         <MenuInferior menuButtons={menuButtons} />
       </div>
     )

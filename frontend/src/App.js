@@ -16,6 +16,7 @@ import { ControllerDeEmpleado } from './controller/ControllerDeEmpleado';
 import { ServiceLocator } from './services/ServiceLocator';
 import DetalleItemCartaEmpleado from './pages/detalleItemCartaEmpleado/DetalleItemCartaEmpleado';
 import MenuEmpleado from './pages/menuEmpleado/MenuEmpleado';
+import DetalleMesa from './pages/detalleMesa/DetalleMesa';
 import './App.css';
 
 function RouterPrincipal(props) {
@@ -29,6 +30,7 @@ function RouterPrincipal(props) {
           <Route path="/pedido" exact component={VisualizarPedido} />
           <Route path="/pedido/cocina" exact component={VisualizarPedidoCocina} />
           <Route path="/mesas" exact component={VisualizarMesas} />
+          <Route path="/detalle/mesa" exact component={DetalleMesa} />
           <Route path="/carta/cliente" exact component={VisualizarCarta} />
           <Route path="/detalle/item/carta/empleado" exact component={DetalleItemCartaEmpleado} />
           <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />

@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ListaMesasMozo(props) {
-  const { mesas } = props;
+  const { mesas, handlers } = props;
   const classes = useStyles();
 
   return (
@@ -38,7 +38,7 @@ export default function ListaMesasMozo(props) {
         <div className="dividerLista" />
         {mesas.map((mesa) => {
           return (
-            <ListItem button key={mesa.id}>
+            <ListItem button key={mesa.id} onClick={() => handlers.onChange(mesa)}>
               <ListItemAvatar >
                 <Typography variant="h5" className={mesa.sesion ? classes.mesaOcupada : classes.mesaLibre}>
                   {mesa.id}
