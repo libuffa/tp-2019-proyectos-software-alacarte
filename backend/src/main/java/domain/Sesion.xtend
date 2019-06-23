@@ -35,6 +35,9 @@ class Sesion {
 
 	@OneToOne(fetch=FetchType.LAZY)
 	@JsonIgnore Mozo mozo
+	
+	@Column
+	Long idMozo
 
 	@Column
 	Boolean pideCuenta = false

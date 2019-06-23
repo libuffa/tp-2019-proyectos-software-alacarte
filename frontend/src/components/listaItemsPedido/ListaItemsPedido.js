@@ -25,50 +25,46 @@ export default function ListaItemsCocina(props) {
   const classes = useStyles();
   const { pedidos, disabled, handlers, handlersDetalleItemPedido } = props
 
-  if (pedidos === null) {
-    return <div></div>
-  } else {
-    return (
-      <div className={classes.root}>
-        <List className={classes.lista}>
-          <div className="dividerLista" />
-          <ListSubheader disableSticky color="inherit" key={-1}>
-            <ListItemText primary="Tu Pedido" />
-          </ListSubheader>
-          <div className="dividerLista" />
-          {pedidos.map((pedido) => {
-            return (
-              <ListItem key={pedido.id} button disabled={disabled} onClick={() => handlersDetalleItemPedido.onChange(pedido)}>
-                <ListItemAvatar>
-                  <Avatar
-                    src={pedido.itemCarta.imagenes[0]}
-                  />
-                </ListItemAvatar>
-                <ListItemText
-                  primary={pedido.itemCarta.titulo}
-                  secondary={"Cantidad: " + pedido.cantidad}
+  return (
+    <div className={classes.root}>
+      <List className={classes.lista}>
+        <div className="dividerLista" />
+        <ListSubheader disableSticky color="inherit" key={-1}>
+          <ListItemText primary="Tu Pedido" />
+        </ListSubheader>
+        <div className="dividerLista" />
+        {pedidos ? pedidos.map((pedido) => {
+          return (
+            <ListItem key={pedido.id} button disabled={disabled} onClick={() => handlersDetalleItemPedido.onChange(pedido)}>
+              <ListItemAvatar>
+                <Avatar
+                  src={pedido.itemCarta.imagenes[0]}
                 />
-                <ListItemText
-                  secondary={
-                    <Typography
-                      color="textSecondary"
-                      align="right"
-                      className={classes.estado}
-                    >
-                      {pedido.estado.replace('_', ' ')}
-                    </Typography>
-                  }
-                />
-                <ListItemSecondaryAction>
-                  <IconButton disabled={pedido.estado !== "Creado"} edge="end" aria-label="Comments" onClick={() => handlers.onChange(pedido)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            );
-          })}
-        </List>
-      </div>
-    );
-  }
+              </ListItemAvatar>
+              <ListItemText
+                primary={pedido.itemCarta.titulo}
+                secondary={"Cantidad: " + pedido.cantidad}
+              />
+              <ListItemText
+                secondary={
+                  <Typography
+                    color="textSecondary"
+                    align="right"
+                    className={classes.estado}
+                  >
+                    {pedido.estado.replace('_', ' ')}
+                  </Typography>
+                }
+              />
+              <ListItemSecondaryAction>
+                <IconButton disabled={pedido.estado !== "Creado"} edge="end" aria-label="Comments" onClick={() => handlers.onChange(pedido)}>
+                  <DeleteIcon />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+          );
+        }) : <div></div>}
+      </List>
+    </div>
+  );
 }

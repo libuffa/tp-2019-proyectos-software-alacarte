@@ -62,8 +62,12 @@ export default class VisualizarPedido extends Component {
   }
 
   getPrecioTotal() {
-    return this.state.pedidos.map((pedido) => pedido.cantidad * pedido.itemCarta.precioUnitario)
-      .reduce((a, b) => a + b)
+    if (this.state.pedidos.length > 0) {
+      return this.state.pedidos.map((pedido) => pedido.cantidad * pedido.itemCarta.precioUnitario)
+        .reduce((a, b) => a + b)
+    } else {
+      return 0
+    }
   }
 
   snackbarOpen() {
@@ -166,38 +170,41 @@ export default class VisualizarPedido extends Component {
       }
     }
 
+
     return (
       <div>
         <ListaItemsPedido
-          pedidos={pedidos}
+          pedidos={pedidos ? pedidos : []}
           handlers={{ onChange: this.actualizar }}
           handlersDetalleItemPedido={{ onChange: this.verDetalleItemPedido }}
           disabled={this.validarSesion()}
         />
-        <Card>
-          <CardContent>
-            <Typography className="precioFinal" variant="subtitle1">
-              {
-                (this.state.pideCuenta) &&
-                <Tooltip
-                  title="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?"
-                  aria-label="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?">
-                  <IconButton onClick={() => this.pidiendoCuenta()}>
-                    <Error color="error" fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-              }
-              Precio final: {new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD'
-              }).format(this.getPrecioTotal())}
-            </Typography>
-          </CardContent>
-          <CardContent></CardContent>
-          <CardContent>
-            <MenuInferior menuButtons={menuButtons} />
-          </CardContent>
-        </Card>
+        {pedidos ?
+          <Card>
+            <CardContent>
+              <Typography className="precioFinal" variant="subtitle1">
+                {
+                  (this.state.pideCuenta) &&
+                  <Tooltip
+                    title="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?"
+                    aria-label="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?">
+                    <IconButton onClick={() => this.pidiendoCuenta()}>
+                      <Error color="error" fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                }
+                Precio final: {new Intl.NumberFormat('en-US', {
+                  style: 'currency',
+                  currency: 'USD'
+                }).format(this.getPrecioTotal())}
+              </Typography>
+            </CardContent>
+            <CardContent></CardContent>
+            <CardContent>
+              <MenuInferior menuButtons={menuButtons} />
+            </CardContent>
+          </Card>
+          : <div></div>}
         <DialogConfirmacion
           titulo={"Pedir Cuenta"}
           descripcion={"¿Estas seguro que deseas pedir la cuenta?"}

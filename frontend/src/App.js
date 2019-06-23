@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import VisualizarMesas from './pages/visualizarMesas/VisualizarMesas';
-import VisualizarPedido from './pages/VisualizarPedido/VisualizarPedido/VisualizarPedido';
-import VisualizarCarta from './pages/visualizarCarta/VisualizarCarta';
-import VisualizarCartaEmpleado from './pages/visualizarCartaEmpleado/VisualizarCartaEmpleado';
-import DetalleItemCarta from './pages/detalleItemCarta/DetalleItemCarta';
-import DetalleItemPedido from './pages/detalleItemPedido/DetalleItemPedido';
-import Header from './components/Header/Header';
 import VisualizarPedidoCocina from './pages/VisualizarPedido/VisualizarPedidoCocina/VisualizarPedidoCocina';
-import DetalleItemPedidoCocina from './pages/detalleItemPedidoCocina/DetalleItemPedidoCocina';
-import { ControllerDeSesion } from './controller/ControllerDeSesion';
-import EscanearQR from './pages/escanearQR/EscanearQR';
-import Login from './pages/Login/Login';
-import { ControllerDeEmpleado } from './controller/ControllerDeEmpleado';
-import { ServiceLocator } from './services/ServiceLocator';
 import DetalleItemCartaEmpleado from './pages/detalleItemCartaEmpleado/DetalleItemCartaEmpleado';
+import VisualizarCartaEmpleado from './pages/visualizarCartaEmpleado/VisualizarCartaEmpleado';
+import DetalleItemPedidoCocina from './pages/detalleItemPedidoCocina/DetalleItemPedidoCocina';
+import VisualizarPedido from './pages/VisualizarPedido/VisualizarPedido/VisualizarPedido';
+import DetalleItemPedido from './pages/detalleItemPedido/DetalleItemPedido';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import DetalleItemCarta from './pages/detalleItemCarta/DetalleItemCarta';
+import { ControllerDeEmpleado } from './controller/ControllerDeEmpleado';
+import VisualizarMesas from './pages/visualizarMesas/VisualizarMesas';
+import VisualizarCarta from './pages/visualizarCarta/VisualizarCarta';
+import { ControllerDeSesion } from './controller/ControllerDeSesion';
 import MenuEmpleado from './pages/menuEmpleado/MenuEmpleado';
+import { ServiceLocator } from './services/ServiceLocator';
 import DetalleMesa from './pages/detalleMesa/DetalleMesa';
+import EscanearQR from './pages/escanearQR/EscanearQR';
+import Header from './components/Header/Header';
+import Login from './pages/Login/Login';
 import './App.css';
 
 function RouterPrincipal(props) {
@@ -55,7 +55,6 @@ function RouterCliente() {
           <Route path="/carta" exact component={VisualizarCarta} />
           <Route path="/detalle/item/carta" exact component={DetalleItemCarta} />
           <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
-          <Route path="/escanearQR" exact component={EscanearQR} />
           <Route component={RedirectCliente} />
         </Switch>
       </div>

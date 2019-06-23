@@ -33,7 +33,8 @@ export default class VisualizarMesas extends Component {
   verDetalleMesa = (mesa) => {
     this.props.history.push({
       pathname: '/detalle/mesa',
-      state: { mesa: mesa }
+      state: { mesa: mesa },
+      history: this.props.history,
     })
   }
 

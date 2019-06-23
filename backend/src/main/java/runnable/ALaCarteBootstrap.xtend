@@ -56,8 +56,10 @@ class ALaCarteBootstrap {
 
 	Mozo claudia
 	Cocinero pepe
+	Mozo monica
 
 	Sesion sesion1
+	Sesion sesion2
 
 	def run() {
 
@@ -265,6 +267,14 @@ class ALaCarteBootstrap {
 			contraseña = "1234"
 			email = "pepegarcia@gmail.com"
 		]
+		
+		monica = new Mozo => [
+			nombreUsuario = "moniCorral"
+			nombre = "Monica"
+			apellido = "Corral"
+			contraseña = ""
+			email = "mcorral@yahoo.com"
+		]
 
 		repoMesas.create(mesa1)
 		repoMesas.create(mesa2)
@@ -274,6 +284,7 @@ class ALaCarteBootstrap {
 		repoMesas.create(mesa6)
 		repoMesas.create(mesa7)
 		repoEmpleado.create(claudia)
+		repoEmpleado.create(monica)
 		repoEmpleado.create(pepe)
 
 		pedido1 = new Pedido => [
@@ -297,9 +308,17 @@ class ALaCarteBootstrap {
 			estado = Estado.Creado
 		]
 
+		sesion2 = new Sesion => [
+			mesa = repoMesas.searchExampleById(mesa2)
+			mozo = repoEmpleado.searchMozoExampleById(monica)
+			idMozo = monica.id
+			pedidos = #[]
+		]
+
 		sesion1 = new Sesion => [
 			mesa = repoMesas.searchExampleById(mesa1)
 			mozo = repoEmpleado.searchMozoExampleById(claudia)
+			idMozo = claudia.id
 			pedidos = #[
 				pedido1, pedido2, pedido3, pedido4, createPedido(milanesa1,1), createPedido(milanesa2,2),
 				createPedido(milanesa3,3)
@@ -307,6 +326,7 @@ class ALaCarteBootstrap {
 		]
 
 		repoSesion.create(sesion1)
+		repoSesion.create(sesion2)
 
 //		sesion1.pedirItem(milanesa,2,"cocida")
 //		sesion1.pedirItem(pizza,1,"")
