@@ -46,7 +46,7 @@ export default function ListaMesasMozo(props) {
               </ListItemAvatar>
               <ListItemText secondary={mesa.sesion ? "Ocupada" : "Disponible"} />
               <ListItemSecondaryAction>
-                {mesa.sesion ? mesa.sesion.notificaciones ?
+                {mesa.sesion ? mesa.sesion.pideCuenta ?
                   <IconButton edge="end" >
                     <Error color="error" fontSize="large" />
                   </IconButton> : "" : ""
