@@ -1,6 +1,7 @@
 package controller
 
 import domain.Estado
+import java.util.ArrayList
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.xtrest.api.Result
 import org.uqbar.xtrest.api.annotation.Body
@@ -136,8 +137,10 @@ class SesionController {
 		try {
 			val sesiones = repositorioSesion.allInstances
 			val sesionesActivas = sesiones.filter[sesion | sesion.sesionActiva ].toList
-			val pedidos = sesionesActivas.map[pedidosActivos].get(0)
-			val pedidosCocina = pedidos.filter[ pedido | !pedido.estado.equals(Estado.Finalizado) && pedido.itemCarta.noEsBebida ].toList
+			val pedidos = sesionesActivas.map[pedidosActivos].toList
+			val todosLosPedidos = new ArrayList
+			pedidos.forEach[listaPedidos | listaPedidos.forEach[pedido | todosLosPedidos.add(pedido)]]
+			val pedidosCocina = todosLosPedidos.filter[ pedido | !pedido.estado.equals(Estado.Finalizado) && !pedido.estado.equals(Estado.Entregado) && pedido.itemCarta.noEsBebida ].toList
 			return ok(pedidosCocina.toJson)
 		} catch(Exception e) {
 			badRequest(e.message)
@@ -149,25 +152,6 @@ class SesionController {
 		try {
 			return ok(Estado.values.toJson)
 		} catch(Exception e) {
-			badRequest(e.message)
-		}
-	}
-	
-	@Put("/pedido/cocina")
-	def Result siguienteEstado(@Body String body) {
-		try {
-			
-			val idPedido = Long.valueOf(body.getPropertyValue("id"))
-
-			if (idPedido === null) {
-				return badRequest('{ "error" : "pedido inexistente" }')
-			}
-
-			val sesion = repositorioSesion.searchSesionByPedido(idPedido)
-			sesion.cambiarEstado(idPedido)
-
-			ok('{"status" : "OK"}')
-		} catch (Exception e) {
 			badRequest(e.message)
 		}
 	}

@@ -80,7 +80,7 @@ class EmpleadoController {
 			
 			switch tipoEmpleado {
 				case Mozo: opciones = #["carta","mesas"]
-				case Cocinero: opciones = #["carta","pedidoCocinero"]
+				case Cocinero: opciones = #["carta","pedidos"]
 				default: opciones = #["carta","mesaAdm","empleado"]
 			}
 
