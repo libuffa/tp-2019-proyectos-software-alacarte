@@ -6,7 +6,6 @@ import CartIcon from '@material-ui/icons/ListAlt';
 import MoneyIcon from '@material-ui/icons/AttachMoney';
 import GamesIcon from '@material-ui/icons/Games';
 import './VisualizarPedido.scss';
-import { Pedido } from '../../../domain/Pedido';
 import ListaItemsPedido from '../../../components/listaItemsPedido/ListaItemsPedido.js';
 import DialogConfirmacion from '../../../components/Dialog/DialogConfirmacion';
 import { Sesion } from '../../../domain/Sesion.js';
@@ -98,10 +97,7 @@ export default class VisualizarPedido extends Component {
         errorMessage: ""
       })
 
-      const pedidosJson = await ServiceLocator.SesionService.getPedidos()
-      this.setState({
-        pedidos: pedidosJson.map((pedidoJson) => Pedido.fromJson(pedidoJson)),
-      })
+      this.cargarPedidos()
 
     } catch (e) {
       const mensaje = await e.response.data.error

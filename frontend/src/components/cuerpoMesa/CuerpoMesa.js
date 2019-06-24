@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(1, 2),
+    marginTop: '7px',
   },
   paper: {
     height: '100%',

@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ListaMesasMozo(props) {
-  const { mesas, handlers } = props;
+  const { mesas, handlers, entregarPedido } = props;
   const classes = useStyles();
 
   return (
@@ -49,9 +49,9 @@ export default function ListaMesasMozo(props) {
               {mesa.sesion ? mesa.sesion.pideCuenta ?
                 <MoneyIcon color="error" fontSize="large" /> : "" : ""
               }
-              {mesa.sesion ? mesa.sesion.pideCuenta ?
+              {mesa.sesion ? mesa.sesion.pedidos.some((pedido) => pedido.estado === "Finalizado") ?
                 <ListItemSecondaryAction>
-                  <IconButton edge="end" >
+                  <IconButton edge="end" onClick={() => entregarPedido.onChange(mesa.sesion.pedidos.filter((pedido) => pedido.estado === "Finalizado")[0].id)}>
                     <Error color="error" fontSize="large" />
                   </IconButton>
                 </ListItemSecondaryAction> : "" : ""
