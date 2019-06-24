@@ -1,5 +1,6 @@
 package controller
 
+import domain.Sesion
 import domain.empleado.Cocinero
 import domain.empleado.Mozo
 import java.util.ArrayList
@@ -109,6 +110,32 @@ class EmpleadoController {
 			return ok(mesa.toJson)
 		}catch(Exception e) {
 			badRequest(e.message)
+		}
+	}
+	
+	@Post("/mesas/estado")
+	def Result asignarDesasignarMesa(@Body String body) {
+		val idMesaBody = Long.valueOf(body.getPropertyValue("idMesa"))
+		val idMozoBody = Long.valueOf(body.getPropertyValue("idMozo"))
+		try{
+			val mesaRepo = repoMesas.searchById(idMesaBody)
+			var sesion = mesaRepo.getSesion()
+			if(sesion === null) {
+				val mozoRepo = repoEmpleados.searchById(idMozoBody)
+				sesion = new Sesion => [
+					mesa = mesaRepo
+					mozo = mozoRepo
+					idMozo = idMozoBody
+					idMesa = idMesaBody
+				]
+				repoSesiones.create(sesion)
+				return ok("La sesion se creo correctamente")
+			} else {
+				sesion.cerrarSesion()
+				return ok("La sesion se cerro correctamente")
+			}
+		}catch(Exception e) {
+			badRequest("Imposible crear sesion")
 		}
 	}
 }

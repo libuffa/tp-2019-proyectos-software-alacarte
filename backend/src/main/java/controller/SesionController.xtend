@@ -25,8 +25,12 @@ class SesionController {
 	def Result iniciarSesion(@Body String body) {
 		var id = Long.valueOf(body.getPropertyValue("idSesion"))
 		try{
-			repositorioSesion.searchById(id)
-			return ok("True")
+			val sesion = repositorioSesion.searchById(id)
+			if(sesion.fechaBaja === null) {
+				return ok("True")
+			} else {
+				return ok("Sesion Cerrada")
+			}
 		}catch(Exception e) {
 			badRequest("La sesion no existe o esta inactiva")
 		}
@@ -41,13 +45,17 @@ class SesionController {
 		
 		try{
 			val sesion = repositorioSesion.searchById(idSesion)
-			val itemCarta = carta.searchById(idItem)
-			if(itemCarta.habilitado){
-				sesion.pedirItem(itemCarta, cantidad, comentario)
-				repositorioSesion.update(sesion)
-				return ok("True")
+			if(sesion.fechaBaja === null){
+				val itemCarta = carta.searchById(idItem)
+				if(itemCarta.habilitado){
+					sesion.pedirItem(itemCarta, cantidad, comentario)
+					repositorioSesion.update(sesion)
+					return ok("True")
+				}
+				return ok("El plato que desea no se encuentra disponible")
+			} else {
+				return ok("La sesion expiro")
 			}
-			return ok("El plato que desea no se encuentra disponible")
 		}catch(Exception e) {
 			badRequest("La sesion no existe o esta inactiva")
 		}
@@ -62,14 +70,18 @@ class SesionController {
 		
 		try{
 			val sesion = repositorioSesion.searchById(idSesion)
-			var pedido = sesion.getPedido(idPedido)
-			if(pedido.estado.equals(Estado.Creado)){
-				pedido.cantidad = cantidad
-				pedido.comentarios = comentario
-				repositorioSesion.update(sesion)
-				return ok("True")
+			if(sesion.fechaBaja === null) {
+				var pedido = sesion.getPedido(idPedido)
+				if(pedido.estado.equals(Estado.Creado)){
+					pedido.cantidad = cantidad
+					pedido.comentarios = comentario
+					repositorioSesion.update(sesion)
+					return ok("True")
+				}
+				return ok("No fue posible modificar el plato")
+			} else {
+				return ok("La sesion expiro")
 			}
-			return ok("No fue posible modificar el plato")
 		}catch(Exception e) {
 			badRequest("La sesion no existe o esta inactiva")
 		}
@@ -125,7 +137,6 @@ class SesionController {
 			val sesiones = repositorioSesion.allInstances
 			val sesionesActivas = sesiones.filter[sesion | sesion.sesionActiva ].toList
 			val pedidos = sesionesActivas.map[pedidosActivos].get(0)
-			
 			return ok(pedidos.toJson)
 		} catch(Exception e) {
 			badRequest(e.message)
@@ -164,11 +175,15 @@ class SesionController {
 				return badRequest('{ "error" : "pedido inexistente" }')
 			}
 			val sesion = repositorioSesion.searchSesionByPedido(idPedido)
-			if(!sesion.sesionActiva) {
-				return badRequest('{ "error" : "pedido pertenece a una sesion no activa" }')
+			if(sesion.fechaBaja === null) {
+				if(!sesion.sesionActiva) {
+					return badRequest('{ "error" : "pedido pertenece a una sesion no activa" }')
+				}
+				sesion.bajaPedido(idPedido)
+				return ok('{"status" : "OK"}')
+			} else {
+				return ok('{"error" : "Sesion Inactiva"}')
 			}
-			sesion.bajaPedido(idPedido)
-			return ok('{"status" : "OK"}')
 		} catch (Exception e) {
 			return badRequest(e.message)
 		}

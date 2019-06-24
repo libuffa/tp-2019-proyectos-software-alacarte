@@ -5,6 +5,7 @@ import CartIcon from '@material-ui/icons/ListAlt';
 import CuerpoMesa from '../../components/cuerpoMesa/CuerpoMesa';
 import { ServiceLocator } from '../../services/ServiceLocator';
 import { ControllerDeSesion } from '../../controller/ControllerDeSesion';
+import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 
 export default class DetalleMesa extends Component {
   constructor(props) {
@@ -22,10 +23,6 @@ export default class DetalleMesa extends Component {
     }
   }
 
-  verMesas() {
-    this.props.history.push('/mesas')
-  }
-
   cargarMozo() {
     ServiceLocator.EmpleadoService.getEmpleadoById(this.state.mesa.sesion.idMozo)
       .then((resultado) => {
@@ -33,6 +30,19 @@ export default class DetalleMesa extends Component {
           mozo: resultado,
         })
       })
+  }
+
+  cargarMesa() {
+    ServiceLocator.mesaService.getMesa(this.state.mesa.id)
+      .then((mesa) => {
+        this.setState({
+          mesa
+        })
+      })
+  }
+
+  verMesas() {
+    this.props.history.push('/mesas')
   }
 
   verPedido = (idSesion) => {
@@ -47,6 +57,16 @@ export default class DetalleMesa extends Component {
     this.props.history.push({
       pathname: '/mostrar/qr',
       state: { mesa: this.state.mesa }
+    })
+  }
+
+  sesionMesa = () => {
+    ServiceLocator.mesaService.cambiarEstado({
+      "idMozo": ControllerDeEmpleado.getSesionActiva(),
+      "idMesa": this.state.mesa.id
+    }).then((respuesta) => {
+      console.log(respuesta)
+      this.cargarMesa()
     })
   }
 
@@ -67,7 +87,7 @@ export default class DetalleMesa extends Component {
         <ListItemText primary={"Mesa " + mesa.id} />
       </ListSubheader>
       <div className="dividerLista" />
-      <CuerpoMesa mesa={mesa} mozo={mozo} mostrarQR={{ onChange: this.mostrarQR }} verPedido={{ onChange: this.verPedido }} />
+      <CuerpoMesa mesa={mesa} mozo={mozo} mostrarQR={{ onChange: this.mostrarQR }} verPedido={{ onChange: this.verPedido }} sesionMesa={{ onChange: this.sesionMesa }} />
       <MenuInferior menuButtons={menuButtons} />
     </div>
   }

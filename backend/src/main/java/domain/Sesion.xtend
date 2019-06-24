@@ -2,7 +2,7 @@ package domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
-import domain.empleado.Mozo
+import domain.empleado.Empleado
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.ArrayList
@@ -34,7 +34,7 @@ class Sesion {
 	@JsonIgnore Mesa mesa
 
 	@OneToOne(fetch=FetchType.LAZY)
-	@JsonIgnore Mozo mozo
+	@JsonIgnore Empleado mozo
 	
 	@Column
 	Long idMozo
@@ -98,6 +98,11 @@ class Sesion {
 	
 	def pedirCuenta() {
 		this.pideCuenta = !this.pideCuenta
+		SesionRepository.instance.update(this)
+	}
+	
+	def cerrarSesion() {
+		fechaBaja = LocalDateTime.now
 		SesionRepository.instance.update(this)
 	}
 	

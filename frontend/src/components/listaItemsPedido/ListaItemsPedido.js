@@ -57,7 +57,7 @@ export default function ListaItemsCocina(props) {
                 }
               />
               <ListItemSecondaryAction>
-                <IconButton disabled={pedido.estado !== "Creado"} edge="end" aria-label="Comments" onClick={() => handlers.onChange(pedido)}>
+                <IconButton disabled={pedido.estado !== "Creado" || disabled} edge="end" aria-label="Comments" onClick={() => handlers.onChange(pedido)}>
                   <DeleteIcon />
                 </IconButton>
               </ListItemSecondaryAction>
