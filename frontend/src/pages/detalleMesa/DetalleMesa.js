@@ -36,7 +36,6 @@ export default class DetalleMesa extends Component {
   }
 
   verPedido = (idSesion) => {
-    console.log("ESTA ES LA SESION QUE VA " + idSesion)
     ControllerDeSesion.setSesionActiva(idSesion)
     this.props.history.push({
       pathname: '/pedido',
@@ -68,7 +67,7 @@ export default class DetalleMesa extends Component {
         <ListItemText primary={"Mesa " + mesa.id} />
       </ListSubheader>
       <div className="dividerLista" />
-      <CuerpoMesa mesa={mesa} mozo={mozo} mostrarQR={{onChange: this.mostrarQR}} verPedido={{ onChange: this.verPedido }} />
+      <CuerpoMesa mesa={mesa} mozo={mozo} mostrarQR={{ onChange: this.mostrarQR }} verPedido={{ onChange: this.verPedido }} />
       <MenuInferior menuButtons={menuButtons} />
     </div>
   }
