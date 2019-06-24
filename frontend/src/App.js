@@ -42,7 +42,7 @@ function RouterPrincipal(props) {
           <Route path="/carta" exact component={VisualizarCartaEmpleado} />
           <Route path="/menu/empleado" exact component={MenuEmpleado} />
           <Route path="/escanearQR" exact component={EscanearQR} />
-          <Route path="/mostrar/qr/:id" exact component={MostrarQR} />
+          <Route path="/mostrar/qr" exact component={MostrarQR} />
           <Route component={RedirectPrincipal} />
         </Switch>
       </div>

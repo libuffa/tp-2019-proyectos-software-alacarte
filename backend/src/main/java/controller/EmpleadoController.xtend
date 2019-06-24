@@ -99,4 +99,16 @@ class EmpleadoController {
 			badRequest(e.message)
 		}
 	}
+	
+	@Get("/mesas/:id")
+	def Result getMesa() {
+		val idMesa = Long.valueOf(id)
+		try{
+			val mesas = repoMesas.allInstances()
+			val mesa = mesas.filter[mesa | mesa.id === idMesa].get(0)
+			return ok(mesa.toJson)
+		}catch(Exception e) {
+			badRequest(e.message)
+		}
+	}
 }

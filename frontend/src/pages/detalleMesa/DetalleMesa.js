@@ -43,9 +43,9 @@ export default class DetalleMesa extends Component {
     })
   }
 
-  mostrarQR = (id) => {
+  mostrarQR = () => {
     this.props.history.push({
-      pathname: '/mostrar/qr/' + id,
+      pathname: '/mostrar/qr',
       state: { mesa: this.state.mesa }
     })
   }

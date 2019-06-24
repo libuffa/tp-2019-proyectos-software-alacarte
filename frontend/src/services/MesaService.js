@@ -6,4 +6,8 @@ export default class MesaService {
   getMesas() {
     return client.get(`/mesas`).then(res => { return res.data })
   }
+
+  getMesa(id) {
+    return client.get(`/mesas/${id}`).then(res => { return res.data })
+  }
 }

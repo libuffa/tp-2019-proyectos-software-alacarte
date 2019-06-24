@@ -21,7 +21,10 @@ export default class MostrarQR extends Component {
   }
 
   render() {
-    console.log(this.state)
+
+    const url = `http://api.qrserver.com/v1/create-qr-code/?data=${this.props.location.state.mesa.sesion.id}!&size=200x200`
+
+    console.log(this.props.location.state.mesa.sesion.id)
 
     const menuButtons = {
       firstButton: {
@@ -31,21 +34,22 @@ export default class MostrarQR extends Component {
       },
     }
 
-    const url = `http://api.qrserver.com/v1/create-qr-code/?data=${this.props.match.params.id}!&size=200x200`
 
     return (
       <div>
         <Container component="main" maxWidth="xs">
           <br></br>
           <Typography align='center' variant="h5">
-            {"¡Escanea el codigo debajo y comenza a pedir!"}
+            {"¡Escanea este codigo y comenza a pedir!"}
           </Typography>
           <div align='center'>
             <img className="qr" src={url} alt="qr code" title="qr" />
           </div>
-          <Typography align="center" variant="h5">
-
-          </Typography>
+          <div className="qr">
+            <Typography align="center" variant="h5">
+              {"Sesion: " + this.props.location.state.mesa.sesion.id}
+            </Typography>
+          </div>
         </Container>
         <MenuInferior menuButtons={menuButtons} />
       </div>
