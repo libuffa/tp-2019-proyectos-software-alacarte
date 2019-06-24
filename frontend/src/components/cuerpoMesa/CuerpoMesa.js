@@ -72,11 +72,14 @@ export default function CuerpoMesa(props) {
                 {"Avisos:"}
               </Typography>
               <Typography color="textSecondary" variant="h5">
-                {mesa.sesion ? mesa.sesion.notificaciones ? mesa.sesion.notificaciones.map((notificacion) => {
-                  return (
-                    <div>{notificacion}</div>
-                  )
-                }) : "-" : "-"}
+                {mesa.sesion ?
+                  mesa.sesion.pedidos.filter((pedido) => pedido.estado === "Finalizado" || (pedido.itemCarta.categoria === "Bebida" && pedido.estado !== "Entregado")).map((pedido) => {
+                    return (
+                      <div key={pedido.id} >- {pedido.estado === "Finalizado" ? "Retirar pedido listo" : "Bebidas solicitadas"}</div>
+                    )
+                  }) :
+                  "-"}
+                <div>{mesa.sesion ? mesa.sesion.pideCuenta ? "- Solicita cuenta" : "" : ""}</div>
               </Typography>
             </div>
           </Grid>
