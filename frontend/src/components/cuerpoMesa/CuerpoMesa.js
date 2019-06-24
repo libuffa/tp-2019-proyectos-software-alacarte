@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function CuerpoMesa(props) {
-  const { mesa, mozo, verPedido } = props;
+  const { mesa, mozo, verPedido, mostrarQR } = props;
   const classes = useStyles();
 
   return (
@@ -94,7 +94,7 @@ export default function CuerpoMesa(props) {
           </Grid>
           <Grid item xs={12}>
             <Button className={classes.boton} disabled={mesa.sesion ? false : true} variant="contained" color="primary">
-              <Typography color="inherit" variant="h6">
+              <Typography color="inherit" variant="h6" onClick={ () => mostrarQR.onChange(mesa.id) }>
                 {"Mostrar QR"}
               </Typography>
             </Button>
