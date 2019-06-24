@@ -40,7 +40,7 @@ export default class MostrarQR extends Component {
         <Container component="main" maxWidth="xs">
           <br></br>
           <Typography align='center' variant="h5">
-            {"¡Escanea este codigo y comenza a pedir!"}
+            {"¡Escaneá este código y empezá a pedir!"}
           </Typography>
           <div align='center'>
             <img className="qr" src={url} alt="qr code" title="qr" />
