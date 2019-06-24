@@ -9,6 +9,7 @@ export default class VisualizarMesas extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      timer: setInterval(() => { this.cargarMesas(); }, 4000),
       mesas: null,
     };
   }
@@ -27,14 +28,29 @@ export default class VisualizarMesas extends Component {
   }
 
   verMenu = () => {
+    clearInterval(this.state.timer)
     this.props.history.push('/menu/empleado')
   }
 
   verDetalleMesa = (mesa) => {
+    clearInterval(this.state.timer)
     this.props.history.push({
       pathname: '/detalle/mesa',
       state: { mesa: mesa }
     })
+  }
+
+  entregarPedido = (idPedido) => {
+    try {
+      ServiceLocator.SesionService.cambiarEstadoPedido(idPedido)
+        .then((respuesta) => {
+          if (respuesta.status === "True") {
+            this.cargarMesas()
+          }
+        })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   render() {
@@ -53,7 +69,7 @@ export default class VisualizarMesas extends Component {
     }
     return (
       <div>
-        <ListaMesasMozo mesas={mesas} handlers={{ onChange: this.verDetalleMesa }} />
+        <ListaMesasMozo mesas={mesas} handlers={{ onChange: this.verDetalleMesa }} entregarPedido={{ onChange: this.entregarPedido }} />
         <MenuInferior menuButtons={menuButtons} />
       </div>
     )
