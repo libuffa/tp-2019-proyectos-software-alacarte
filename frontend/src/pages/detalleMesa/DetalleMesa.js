@@ -34,10 +34,14 @@ export default class DetalleMesa extends Component {
 
   cargarMesa() {
     ServiceLocator.mesaService.getMesa(this.state.mesa.id)
-      .then((mesa) => {
+      .then((resultado) => {
         this.setState({
-          mesa
+          mesa: resultado,
+          mozo: null,
         })
+        if (this.state.mesa.sesion) {
+          this.cargarMozo()
+        }
       })
   }
 

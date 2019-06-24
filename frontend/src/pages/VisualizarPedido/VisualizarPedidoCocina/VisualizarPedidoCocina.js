@@ -67,7 +67,6 @@ export default class VisualizarPedidoCocina extends Component {
     })
   }
 
-
   render() {
     const { pedidos, errorMessage } = this.state
 
