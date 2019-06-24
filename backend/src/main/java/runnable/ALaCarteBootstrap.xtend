@@ -329,9 +329,6 @@ class ALaCarteBootstrap {
 
 		repoSesion.create(sesion1)
 		repoSesion.create(sesion2)
-
-//		sesion1.pedirItem(milanesa,2,"cocida")
-//		sesion1.pedirItem(pizza,1,"")
 	}
 	
 	def createPedido(ItemCarta itemCarta, int cantidad) {

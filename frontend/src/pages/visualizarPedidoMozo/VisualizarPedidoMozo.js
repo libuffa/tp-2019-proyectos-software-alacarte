@@ -20,6 +20,7 @@ export default class VisualizarPedidoMozo extends Component {
       open: false,
       sesion: null,
       sesionJson: null,
+      mesa: this.props.location.state.mesa,
     }
   }
 
@@ -46,7 +47,10 @@ export default class VisualizarPedidoMozo extends Component {
   verDetalleMesa = () => {
     clearInterval(this.state.timer)
     ControllerDeSesion.cerrarSesionActiva()
-    this.props.history.push('/mesas')
+    this.props.history.push({
+      pathname: '/detalle/mesa',
+      state: { mesa: this.state.mesa }
+    })
   }
 
   verDetalleItemPedido = (pedido) => {
@@ -152,7 +156,7 @@ export default class VisualizarPedidoMozo extends Component {
     const menuButtons = {
       firstButton: {
         onChange: this.verDetalleMesa,
-        name: "Mesas",
+        name: "Ver Detalle Mesa",
         icon: (<ArrowBack />)
       },
       secondButton: {

@@ -160,7 +160,8 @@ export default class VisualizarPedido extends Component {
       secondButton: {
         onChange: null,
         name: "Jugar Juego",
-        icon: (<GamesIcon />)
+        icon: (<GamesIcon />),
+        disabled: true,
       },
       thirdButton: {
         onChange: this.open,
