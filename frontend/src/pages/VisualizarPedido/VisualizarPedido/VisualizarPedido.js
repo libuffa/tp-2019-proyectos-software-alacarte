@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Typography, Card, CardContent, Snackbar, Tooltip, IconButton } from '@material-ui/core';
+import { Typography, Card, CardContent, Snackbar, Button } from '@material-ui/core';
 import { ServiceLocator } from "../../../services/ServiceLocator.js";
 import MenuInferior from '../../../components/menuInferior/MenuInferior';
 import CartIcon from '@material-ui/icons/ListAlt';
@@ -9,7 +9,6 @@ import './VisualizarPedido.scss';
 import ListaItemsPedido from '../../../components/listaItemsPedido/ListaItemsPedido.js';
 import DialogConfirmacion from '../../../components/Dialog/DialogConfirmacion';
 import { Sesion } from '../../../domain/Sesion.js';
-import Error from '@material-ui/icons/Error';
 import { ControllerDeSesion } from '../../../controller/ControllerDeSesion.js';
 
 export default class VisualizarPedido extends Component {
@@ -17,7 +16,7 @@ export default class VisualizarPedido extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      timer: setInterval(() => { this.cargarPedidos(); }, 30000),
+      timer: setInterval(() => { this.cargarPedidos(); }, 10000),
       idSesion: null,
       pedidos: null,
       fechaBaja: null,
@@ -126,7 +125,7 @@ export default class VisualizarPedido extends Component {
   }
 
   validarSesion() {
-    return this.state.fechaBaja !== null
+    return this.state.pideCuenta || this.state.fechaBaja !== null
   }
 
   open = () => {
@@ -182,13 +181,9 @@ export default class VisualizarPedido extends Component {
               <Typography className="precioFinal" variant="subtitle1">
                 {
                   (this.state.pideCuenta) &&
-                  <Tooltip
-                    title="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?"
-                    aria-label="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?">
-                    <IconButton onClick={() => this.pidiendoCuenta()}>
-                      <Error color="error" fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
+                  <Button color="secondary" size="small" onClick={() => this.pidiendoCuenta()}>
+                    {"Cancelar Pedido cuenta"}
+                  </Button>
                 }
                 Precio final: {new Intl.NumberFormat('en-US', {
                   style: 'currency',

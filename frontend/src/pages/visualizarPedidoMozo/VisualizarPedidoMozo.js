@@ -132,7 +132,7 @@ export default class VisualizarPedidoMozo extends Component {
   }
 
   validarSesion() {
-    return this.state.fechaBaja !== null
+    return this.state.pideCuenta || this.state.fechaBaja !== null
   }
 
   open = () => {

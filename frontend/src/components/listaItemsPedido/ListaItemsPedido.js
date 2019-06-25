@@ -27,9 +27,9 @@ export default function ListaItemsCocina(props) {
   const { pedidos, disabled, handlers, handlersDetalleItemPedido } = props
 
   function validarBajaPedido(pedido) {
-    return (pedido.estado !== "Creado") && (ControllerDeEmpleado.getSesionActiva() === null)
+    return (((pedido.estado !== "Creado") && (ControllerDeEmpleado.getSesionActiva() === null)) || disabled)
   }
-  
+
   return (
     <div className={classes.root}>
       <List className={classes.lista}>
