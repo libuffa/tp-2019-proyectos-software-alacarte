@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function CuerpoMesa(props) {
-  const { mesa, mozo, verPedido } = props;
+  const { mesa, mozo, verPedido, mostrarQR, sesionMesa } = props;
   const classes = useStyles();
 
   return (
@@ -72,11 +72,14 @@ export default function CuerpoMesa(props) {
                 {"Avisos:"}
               </Typography>
               <Typography color="textSecondary" variant="h5">
-                {mesa.sesion ? mesa.sesion.notificaciones ? mesa.sesion.notificaciones.map((notificacion) => {
-                  return (
-                    <div>{notificacion}</div>
-                  )
-                }) : "-" : "-"}
+                {mesa.sesion ?
+                  mesa.sesion.pedidos.filter((pedido) => pedido.estado === "Finalizado" || (pedido.itemCarta.categoria === "Bebida" && pedido.estado !== "Entregado")).map((pedido) => {
+                    return (
+                      <div key={pedido.id} >- {pedido.estado === "Finalizado" ? "Retirar pedido listo" : "Bebidas solicitadas"}</div>
+                    )
+                  }) :
+                  "-"}
+                <div>{mesa.sesion ? mesa.sesion.pideCuenta ? "- Solicita cuenta" : "" : ""}</div>
               </Typography>
             </div>
           </Grid>
@@ -95,7 +98,7 @@ export default function CuerpoMesa(props) {
           </Grid>
           <Grid item xs={12}>
             <Button className={classes.boton} disabled={mesa.sesion ? false : true} variant="contained" color="primary">
-              <Typography color="inherit" variant="h6">
+              <Typography color="inherit" variant="h6" onClick={() => mostrarQR.onChange()}>
                 {"Mostrar QR"}
               </Typography>
             </Button>
@@ -104,7 +107,7 @@ export default function CuerpoMesa(props) {
             <div className="divider" />
           </Grid>
           <Grid item xs={12}>
-            <Button className={classes.boton} variant="contained" color="primary">
+            <Button className={classes.boton} variant="contained" color="primary" onClick={() => sesionMesa.onChange()}>
               <Typography color="inherit" variant="h6">
                 {mesa.sesion ? "desasignar" : "Asignar"}
               </Typography>

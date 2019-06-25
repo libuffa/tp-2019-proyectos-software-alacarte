@@ -9,6 +9,7 @@ enum Estado {
 //        },
 	En_Curso,
 	Finalizado,
-	Cancelado
+	Cancelado,
+	Entregado
 	
 }

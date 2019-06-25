@@ -5,6 +5,7 @@ import CartIcon from '@material-ui/icons/ListAlt';
 import CuerpoMesa from '../../components/cuerpoMesa/CuerpoMesa';
 import { ServiceLocator } from '../../services/ServiceLocator';
 import { ControllerDeSesion } from '../../controller/ControllerDeSesion';
+import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 
 export default class DetalleMesa extends Component {
   constructor(props) {
@@ -22,10 +23,6 @@ export default class DetalleMesa extends Component {
     }
   }
 
-  verMesas() {
-    this.props.history.push('/mesas')
-  }
-
   cargarMozo() {
     ServiceLocator.EmpleadoService.getEmpleadoById(this.state.mesa.sesion.idMozo)
       .then((resultado) => {
@@ -35,10 +32,46 @@ export default class DetalleMesa extends Component {
       })
   }
 
+  cargarMesa() {
+    ServiceLocator.mesaService.getMesa(this.state.mesa.id)
+      .then((resultado) => {
+        this.setState({
+          mesa: resultado,
+          mozo: null,
+        })
+        if (this.state.mesa.sesion) {
+          this.cargarMozo()
+        }
+      })
+  }
+
+  verMesas() {
+    this.props.history.push('/mesas')
+  }
+
   verPedido = (idSesion) => {
-    console.log("ESTA ES LA SESION QUE VA " + idSesion)
     ControllerDeSesion.setSesionActiva(idSesion)
-    this.props.history.push('/pedido')
+    this.props.history.push({
+      pathname: '/pedido',
+      state: { mesa: this.state.mesa }
+    })
+  }
+
+  mostrarQR = () => {
+    this.props.history.push({
+      pathname: '/mostrar/qr',
+      state: { mesa: this.state.mesa }
+    })
+  }
+
+  sesionMesa = () => {
+    ServiceLocator.mesaService.cambiarEstado({
+      "idMozo": ControllerDeEmpleado.getSesionActiva(),
+      "idMesa": this.state.mesa.id
+    }).then((respuesta) => {
+      console.log(respuesta)
+      this.cargarMesa()
+    })
   }
 
   render() {
@@ -58,7 +91,7 @@ export default class DetalleMesa extends Component {
         <ListItemText primary={"Mesa " + mesa.id} />
       </ListSubheader>
       <div className="dividerLista" />
-      <CuerpoMesa mesa={mesa} mozo={mozo} verPedido={{ onChange: this.verPedido }} />
+      <CuerpoMesa mesa={mesa} mozo={mozo} mostrarQR={{ onChange: this.mostrarQR }} verPedido={{ onChange: this.verPedido }} sesionMesa={{ onChange: this.sesionMesa }} />
       <MenuInferior menuButtons={menuButtons} />
     </div>
   }

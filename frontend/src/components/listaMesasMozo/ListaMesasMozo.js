@@ -1,7 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Error from '@material-ui/icons/Error';
+import Restaurant from '@material-ui/icons/Restaurant';
 import MoneyIcon from '@material-ui/icons/AttachMoney';
+import LocalBar from '@material-ui/icons/LocalBar';
 import { ListItem, ListItemAvatar, ListItemText, List, ListSubheader, Typography, ListItemSecondaryAction, IconButton } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -46,16 +47,23 @@ export default function ListaMesasMozo(props) {
                 </Typography>
               </ListItemAvatar>
               <ListItemText secondary={mesa.sesion ? "Ocupada" : "Disponible"} />
-              {mesa.sesion ? mesa.sesion.pideCuenta ?
-                <MoneyIcon color="error" fontSize="large" /> : "" : ""
-              }
-              {mesa.sesion ? mesa.sesion.pedidos.some((pedido) => pedido.estado === "Finalizado") ?
-                <ListItemSecondaryAction>
+              <ListItemSecondaryAction>
+                {mesa.sesion ? mesa.sesion.pideCuenta ?
+                  <IconButton edge="end">
+                    <MoneyIcon color="error" fontSize="large" />
+                  </IconButton> : "" : ""
+                }
+                {mesa.sesion ? mesa.sesion.pedidos.some((pedido) => pedido.estado === "Creado" && pedido.itemCarta.categoria === "Bebida") ?
+                  <IconButton edge="end" onClick={() => entregarPedido.onChange(mesa.sesion.pedidos.filter((pedido) => pedido.estado === "Creado" && pedido.itemCarta.categoria === "Bebida")[0].id)}>
+                    <LocalBar color="error" fontSize="large" />
+                  </IconButton> : "" : ""
+                }
+                {mesa.sesion ? mesa.sesion.pedidos.some((pedido) => pedido.estado === "Finalizado") ?
                   <IconButton edge="end" onClick={() => entregarPedido.onChange(mesa.sesion.pedidos.filter((pedido) => pedido.estado === "Finalizado")[0].id)}>
-                    <Error color="error" fontSize="large" />
-                  </IconButton>
-                </ListItemSecondaryAction> : "" : ""
-              }
+                    <Restaurant color="error" fontSize="large" />
+                  </IconButton> : "" : ""
+                }
+              </ListItemSecondaryAction>
             </ListItem>
           )
         })}
