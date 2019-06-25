@@ -9,8 +9,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { ServiceLocator } from '../../services/ServiceLocator';
 import { withStyles } from '@material-ui/styles';
-import './Login.scss';
 import { Snackbar } from '@material-ui/core';
+import './Login.scss';
 
 const styles = makeStyles(theme => ({
   '@global': {
@@ -25,7 +25,7 @@ const styles = makeStyles(theme => ({
     alignItems: 'center',
   },
   avatar: {
-    margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(2, 0, 2),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
@@ -33,13 +33,11 @@ const styles = makeStyles(theme => ({
     marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    marginTop: theme.spacing(2),
   },
 }));
 
 class Login extends Component {
-
-
   constructor(props) {
     super(props)
     this.state = {
@@ -75,7 +73,7 @@ class Login extends Component {
   }
 
   snackbarOpen() {
-    return this.state.errorMessage
+    return this.state.errorMessage !== ""
   }
 
   generarError(errorMessage) {
@@ -100,17 +98,16 @@ class Login extends Component {
           </div>
           <Typography align='center' component="h1" variant="h5">
             Login a La Carte
-                    </Typography>
+          </Typography>
           <form className={classes.form} >
             <TextField
               variant="outlined"
               margin="normal"
+              placeholder="Usuario"
               required
               fullWidth
               id="usuario"
-              label="Usuario"
               name="usuario"
-              autoComplete="usuario"
               autoFocus
               onChange={this.handleChange}
             />
@@ -118,9 +115,9 @@ class Login extends Component {
               variant="outlined"
               margin="normal"
               fullWidth
+              placeholder="Contraseña"
               name="pass"
-              label="pass"
-              type="pass"
+              type="password"
               id="pass"
               autoComplete="current-password"
               onChange={this.handleChange}
@@ -131,13 +128,14 @@ class Login extends Component {
                         /> */}
             <Button
               type="submit"
+              className="botonLogin"
               fullWidth
               variant="contained"
               color="primary"
-              className={classes.submit}
-              onClick={this.handleEnviar}>
+              onClick={this.handleEnviar}
+            >
               Login
-                        </Button>
+            </Button>
             {/* <Grid container>
                             <Grid item xs>
                                 <Link href="#" variant="body2">

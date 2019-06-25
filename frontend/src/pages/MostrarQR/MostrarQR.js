@@ -24,8 +24,6 @@ export default class MostrarQR extends Component {
 
     const url = `http://api.qrserver.com/v1/create-qr-code/?data=${this.props.location.state.mesa.sesion.id}&size=200x200`
 
-    console.log(this.props.location.state.mesa.sesion.id)
-
     const menuButtons = {
       firstButton: {
         onChange: this.verDetalleMesa,

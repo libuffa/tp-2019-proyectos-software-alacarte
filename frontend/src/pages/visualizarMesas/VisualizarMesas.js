@@ -9,7 +9,7 @@ export default class VisualizarMesas extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      timer: setInterval(() => { this.cargarMesas(); }, 4000),
+      timer: window.setInterval(() => { this.cargarMesas(); }, 4000),
       mesas: null,
     };
   }

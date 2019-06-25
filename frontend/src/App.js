@@ -73,6 +73,7 @@ function RouterInicial(props) {
   return (
     <Router>
       <div>
+        <Header />
         <Switch>
           <Route path="/login" render={() => <Login iniciarSesion={iniciarSesion.empleado} />} />
           <Route path="/escanearQR" render={() => <EscanearQR iniciarSesion={iniciarSesion.sesion} />} />
@@ -150,8 +151,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state.sesionEmpleadoActiva)
-    console.log(this.state.sesionActiva)
     return (
       <div className="contenedor">
         {
