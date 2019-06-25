@@ -10,7 +10,7 @@ export default class VisualizarPedidoCocina extends Component {
     super(props)
     this.state = {
       pedidos: null,
-      timer: setInterval(() => { this.cargarPedidos(); }, 10000),
+      timer: setInterval(() => { this.cargarPedidos(); }, 4000),
     }
   }
 

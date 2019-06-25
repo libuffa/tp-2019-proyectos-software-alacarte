@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function CuerpoMesa(props) {
-  const { mesa, mozo, verPedido, mostrarQR, sesionMesa } = props;
+  const { mesa, mozo, verPedido, mostrarQR, sesionMesa, entregarPedido } = props;
   const classes = useStyles();
 
   return (
@@ -75,7 +75,7 @@ export default function CuerpoMesa(props) {
                 {mesa.sesion ?
                   mesa.sesion.pedidos.filter((pedido) => pedido.estado === "Finalizado" || (pedido.itemCarta.categoria === "Bebida" && pedido.estado !== "Entregado")).map((pedido) => {
                     return (
-                      <div key={pedido.id} >- {pedido.estado === "Finalizado" ? "Retirar pedido listo" : "Bebidas solicitadas"}</div>
+                      <div key={pedido.id} onClick={() => entregarPedido.onChange(pedido.id)} >- {pedido.estado === "Finalizado" ? "Retirar pedido listo" : "Bebidas solicitadas"}</div>
                     )
                   }) :
                   "-"}

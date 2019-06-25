@@ -74,6 +74,19 @@ export default class DetalleMesa extends Component {
     })
   }
 
+  entregarPedido = (idPedido) => {
+    try {
+      ServiceLocator.SesionService.cambiarEstadoPedido(idPedido)
+        .then((respuesta) => {
+          if (respuesta.status === "True") {
+            this.cargarMesa()
+          }
+        })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   render() {
     const { mesa, mozo } = this.state
 
@@ -91,7 +104,7 @@ export default class DetalleMesa extends Component {
         <ListItemText primary={"Mesa " + mesa.id} />
       </ListSubheader>
       <div className="dividerLista" />
-      <CuerpoMesa mesa={mesa} mozo={mozo} mostrarQR={{ onChange: this.mostrarQR }} verPedido={{ onChange: this.verPedido }} sesionMesa={{ onChange: this.sesionMesa }} />
+      <CuerpoMesa mesa={mesa} mozo={mozo} entregarPedido={{ onChange: this.entregarPedido }} mostrarQR={{ onChange: this.mostrarQR }} verPedido={{ onChange: this.verPedido }} sesionMesa={{ onChange: this.sesionMesa }} />
       <MenuInferior menuButtons={menuButtons} />
     </div>
   }
