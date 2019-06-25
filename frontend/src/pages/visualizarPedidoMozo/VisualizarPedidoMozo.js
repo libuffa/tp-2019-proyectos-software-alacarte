@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Typography, Card, CardContent, Snackbar, Tooltip, IconButton } from '@material-ui/core';
+import { Typography, Card, CardContent, Snackbar, Button } from '@material-ui/core';
 import { ServiceLocator } from "../../services/ServiceLocator.js";
 import MenuInferior from '../../components/menuInferior/MenuInferior';
 import CartIcon from '@material-ui/icons/ListAlt';
@@ -8,7 +8,6 @@ import ArrowBack from '@material-ui/icons/ArrowBack';
 import ListaItemsPedido from '../../components/listaItemsPedido/ListaItemsPedido.js';
 import DialogConfirmacion from '../../components/Dialog/DialogConfirmacion';
 import { Sesion } from '../../domain/Sesion.js';
-import Error from '@material-ui/icons/Error';
 import { ControllerDeSesion } from '../../controller/ControllerDeSesion.js';
 
 export default class VisualizarPedidoMozo extends Component {
@@ -185,17 +184,13 @@ export default class VisualizarPedidoMozo extends Component {
         {pedidos ?
           <Card>
             <CardContent>
+              {
+                (this.state.pideCuenta) &&
+                <Button color="secondary" size="small" onClick={() => this.pidiendoCuenta()}>
+                  {"Cancelar Pedido cuenta"}
+                </Button>
+              }
               <Typography className="precioFinal" variant="subtitle1">
-                {
-                  (this.state.pideCuenta) &&
-                  <Tooltip
-                    title="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?"
-                    aria-label="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?">
-                    <IconButton onClick={() => this.pidiendoCuenta()}>
-                      <Error color="error" fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                }
                 Precio final: {new Intl.NumberFormat('en-US', {
                   style: 'currency',
                   currency: 'USD'

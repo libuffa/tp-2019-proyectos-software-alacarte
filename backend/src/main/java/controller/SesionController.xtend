@@ -49,7 +49,6 @@ class SesionController {
 				val itemCarta = carta.searchById(idItem)
 				if(itemCarta.habilitado){
 					sesion.pedirItem(itemCarta, cantidad, comentario)
-					repositorioSesion.update(sesion)
 					return ok("True")
 				}
 				return ok("El plato que desea no se encuentra disponible")
