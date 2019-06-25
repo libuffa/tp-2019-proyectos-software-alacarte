@@ -52,7 +52,6 @@ export default class DetalleItemPedidoCocina extends Component {
         text2="eliminar"
         handlersVolver={{ onChange: this.verPedidoCocina }}
         handlersAgregarAPedido={{ onChange: this.eliminarPedido }}
-        disabled={pedido.estado === "En_Curso"}
         eliminar={true}
       />
     </div>

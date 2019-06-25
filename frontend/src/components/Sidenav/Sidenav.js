@@ -27,12 +27,12 @@ export function Sidenav(props) {
       switch (opcionesMenu) {
         case 'carta':
           return {
-            onClick: '/carta/empleado',
+            onClick: '/carta',
             description: 'ver Carta',
             icon: (<CartIcon />)
           }
 
-        case 'pedidoCocinero':
+        case 'pedidos':
           return {
             onClick: '/pedido/cocina',
             description: 'ver Pedidos',
