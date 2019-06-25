@@ -82,7 +82,7 @@ class EmpleadoController {
 			switch tipoEmpleado {
 				case Mozo: opciones = #["carta","mesas"]
 				case Cocinero: opciones = #["carta","pedidos"]
-				default: opciones = #["carta","mesaAdm","empleado"]
+				default: opciones = #["carta","administrar_mesas","empleados"]
 			}
 
 			return ok(opciones.toJson)

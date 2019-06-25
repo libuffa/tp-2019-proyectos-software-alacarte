@@ -13,6 +13,7 @@ import repository.EmpleadoRepository
 import repository.ItemCartaRepository
 import repository.MesaRepository
 import repository.SesionRepository
+import domain.empleado.Administrador
 
 @Accessors
 class ALaCarteBootstrap {
@@ -57,6 +58,7 @@ class ALaCarteBootstrap {
 	Mozo claudia
 	Cocinero pepe
 	Mozo monica
+	Administrador jose
 
 	Sesion sesion1
 	Sesion sesion2
@@ -275,6 +277,14 @@ class ALaCarteBootstrap {
 			contraseña = ""
 			email = "mcorral@yahoo.com"
 		]
+		
+		jose = new Administrador => [
+			nombreUsuario = "joseDueño"
+			nombre = "Jose"
+			apellido = "Dueño"
+			contraseña = ""
+			email = "eldueñodetodo@yahoo.com"
+		]
 
 		repoMesas.create(mesa1)
 		repoMesas.create(mesa2)
@@ -286,6 +296,7 @@ class ALaCarteBootstrap {
 		repoEmpleado.create(claudia)
 		repoEmpleado.create(monica)
 		repoEmpleado.create(pepe)
+		repoEmpleado.create(jose)
 
 		pedido1 = new Pedido => [
 			itemCarta = milanesa

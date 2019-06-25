@@ -41,6 +41,12 @@ export default class MenuEmpleado extends Component {
       case 'pedidos':
         ruta = 'pedido/cocina'
         break
+      case 'administrar_mesas':
+        ruta = 'mesas'
+        break
+      case 'empleados':
+        ruta = 'carta'
+        break
       default:
         ruta = 'carta'
         break

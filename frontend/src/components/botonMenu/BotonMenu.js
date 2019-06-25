@@ -6,7 +6,7 @@ export default function BotonMenu(props) {
 
   return (
     <button className="botonMenu" onClick={() => handlers.onChange(texto)}>
-      {texto.toUpperCase()}
+      {texto.toUpperCase().replace("_", " ")}
     </button>
   );
 }
