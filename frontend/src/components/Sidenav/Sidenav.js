@@ -95,7 +95,6 @@ export function Sidenav(props) {
                 const menu = optionSwitch(opcion)
                 return (
                   <div key={menu.description}>
-                    <br  />
                     <ListItem button onClick={() => history.push(menu.onClick)}>
                       <ListItemAvatar>
                         {menu.icon}
@@ -118,7 +117,11 @@ export function Sidenav(props) {
                 <ListItemAvatar>
                   <PersonOutlined fontSize="large" />
                 </ListItemAvatar>
-                <ListItemText primary={" Cerrar Sesión"} />
+                <ListItemText primary={
+                  <Typography variant="subtitle2">
+                    {" Cerrar Sesión"}
+                  </Typography>}
+                />
               </ListItem>
             </List>
           </footer>
