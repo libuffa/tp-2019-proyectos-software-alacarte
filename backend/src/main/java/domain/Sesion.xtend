@@ -35,23 +35,23 @@ class Sesion {
 
 	@OneToOne(fetch=FetchType.LAZY)
 	@JsonIgnore Mozo mozo
-	
+
 	@Column
 	Long idMozo
-	
+
 	@Column
 	Long idMesa
 
 	@Column
 	Boolean pideCuenta = false
-	
+
 	@Column
 	@JsonIgnore LocalDateTime fechaAlta
-	
+
 	@Column
 	@JsonIgnore LocalDateTime fechaBaja = null
-	
-	new(){
+
+	new() {
 		fechaAlta = LocalDateTime.now
 	}
 
@@ -65,63 +65,59 @@ class Sesion {
 		this.pedidos.add(pedido)
 		SesionRepository.instance.update(this)
 	}
-	
+
 	def cambiarEstado(Long idPedido) {
-		pedidos.findFirst[pedido | pedido.id.equals(idPedido)].siguienteEstado
+		pedidos.findFirst[pedido|pedido.id.equals(idPedido)].siguienteEstado
 		SesionRepository.instance.update(this)
 //		return true
 	}
-	
+
 	def contienePedido(Long id) {
-		pedidos.exists[pedido | pedido.id.equals(id)]
+		pedidos.exists[pedido|pedido.id.equals(id)]
 	}
-	
+
 	def bajaPedido(Long idPedido) {
-		val pedido = pedidos.findFirst[pedido | pedido.id.equals(idPedido)]
-		if (pedido.estado.equals(Estado.Creado)) {
-			pedido.cancelado = true
-			SesionRepository.instance.update(this)
-		} else {
-			throw new UserException('{ "error" : "no se puede cancelar un pedido en curso" }')
-		}
+		val pedido = pedidos.findFirst[pedido|pedido.id.equals(idPedido)]
+		pedido.cancelado = true
+		SesionRepository.instance.update(this)
 	}
 
 	@JsonIgnore
 	def getPedidosActivos() {
-		pedidos.filter[pedido | !pedido.cancelado ].toList
+		pedidos.filter[pedido|!pedido.cancelado].toList
 	}
-	
+
 	@JsonIgnore
 	def getPedido(Long id) {
-		this.pedidos.findFirst[pedido | pedido.id.equals(id)]
+		this.pedidos.findFirst[pedido|pedido.id.equals(id)]
 	}
-	
+
 	def pedirCuenta() {
 		this.pideCuenta = !this.pideCuenta
 		SesionRepository.instance.update(this)
 	}
-	
+
 	def sesionActiva() {
 		fechaBaja === null
 	}
-	
+
 	@JsonProperty("fechaAlta")
 	def getFechaAltaAsString() {
 		getFechaHora(this.fechaAlta)
 	}
-	
+
 	@JsonProperty("fechaBaja")
 	def getFechaBajaAsString() {
-		if(this.fechaBaja !== null) {
+		if (this.fechaBaja !== null) {
 			getFechaHora(this.fechaBaja)
 		} else {
 			null
 		}
 	}
-	
+
 	def getFechaHora(LocalDateTime fechaHora) {
 		val formatterDateTime = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
 		formatterDateTime.format(fechaHora)
 	}
-	
+
 }

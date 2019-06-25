@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from "@material-ui/icons/Delete";
 import { ListItem, IconButton, Typography, ListItemAvatar, Avatar, ListItemText, List, ListItemSecondaryAction, ListSubheader } from '@material-ui/core';
+import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,6 +26,10 @@ export default function ListaItemsCocina(props) {
   const classes = useStyles();
   const { pedidos, disabled, handlers, handlersDetalleItemPedido } = props
 
+  function validarBajaPedido(pedido) {
+    return (pedido.estado !== "Creado") && (ControllerDeEmpleado.getSesionActiva() === null)
+  }
+  
   return (
     <div className={classes.root}>
       <List className={classes.lista}>
@@ -57,7 +62,7 @@ export default function ListaItemsCocina(props) {
                 }
               />
               <ListItemSecondaryAction>
-                <IconButton disabled={pedido.estado !== "Creado"} edge="end" aria-label="Comments" onClick={() => handlers.onChange(pedido)}>
+                <IconButton disabled={validarBajaPedido(pedido)} edge="end" aria-label="Comments" onClick={() => handlers.onChange(pedido)}>
                   <DeleteIcon />
                 </IconButton>
               </ListItemSecondaryAction>
