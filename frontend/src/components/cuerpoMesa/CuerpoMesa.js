@@ -73,7 +73,7 @@ export default function CuerpoMesa(props) {
               </Typography>
               <Typography color="textSecondary" variant="h5">
                 {mesa.sesion ?
-                  mesa.sesion.pedidos.filter((pedido) => pedido.estado === "Finalizado" || (pedido.itemCarta.categoria === "Bebida" && pedido.estado !== "Entregado")).map((pedido) => {
+                  mesa.sesion.pedidos.filter((pedido) => (pedido.estado === "Finalizado" && !pedido.cancelado) || (pedido.itemCarta.categoria === "Bebida" && pedido.estado !== "Entregado" && !pedido.cancelado)).map((pedido) => {
                     return (
                       <div key={pedido.id} onClick={() => entregarPedido.onChange(pedido.id)} >- {pedido.estado === "Finalizado" ? "Retirar pedido listo" : "Bebidas solicitadas"}</div>
                     )

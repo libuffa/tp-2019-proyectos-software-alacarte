@@ -121,7 +121,7 @@ export default class DetalleMesa extends Component {
     return <div>
       <div className="dividerLista" />
       <ListSubheader disableSticky color="inherit" >
-        <ListItemText primary={"Mesa " + mesa.id} />
+        <ListItemText primary={"Mesa " + mesa.numero} />
       </ListSubheader>
       <div className="dividerLista" />
       <CuerpoMesa mesa={mesa} mozo={mozo} entregarPedido={{ onChange: this.entregarPedido }} mostrarQR={{ onChange: this.mostrarQR }} verPedido={{ onChange: this.verPedido }} sesionMesa={{ onChange: this.sesionMesa }} />

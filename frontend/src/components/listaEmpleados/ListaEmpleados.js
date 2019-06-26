@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { ListItem, ListItemAvatar, ListItemText, List, ListSubheader, Typography } from '@material-ui/core';
+import { ListItem, ListItemAvatar, ListItemText, List, ListSubheader, Typography, Avatar } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,12 +16,12 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(0, 0),
   },
   empleadoActivo: {
-    color: '#03a524bf',
-    textAlign: 'center',
+    color: '#ffffff',
+    backgroundColor: '#03a524bf',
   },
   empleadoInactivo: {
-    color: '#ff0000bf',
-    textAlign: 'center',
+    color: '#ffffff',
+    backgroundColor: '#ff0000bf',
   }
 }));
 
@@ -41,9 +41,11 @@ export default function ListaEmpleados(props) {
           return (
             <ListItem button key={empleado.id} onClick={() => handlers.onChange(empleado)}>
               <ListItemAvatar >
-                <Typography variant="h5" className={empleado.logueado ? classes.empleadoActivo : classes.empleadoInactivo}>
-                  {empleado.nombre.charAt(0)}
-                </Typography>
+                <Avatar className={empleado.logueado ? classes.empleadoActivo : classes.empleadoInactivo}>
+                  <Typography variant="h5" >
+                    {empleado.nombre.charAt(0)}
+                  </Typography>
+                </Avatar>
               </ListItemAvatar>
               <ListItemText primary={empleado.nombre + " " + empleado.apellido} secondary={empleado.logueado ? "Conectado" : "Desconectado"} />
             </ListItem>

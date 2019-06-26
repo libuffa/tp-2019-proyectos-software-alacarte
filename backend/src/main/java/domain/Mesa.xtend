@@ -1,6 +1,7 @@
 package domain
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
@@ -14,6 +15,9 @@ class Mesa {
 	@Id
 	@GeneratedValue
 	Long id
+	
+	@Column
+	Integer numero
 	
 	@JsonProperty("sesion")
 	def getSesion() {

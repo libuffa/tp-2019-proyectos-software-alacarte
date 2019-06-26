@@ -247,19 +247,19 @@ class ALaCarteBootstrap {
 		carta.create(cocaCola)
 		carta.create(asado)
 
-		mesa1 = new Mesa
-		mesa2 = new Mesa
-		mesa3 = new Mesa
-		mesa4 = new Mesa
-		mesa5 = new Mesa
-		mesa6 = new Mesa
-		mesa7 = new Mesa
+		mesa1 = new Mesa => [numero = 1]
+		mesa2 = new Mesa => [numero = 2]
+		mesa3 = new Mesa => [numero = 3]
+		mesa4 = new Mesa => [numero = 4]
+		mesa5 = new Mesa => [numero = 5]
+		mesa6 = new Mesa => [numero = 6]
+		mesa7 = new Mesa => [numero = 7]
 
 		claudia = new Mozo => [
 			nombreUsuario = "clauMorales"
 			nombre = "Claudia"
 			apellido = "Morales"
-			contraseña = ""
+			contraseña = "1234"
 			email = "cmorales@yahoo.com"
 		]
 		pepe = new Cocinero => [
@@ -274,7 +274,7 @@ class ALaCarteBootstrap {
 			nombreUsuario = "moniCorral"
 			nombre = "Monica"
 			apellido = "Corral"
-			contraseña = ""
+			contraseña = "1234"
 			email = "mcorral@yahoo.com"
 		]
 		
@@ -282,7 +282,7 @@ class ALaCarteBootstrap {
 			nombreUsuario = "joseDueño"
 			nombre = "Jose"
 			apellido = "Dueño"
-			contraseña = ""
+			contraseña = "4321"
 			email = "eldueñodetodo@yahoo.com"
 		]
 
