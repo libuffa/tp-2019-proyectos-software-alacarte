@@ -8,12 +8,17 @@ export default class Empleados extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      timer: setInterval(() => { this.cargarEmpleados() }, 10000),
       empleados: null,
     };
   }
 
   componentDidMount() {
     this.cargarEmpleados()
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.timer)
   }
 
   cargarEmpleados() {

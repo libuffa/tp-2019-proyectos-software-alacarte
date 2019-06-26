@@ -185,12 +185,14 @@ export default class VisualizarPedidoMozo extends Component {
         {pedidos ?
           <Card>
             <CardContent>
-              {
-                (this.state.pideCuenta) &&
-                <Button color="secondary" size="small" onClick={() => this.pidiendoCuenta()}>
-                  {"Cancelar Pedido cuenta"}
-                </Button>
-              }
+              <Typography className="botonCentrado" variant="subtitle1">
+                {
+                  (this.state.pideCuenta) &&
+                  <Button color="secondary" size="small" onClick={() => this.pidiendoCuenta()}>
+                    {"Cancelar Pedido cuenta"}
+                  </Button>
+                }
+              </Typography>
               <Typography className="precioFinal" variant="subtitle1">
                 Precio final: {new Intl.NumberFormat('en-US', {
                   style: 'currency',
@@ -198,7 +200,6 @@ export default class VisualizarPedidoMozo extends Component {
                 }).format(this.getPrecioTotal())}
               </Typography>
             </CardContent>
-            <CardContent></CardContent>
             <CardContent>
               <MenuInferior menuButtons={menuButtons} />
             </CardContent>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Typography, Card, CardContent, Snackbar, Button } from '@material-ui/core';
+import { Typography, Card, CardContent, Button } from '@material-ui/core';
 import { ServiceLocator } from "../../../services/ServiceLocator.js";
 import MenuInferior from '../../../components/menuInferior/MenuInferior';
 import CartIcon from '@material-ui/icons/ListAlt';
@@ -70,10 +70,6 @@ export default class VisualizarPedido extends Component {
     }
   }
 
-  snackbarOpen() {
-    return this.state.errorMessage
-  }
-
   generarError(errorMessage) {
     this.setState({
       errorMessage: errorMessage
@@ -142,7 +138,7 @@ export default class VisualizarPedido extends Component {
   }
 
   render() {
-    const { pedidos, errorMessage } = this.state
+    const { pedidos } = this.state
 
     if (!pedidos) {
       return <div></div>
@@ -180,20 +176,21 @@ export default class VisualizarPedido extends Component {
         {pedidos ?
           <Card>
             <CardContent>
-              <Typography className="precioFinal" variant="subtitle1">
+              <Typography className="botonCentrado" variant="subtitle1">
                 {
                   (this.state.pideCuenta) &&
                   <Button color="secondary" size="small" onClick={() => this.pidiendoCuenta()}>
                     {"Cancelar Pedido cuenta"}
                   </Button>
                 }
+              </Typography>
+              <Typography className="precioFinal" variant="subtitle1">
                 Precio final: {new Intl.NumberFormat('en-US', {
                   style: 'currency',
                   currency: 'USD'
                 }).format(this.getPrecioTotal())}
               </Typography>
             </CardContent>
-            <CardContent></CardContent>
             <CardContent>
               <MenuInferior menuButtons={menuButtons} />
             </CardContent>
@@ -205,10 +202,6 @@ export default class VisualizarPedido extends Component {
           handlers={{ onChange: this.pedirCuenta, open: this.open }}
           open={this.state.open}
         />
-        <Snackbar
-          open={this.snackbarOpen()}
-          message={errorMessage}
-          autoHideDuration={4000} />
       </div>
     )
   }
