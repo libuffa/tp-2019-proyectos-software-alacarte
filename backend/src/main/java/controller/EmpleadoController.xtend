@@ -33,10 +33,10 @@ class EmpleadoController {
 		try{
 			val empleado = repoEmpleados.searchByString(nombreUsuario)
 			if(empleado === null || empleado.logueado) {
-				return badRequest('{ "error" : "usuario inexistente" }')
+				return ok("Usuario logueado o incorrecto")
 			}
 			if(!empleado.contraseña.equals(contraseña)) {
-				return badRequest('{ "error" : "contraseña incorrecta" }')
+				return ok("Contraseña incorrecta")
 			}
 			empleado.loguearDesloguear()
 			return ok(empleado.toJson)
@@ -52,10 +52,10 @@ class EmpleadoController {
 		try{
 			val empleado = repoEmpleados.searchById(idEmpleado)
 			if(empleado === null || !empleado.logueado) {
-				return badRequest('{ "error" : "Usuario inexistente o no logueado" }')
+				return ok("Usuario no logueado")
 			}
 			empleado.loguearDesloguear()
-			return ok("Sesion cerrada correctamente")
+			return ok("Usuario cerrado correctamente")
 		}catch(Exception e) {
 			badRequest(e.message)
 		}
@@ -83,21 +83,16 @@ class EmpleadoController {
 		try {
 			val _id = Long.valueOf(id)
 			val empleado = repoEmpleados.searchById(_id)
-			
 			if(empleado === null) {
-				return badRequest('{ "error" : "usuario inexistente" }')
+				return badRequest("Usuario incorrecto")
 			}
-			
 			val tipoEmpleado = empleado.class
-			
 			var List<String> opciones = new ArrayList
-			
 			switch tipoEmpleado {
 				case Mozo: opciones = #["carta","mesas"]
 				case Cocinero: opciones = #["carta","pedidos"]
 				default: opciones = #["carta","administrar_mesas","empleados"]
 			}
-
 			return ok(opciones.toJson)
 		} catch (Exception e) {
 			badRequest(e.message)
@@ -142,10 +137,10 @@ class EmpleadoController {
 					idMesa = idMesaBody
 				]
 				repoSesiones.create(sesion)
-				return ok("La sesion se creo correctamente")
+				return ok("true")
 			} else {
 				sesion.cerrarSesion()
-				return ok("La sesion se cerro correctamente")
+				return ok("false")
 			}
 		}catch(Exception e) {
 			badRequest("Imposible crear sesion")

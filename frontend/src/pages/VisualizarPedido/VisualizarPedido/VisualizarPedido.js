@@ -30,6 +30,10 @@ export default class VisualizarPedido extends Component {
     this.cargarPedidos()
   }
 
+  componentWillUnmount() {
+    clearInterval(this.state.timer)
+  }
+
   cargarPedidos() {
     ServiceLocator.SesionService.getSesionActiva()
       .then((sesionJSON) => {
@@ -47,12 +51,10 @@ export default class VisualizarPedido extends Component {
   }
 
   verCarta = () => {
-    clearInterval(this.state.timer)
     this.props.history.push('/carta')
   }
 
   verDetalleItemPedido = (pedido) => {
-    clearInterval(this.state.timer)
     this.props.history.push({
       pathname: '/detalle/item/pedido',
       state: { pedido: pedido }

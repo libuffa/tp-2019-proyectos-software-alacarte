@@ -1,43 +1,12 @@
 import React, { Component } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { ServiceLocator } from '../../services/ServiceLocator';
-import { withStyles } from '@material-ui/styles';
-import { Snackbar } from '@material-ui/core';
+import PersonIcon from '@material-ui/icons/PersonPin'
 import './Login.scss';
+import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal';
 
-const styles = makeStyles(theme => ({
-  '@global': {
-    body: {
-      backgroundColor: theme.palette.common.white,
-    },
-  },
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(2, 0, 2),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    marginTop: theme.spacing(2),
-  },
-}));
-
-class Login extends Component {
+export default class Login extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -52,28 +21,29 @@ class Login extends Component {
     if (usuario) {
       ServiceLocator.EmpleadoService.iniciarSesion({ nombreUsuario: usuario, contraseña: pass })
         .then((respuesta) => {
-          console.log(respuesta)
-          if (respuesta) {
+          if (respuesta.id) {
             this.props.iniciarSesion(respuesta.id)
           } else {
-            throw respuesta
+            this.generarError(respuesta)
           }
         })
-        .catch(error => {
-          console.log(error)
-          this.generarError(error)
-        })
     }
+  }
+
+  snackbarOpen() {
+    return this.state.errorMessage !== ""
+  }
+
+  snackbarClose = () => {
+    this.setState({
+      errorMessage: ""
+    })
   }
 
   handleChange = event => {
     this.setState({
       [event.target.name]: event.target.value
     })
-  }
-
-  snackbarOpen() {
-    return this.state.errorMessage !== ""
   }
 
   generarError(errorMessage) {
@@ -83,82 +53,27 @@ class Login extends Component {
   }
 
   render() {
-    const { classes } = this.props;
     const { errorMessage } = this.state
 
     return (
       <Container component="main" maxWidth="xs" >
-        <CssBaseline />
-        <div className={classes.paper}>
-          <br />
-          <div align='center' >
-            <Avatar className={classes.avatar}>
-              <LockOutlinedIcon />
-            </Avatar>
-          </div>
-          <Typography align='center' component="h1" variant="h5">
-            Login a La Carte
+        <div className="contenedorTitulo">
+          <Typography variant="h3" color="textSecondary">
+            <PersonIcon fontSize="large"></PersonIcon>
           </Typography>
-          <form className={classes.form} >
-            <TextField
-              variant="outlined"
-              margin="normal"
-              placeholder="Usuario"
-              required
-              fullWidth
-              id="usuario"
-              name="usuario"
-              autoFocus
-              onChange={this.handleChange}
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              placeholder="Contraseña"
-              name="pass"
-              type="password"
-              id="pass"
-              autoComplete="current-password"
-              onChange={this.handleChange}
-            />
-            {/* <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        /> */}
-            <Button
-              type="submit"
-              className="botonLogin"
-              fullWidth
-              variant="contained"
-              color="primary"
-              onClick={this.handleEnviar}
-            >
-              Login
-            </Button>
-            {/* <Grid container>
-                            <Grid item xs>
-                                <Link href="#" variant="body2">
-                                    Recuperar Contraseña
-                                </Link>
-                            </Grid>
-                            <Grid item>
-                                <Link href="#" variant="body2">
-                                    {"Cambiar Contraseña"}
-                                </Link>
-                            </Grid>
-                        </Grid> */}
-          </form>
+          <Typography variant="h5" color="textSecondary">
+            {"Login A La Carte"}
+          </Typography>
         </div>
-        <Snackbar
-          open={this.snackbarOpen()}
-          message={errorMessage}
-          autoHideDuration={4000} />
+        <div>
+          <input className="inputLogin" placeholder=" Usuario" name="usuario" onChange={this.handleChange}></input>
+        </div>
+        <div>
+          <input type="password" className="inputLogin" placeholder=" Contraseña" name="pass" onChange={this.handleChange}></input>
+        </div>
+        <button className="botonLogin" onClick={this.handleEnviar}>INGRESAR</button>
+        <SnackBarPersonal mensajeError={errorMessage} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={"error"} />
       </Container>
     );
-
   }
-
 }
-
-export default withStyles(styles)(Login)

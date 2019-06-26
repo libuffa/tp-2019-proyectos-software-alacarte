@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Snackbar } from '@material-ui/core';
 import { ServiceLocator } from '../../../services/ServiceLocator';
 import ListaItemsCocina from '../../../components/listaItemsCocina/ListaItemsCocina';
 import MenuInferior from '../../../components/menuInferior/MenuInferior';
@@ -16,6 +15,10 @@ export default class VisualizarPedidoCocina extends Component {
 
   componentDidMount() {
     this.cargarPedidos()
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.timer)
   }
 
   cargarPedidos() {
@@ -45,7 +48,6 @@ export default class VisualizarPedidoCocina extends Component {
   }
 
   verDetalleItemPedido = (pedido) => {
-    clearInterval(this.state.timer)
     this.props.history.push({
       pathname: '/detalle/item/pedido/cocina',
       state: { pedido: pedido }
@@ -53,7 +55,6 @@ export default class VisualizarPedidoCocina extends Component {
   }
 
   verMenu = () => {
-    clearInterval(this.state.timer)
     this.props.history.push('/menu/empleado')
   }
 
@@ -68,7 +69,7 @@ export default class VisualizarPedidoCocina extends Component {
   }
 
   render() {
-    const { pedidos, errorMessage } = this.state
+    const { pedidos } = this.state
 
     const menuButtons = {
       firstButton: {
@@ -85,7 +86,6 @@ export default class VisualizarPedidoCocina extends Component {
       <div>
         <ListaItemsCocina pedidos={pedidos} handlers={{ onChange: this.actualizarEstadoPedido }} handlersDetalleItem={{ onChange: this.verDetalleItemPedido }} />
         <MenuInferior menuButtons={menuButtons} />
-        <Snackbar open={this.snackbarOpen()} message={errorMessage} autoHideDuration={4} />
       </div>
     )
   }

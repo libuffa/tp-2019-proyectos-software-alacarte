@@ -4,21 +4,9 @@ import { withRouter } from 'react-router';
 import MenuIcon from '@material-ui/icons/Menu';
 import './Header.scss';
 import { Sidenav } from '../Sidenav/Sidenav';
-// import { ServiceLocator } from '../../services/ServiceLocator';
-// import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
-
-
-
-// async function getMenuEmpleado() {
-//   if (ControllerDeEmpleado.getSesionActiva()) {
-//     try {
-//       const res = await ServiceLocator.EmpleadoService.getMenuEmpleado()
-//       return res
-//     } catch (error) {
-//       console.error({ error })
-//     }
-//   }
-// }
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
+import { ControllerDeSesion } from '../../controller/ControllerDeSesion';
 
 function Header(props) {
   const [open, setOpen] = React.useState(false);
@@ -37,6 +25,10 @@ function Header(props) {
     setOpen(false);
   };
 
+  function irALogin() {
+    history.push('/login');
+  }
+
   return (
     <div>
       <AppBar position="static">
@@ -54,6 +46,12 @@ function Header(props) {
           <Typography className="title" variant="h6">
             A la Carte{" - " + pageName}
           </Typography>
+          {!ControllerDeEmpleado.getSesionActiva() && !ControllerDeSesion.getSesionActiva() ?
+            <IconButton edge="end" color="inherit" onClick={() => irALogin()}>
+              <AccountCircle />
+            </IconButton> :
+            ""
+          }
         </Toolbar>
       </AppBar>
       <Sidenav

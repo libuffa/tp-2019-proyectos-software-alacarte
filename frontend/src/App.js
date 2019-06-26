@@ -150,6 +150,7 @@ class App extends Component {
     this.setState({
       sesionEmpleadoActiva: empleado
     })
+    this.abrirSesionEmpleado()
   }
 
   render() {

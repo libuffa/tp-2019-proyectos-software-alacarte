@@ -26,6 +26,10 @@ export default class VisualizarPedidoMozo extends Component {
     this.cargarPedidos()
   }
 
+  componentWillUnmount() {
+    clearInterval(this.state.timer)
+  }
+
   cargarPedidos() {
     ServiceLocator.SesionService.getSesionActiva()
       .then((sesionJSON) => {
@@ -43,7 +47,6 @@ export default class VisualizarPedidoMozo extends Component {
   }
 
   verDetalleMesa = () => {
-    clearInterval(this.state.timer)
     ControllerDeSesion.cerrarSesionActiva()
     ServiceLocator.mesaService.getMesa(this.state.sesion.idMesa).then((mesa) => {
       this.props.history.push({
@@ -54,7 +57,6 @@ export default class VisualizarPedidoMozo extends Component {
   }
 
   verDetalleItemPedido = (pedido) => {
-    clearInterval(this.state.timer)
     this.props.history.push({
       pathname: '/detalle/item/pedido',
       state: { pedido: pedido }
@@ -62,7 +64,6 @@ export default class VisualizarPedidoMozo extends Component {
   }
 
   verCartaCliente = () => {
-    clearInterval(this.state.timer)
     this.props.history.push("/carta/cliente")
   }
 

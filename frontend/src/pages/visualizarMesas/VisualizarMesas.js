@@ -18,6 +18,10 @@ export default class VisualizarMesas extends Component {
     this.cargarMesas()
   }
 
+  componentWillUnmount() {
+    clearInterval(this.state.timer)
+  }
+
   cargarMesas() {
     ServiceLocator.mesaService.getMesas()
       .then((respuesta) => {
@@ -28,12 +32,10 @@ export default class VisualizarMesas extends Component {
   }
 
   verMenu = () => {
-    clearInterval(this.state.timer)
     this.props.history.push('/menu/empleado')
   }
 
   verDetalleMesa = (mesa) => {
-    clearInterval(this.state.timer)
     this.props.history.push({
       pathname: '/detalle/mesa',
       state: { mesa: mesa }

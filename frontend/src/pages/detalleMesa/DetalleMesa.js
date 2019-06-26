@@ -6,6 +6,7 @@ import CuerpoMesa from '../../components/cuerpoMesa/CuerpoMesa';
 import { ServiceLocator } from '../../services/ServiceLocator';
 import { ControllerDeSesion } from '../../controller/ControllerDeSesion';
 import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
+import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal';
 
 export default class DetalleMesa extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ export default class DetalleMesa extends Component {
     this.state = {
       mesa: this.props.location.state.mesa,
       mozo: null,
+      mensaje: "",
     }
     this.verMesas = this.verMesas.bind(this)
   }
@@ -69,7 +71,15 @@ export default class DetalleMesa extends Component {
       "idMozo": ControllerDeEmpleado.getSesionActiva(),
       "idMesa": this.state.mesa.id
     }).then((respuesta) => {
-      console.log(respuesta)
+      if (respuesta) {
+        this.setState({
+          mensaje: "Mesa asignada correctamente",
+        })
+      } else {
+        this.setState({
+          mensaje: "Mesa cerrada correctamente",
+        })
+      }
       this.cargarMesa()
     })
   }
@@ -87,8 +97,18 @@ export default class DetalleMesa extends Component {
     }
   }
 
+  snackbarOpen() {
+    return this.state.mensaje !== ""
+  }
+
+  snackbarClose = () => {
+    this.setState({
+      mensaje: ""
+    })
+  }
+
   render() {
-    const { mesa, mozo } = this.state
+    const { mesa, mozo, mensaje } = this.state
 
     const menuButtons = {
       firstButton: {
@@ -106,6 +126,7 @@ export default class DetalleMesa extends Component {
       <div className="dividerLista" />
       <CuerpoMesa mesa={mesa} mozo={mozo} entregarPedido={{ onChange: this.entregarPedido }} mostrarQR={{ onChange: this.mostrarQR }} verPedido={{ onChange: this.verPedido }} sesionMesa={{ onChange: this.sesionMesa }} />
       <MenuInferior menuButtons={menuButtons} />
+      <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant="success" />
     </div>
   }
 }
