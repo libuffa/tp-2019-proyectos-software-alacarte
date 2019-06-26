@@ -20,6 +20,7 @@ import Login from './pages/Login/Login';
 import './App.css';
 import VisualizarPedidoMozo from './pages/visualizarPedidoMozo/VisualizarPedidoMozo';
 import MostrarQR from './pages/MostrarQR/MostrarQR';
+import Empleados from './pages/empleados/Empleados';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -43,6 +44,7 @@ function RouterPrincipal(props) {
           <Route path="/menu/empleado" exact component={MenuEmpleado} />
           <Route path="/escanearQR" exact component={EscanearQR} />
           <Route path="/mostrar/qr" exact component={MostrarQR} />
+          <Route path="/empleados" exact component={Empleados} />
           <Route component={RedirectPrincipal} />
         </Switch>
       </div>

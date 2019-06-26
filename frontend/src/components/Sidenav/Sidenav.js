@@ -8,6 +8,7 @@ import PersonOutlined from '@material-ui/icons/PersonOutline';
 import './Sidenav.scss'
 import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 import DialogConfirmacion from '../Dialog/DialogConfirmacion';
+import { ServiceLocator } from '../../services/ServiceLocator';
 
 export function Sidenav(props) {
   const { open, history, handlers, empleado, opcionesMenu } = props;
@@ -50,7 +51,7 @@ export function Sidenav(props) {
           }
         case 'empleados':
           return {
-            onClick: '/carta',
+            onClick: '/empleados',
             description: 'Empleados',
             icon: (<PersonIcon fontSize="large" color="primary" />)
           }
@@ -66,6 +67,7 @@ export function Sidenav(props) {
 
   const logOut = () => {
     ControllerDeEmpleado.cerrarSesionActiva()
+    ServiceLocator.EmpleadoService.cerrarSesion({ idEmpleado: empleado.id })
     window.location.reload();
   }
 

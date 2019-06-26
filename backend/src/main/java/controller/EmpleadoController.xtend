@@ -27,22 +27,35 @@ class EmpleadoController {
 
 	@Post("/empleado/iniciarSesion")
 	def Result iniciarSesion(@Body String body) {
+		val nombreUsuario = body.getPropertyValue("nombreUsuario")
+		val contraseña = body.getPropertyValue("contraseña")
+		
 		try{
-			val nombreUsuario = body.getPropertyValue("nombreUsuario")
-			val contraseña = body.getPropertyValue("contraseña")
 			val empleado = repoEmpleados.searchByString(nombreUsuario)
-			println(empleado)
-			
-			if(empleado === null) {
+			if(empleado === null || empleado.logueado) {
 				return badRequest('{ "error" : "usuario inexistente" }')
 			}
-			
 			if(!empleado.contraseña.equals(contraseña)) {
 				return badRequest('{ "error" : "contraseña incorrecta" }')
 			}
-			
-			println(empleado)
+			empleado.loguearDesloguear()
 			return ok(empleado.toJson)
+		}catch(Exception e) {
+			badRequest(e.message)
+		}
+	}
+	
+	@Post("/empleado/cerrarSesion")
+	def Result cerrarSesion(@Body String body) {
+		val idEmpleado = Long.valueOf(body.getPropertyValue("idEmpleado"))
+		
+		try{
+			val empleado = repoEmpleados.searchById(idEmpleado)
+			if(empleado === null || !empleado.logueado) {
+				return badRequest('{ "error" : "Usuario inexistente o no logueado" }')
+			}
+			empleado.loguearDesloguear()
+			return ok("Sesion cerrada correctamente")
 		}catch(Exception e) {
 			badRequest(e.message)
 		}
@@ -136,6 +149,16 @@ class EmpleadoController {
 			}
 		}catch(Exception e) {
 			badRequest("Imposible crear sesion")
+		}
+	}
+	
+	@Get("/empleados")
+	def Result getEmpleados(){
+		try{
+			val empleados = repoEmpleados.allInstances()
+			return ok(empleados.toJson)
+		}catch(Exception e) {
+			badRequest(e.message)
 		}
 	}
 }

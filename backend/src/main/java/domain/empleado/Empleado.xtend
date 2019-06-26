@@ -7,6 +7,7 @@ import javax.persistence.Id
 import javax.persistence.Inheritance
 import javax.persistence.InheritanceType
 import org.eclipse.xtend.lib.annotations.Accessors
+import repository.EmpleadoRepository
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
@@ -31,5 +32,12 @@ abstract class Empleado {
 
 	@Column(length=100)
 	String apellido
+	
+	@Column
+	Boolean logueado = false
 
+	def loguearDesloguear() {
+		this.logueado = !this.logueado
+		EmpleadoRepository.instance.update(this)
+	}
 }

@@ -60,7 +60,8 @@ function Header(props) {
         open={open}
         history={history}
         handlers={{ onChange: handleClose }}
-        empleado={empleado} opcionesMenu={opcionesMenu} />
+        empleado={empleado}
+        opcionesMenu={opcionesMenu} />
     </div>
   );
 };

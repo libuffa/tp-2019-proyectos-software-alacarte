@@ -45,7 +45,7 @@ export default class MenuEmpleado extends Component {
         ruta = 'mesas'
         break
       case 'empleados':
-        ruta = 'carta'
+        ruta = 'empleados'
         break
       default:
         ruta = 'carta'

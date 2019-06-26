@@ -26,4 +26,8 @@ export class EmpleadoService {
   getMenuEmpleado() {
     return client.get(`/empleado/${ControllerDeEmpleado.getSesionActiva()}/menu`).then(res => { return res.data })
   }
+
+  getEmpleados() {
+    return client.get(`/empleados`).then(res => { return res.data })
+  }
 }
