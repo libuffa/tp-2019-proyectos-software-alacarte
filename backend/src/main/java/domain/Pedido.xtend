@@ -25,7 +25,7 @@ class Pedido {
 	@Column
 	Integer cantidad
 
-	@Column(length=100)
+	@Column(length=250)
 	String comentarios
 
 	@Enumerated(EnumType.STRING)

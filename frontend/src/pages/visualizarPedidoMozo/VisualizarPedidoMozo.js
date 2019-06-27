@@ -183,7 +183,7 @@ export default class VisualizarPedidoMozo extends Component {
           disabled={this.validarSesion()}
         />
         {pedidos ?
-          <Card>
+          <Card elevation={0}>
             <CardContent>
               <Typography className="botonCentrado" variant="subtitle1">
                 {

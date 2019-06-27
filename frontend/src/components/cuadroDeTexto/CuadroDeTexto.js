@@ -16,8 +16,10 @@ export default function OutlinedTextFields(props) {
   });
 
   const handleChange = comentario => event => {
-    setValue({ ...value, [comentario]: event.target.value });
-    handlers.onChange(event.target.value)
+    if (event.target.value.length <= 250) {
+      setValue({ ...value, [comentario]: event.target.value });
+      handlers.onChange(event.target.value)
+    }
   };
 
   return (

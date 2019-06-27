@@ -26,7 +26,11 @@ function Header(props) {
   };
 
   function irALogin() {
-    history.push('/login');
+    if (!location.pathname.includes("login")) {
+      history.push('/login');
+    } else {
+      history.push('/escanearQR');
+    }
   }
 
   return (
@@ -46,11 +50,12 @@ function Header(props) {
           <Typography className="title" variant="h6">
             A la Carte{" - " + pageName}
           </Typography>
-          {!ControllerDeEmpleado.getSesionActiva() && !ControllerDeSesion.getSesionActiva() ?
+          {
+            !ControllerDeEmpleado.getSesionActiva() &&
+            !ControllerDeSesion.getSesionActiva() &&
             <IconButton edge="end" color="inherit" onClick={() => irALogin()}>
               <AccountCircle />
-            </IconButton> :
-            ""
+            </IconButton>
           }
         </Toolbar>
       </AppBar>
