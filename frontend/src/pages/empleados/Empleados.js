@@ -3,6 +3,7 @@ import { ServiceLocator } from '../../services/ServiceLocator';
 import MenuInferior from '../../components/menuInferior/MenuInferior.js';
 import Menu from '@material-ui/icons/Menu';
 import ListaEmpleados from '../../components/listaEmpleados/ListaEmpleados';
+import { CircularProgress } from '@material-ui/core';
 
 export default class Empleados extends Component {
   constructor(props) {
@@ -53,7 +54,11 @@ export default class Empleados extends Component {
     }
 
     if (!empleados) {
-      return <div></div>
+      return (
+        <div className="fullWidth center">
+          <CircularProgress size={80} />
+        </div>
+      )
     }
     return (
       <div>

@@ -4,6 +4,7 @@ import MenuSuperior from "../../components/menuSuperior/MenuSuperior";
 import ListaItemsEmpleado from "../../components/listaItemsEmpleado/ListaItemsEmpleado";
 import MenuInferior from '../../components/menuInferior/MenuInferior.js';
 import Menu from '@material-ui/icons/Menu';
+import { CircularProgress } from '@material-ui/core';
 
 export default class VisualizarCartaEmpleado extends Component {
   constructor(props) {
@@ -86,7 +87,11 @@ export default class VisualizarCartaEmpleado extends Component {
     }
 
     if (!carta || !categorias) {
-      return <div></div>
+      return (
+        <div className="fullWidth center">
+          <CircularProgress size={80} />
+        </div>
+      )
     } else {
       categorias = categorias.map((categoria) => categoria.replace('_', ' '))
     }

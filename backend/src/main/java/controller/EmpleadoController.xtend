@@ -41,7 +41,7 @@ class EmpleadoController {
 			empleado.loguearDesloguear()
 			return ok(empleado.toJson)
 		}catch(Exception e) {
-			badRequest(e.message)
+			return ok("Usuario incorrecto")
 		}
 	}
 	
@@ -127,6 +127,9 @@ class EmpleadoController {
 		val idMozoBody = Long.valueOf(body.getPropertyValue("idMozo"))
 		try{
 			val mesaRepo = repoMesas.searchById(idMesaBody)
+			if(mesaRepo === null){
+				return ok("Mesa incorrecta")
+			}
 			var sesion = mesaRepo.getSesion()
 			if(sesion === null) {
 				val mozoRepo = repoEmpleados.searchById(idMozoBody)
@@ -137,13 +140,13 @@ class EmpleadoController {
 					idMesa = idMesaBody
 				]
 				repoSesiones.create(sesion)
-				return ok("true")
+				return ok("Mesa asignada correctamente")
 			} else {
 				sesion.cerrarSesion()
-				return ok("false")
+				return ok("Mesa cerrada correctamente")
 			}
 		}catch(Exception e) {
-			badRequest("Imposible crear sesion")
+			return ok("Error en el servidor")
 		}
 	}
 	

@@ -9,7 +9,7 @@ import ListaItemsPedido from '../../components/listaItemsPedido/ListaItemsPedido
 import DialogConfirmacion from '../../components/Dialog/DialogConfirmacion';
 import { Sesion } from '../../domain/Sesion.js';
 import { ControllerDeSesion } from '../../controller/ControllerDeSesion.js';
-import { Card, CardContent, Typography, Button } from '@material-ui/core';
+import { Card, CardContent, Typography, Button, CircularProgress } from '@material-ui/core';
 
 export default class VisualizarPedido extends Component {
 
@@ -141,7 +141,11 @@ export default class VisualizarPedido extends Component {
     const { pedidos } = this.state
 
     if (!pedidos) {
-      return <div></div>
+      return (
+        <div className="fullWidth center">
+          <CircularProgress size={80} />
+        </div>
+      )
     }
 
     const menuButtons = {
@@ -173,7 +177,7 @@ export default class VisualizarPedido extends Component {
           handlersDetalleItemPedido={{ onChange: this.verDetalleItemPedido }}
           disabled={this.validarSesion()}
         />
-        {pedidos ?
+        {pedidos &&
           <Card elevation={0}>
             <CardContent>
               <Typography className="botonCentrado" variant="subtitle1">
@@ -193,8 +197,7 @@ export default class VisualizarPedido extends Component {
             </CardContent>
             <CardContent>
             </CardContent>
-          </Card>
-          : <div></div>}
+          </Card>}
         <DialogConfirmacion
           titulo={"Pedir Cuenta"}
           descripcion={"¿Estas seguro que deseas pedir la cuenta?"}

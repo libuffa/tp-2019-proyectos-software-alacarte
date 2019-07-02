@@ -28,7 +28,7 @@ function RouterPrincipal(props) {
 
   return (
     <Router>
-      <div>
+      <div className="fullPaper">
         <Header empleado={empleado} opcionesMenu={opcionesMenu} />
         <Switch>
           <Route path="/pedido" exact component={VisualizarPedidoMozo} />
@@ -56,7 +56,7 @@ function RouterPrincipal(props) {
 function RouterCliente() {
   return (
     <Router>
-      <div>
+      <div className="fullPaper">
         <Header />
         <Switch>
           <Route path="/pedido" exact component={VisualizarPedido} />
@@ -75,7 +75,7 @@ function RouterInicial(props) {
 
   return (
     <Router>
-      <div>
+      <div className="fullPaper">
         <Header />
         <Switch>
           <Route path="/login" render={() => <Login iniciarSesion={iniciarSesion.empleado} />} />

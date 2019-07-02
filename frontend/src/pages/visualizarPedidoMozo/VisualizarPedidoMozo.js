@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Typography, Card, CardContent, Snackbar, Button } from '@material-ui/core';
+import { Typography, Card, CardContent, Snackbar, Button, CircularProgress } from '@material-ui/core';
 import { ServiceLocator } from "../../services/ServiceLocator.js";
 import MenuInferior from '../../components/menuInferior/MenuInferior';
 import CartIcon from '@material-ui/icons/ListAlt';
@@ -152,7 +152,11 @@ export default class VisualizarPedidoMozo extends Component {
     const { pedidos, errorMessage } = this.state
 
     if (!pedidos) {
-      return <div></div>
+      return (
+        <div className="fullWidth center">
+          <CircularProgress size={80} />
+        </div>
+      )
     }
 
     const menuButtons = {

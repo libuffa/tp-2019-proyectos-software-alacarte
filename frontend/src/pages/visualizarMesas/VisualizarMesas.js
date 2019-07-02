@@ -3,6 +3,7 @@ import { ServiceLocator } from '../../services/ServiceLocator';
 import ListaMesasMozo from '../../components/listaMesasMozo/ListaMesasMozo';
 import MenuInferior from '../../components/menuInferior/MenuInferior.js';
 import Menu from '@material-ui/icons/Menu';
+import { CircularProgress } from '@material-ui/core';
 
 export default class VisualizarMesas extends Component {
 
@@ -67,7 +68,11 @@ export default class VisualizarMesas extends Component {
     }
 
     if (!mesas) {
-      return <div></div>
+      return (
+        <div className="fullWidth center">
+          <CircularProgress size={80} />
+        </div>
+      )
     }
     return (
       <div className="contenedorLista">

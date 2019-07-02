@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ServiceLocator } from '../../services/ServiceLocator';
-import { Grid } from '@material-ui/core';
+import { Grid, CircularProgress } from '@material-ui/core';
 import '../estilosPaginas.scss';
 import BotonMenu from '../../components/botonMenu/BotonMenu';
 
@@ -58,7 +58,11 @@ export default class MenuEmpleado extends Component {
     const { opciones } = this.state;
 
     if (!opciones) {
-      return <div></div>
+      return (
+        <div className="fullWidth center">
+          <CircularProgress size={80} />
+        </div>
+      )
     }
     return (
       <div className="fullContainer">

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ListSubheader, ListItemText } from '@material-ui/core';
+import { ListSubheader, ListItemText, CircularProgress } from '@material-ui/core';
 import MenuInferior from '../../components/menuInferior/MenuInferior';
 import CartIcon from '@material-ui/icons/ListAlt';
 import CuerpoMesa from '../../components/cuerpoMesa/CuerpoMesa';
@@ -12,15 +12,16 @@ export default class DetalleMesa extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      mesa: this.props.location.state.mesa,
+      mesa: this.props.location.state ? this.props.location.state.mesa : null,
       mozo: null,
       mensaje: "",
+      variant: "",
     }
     this.verMesas = this.verMesas.bind(this)
   }
 
   componentDidMount() {
-    if (this.state.mesa.sesion) {
+    if (this.props.location.state && this.state.mesa.sesion) {
       this.cargarMozo()
     }
   }
@@ -73,11 +74,8 @@ export default class DetalleMesa extends Component {
     }).then((respuesta) => {
       if (respuesta) {
         this.setState({
-          mensaje: "Mesa asignada correctamente",
-        })
-      } else {
-        this.setState({
-          mensaje: "Mesa cerrada correctamente",
+          mensaje: respuesta,
+          variant: "success",
         })
       }
       this.cargarMesa()
@@ -108,7 +106,7 @@ export default class DetalleMesa extends Component {
   }
 
   render() {
-    const { mesa, mozo, mensaje } = this.state
+    const { mesa, mozo, mensaje, variant } = this.state
 
     const menuButtons = {
       firstButton: {
@@ -117,16 +115,23 @@ export default class DetalleMesa extends Component {
         icon: (<CartIcon />)
       },
     }
+    if (!mesa) {
+      return (
+        <div className="fullWidth center">
+          <CircularProgress size={80} />
+        </div>
+      )
+    }
 
     return <div>
-      <div className="dividerLista" />
+      < div className="dividerLista" />
       <ListSubheader disableSticky color="inherit" >
         <ListItemText primary={"Mesa " + mesa.numero} />
       </ListSubheader>
       <div className="dividerLista" />
       <CuerpoMesa mesa={mesa} mozo={mozo} entregarPedido={{ onChange: this.entregarPedido }} mostrarQR={{ onChange: this.mostrarQR }} verPedido={{ onChange: this.verPedido }} sesionMesa={{ onChange: this.sesionMesa }} />
       <MenuInferior menuButtons={menuButtons} />
-      <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant="success" />
-    </div>
+      <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
+    </div >
   }
 }

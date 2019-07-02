@@ -4,6 +4,7 @@ import { Typography, Container, Grid, Button } from "@material-ui/core";
 import QrReader from 'react-qr-reader';
 import '../estilosPaginas.scss';
 import InputSesion from "../../components/inputSesion/InputSesion.js";
+import SnackBarPersonal from "../../components/snackBarPersonal/SnackBarPersonal.js";
 
 
 export default class EscanearQR extends Component {
@@ -13,6 +14,7 @@ export default class EscanearQR extends Component {
       sesion: "",
       delay: 100,
       result: 'No result',
+      errorMessage: "",
     }
     this.handleScan = this.handleScan.bind(this)
   }
@@ -25,14 +27,32 @@ export default class EscanearQR extends Component {
 
   handleEnviar = () => {
     const { sesion } = this.state
-    ServiceLocator.SesionService.iniciarSesion({ idSesion: sesion })
-      .then(respuesta => {
-        if (respuesta === "True") {
-          this.props.iniciarSesion(sesion)
-        } else {
-          console.log(respuesta)
-        }
-      })
+    if (sesion !== "") {
+      ServiceLocator.SesionService.iniciarSesion({ idSesion: sesion })
+        .then(respuesta => {
+          if (respuesta === "True") {
+            this.props.iniciarSesion(sesion)
+          } else {
+            this.generarError(respuesta)
+          }
+        })
+    }
+  }
+
+  generarError(errorMessage) {
+    this.setState({
+      errorMessage: errorMessage
+    })
+  }
+
+  snackbarOpen() {
+    return this.state.errorMessage !== ""
+  }
+
+  snackbarClose = () => {
+    this.setState({
+      errorMessage: ""
+    })
   }
 
   modificarSesion = (sesion) => {
@@ -49,11 +69,14 @@ export default class EscanearQR extends Component {
       this.handleEnviar()
     }
   }
+
   handleError = err => {
     console.error(err)
   }
 
   render() {
+    const { errorMessage } = this.state;
+
     return (
       <Container component="main" maxWidth="xs">
         <br />
@@ -92,8 +115,8 @@ export default class EscanearQR extends Component {
             </Button>
           </Grid>
         </Grid>
+        <SnackBarPersonal mensajeError={errorMessage} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={"error"} />
       </Container>
-
     );
   }
 }

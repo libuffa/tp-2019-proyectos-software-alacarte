@@ -3,6 +3,7 @@ import { ServiceLocator } from '../../services/ServiceLocator';
 import ListaItemsCocina from '../../components/listaItemsCocina/ListaItemsCocina';
 import MenuInferior from '../../components/menuInferior/MenuInferior';
 import Menu from '@material-ui/icons/Menu';
+import { CircularProgress } from '@material-ui/core';
 
 export default class VisualizarPedidoCocina extends Component {
   constructor(props) {
@@ -80,7 +81,11 @@ export default class VisualizarPedidoCocina extends Component {
     }
 
     if (!pedidos) {
-      return <div></div>
+      return (
+        <div className="fullWidth center">
+          <CircularProgress size={80} />
+        </div>
+      )
     }
     return (
       <div>

@@ -20,10 +20,14 @@ export default class Login extends Component {
     if (usuario) {
       ServiceLocator.EmpleadoService.iniciarSesion({ nombreUsuario: usuario, contraseña: pass })
         .then((respuesta) => {
-          if (respuesta.id) {
-            this.props.iniciarSesion(respuesta.id)
+          if (respuesta) {
+            if (respuesta.id) {
+              this.props.iniciarSesion(respuesta.id)
+            } else {
+              this.generarError(respuesta)
+            }
           } else {
-            this.generarError(respuesta)
+            this.generarError("Error en el servidor")
           }
         })
     }

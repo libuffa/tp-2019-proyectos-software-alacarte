@@ -4,14 +4,15 @@ import { ControllerDeSesion } from '../../controller/ControllerDeSesion.js'
 import { ServiceLocator } from "../../services/ServiceLocator.js";
 import '../estilosPaginas.scss';
 import ContenedorCuerpoItem from '../../components/contenedorCuerpoItem/ContenedorCuerpoItem.js';
+import { CircularProgress } from '@material-ui/core';
 
 export default class DetalleItemCarta extends Component {
   constructor(props) {
     super(props)
     this.state = {
       itemCarta: null,
-      idItemCarta: this.props.location.state.idItem,
-      history: this.props.location.state.history,
+      idItemCarta: this.props.location.state ? this.props.location.state.idItem : null,
+      history: this.props.location.state ? this.props.location.state.history : null,
     }
   }
 
@@ -51,7 +52,11 @@ export default class DetalleItemCarta extends Component {
     const { itemCarta } = this.state;
 
     if (!itemCarta) {
-      return <div></div>
+      return (
+        <div className="fullWidth center">
+          <CircularProgress size={80} />
+        </div>
+      )
     }
     return <div>
       <PasadorDeImagenes
