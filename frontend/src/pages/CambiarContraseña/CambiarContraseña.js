@@ -4,6 +4,8 @@ import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal
 import { Container, Typography, Grid } from '@material-ui/core';
 import '../estilosPaginas.scss';
 import DialogVolver from '../../components/Dialog/DialogVolver';
+import { ServiceLocator } from '../../services/ServiceLocator';
+import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 
 export default class CambiarContraseña extends Component {
 
@@ -17,55 +19,72 @@ export default class CambiarContraseña extends Component {
             errorMessage: ""
         }
     }
-    
+
     handleEnviar = () => {
-        this.handleClickOpen()
+        const { contraseñaActual, contraseñaNueva, confirmarContraseñaNueva } = this.state
+        if(contraseñaNueva === confirmarContraseñaNueva) {
+            const json = {
+                idEmpleado: ControllerDeEmpleado.getSesionActiva(),
+                contraseñaActual: contraseñaActual,
+                contraseñaNueva: contraseñaNueva,
+            }
+            ServiceLocator.EmpleadoService.cambiarContraseña(json)
+                .then((respuesta) => {
+                    if (respuesta) {
+                        this.handleClickOpen()
+                    } else {
+                        throw respuesta
+                    }
+                })
+        } else {
+            this.generarError("Contraseña nueva no se confirmo correctamente")
+        }
     }
 
-    snackbarOpen() {
-        return this.state.errorMessage !== ""
-    }
-    
-    snackbarClose = () => {
-        this.setState({
-            errorMessage: ""
-        })
-    }
-    
-    handleChange = event => {
-        this.setState({
-            [event.target.name]: event.target.value
-        })
-    }
-    
-    generarError(errorMessage) {
-        this.setState({
-            errorMessage: errorMessage
-        })
-    }
-    
-    handleClickOpen() {
-        this.setState({
-            open: true,
-        })
-    }
-    
-    handleClose = () => {
-        this.props.history.push('/')
-        this.setState({
-            open: false,
-        })
-    };
+snackbarOpen() {
+    return this.state.errorMessage !== ""
+}
 
-    validarConfirmar() {
-        return !(this.state.contraseñaActual && this.state.contraseñaNueva && this.state.confirmarContraseñaNueva)
-    }
+snackbarClose = () => {
+    this.setState({
+        errorMessage: ""
+    })
+}
 
-    render() {
-        const { errorMessage, open } = this.state
+handleChange = event => {
+    this.setState({
+        [event.target.name]: event.target.value
+    })
+}
 
-        return (
-            <div>
+generarError(errorMessage) {
+    this.setState({
+        errorMessage: errorMessage
+    })
+}
+
+handleClickOpen() {
+    this.setState({
+        open: true,
+    })
+}
+
+handleClose = () => {
+    this.props.history.push('/')
+    this.setState({
+        open: false,
+    })
+};
+
+validarConfirmar() {
+    return !(this.state.contraseñaActual && this.state.contraseñaNueva && this.state.confirmarContraseñaNueva)
+}
+
+render() {
+    const { errorMessage, open } = this.state
+
+    return (
+        <div>
             <Container component="main" maxWidth="xs" >
                 <div className="contenedorTitulo">
                     <Typography variant="h3" color="textSecondary">
@@ -86,16 +105,16 @@ export default class CambiarContraseña extends Component {
                 </div>
                 <Grid container spacing={16}>
                     <Grid item xs={5} className="margenBoton">
-                        <button 
-                            className="botonLogin" 
+                        <button
+                            className="botonLogin"
                             onClick={() => this.handleClose()}>
-                                Volver
+                            Volver
                             </button>
                     </Grid>
                     <Grid item xs={2} > </Grid>
                     <Grid item xs={5}>
-                        <button 
-                            className="botonLogin" 
+                        <button
+                            className="botonLogin"
                             onClick={this.handleEnviar}
                             disabled={this.validarConfirmar()}>Confirmar</button>
                     </Grid>
@@ -108,7 +127,7 @@ export default class CambiarContraseña extends Component {
                 handlers={{ onChange: this.handleClose }}
                 open={open}
             />
-            </div>
-        )
-    }
+        </div>
+    )
+}
 }
