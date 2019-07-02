@@ -37,4 +37,10 @@ export class EmpleadoService {
       .catch(error => { console.log(error)  })
   }
 
+  recuperarContraseña(data) {
+    return client.put('/empleado/recuperarContraseña', data, { timeout: 10000 })
+      .then(res => { return res })
+      .catch(error => { console.log(error)  })
+  }
+
 }

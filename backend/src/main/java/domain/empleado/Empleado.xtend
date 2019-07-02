@@ -45,4 +45,8 @@ abstract class Empleado {
 		this.contraseña = contraseñaNueva
 		EmpleadoRepository.instance.update(this)
 	}
+	
+	def recuperarContraseña() {
+//		val correo = new Email
+	}
 }

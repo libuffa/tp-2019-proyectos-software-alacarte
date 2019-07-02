@@ -29,7 +29,7 @@ function Header(props) {
     if (!location.pathname.includes("login")) {
       history.push('/login');
     } else {
-      history.push('/escanearQR');
+      history.push('/escanear/qr');
     }
   }
 

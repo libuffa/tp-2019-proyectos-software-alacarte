@@ -23,6 +23,7 @@ import Header from './components/Header/Header';
 import Login from './pages/Login/Login';
 import './App.css';
 import CambiarContraseña from './pages/CambiarContraseña/CambiarContraseña';
+import RecuperarContraseña from './pages/RecuperarContraseña/RecuperarContraseña';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -82,6 +83,7 @@ function RouterInicial(props) {
         <Switch>
           <Route path="/login" render={() => <Login iniciarSesion={iniciarSesion.empleado} />} />
           <Route path="/escanearQR" render={() => <EscanearQR iniciarSesion={iniciarSesion.sesion} />} />
+          <Route path="/recuperar/contraseña" exact component={RecuperarContraseña} />
           <Route component={RedirectInicial} />
         </Switch>
       </div>

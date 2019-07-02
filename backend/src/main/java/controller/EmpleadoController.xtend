@@ -183,4 +183,27 @@ class EmpleadoController {
 			return ok(e.message)
 		}
 	}
+	
+	@Get("/empleado/recuperarContraseña")
+	def Result recuperarContraseña(@Body String body) {
+		try{
+			val idEmpleado = Long.valueOf(body.getPropertyValue("idEmpleado"))
+			val correoUsuario = body.getPropertyValue("correoUsuario")
+			val empleado = repoEmpleados.searchById(idEmpleado)
+			
+			if(empleado === null){
+				return badRequest('{ "error" : "usuario inexistente" }')
+			}
+			if(!empleado.email.equals(correoUsuario)) {
+				return badRequest('{ "error" : "Correo de usuario incorrecto" }')
+			}
+			
+			val email = empleado.email
+			
+			return ok("True")
+			
+		}catch(Exception e) {
+			return ok(e.message)
+		}
+	}
 }
