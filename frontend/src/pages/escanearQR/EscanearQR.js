@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { ServiceLocator } from "../../services/ServiceLocator.js";
 import { Typography, Container, Grid, Button } from "@material-ui/core";
 import QrReader from 'react-qr-reader';
-import './EscanearQR.scss';
+import '../estilosPaginas.scss';
 import InputSesion from "../../components/inputSesion/InputSesion.js";
 
 

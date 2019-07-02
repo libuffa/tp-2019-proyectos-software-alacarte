@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PasadorDeImagenes from '../../components/pasadorDeImagenes/PasadorDeImagenes.js';
 import { ControllerDeSesion } from '../../controller/ControllerDeSesion.js'
 import { ServiceLocator } from "../../services/ServiceLocator.js";
-import './DetalleItemPedido.scss';
+import '../estilosPaginas.scss';
 import ContenedorCuerpoItem from '../../components/contenedorCuerpoItem/ContenedorCuerpoItem.js';
 
 export default class DetalleItemPedido extends Component {

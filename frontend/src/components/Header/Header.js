@@ -1,8 +1,8 @@
 import React from 'react'
+import '../estilos.scss';
 import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import MenuIcon from '@material-ui/icons/Menu';
-import './Header.scss';
 import { Sidenav } from '../Sidenav/Sidenav';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
@@ -35,7 +35,7 @@ function Header(props) {
 
   return (
     <div>
-      <AppBar position="static">
+      <AppBar elevation={0} position="static">
         <Toolbar>
           {
             (opcionesMenu) &&
@@ -48,7 +48,7 @@ function Header(props) {
             </IconButton>)
           }
           <Typography className="title" variant="h6">
-            A la Carte{" - " + pageName}
+            À la carte {/*" - " + pageName*/}
           </Typography>
           {
             !ControllerDeEmpleado.getSesionActiva() &&

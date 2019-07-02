@@ -5,7 +5,7 @@ import CartIcon from '@material-ui/icons/LocalLibrary';
 import PedidoIcon from '@material-ui/icons/RestaurantMenu';
 import MesaIcon from '@material-ui/icons/Layers';
 import PersonOutlined from '@material-ui/icons/PersonOutline';
-import './Sidenav.scss'
+import '../estilos.scss'
 import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 import DialogConfirmacion from '../Dialog/DialogConfirmacion';
 import { ServiceLocator } from '../../services/ServiceLocator';

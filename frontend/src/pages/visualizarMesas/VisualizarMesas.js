@@ -70,7 +70,7 @@ export default class VisualizarMesas extends Component {
       return <div></div>
     }
     return (
-      <div>
+      <div className="contenedorLista">
         <ListaMesasMozo mesas={mesas} handlers={{ onChange: this.verDetalleMesa }} entregarPedido={{ onChange: this.entregarPedido }} />
         <MenuInferior menuButtons={menuButtons} />
       </div>

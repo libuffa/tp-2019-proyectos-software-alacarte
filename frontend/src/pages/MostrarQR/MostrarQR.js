@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import MenuInferior from '../../components/menuInferior/MenuInferior';
 import { Container, Typography } from '@material-ui/core';
+import MenuInferior from '../../components/menuInferior/MenuInferior';
 import ArrowBack from '@material-ui/icons/ArrowBack';
-import './MostrarQR.scss';
+import '../estilosPaginas.scss';
 
 export default class MostrarQR extends Component {
 

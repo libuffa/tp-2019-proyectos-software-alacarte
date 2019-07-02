@@ -1,5 +1,5 @@
 import React from 'react';
-import './BotonMenu.scss'
+import '../estilos.scss'
 
 export default function BotonMenu(props) {
   const { texto, handlers } = props;

@@ -9,6 +9,7 @@ import ListaItemsPedido from '../../components/listaItemsPedido/ListaItemsPedido
 import DialogConfirmacion from '../../components/Dialog/DialogConfirmacion';
 import { Sesion } from '../../domain/Sesion.js';
 import { ControllerDeSesion } from '../../controller/ControllerDeSesion.js';
+import '../estilosPaginas.scss';
 
 export default class VisualizarPedidoMozo extends Component {
 
@@ -201,7 +202,6 @@ export default class VisualizarPedidoMozo extends Component {
               </Typography>
             </CardContent>
             <CardContent>
-              <MenuInferior menuButtons={menuButtons} />
             </CardContent>
           </Card>
           : <div></div>}
@@ -215,6 +215,7 @@ export default class VisualizarPedidoMozo extends Component {
           open={this.snackbarOpen()}
           message={errorMessage}
           autoHideDuration={4000} />
+        <MenuInferior menuButtons={menuButtons} />
       </div>
     )
   }

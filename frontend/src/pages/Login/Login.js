@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
 import { ServiceLocator } from '../../services/ServiceLocator';
-import PersonIcon from '@material-ui/icons/PersonPin'
-import './Login.scss';
+import PersonIcon from '@material-ui/icons/PersonPin';
+import '../estilosPaginas.scss';
 import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal';
+import { Container, Typography } from '@material-ui/core';
 
 export default class Login extends Component {
   constructor(props) {

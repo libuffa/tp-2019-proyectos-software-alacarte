@@ -1,26 +1,27 @@
 import React, { Component } from 'react';
-import VisualizarPedidoCocina from './pages/VisualizarPedido/VisualizarPedidoCocina/VisualizarPedidoCocina';
-import DetalleItemCartaEmpleado from './pages/detalleItemCartaEmpleado/DetalleItemCartaEmpleado';
-import VisualizarCartaEmpleado from './pages/visualizarCartaEmpleado/VisualizarCartaEmpleado';
-import DetalleItemPedidoCocina from './pages/detalleItemPedidoCocina/DetalleItemPedidoCocina';
-import VisualizarPedido from './pages/VisualizarPedido/VisualizarPedido/VisualizarPedido';
-import DetalleItemPedido from './pages/detalleItemPedido/DetalleItemPedido';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import DetalleItemCarta from './pages/detalleItemCarta/DetalleItemCarta';
 import { ControllerDeEmpleado } from './controller/ControllerDeEmpleado';
-import VisualizarMesas from './pages/visualizarMesas/VisualizarMesas';
-import VisualizarCarta from './pages/visualizarCarta/VisualizarCarta';
 import { ControllerDeSesion } from './controller/ControllerDeSesion';
-import MenuEmpleado from './pages/menuEmpleado/MenuEmpleado';
 import { ServiceLocator } from './services/ServiceLocator';
-import DetalleMesa from './pages/detalleMesa/DetalleMesa';
-import EscanearQR from './pages/escanearQR/EscanearQR';
-import Header from './components/Header/Header';
-import Login from './pages/Login/Login';
-import './App.css';
+import { Paper } from '@material-ui/core';
+import VisualizarPedido from './pages/visualizarPedido/VisualizarPedido';
 import VisualizarPedidoMozo from './pages/visualizarPedidoMozo/VisualizarPedidoMozo';
-import MostrarQR from './pages/MostrarQR/MostrarQR';
+import VisualizarPedidoCocina from './pages/visualizarPedidoCocina/VisualizarPedidoCocina';
+import VisualizarCarta from './pages/visualizarCarta/VisualizarCarta';
+import VisualizarCartaEmpleado from './pages/visualizarCartaEmpleado/VisualizarCartaEmpleado';
+import VisualizarMesas from './pages/visualizarMesas/VisualizarMesas';
+import DetalleItemCarta from './pages/detalleItemCarta/DetalleItemCarta';
+import DetalleItemCartaEmpleado from './pages/detalleItemCartaEmpleado/DetalleItemCartaEmpleado';
+import DetalleItemPedido from './pages/detalleItemPedido/DetalleItemPedido';
+import DetalleItemPedidoCocina from './pages/detalleItemPedidoCocina/DetalleItemPedidoCocina';
+import DetalleMesa from './pages/detalleMesa/DetalleMesa';
+import MenuEmpleado from './pages/menuEmpleado/MenuEmpleado';
+import EscanearQR from './pages/escanearQR/EscanearQR';
 import Empleados from './pages/empleados/Empleados';
+import MostrarQR from './pages/mostrarQR/MostrarQR';
+import Header from './components/Header/Header';
+import Login from './pages/login/Login';
+import './App.css';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -122,6 +123,15 @@ class App extends Component {
     this.abrirSesionEmpleado()
   }
 
+  componentWillUnmount() {
+    this.logOut()
+  }
+
+  logOut() {
+    ServiceLocator.EmpleadoService.cerrarSesion({ idEmpleado: ControllerDeEmpleado.getSesionActiva() })
+    ControllerDeEmpleado.cerrarSesionActiva()
+  }
+
   async abrirSesionEmpleado() {
     if (ControllerDeEmpleado.getSesionActiva()) {
       try {
@@ -155,16 +165,20 @@ class App extends Component {
 
   render() {
     return (
-      <div className="contenedor">
-        {
-          (this.state.sesionActiva && !this.state.sesionEmpleadoActiva && <RouterCliente />)
-          ||
-          (this.state.sesionActiva && this.state.sesionEmpleadoActiva && <RouterPrincipal empleado={this.state.empleado} opcionesMenu={this.state.opcionesMenu} />)
-          ||
-          (this.state.sesionEmpleadoActiva && <RouterPrincipal empleado={this.state.empleado} opcionesMenu={this.state.opcionesMenu} />)
-          ||
-          (<RouterInicial iniciarSesion={{ sesion: this.handleAbrirSesion, empleado: this.handleAbrirSesionEmpleado }} />)
-        }
+      <div className="contenedorGeneral">
+        <div className="contenedor600pix">
+          <Paper square className="fullPaper">
+            {
+              (this.state.sesionActiva && !this.state.sesionEmpleadoActiva && <RouterCliente />)
+              ||
+              (this.state.sesionActiva && this.state.sesionEmpleadoActiva && <RouterPrincipal empleado={this.state.empleado} opcionesMenu={this.state.opcionesMenu} />)
+              ||
+              (this.state.sesionEmpleadoActiva && <RouterPrincipal empleado={this.state.empleado} opcionesMenu={this.state.opcionesMenu} />)
+              ||
+              (<RouterInicial iniciarSesion={{ sesion: this.handleAbrirSesion, empleado: this.handleAbrirSesionEmpleado }} />)
+            }
+          </Paper>
+        </div>
       </div>
     )
   }

@@ -4,8 +4,8 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { Grid } from '@material-ui/core';
 import Fab from '@material-ui/core/Fab';
-import './CuerpoItem.scss';
 import CuadroDeTexto from '../../components/cuadroDeTexto/CuadroDeTexto.js';
+import '../estilos.scss';
 
 const useStyles = makeStyles(theme => ({
   root: {

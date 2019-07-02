@@ -1,21 +1,11 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import './MenuInferior.scss';
+import '../estilos.scss';
 
-
-const useStyles = makeStyles(theme => ({
-  appBar: {
-    top: 'auto',
-    bottom: 0,
-  },
-}));
 
 export default function MenuInferior(props) {
   const { menuButtons } = props;
-  const classes = useStyles();
   const secondButton = (menuButtons.secondButton) && (
     <BottomNavigationAction
       label={menuButtons.secondButton.name}
@@ -36,10 +26,8 @@ export default function MenuInferior(props) {
 
   return (
     <React.Fragment>
-      <AppBar position="fixed" color="primary" className={classes.appBar}>
-        <BottomNavigation
-          showLabels
-        >
+      <div className="contenedorMenuInferior">
+        <BottomNavigation showLabels>
           <BottomNavigationAction
             label={menuButtons.firstButton.name}
             icon={menuButtons.firstButton.icon}
@@ -49,7 +37,7 @@ export default function MenuInferior(props) {
           {secondButton}
           {thirdButton}
         </BottomNavigation>
-      </AppBar>
+      </div>
     </React.Fragment>
   );
 }

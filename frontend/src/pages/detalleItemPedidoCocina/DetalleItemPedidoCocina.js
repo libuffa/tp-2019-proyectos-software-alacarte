@@ -3,7 +3,7 @@ import { ServiceLocator } from "../../services/ServiceLocator.js";
 import PasadorDeImagenes from '../../components/pasadorDeImagenes/PasadorDeImagenes.js';
 import CuerpoItemCocina from '../../components/cuerpoItemCocina/CuerpoItemCocina';
 import Botones from '../../components/botones/Botones';
-import './DetalleItemPedidoCocina.scss';
+import '../estilosPaginas.scss';
 
 export default class DetalleItemPedidoCocina extends Component {
   constructor(props) {

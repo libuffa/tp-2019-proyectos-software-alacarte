@@ -4,7 +4,7 @@ import MenuSuperior from "../../components/menuSuperior/MenuSuperior";
 import ListaItems from "../../components/listaItems/ListaItems";
 import MenuInferior from '../../components/menuInferior/MenuInferior.js';
 import PedidoIcon from '@material-ui/icons/RestaurantMenu';
-import './VisualizarCarta.scss';
+import '../estilosPaginas.scss';
 
 export default class VisualizarCarta extends Component {
   constructor(props) {

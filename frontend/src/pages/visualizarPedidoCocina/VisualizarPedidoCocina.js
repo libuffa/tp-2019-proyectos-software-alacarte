@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { ServiceLocator } from '../../../services/ServiceLocator';
-import ListaItemsCocina from '../../../components/listaItemsCocina/ListaItemsCocina';
-import MenuInferior from '../../../components/menuInferior/MenuInferior';
+import { ServiceLocator } from '../../services/ServiceLocator';
+import ListaItemsCocina from '../../components/listaItemsCocina/ListaItemsCocina';
+import MenuInferior from '../../components/menuInferior/MenuInferior';
 import Menu from '@material-ui/icons/Menu';
 
 export default class VisualizarPedidoCocina extends Component {

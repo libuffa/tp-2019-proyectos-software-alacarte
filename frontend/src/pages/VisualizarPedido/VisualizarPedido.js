@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
-import { Typography, Card, CardContent, Button } from '@material-ui/core';
-import { ServiceLocator } from "../../../services/ServiceLocator.js";
-import MenuInferior from '../../../components/menuInferior/MenuInferior';
+import { ServiceLocator } from "../../services/ServiceLocator.js";
+import MenuInferior from '../../components/menuInferior/MenuInferior';
 import CartIcon from '@material-ui/icons/ListAlt';
 import MoneyIcon from '@material-ui/icons/AttachMoney';
 import GamesIcon from '@material-ui/icons/Games';
-import './VisualizarPedido.scss';
-import ListaItemsPedido from '../../../components/listaItemsPedido/ListaItemsPedido.js';
-import DialogConfirmacion from '../../../components/Dialog/DialogConfirmacion';
-import { Sesion } from '../../../domain/Sesion.js';
-import { ControllerDeSesion } from '../../../controller/ControllerDeSesion.js';
+import '../estilosPaginas.scss';
+import ListaItemsPedido from '../../components/listaItemsPedido/ListaItemsPedido.js';
+import DialogConfirmacion from '../../components/Dialog/DialogConfirmacion';
+import { Sesion } from '../../domain/Sesion.js';
+import { ControllerDeSesion } from '../../controller/ControllerDeSesion.js';
+import { Card, CardContent, Typography, Button } from '@material-ui/core';
 
 export default class VisualizarPedido extends Component {
 
@@ -192,7 +192,6 @@ export default class VisualizarPedido extends Component {
               </Typography>
             </CardContent>
             <CardContent>
-              <MenuInferior menuButtons={menuButtons} />
             </CardContent>
           </Card>
           : <div></div>}
@@ -202,6 +201,7 @@ export default class VisualizarPedido extends Component {
           handlers={{ onChange: this.pedirCuenta, open: this.open }}
           open={this.state.open}
         />
+        <MenuInferior menuButtons={menuButtons} />
       </div>
     )
   }

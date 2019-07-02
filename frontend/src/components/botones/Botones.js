@@ -23,7 +23,6 @@ const useStyles = makeStyles(theme => ({
   },
   buttonContainer: {
     padding: theme.spacing(1, 0),
-    height: '100%',
     width: '100%',
     textAlign: 'center',
     fontSize: 20,
@@ -31,6 +30,7 @@ const useStyles = makeStyles(theme => ({
   noBorder: {
     padding: '0',
     margin: '0',
+    backgroundColor: '#fff',
   },
 }));
 
@@ -62,5 +62,5 @@ export default function IconLabelButtons(props) {
         </Grid>
       </Grid>
     </div>
-  ); 
+  );
 }

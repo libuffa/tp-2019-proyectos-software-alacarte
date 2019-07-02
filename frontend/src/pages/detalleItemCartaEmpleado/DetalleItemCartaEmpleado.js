@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PasadorDeImagenes from '../../components/pasadorDeImagenes/PasadorDeImagenes.js';
-import './DetalleItemCartaEmpleado.scss';
+import '../estilosPaginas.scss';
 import ContenedorCuerpoItemMozo from '../../components/contenedorCuerpoItemMozo/contenedorCuerpoItemMozo.js';
 
 export default class DetalleItemCartaEmpleado extends Component {

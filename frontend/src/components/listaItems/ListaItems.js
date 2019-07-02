@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { ListItem, ListItemAvatar, Avatar, ListItemText, List, ListItemSecondaryAction, ListSubheader } from '@material-ui/core';
-import './ListaItems.scss';
+import '../estilos.scss';
 
 const useStyles = makeStyles(theme => ({
   root: {
