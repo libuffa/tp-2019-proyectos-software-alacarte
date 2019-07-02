@@ -22,6 +22,7 @@ import MostrarQR from './pages/MostrarQR/MostrarQR';
 import Header from './components/Header/Header';
 import Login from './pages/Login/Login';
 import './App.css';
+import CambiarContraseña from './pages/CambiarContraseña/CambiarContraseña';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -43,9 +44,10 @@ function RouterPrincipal(props) {
           <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
           <Route path="/carta" exact component={VisualizarCartaEmpleado} />
           <Route path="/menu/empleado" exact component={MenuEmpleado} />
-          <Route path="/escanearQR" exact component={EscanearQR} />
+          <Route path="/escanear/qr" exact component={EscanearQR} />
           <Route path="/mostrar/qr" exact component={MostrarQR} />
           <Route path="/empleados" exact component={Empleados} />
+          <Route path="/cambiar/contraseña" exact component={CambiarContraseña} />
           <Route component={RedirectPrincipal} />
         </Switch>
       </div>

@@ -4,6 +4,7 @@ import PersonIcon from '@material-ui/icons/PersonPin'
 import CartIcon from '@material-ui/icons/LocalLibrary';
 import PedidoIcon from '@material-ui/icons/RestaurantMenu';
 import MesaIcon from '@material-ui/icons/Layers';
+import BuildIcon from '@material-ui/icons/Build'
 import PersonOutlined from '@material-ui/icons/PersonOutline';
 import '../estilos.scss'
 import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
@@ -115,7 +116,17 @@ export function Sidenav(props) {
           <footer >
             <Divider />
             <List>
-              <ListItem button onClick={handleClickOpen}>
+              <ListItem button onClick={() => history.push('/cambiar/contraseña')}>
+                <ListItemAvatar>
+                  <BuildIcon fontSize="large" />
+                </ListItemAvatar>
+                <ListItemText primary={
+                  <Typography variant="subtitle2">
+                    {" Cambiar Contraseña"}
+                  </Typography>}
+                />
+                </ListItem>
+                <ListItem button onClick={handleClickOpen}>
                 <ListItemAvatar>
                   <PersonOutlined fontSize="large" />
                 </ListItemAvatar>
