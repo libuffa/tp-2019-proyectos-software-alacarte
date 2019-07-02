@@ -45,11 +45,10 @@ class SesionController {
 		
 		try{
 			val sesion = repositorioSesion.searchById(idSesion)
-			if(sesion.fechaBaja === null){
+			if(sesion.fechaBaja === null && !sesion.pideCuenta){
 				val itemCarta = carta.searchById(idItem)
 				if(itemCarta.habilitado){
 					sesion.pedirItem(itemCarta, cantidad, comentario)
-					repositorioSesion.update(sesion)
 					return ok("True")
 				}
 				return ok("El plato que desea no se encuentra disponible")
@@ -70,7 +69,7 @@ class SesionController {
 		
 		try{
 			val sesion = repositorioSesion.searchById(idSesion)
-			if(sesion.fechaBaja === null) {
+			if(sesion.fechaBaja === null && !sesion.pideCuenta) {
 				var pedido = sesion.getPedido(idPedido)
 				if(pedido.estado.equals(Estado.Creado)){
 					pedido.cantidad = cantidad
@@ -91,11 +90,6 @@ class SesionController {
 	def Result sesion() {
 		try {
 			val _id = Long.valueOf(id)
-			
-//			if(!sesion.sesionActiva) {
-//				return badRequest('{ "error" : "sesion no activa" }')
-//			}
-			
 			val sesion = repositorioSesion.searchById(_id)
 			return ok(sesion.toJson)
 		} catch(Exception e) {
@@ -119,11 +113,9 @@ class SesionController {
 		try {
 			val _id = Long.valueOf(id)
 			val sesion = repositorioSesion.searchSesionByPedido(_id)
-			
 			if(!sesion.sesionActiva) {
 				return badRequest('{ "error" : "ya pediste la cuenta" }')
 			}
-			
 			val pedido = sesion.pedidosActivos.findFirst[pedido|pedido.id.equals(_id)]
 			return ok(pedido.toJson)
 		} catch(Exception e) {
@@ -175,7 +167,7 @@ class SesionController {
 				return badRequest('{ "error" : "pedido inexistente" }')
 			}
 			val sesion = repositorioSesion.searchSesionByPedido(idPedido)
-			if(sesion.fechaBaja === null) {
+			if(sesion.fechaBaja === null && !sesion.pideCuenta) {
 				if(!sesion.sesionActiva) {
 					return badRequest('{ "error" : "pedido pertenece a una sesion no activa" }')
 				}
@@ -192,20 +184,15 @@ class SesionController {
 	@Put("/pedido/cuenta/:id")
 	def Result pedirCuenta() {
 		try {
-			
 			val _id = Long.valueOf(id) 
 			val sesion =repositorioSesion.searchById(_id)
-
 			if (sesion === null) {
 				return badRequest('{ "error" : "sesion inexistente" }')
 			}
-			
 			if(!sesion.sesionActiva) {
 				return badRequest('{ "error" : "sesion no activa" }')
 			}
-			
 			sesion.pedirCuenta()
-
 			ok('{"status" : "OK"}')
 		} catch (Exception e) {
 			badRequest(e.message)

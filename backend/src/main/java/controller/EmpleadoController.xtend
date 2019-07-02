@@ -27,22 +27,35 @@ class EmpleadoController {
 
 	@Post("/empleado/iniciarSesion")
 	def Result iniciarSesion(@Body String body) {
+		val nombreUsuario = body.getPropertyValue("nombreUsuario")
+		val contraseña = body.getPropertyValue("contraseña")
+		
 		try{
-			val nombreUsuario = body.getPropertyValue("nombreUsuario")
-			val contraseña = body.getPropertyValue("contraseña")
 			val empleado = repoEmpleados.searchByString(nombreUsuario)
-			println(empleado)
-			
-			if(empleado === null) {
-				return badRequest('{ "error" : "usuario inexistente" }')
+			if(empleado === null || empleado.logueado) {
+				return ok("Usuario logueado o incorrecto")
 			}
-			
 			if(!empleado.contraseña.equals(contraseña)) {
-				return badRequest('{ "error" : "contraseña incorrecta" }')
+				return ok("Contraseña incorrecta")
 			}
-			
-			println(empleado)
+			empleado.loguearDesloguear()
 			return ok(empleado.toJson)
+		}catch(Exception e) {
+			return ok("Usuario incorrecto")
+		}
+	}
+	
+	@Post("/empleado/cerrarSesion")
+	def Result cerrarSesion(@Body String body) {
+		val idEmpleado = Long.valueOf(body.getPropertyValue("idEmpleado"))
+		
+		try{
+			val empleado = repoEmpleados.searchById(idEmpleado)
+			if(empleado === null || !empleado.logueado) {
+				return ok("Usuario no logueado")
+			}
+			empleado.loguearDesloguear()
+			return ok("Usuario cerrado correctamente")
 		}catch(Exception e) {
 			badRequest(e.message)
 		}
@@ -70,21 +83,16 @@ class EmpleadoController {
 		try {
 			val _id = Long.valueOf(id)
 			val empleado = repoEmpleados.searchById(_id)
-			
 			if(empleado === null) {
-				return badRequest('{ "error" : "usuario inexistente" }')
+				return badRequest("Usuario incorrecto")
 			}
-			
 			val tipoEmpleado = empleado.class
-			
 			var List<String> opciones = new ArrayList
-			
 			switch tipoEmpleado {
 				case Mozo: opciones = #["carta","mesas"]
 				case Cocinero: opciones = #["carta","pedidos"]
-				default: opciones = #["carta","mesaAdm","empleado"]
+				default: opciones = #["carta","administrar_mesas","empleados"]
 			}
-
 			return ok(opciones.toJson)
 		} catch (Exception e) {
 			badRequest(e.message)
@@ -119,6 +127,9 @@ class EmpleadoController {
 		val idMozoBody = Long.valueOf(body.getPropertyValue("idMozo"))
 		try{
 			val mesaRepo = repoMesas.searchById(idMesaBody)
+			if(mesaRepo === null){
+				return ok("Mesa incorrecta")
+			}
 			var sesion = mesaRepo.getSesion()
 			if(sesion === null) {
 				val mozoRepo = repoEmpleados.searchById(idMozoBody)
@@ -129,13 +140,23 @@ class EmpleadoController {
 					idMesa = idMesaBody
 				]
 				repoSesiones.create(sesion)
-				return ok("La sesion se creo correctamente")
+				return ok("Mesa asignada correctamente")
 			} else {
 				sesion.cerrarSesion()
-				return ok("La sesion se cerro correctamente")
+				return ok("Mesa cerrada correctamente")
 			}
 		}catch(Exception e) {
-			badRequest("Imposible crear sesion")
+			return ok("Error en el servidor")
+		}
+	}
+	
+	@Get("/empleados")
+	def Result getEmpleados(){
+		try{
+			val empleados = repoEmpleados.allInstances()
+			return ok(empleados.toJson)
+		}catch(Exception e) {
+			badRequest(e.message)
 		}
 	}
 }

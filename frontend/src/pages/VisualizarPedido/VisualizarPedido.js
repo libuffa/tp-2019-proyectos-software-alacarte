@@ -1,23 +1,22 @@
 import React, { Component } from 'react'
-import { Typography, Card, CardContent, Snackbar, Tooltip, IconButton } from '@material-ui/core';
-import { ServiceLocator } from "../../../services/ServiceLocator.js";
-import MenuInferior from '../../../components/menuInferior/MenuInferior';
+import { ServiceLocator } from "../../services/ServiceLocator.js";
+import MenuInferior from '../../components/menuInferior/MenuInferior';
 import CartIcon from '@material-ui/icons/ListAlt';
 import MoneyIcon from '@material-ui/icons/AttachMoney';
 import GamesIcon from '@material-ui/icons/Games';
-import './VisualizarPedido.scss';
-import ListaItemsPedido from '../../../components/listaItemsPedido/ListaItemsPedido.js';
-import DialogConfirmacion from '../../../components/Dialog/DialogConfirmacion';
-import { Sesion } from '../../../domain/Sesion.js';
-import Error from '@material-ui/icons/Error';
-import { ControllerDeSesion } from '../../../controller/ControllerDeSesion.js';
+import '../estilosPaginas.scss';
+import ListaItemsPedido from '../../components/listaItemsPedido/ListaItemsPedido.js';
+import DialogConfirmacion from '../../components/Dialog/DialogConfirmacion';
+import { Sesion } from '../../domain/Sesion.js';
+import { ControllerDeSesion } from '../../controller/ControllerDeSesion.js';
+import { Card, CardContent, Typography, Button, CircularProgress } from '@material-ui/core';
 
 export default class VisualizarPedido extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      timer: setInterval(() => { this.cargarPedidos(); }, 30000),
+      timer: setInterval(() => { this.cargarPedidos(); }, 10000),
       idSesion: null,
       pedidos: null,
       fechaBaja: null,
@@ -29,6 +28,10 @@ export default class VisualizarPedido extends Component {
 
   componentDidMount() {
     this.cargarPedidos()
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.timer)
   }
 
   cargarPedidos() {
@@ -48,12 +51,10 @@ export default class VisualizarPedido extends Component {
   }
 
   verCarta = () => {
-    clearInterval(this.state.timer)
     this.props.history.push('/carta')
   }
 
   verDetalleItemPedido = (pedido) => {
-    clearInterval(this.state.timer)
     this.props.history.push({
       pathname: '/detalle/item/pedido',
       state: { pedido: pedido }
@@ -67,10 +68,6 @@ export default class VisualizarPedido extends Component {
     } else {
       return 0
     }
-  }
-
-  snackbarOpen() {
-    return this.state.errorMessage
   }
 
   generarError(errorMessage) {
@@ -126,7 +123,7 @@ export default class VisualizarPedido extends Component {
   }
 
   validarSesion() {
-    return this.state.fechaBaja !== null
+    return this.state.pideCuenta || this.state.fechaBaja !== null
   }
 
   open = () => {
@@ -141,10 +138,14 @@ export default class VisualizarPedido extends Component {
   }
 
   render() {
-    const { pedidos, errorMessage } = this.state
+    const { pedidos } = this.state
 
     if (!pedidos) {
-      return <div></div>
+      return (
+        <div className="fullWidth center">
+          <CircularProgress size={80} />
+        </div>
+      )
     }
 
     const menuButtons = {
@@ -176,42 +177,34 @@ export default class VisualizarPedido extends Component {
           handlersDetalleItemPedido={{ onChange: this.verDetalleItemPedido }}
           disabled={this.validarSesion()}
         />
-        {pedidos ?
-          <Card>
+        {pedidos &&
+          <Card elevation={0}>
             <CardContent>
-              <Typography className="precioFinal" variant="subtitle1">
+              <Typography className="botonCentrado" variant="subtitle1">
                 {
                   (this.state.pideCuenta) &&
-                  <Tooltip
-                    title="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?"
-                    aria-label="Ya se ha pedido la cuenta.. ¿Desea cancelar y seguir pidiendo?">
-                    <IconButton onClick={() => this.pidiendoCuenta()}>
-                      <Error color="error" fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
+                  <Button color="secondary" size="small" onClick={() => this.pidiendoCuenta()}>
+                    {"Cancelar Pedido cuenta"}
+                  </Button>
                 }
+              </Typography>
+              <Typography className="precioFinal" variant="subtitle1">
                 Precio final: {new Intl.NumberFormat('en-US', {
                   style: 'currency',
                   currency: 'USD'
                 }).format(this.getPrecioTotal())}
               </Typography>
             </CardContent>
-            <CardContent></CardContent>
             <CardContent>
-              <MenuInferior menuButtons={menuButtons} />
             </CardContent>
-          </Card>
-          : <div></div>}
+          </Card>}
         <DialogConfirmacion
           titulo={"Pedir Cuenta"}
           descripcion={"¿Estas seguro que deseas pedir la cuenta?"}
           handlers={{ onChange: this.pedirCuenta, open: this.open }}
           open={this.state.open}
         />
-        <Snackbar
-          open={this.snackbarOpen()}
-          message={errorMessage}
-          autoHideDuration={4000} />
+        <MenuInferior menuButtons={menuButtons} />
       </div>
     )
   }

@@ -1,24 +1,12 @@
 import React from 'react'
+import '../estilos.scss';
 import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import MenuIcon from '@material-ui/icons/Menu';
-import './Header.scss';
 import { Sidenav } from '../Sidenav/Sidenav';
-// import { ServiceLocator } from '../../services/ServiceLocator';
-// import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
-
-
-
-// async function getMenuEmpleado() {
-//   if (ControllerDeEmpleado.getSesionActiva()) {
-//     try {
-//       const res = await ServiceLocator.EmpleadoService.getMenuEmpleado()
-//       return res
-//     } catch (error) {
-//       console.error({ error })
-//     }
-//   }
-// }
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
+import { ControllerDeSesion } from '../../controller/ControllerDeSesion';
 
 function Header(props) {
   const [open, setOpen] = React.useState(false);
@@ -37,9 +25,17 @@ function Header(props) {
     setOpen(false);
   };
 
+  function irALogin() {
+    if (!location.pathname.includes("login")) {
+      history.push('/login');
+    } else {
+      history.push('/escanearQR');
+    }
+  }
+
   return (
     <div>
-      <AppBar position="static">
+      <AppBar elevation={0} position="static">
         <Toolbar>
           {
             (opcionesMenu) &&
@@ -52,15 +48,23 @@ function Header(props) {
             </IconButton>)
           }
           <Typography className="title" variant="h6">
-            A la Carte{" - " + pageName}
+            À la carte {/*" - " + pageName*/}
           </Typography>
+          {
+            !ControllerDeEmpleado.getSesionActiva() &&
+            !ControllerDeSesion.getSesionActiva() &&
+            <IconButton edge="end" color="inherit" onClick={() => irALogin()}>
+              <AccountCircle />
+            </IconButton>
+          }
         </Toolbar>
       </AppBar>
       <Sidenav
         open={open}
         history={history}
         handlers={{ onChange: handleClose }}
-        empleado={empleado} opcionesMenu={opcionesMenu} />
+        empleado={empleado}
+        opcionesMenu={opcionesMenu} />
     </div>
   );
 };

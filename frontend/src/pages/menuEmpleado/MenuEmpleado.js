@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ServiceLocator } from '../../services/ServiceLocator';
-import { Grid } from '@material-ui/core';
-import './MenuEmpleado.scss';
+import { Grid, CircularProgress } from '@material-ui/core';
+import '../estilosPaginas.scss';
 import BotonMenu from '../../components/botonMenu/BotonMenu';
 
 export default class MenuEmpleado extends Component {
@@ -41,6 +41,12 @@ export default class MenuEmpleado extends Component {
       case 'pedidos':
         ruta = 'pedido/cocina'
         break
+      case 'administrar_mesas':
+        ruta = 'mesas'
+        break
+      case 'empleados':
+        ruta = 'empleados'
+        break
       default:
         ruta = 'carta'
         break
@@ -52,7 +58,11 @@ export default class MenuEmpleado extends Component {
     const { opciones } = this.state;
 
     if (!opciones) {
-      return <div></div>
+      return (
+        <div className="fullWidth center">
+          <CircularProgress size={80} />
+        </div>
+      )
     }
     return (
       <div className="fullContainer">

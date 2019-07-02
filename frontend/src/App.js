@@ -1,32 +1,34 @@
 import React, { Component } from 'react';
-import VisualizarPedidoCocina from './pages/VisualizarPedido/VisualizarPedidoCocina/VisualizarPedidoCocina';
-import DetalleItemCartaEmpleado from './pages/detalleItemCartaEmpleado/DetalleItemCartaEmpleado';
-import VisualizarCartaEmpleado from './pages/visualizarCartaEmpleado/VisualizarCartaEmpleado';
-import DetalleItemPedidoCocina from './pages/detalleItemPedidoCocina/DetalleItemPedidoCocina';
-import VisualizarPedido from './pages/VisualizarPedido/VisualizarPedido/VisualizarPedido';
-import DetalleItemPedido from './pages/detalleItemPedido/DetalleItemPedido';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import DetalleItemCarta from './pages/detalleItemCarta/DetalleItemCarta';
 import { ControllerDeEmpleado } from './controller/ControllerDeEmpleado';
-import VisualizarMesas from './pages/visualizarMesas/VisualizarMesas';
-import VisualizarCarta from './pages/visualizarCarta/VisualizarCarta';
 import { ControllerDeSesion } from './controller/ControllerDeSesion';
-import MenuEmpleado from './pages/menuEmpleado/MenuEmpleado';
 import { ServiceLocator } from './services/ServiceLocator';
+import { Paper } from '@material-ui/core';
+import VisualizarPedido from './pages/VisualizarPedido/VisualizarPedido';
+import VisualizarPedidoMozo from './pages/visualizarPedidoMozo/VisualizarPedidoMozo';
+import VisualizarPedidoCocina from './pages/visualizarPedidoCocina/VisualizarPedidoCocina';
+import VisualizarCarta from './pages/visualizarCarta/VisualizarCarta';
+import VisualizarCartaEmpleado from './pages/visualizarCartaEmpleado/VisualizarCartaEmpleado';
+import VisualizarMesas from './pages/visualizarMesas/VisualizarMesas';
+import DetalleItemCarta from './pages/detalleItemCarta/DetalleItemCarta';
+import DetalleItemCartaEmpleado from './pages/detalleItemCartaEmpleado/DetalleItemCartaEmpleado';
+import DetalleItemPedido from './pages/detalleItemPedido/DetalleItemPedido';
+import DetalleItemPedidoCocina from './pages/detalleItemPedidoCocina/DetalleItemPedidoCocina';
 import DetalleMesa from './pages/detalleMesa/DetalleMesa';
+import MenuEmpleado from './pages/menuEmpleado/MenuEmpleado';
 import EscanearQR from './pages/escanearQR/EscanearQR';
+import Empleados from './pages/empleados/Empleados';
+import MostrarQR from './pages/MostrarQR/MostrarQR';
 import Header from './components/Header/Header';
 import Login from './pages/Login/Login';
 import './App.css';
-import VisualizarPedidoMozo from './pages/visualizarPedidoMozo/VisualizarPedidoMozo';
-import MostrarQR from './pages/MostrarQR/MostrarQR';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
 
   return (
     <Router>
-      <div>
+      <div className="fullPaper">
         <Header empleado={empleado} opcionesMenu={opcionesMenu} />
         <Switch>
           <Route path="/pedido" exact component={VisualizarPedidoMozo} />
@@ -43,6 +45,7 @@ function RouterPrincipal(props) {
           <Route path="/menu/empleado" exact component={MenuEmpleado} />
           <Route path="/escanearQR" exact component={EscanearQR} />
           <Route path="/mostrar/qr" exact component={MostrarQR} />
+          <Route path="/empleados" exact component={Empleados} />
           <Route component={RedirectPrincipal} />
         </Switch>
       </div>
@@ -53,7 +56,7 @@ function RouterPrincipal(props) {
 function RouterCliente() {
   return (
     <Router>
-      <div>
+      <div className="fullPaper">
         <Header />
         <Switch>
           <Route path="/pedido" exact component={VisualizarPedido} />
@@ -72,7 +75,8 @@ function RouterInicial(props) {
 
   return (
     <Router>
-      <div>
+      <div className="fullPaper">
+        <Header />
         <Switch>
           <Route path="/login" render={() => <Login iniciarSesion={iniciarSesion.empleado} />} />
           <Route path="/escanearQR" render={() => <EscanearQR iniciarSesion={iniciarSesion.sesion} />} />
@@ -119,6 +123,15 @@ class App extends Component {
     this.abrirSesionEmpleado()
   }
 
+  componentWillUnmount() {
+    this.logOut()
+  }
+
+  logOut() {
+    ServiceLocator.EmpleadoService.cerrarSesion({ idEmpleado: ControllerDeEmpleado.getSesionActiva() })
+    ControllerDeEmpleado.cerrarSesionActiva()
+  }
+
   async abrirSesionEmpleado() {
     if (ControllerDeEmpleado.getSesionActiva()) {
       try {
@@ -147,22 +160,25 @@ class App extends Component {
     this.setState({
       sesionEmpleadoActiva: empleado
     })
+    this.abrirSesionEmpleado()
   }
 
   render() {
-    console.log(this.state.sesionEmpleadoActiva)
-    console.log(this.state.sesionActiva)
     return (
-      <div className="contenedor">
-        {
-          (this.state.sesionActiva && !this.state.sesionEmpleadoActiva && <RouterCliente />)
-          ||
-          (this.state.sesionActiva && this.state.sesionEmpleadoActiva && <RouterPrincipal empleado={this.state.empleado} opcionesMenu={this.state.opcionesMenu} />)
-          ||
-          (this.state.sesionEmpleadoActiva && <RouterPrincipal empleado={this.state.empleado} opcionesMenu={this.state.opcionesMenu} />)
-          ||
-          (<RouterInicial iniciarSesion={{ sesion: this.handleAbrirSesion, empleado: this.handleAbrirSesionEmpleado }} />)
-        }
+      <div className="contenedorGeneral">
+        <div className="contenedor600pix">
+          <Paper square className="fullPaper">
+            {
+              (this.state.sesionActiva && !this.state.sesionEmpleadoActiva && <RouterCliente />)
+              ||
+              (this.state.sesionActiva && this.state.sesionEmpleadoActiva && <RouterPrincipal empleado={this.state.empleado} opcionesMenu={this.state.opcionesMenu} />)
+              ||
+              (this.state.sesionEmpleadoActiva && <RouterPrincipal empleado={this.state.empleado} opcionesMenu={this.state.opcionesMenu} />)
+              ||
+              (<RouterInicial iniciarSesion={{ sesion: this.handleAbrirSesion, empleado: this.handleAbrirSesionEmpleado }} />)
+            }
+          </Paper>
+        </div>
       </div>
     )
   }

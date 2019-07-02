@@ -1,15 +1,23 @@
 import React, { Component } from 'react'
+import { Container, Typography, CircularProgress } from '@material-ui/core';
 import MenuInferior from '../../components/menuInferior/MenuInferior';
-import { Container, Typography } from '@material-ui/core';
 import ArrowBack from '@material-ui/icons/ArrowBack';
-import './MostrarQR.scss';
+import '../estilosPaginas.scss';
 
 export default class MostrarQR extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      mesa: this.props.location.state.mesa,
+      mesa: null
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.location.state) {
+      this.setState({
+        mesa: this.props.location.state.mesa,
+      })
     }
   }
 
@@ -21,10 +29,17 @@ export default class MostrarQR extends Component {
   }
 
   render() {
+    const { mesa } = this.state
+
+    if (!mesa) {
+      return (
+        <div className="fullWidth center">
+          <CircularProgress size={80} />
+        </div>
+      )
+    }
 
     const url = `http://api.qrserver.com/v1/create-qr-code/?data=${this.props.location.state.mesa.sesion.id}&size=200x200`
-
-    console.log(this.props.location.state.mesa.sesion.id)
 
     const menuButtons = {
       firstButton: {

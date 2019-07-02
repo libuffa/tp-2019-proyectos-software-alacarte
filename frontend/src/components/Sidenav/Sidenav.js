@@ -1,16 +1,16 @@
 import React from 'react'
-import { Typography, Drawer, List, ListItem, IconButton, Grid, AppBar, Container, Divider } from '@material-ui/core';
+import { Typography, Drawer, List, ListItem, AppBar, Divider, ListItemAvatar, ListItemText } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/PersonPin'
 import CartIcon from '@material-ui/icons/LocalLibrary';
 import PedidoIcon from '@material-ui/icons/RestaurantMenu';
 import MesaIcon from '@material-ui/icons/Layers';
 import PersonOutlined from '@material-ui/icons/PersonOutline';
-import './Sidenav.scss'
+import '../estilos.scss'
 import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 import DialogConfirmacion from '../Dialog/DialogConfirmacion';
+import { ServiceLocator } from '../../services/ServiceLocator';
 
 export function Sidenav(props) {
-
   const { open, history, handlers, empleado, opcionesMenu } = props;
   const [openDialog, setOpenDialog] = React.useState(false);
 
@@ -28,22 +28,38 @@ export function Sidenav(props) {
         case 'carta':
           return {
             onClick: '/carta',
-            description: 'ver Carta',
-            icon: (<CartIcon />)
+            description: 'Carta',
+            icon: (<CartIcon fontSize="large" color="primary" />)
           }
-
         case 'pedidos':
           return {
             onClick: '/pedido/cocina',
-            description: 'ver Pedidos',
-            icon: (<PedidoIcon />)
+            description: 'Pedidos',
+            icon: (<PedidoIcon fontSize="large" color="primary" />)
           }
-
-        default:
+        case 'mesas':
           return {
             onClick: '/mesas',
-            description: 'ver Mesa',
-            icon: (<MesaIcon />)
+            description: 'Mesas',
+            icon: (<MesaIcon fontSize="large" color="primary" />)
+          }
+        case 'administrar_mesas':
+          return {
+            onClick: '/mesas',
+            description: 'Administrar Mesas',
+            icon: (<MesaIcon fontSize="large" color="primary" />)
+          }
+        case 'empleados':
+          return {
+            onClick: '/empleados',
+            description: 'Empleados',
+            icon: (<PersonIcon fontSize="large" color="primary" />)
+          }
+        default:
+          return {
+            onClick: '/carta',
+            description: 'Carta',
+            icon: (<CartIcon fontSize="large" color="primary" />)
           }
       }
     }
@@ -51,99 +67,65 @@ export function Sidenav(props) {
 
   const logOut = () => {
     ControllerDeEmpleado.cerrarSesionActiva()
+    ServiceLocator.EmpleadoService.cerrarSesion({ idEmpleado: empleado.id })
     window.location.reload();
   }
 
   return (
     <div>
-      <Drawer
-        open={open} onClose={handlers.onChange}>
-        <div
-          tabIndex={0}
-          role="button"
-          onClick={handlers.onChange}>
+      <Drawer open={open} onClose={handlers.onChange}>
+        <div tabIndex={0} role="button" onClick={handlers.onChange}>
           <div className="side-nav">
             <AppBar position="static">
               <br />
-              <Grid container spacing={16}>
-                <Grid item xs={12}
-                  container
-                  direction="row"
-                  justify="center">
-
-                  <Grid item xd={6} >
-                    <br />
-                    <PersonIcon fontSize="large" />
-                  </Grid>
-
-                  <Grid item xs={6}>
-                    <br />
-                    <Grid item xs={12}>
-                      <Typography
-                        color="inherit"
-                        variant="body2"
-                        gutterBottom >{((empleado) && empleado.nombre) + ' ' + ((empleado) && empleado.apellido)}</Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Typography color="inherit" variant="caption">{((empleado) && empleado.email)}</Typography>
-                    </Grid>
-                    <br />
-                  </Grid>
-
-                </Grid>
-              </Grid>
+              <ListItem>
+                <ListItemAvatar>
+                  <PersonIcon fontSize="large" />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={
+                    <Typography color="inherit" variant="body2" gutterBottom >
+                      {((empleado) && empleado.nombre) + ' ' + ((empleado) && empleado.apellido)}
+                    </Typography>
+                  }
+                />
+              </ListItem>
               <br />
             </AppBar>
             <List>
               {(opcionesMenu) && opcionesMenu.map((opcion) => {
                 const menu = optionSwitch(opcion)
-                return <ListItem key={menu.description} >
-                  <IconButton onClick={() => history.push(menu.onClick)}>
-                    <Typography
-                      variant="subtitle2"
-                      color="primary">
-                      <Grid container spacing={16}>
-                        <Grid item xs={12}
-                          container
-                          direction="row"
-                          justify="center">
-                          <Grid item xd={6} >
-                            {menu.icon}
-                          </Grid>
-                          <Grid item xd={6} >
-                            {' ' + menu.description}
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </Typography>
-                  </IconButton>
-                </ListItem>
+                return (
+                  <div key={menu.description}>
+                    <ListItem button onClick={() => history.push(menu.onClick)}>
+                      <ListItemAvatar>
+                        {menu.icon}
+                      </ListItemAvatar>
+                      <ListItemText primary={
+                        <Typography variant="subtitle2" color="primary">
+                          {menu.description}
+                        </Typography>
+                      } />
+                    </ListItem>
+                  </div>
+                )
               })}
             </List>
           </div>
           <footer >
             <Divider />
-            <Container maxWidth="sm">
-              <IconButton onClick={handleClickOpen}>
-                <Typography
-                  variant="subtitle2"
-                  color="primary">
-                  <Grid container spacing={16}>
-                    <Grid item xs={12}
-                      container
-                      direction="row"
-                      justify="center">
-                      <Grid item xd={6} >
-                        <PersonOutlined />
-                      </Grid>
-                      <Grid item xd={6} >
-                        {" Cerrar Sesión"}
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Typography>
-              </IconButton>
-            </Container>
+            <List>
+              <ListItem button onClick={handleClickOpen}>
+                <ListItemAvatar>
+                  <PersonOutlined fontSize="large" />
+                </ListItemAvatar>
+                <ListItemText primary={
+                  <Typography variant="subtitle2">
+                    {" Cerrar Sesión"}
+                  </Typography>}
+                />
+              </ListItem>
+            </List>
           </footer>
         </div>
       </Drawer>

@@ -4,7 +4,8 @@ import MenuSuperior from "../../components/menuSuperior/MenuSuperior";
 import ListaItems from "../../components/listaItems/ListaItems";
 import MenuInferior from '../../components/menuInferior/MenuInferior.js';
 import PedidoIcon from '@material-ui/icons/RestaurantMenu';
-import './VisualizarCarta.scss';
+import '../estilosPaginas.scss';
+import { CircularProgress } from '@material-ui/core';
 
 export default class VisualizarCarta extends Component {
   constructor(props) {
@@ -68,7 +69,11 @@ export default class VisualizarCarta extends Component {
     var { categorias } = this.state
 
     if (!carta || !categorias) {
-      return <div></div>
+      return (
+        <div className="fullWidth center">
+          <CircularProgress size={80} />
+        </div>
+      )
     } else {
       categorias = categorias.map((categoria) => categoria.replace('_', ' '))
     }
