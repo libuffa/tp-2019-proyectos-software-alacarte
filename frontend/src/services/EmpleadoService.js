@@ -30,4 +30,11 @@ export class EmpleadoService {
   getEmpleados() {
     return client.get(`/empleados`).then(res => { return res.data })
   }
+
+  cambiarContraseña(data) {
+    return client.put('/empleado/cambiarContraseña', data, { timeout: 10000 })
+      .then(res => { return res.data })
+      .catch(error => { return { error } })
+  }
+
 }

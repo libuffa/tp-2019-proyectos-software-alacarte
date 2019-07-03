@@ -11,6 +11,7 @@ import org.uqbar.xtrest.api.annotation.Body
 import org.uqbar.xtrest.api.annotation.Controller
 import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.api.annotation.Post
+import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.json.JSONUtils
 import repository.EmpleadoRepository
 import repository.MesaRepository
@@ -68,8 +69,7 @@ class EmpleadoController {
 			var empleado = repoEmpleados.searchById(_id)
 			
 			if(empleado === null) {
-				empleado = repoEmpleados.allInstances.get(0)
-//				return badRequest('{ "error" : "usuario inexistente" }')
+				return badRequest('{ "error" : "usuario inexistente" }')
 			}
 			
 			return ok(empleado.toJson)
@@ -157,6 +157,30 @@ class EmpleadoController {
 			return ok(empleados.toJson)
 		}catch(Exception e) {
 			badRequest(e.message)
+		}
+	}
+	
+	@Put("/empleado/cambiarContraseña")
+	def Result cambiarContraseña(@Body String body) {
+		try{
+			val idEmpleado = Long.valueOf(body.getPropertyValue("idEmpleado"))
+			val contraseñaActual = body.getPropertyValue("contraseñaActual")
+			val contraseñaNueva = body.getPropertyValue("contraseñaNueva")
+			val empleado = repoEmpleados.searchById(idEmpleado)
+			
+			if(empleado === null){
+				return badRequest('{ "error" : "usuario inexistente" }')
+			}
+			if(!empleado.contraseña.equals(contraseñaActual)) {
+				return badRequest('{ "error" : "Contraseña actual incorrecta" }')
+			}
+			
+			empleado.cambiarContraseña(contraseñaNueva)
+			
+			return ok("Contraseña modificada correctamente")
+			
+		}catch(Exception e) {
+			return ok(e.message)
 		}
 	}
 }

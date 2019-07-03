@@ -40,4 +40,9 @@ abstract class Empleado {
 		this.logueado = !this.logueado
 		EmpleadoRepository.instance.update(this)
 	}
+	
+	def cambiarContraseña(String contraseñaNueva) {
+		this.contraseña = contraseñaNueva
+		EmpleadoRepository.instance.update(this)
+	}
 }
