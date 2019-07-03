@@ -33,8 +33,8 @@ export class EmpleadoService {
 
   cambiarContraseña(data) {
     return client.put('/empleado/cambiarContraseña', data, { timeout: 10000 })
-      .then(res => { return res })
-      .catch(error => { console.log(error)  })
+      .then(res => { return res.data })
+      .catch(error => { return { error } })
   }
 
 }
