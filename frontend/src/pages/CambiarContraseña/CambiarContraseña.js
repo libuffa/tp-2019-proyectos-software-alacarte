@@ -30,10 +30,11 @@ export default class CambiarContraseña extends Component {
             }
             ServiceLocator.EmpleadoService.cambiarContraseña(json)
                 .then((respuesta) => {
-                    if (respuesta) {
+                    const error = respuesta.error.response.data.error
+                    if (!error) {
                         this.handleClickOpen()
                     } else {
-                        throw respuesta
+                        this.generarError(error)
                     }
                 })
         } else {
