@@ -23,6 +23,7 @@ import Header from './components/Header/Header';
 import Login from './pages/Login/Login';
 import './App.css';
 import CambiarContraseña from './pages/CambiarContraseña/CambiarContraseña';
+import VisualizarMesasAdministrador from './pages/VisualizarMesasAdministrador/VisualizarMesasAdministrador';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -35,6 +36,7 @@ function RouterPrincipal(props) {
           <Route path="/pedido" exact component={VisualizarPedidoMozo} />
           <Route path="/pedido/cocina" exact component={VisualizarPedidoCocina} />
           <Route path="/mesas" exact component={VisualizarMesas} />
+          <Route path="/mesas/admin" exact component={VisualizarMesasAdministrador} />
           <Route path="/detalle/mesa" exact component={DetalleMesa} />
           <Route path="/carta/cliente" exact component={VisualizarCarta} />
           <Route path="/detalle/item/carta/empleado" exact component={DetalleItemCartaEmpleado} />

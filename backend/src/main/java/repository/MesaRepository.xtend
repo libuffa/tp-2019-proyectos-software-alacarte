@@ -47,4 +47,5 @@ class MesaRepository extends AbstractRepository<Mesa> {
 		searchById(id)
 	}
 	
+	
 }

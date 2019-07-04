@@ -1,5 +1,6 @@
 package controller
 
+import domain.Mesa
 import domain.Sesion
 import domain.empleado.Cocinero
 import domain.empleado.Mozo
@@ -30,34 +31,34 @@ class EmpleadoController {
 	def Result iniciarSesion(@Body String body) {
 		val nombreUsuario = body.getPropertyValue("nombreUsuario")
 		val contraseña = body.getPropertyValue("contraseña")
-		
-		try{
+
+		try {
 			val empleado = repoEmpleados.searchByString(nombreUsuario)
-			if(empleado === null || empleado.logueado) {
+			if (empleado === null || empleado.logueado) {
 				return ok("Usuario logueado o incorrecto")
 			}
-			if(!empleado.contraseña.equals(contraseña)) {
+			if (!empleado.contraseña.equals(contraseña)) {
 				return ok("Contraseña incorrecta")
 			}
 			empleado.loguearDesloguear()
 			return ok(empleado.toJson)
-		}catch(Exception e) {
+		} catch (Exception e) {
 			return ok("Usuario incorrecto")
 		}
 	}
-	
+
 	@Post("/empleado/cerrarSesion")
 	def Result cerrarSesion(@Body String body) {
 		val idEmpleado = Long.valueOf(body.getPropertyValue("idEmpleado"))
-		
-		try{
+
+		try {
 			val empleado = repoEmpleados.searchById(idEmpleado)
-			if(empleado === null || !empleado.logueado) {
+			if (empleado === null || !empleado.logueado) {
 				return ok("Usuario no logueado")
 			}
 			empleado.loguearDesloguear()
 			return ok("Usuario cerrado correctamente")
-		}catch(Exception e) {
+		} catch (Exception e) {
 			badRequest(e.message)
 		}
 	}
@@ -67,11 +68,11 @@ class EmpleadoController {
 		try {
 			val _id = Long.valueOf(id)
 			var empleado = repoEmpleados.searchById(_id)
-			
-			if(empleado === null) {
+
+			if (empleado === null) {
 				return badRequest('{ "error" : "usuario inexistente" }')
 			}
-			
+
 			return ok(empleado.toJson)
 		} catch (Exception e) {
 			badRequest(e.message)
@@ -83,15 +84,15 @@ class EmpleadoController {
 		try {
 			val _id = Long.valueOf(id)
 			val empleado = repoEmpleados.searchById(_id)
-			if(empleado === null) {
+			if (empleado === null) {
 				return badRequest("Usuario incorrecto")
 			}
 			val tipoEmpleado = empleado.class
 			var List<String> opciones = new ArrayList
 			switch tipoEmpleado {
-				case Mozo: opciones = #["carta","mesas"]
-				case Cocinero: opciones = #["carta","pedidos"]
-				default: opciones = #["carta","administrar_mesas","empleados"]
+				case Mozo: opciones = #["carta", "mesas"]
+				case Cocinero: opciones = #["carta", "pedidos"]
+				default: opciones = #["carta", "administrar_mesas", "empleados"]
 			}
 			return ok(opciones.toJson)
 		} catch (Exception e) {
@@ -101,37 +102,37 @@ class EmpleadoController {
 
 	@Get("/mesas")
 	def Result getMesas() {
-		try{
+		try {
 			val mesas = repoMesas.allInstances()
 			return ok(mesas.toJson)
-		}catch(Exception e) {
+		} catch (Exception e) {
 			badRequest(e.message)
 		}
 	}
-	
+
 	@Get("/mesas/:id")
 	def Result getMesa() {
 		val idMesa = Long.valueOf(id)
-		try{
+		try {
 			val mesas = repoMesas.allInstances()
-			val mesa = mesas.filter[mesa | mesa.id === idMesa].get(0)
+			val mesa = mesas.filter[mesa|mesa.id === idMesa].get(0)
 			return ok(mesa.toJson)
-		}catch(Exception e) {
+		} catch (Exception e) {
 			badRequest(e.message)
 		}
 	}
-	
+
 	@Post("/mesas/estado")
 	def Result asignarDesasignarMesa(@Body String body) {
 		val idMesaBody = Long.valueOf(body.getPropertyValue("idMesa"))
 		val idMozoBody = Long.valueOf(body.getPropertyValue("idMozo"))
-		try{
+		try {
 			val mesaRepo = repoMesas.searchById(idMesaBody)
-			if(mesaRepo === null){
+			if (mesaRepo === null) {
 				return ok("Mesa incorrecta")
 			}
 			var sesion = mesaRepo.getSesion()
-			if(sesion === null) {
+			if (sesion === null) {
 				val mozoRepo = repoEmpleados.searchById(idMozoBody)
 				sesion = new Sesion => [
 					mesa = mesaRepo
@@ -145,41 +146,84 @@ class EmpleadoController {
 				sesion.cerrarSesion()
 				return ok("Mesa cerrada correctamente")
 			}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			return ok("Error en el servidor")
 		}
 	}
-	
-	@Get("/empleados")
-	def Result getEmpleados(){
-		try{
-			val empleados = repoEmpleados.allInstances()
-			return ok(empleados.toJson)
-		}catch(Exception e) {
-			badRequest(e.message)
+
+	@Post("/mesas/eliminar")
+	def Result eliminarMesa(@Body String body) {
+		try {
+			val idMesaBody = Long.valueOf(body.getPropertyValue("idMesa"))
+			val idEmpleadoBody = Long.valueOf(body.getPropertyValue("idEmpleado"))
+			val empleadoRepo = repoEmpleados.searchById(idEmpleadoBody)
+			if (empleadoRepo === null) {
+				return ok('{ "error" : "Empleado inexistente" }')
+			}
+			val mesaRepo = repoMesas.searchById(idMesaBody)
+			if (mesaRepo === null) {
+				return ok('{ "error" : "Mesa inexistente" }')
+			}
+			repoMesas.delete(mesaRepo)
+			return ok('{ "ok" : "Mesa eliminada correctamente" }')
+		} catch (Exception e) {
+			return ok(e.message)
 		}
 	}
 	
+	@Post("/mesas/crear")
+	def Result crearMesa(@Body String body) {
+		try {
+			val idEmpleadoBody = Long.valueOf(body.getPropertyValue("idEmpleado"))
+			val empleadoRepo = repoEmpleados.searchById(idEmpleadoBody)
+			if (empleadoRepo === null) {
+				return ok('{ "error" : "Empleado inexistente" }')
+			}
+			val mesa = repoMesas.allInstances.maxBy[mesa | mesa.numero]
+			val numeroMesa = mesa.numero
+			val mesaRepo = new Mesa => [ 
+				numero = numeroMesa + 1
+			]
+			if (mesaRepo === null) {
+				return ok('{ "error" : "Mesa inexistente" }')
+			}
+			repoMesas.create(mesaRepo)
+			return ok('{ "ok" : "Mesa creada correctamente" }')
+		} catch (Exception e) {
+			return ok(e.message)
+		}
+	}
+
+	@Get("/empleados")
+	def Result getEmpleados() {
+		try {
+			val empleados = repoEmpleados.allInstances()
+			return ok(empleados.toJson)
+		} catch (Exception e) {
+			badRequest(e.message)
+		}
+	}
+
 	@Put("/empleado/cambiarContraseña")
 	def Result cambiarContraseña(@Body String body) {
-		try{
+		try {
 			val idEmpleado = Long.valueOf(body.getPropertyValue("idEmpleado"))
 			val contraseñaActual = body.getPropertyValue("contraseñaActual")
 			val contraseñaNueva = body.getPropertyValue("contraseñaNueva")
 			val empleado = repoEmpleados.searchById(idEmpleado)
-			
-			if(empleado === null){
+
+			if (empleado === null) {
 				return badRequest('{ "error" : "usuario inexistente" }')
 			}
-			if(!empleado.contraseña.equals(contraseñaActual)) {
+			if (!empleado.contraseña.equals(contraseñaActual)) {
 				return badRequest('{ "error" : "Contraseña actual incorrecta" }')
 			}
-			
+
 			empleado.cambiarContraseña(contraseñaNueva)
-			
+
 			return ok("Contraseña modificada correctamente")
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			return ok(e.message)
 		}
 	}
