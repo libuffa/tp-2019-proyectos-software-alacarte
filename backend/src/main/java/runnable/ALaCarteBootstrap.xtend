@@ -1,19 +1,19 @@
 package runnable
 
 import domain.Categoria
-import domain.Estado
 import domain.ItemCarta
 import domain.Mesa
 import domain.Pedido
-import domain.Sesion
+import domain.empleado.Administrador
 import domain.empleado.Cocinero
+import domain.empleado.Empleado
 import domain.empleado.Mozo
+import domain.empleado.TipoEmpleado
 import org.eclipse.xtend.lib.annotations.Accessors
 import repository.EmpleadoRepository
 import repository.ItemCartaRepository
 import repository.MesaRepository
 import repository.SesionRepository
-import domain.empleado.Administrador
 
 @Accessors
 class ALaCarteBootstrap {
@@ -55,10 +55,10 @@ class ALaCarteBootstrap {
 	Mesa mesa9
 	Mesa mesa10
 
-	Mozo claudia
-	Mozo monica
-	Cocinero pepe
-	Administrador jose
+	Empleado claudia
+	Empleado monica
+	Empleado pepe
+	Empleado jose
 
 	def run() {
 
@@ -254,35 +254,39 @@ class ALaCarteBootstrap {
 		mesa9 = new Mesa => [numero = 9]
 		mesa10 = new Mesa => [numero = 10]
 
-		claudia = new Mozo => [
+		claudia = new Empleado => [
 			nombreUsuario = "clauMorales"
 			nombre = "Claudia"
 			apellido = "Morales"
 			contraseña = "1234"
 			email = "cmorales@yahoo.com"
+			tipoEmpleado = TipoEmpleado.Mozo
 		]
-		pepe = new Cocinero => [
+		pepe = new Empleado => [
 			nombreUsuario = "pepe"
 			nombre = "Roberto"
 			apellido = "Garcia"
 			contraseña = "1234"
 			email = "pepegarcia@gmail.com"
+			tipoEmpleado = TipoEmpleado.Cocinero
 		]
 		
-		monica = new Mozo => [
+		monica = new Empleado => [
 			nombreUsuario = "moniCorral"
 			nombre = "Monica"
 			apellido = "Corral"
 			contraseña = "1234"
 			email = "mcorral@yahoo.com"
+			tipoEmpleado = TipoEmpleado.Mozo
 		]
 		
-		jose = new Administrador => [
+		jose = new Empleado => [
 			nombreUsuario = "joseDueño"
 			nombre = "Jose"
 			apellido = "Dueño"
 			contraseña = "4321"
 			email = "eldueñodetodo@yahoo.com"
+			tipoEmpleado = TipoEmpleado.Administrador
 		]
 		
 		carta.create(plato1)

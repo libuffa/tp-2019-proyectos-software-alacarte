@@ -37,16 +37,5 @@ export class EmpleadoService {
       .catch(error => { return { error } })
   }
 
-  crearMesa(data) {
-    return client.post('/mesas/crear', data, { timeout: 10000 })
-      .then(res => { return res.data })
-      .catch(error => { return { error } })
-  }
-
-  eliminarMesa(data) {
-    return client.post('/mesas/eliminar', data, { timeout: 10000 })
-      .then(res => { return res.data })
-      .catch(error => { return { error } })
-  }
 
 }

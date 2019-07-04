@@ -60,7 +60,7 @@ export default class VisualizarMesasAdministrador extends Component {
     }
 
     crearMesa() {
-        ServiceLocator.EmpleadoService.crearMesa({
+        ServiceLocator.mesaService.crearMesa({
             "idEmpleado": ControllerDeEmpleado.getSesionActiva()
         }).then((respuesta) => {
             if (respuesta.ok) {
@@ -79,7 +79,7 @@ export default class VisualizarMesasAdministrador extends Component {
     }
 
     eliminarMesa = (id) => {
-        ServiceLocator.EmpleadoService.eliminarMesa({
+        ServiceLocator.mesaService.eliminarMesa({
             "idEmpleado": ControllerDeEmpleado.getSesionActiva(),
             "idMesa": id
         }).then((respuesta) => {

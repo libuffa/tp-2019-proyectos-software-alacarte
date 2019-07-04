@@ -2,6 +2,8 @@ package domain.empleado
 
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.Inheritance
@@ -12,7 +14,7 @@ import repository.EmpleadoRepository
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 @Accessors
-abstract class Empleado {
+class Empleado {
 
 	@Id
 	@GeneratedValue
@@ -35,6 +37,10 @@ abstract class Empleado {
 	
 	@Column
 	Boolean logueado = false
+	
+	@Enumerated(EnumType.STRING)
+	@Column(length=20)
+	TipoEmpleado tipoEmpleado
 
 	def loguearDesloguear() {
 		this.logueado = !this.logueado
