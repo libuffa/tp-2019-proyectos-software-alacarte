@@ -69,19 +69,19 @@ export default class Login extends Component {
           </Typography>
         </div>
         <div>
-          <input className="inputLogin" placeholder=" Usuario" name="usuario" onChange={this.handleChange}></input>
+          <input maxLength="20" className="inputLogin" placeholder=" Usuario" name="usuario" onChange={this.handleChange}></input>
         </div>
         <div>
-          <input type="password" className="inputLogin" placeholder=" Contraseña" name="pass" onChange={this.handleChange}></input>
+          <input maxLength="15" type="password" className="inputLogin" placeholder=" Contraseña" name="pass" onChange={this.handleChange}></input>
         </div>
         <button className="botonLogin" onClick={this.handleEnviar}>INGRESAR</button>
         <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                {"Recuperar Contraseña"}
-              </Link>
-            </Grid>
+          <Grid item xs>
+            <Link href="#" variant="body2">
+              {"Recuperar Contraseña"}
+            </Link>
           </Grid>
+        </Grid>
         <SnackBarPersonal mensajeError={errorMessage} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={"error"} />
       </Container>
     );
