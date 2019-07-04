@@ -14,6 +14,7 @@ import DetalleItemCarta from './pages/detalleItemCarta/DetalleItemCarta';
 import DetalleItemCartaEmpleado from './pages/detalleItemCartaEmpleado/DetalleItemCartaEmpleado';
 import DetalleItemPedido from './pages/detalleItemPedido/DetalleItemPedido';
 import DetalleItemPedidoCocina from './pages/detalleItemPedidoCocina/DetalleItemPedidoCocina';
+import DetalleEmpleado from './pages/detalleEmpleado/DetalleEmpleado';
 import DetalleMesa from './pages/detalleMesa/DetalleMesa';
 import MenuEmpleado from './pages/menuEmpleado/MenuEmpleado';
 import EscanearQR from './pages/escanearQR/EscanearQR';
@@ -44,6 +45,7 @@ function RouterPrincipal(props) {
           <Route path="/detalle/item/pedido/cocina" exact component={DetalleItemPedidoCocina} />
           <Route path="/detalle/item/carta" exact component={DetalleItemCarta} />
           <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
+          <Route path="/detalle/empleado" exact component={DetalleEmpleado} />
           <Route path="/carta" exact component={VisualizarCartaEmpleado} />
           <Route path="/menu/empleado" exact component={MenuEmpleado} />
           <Route path="/escanear/qr" exact component={EscanearQR} />

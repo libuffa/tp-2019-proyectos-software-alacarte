@@ -4,10 +4,7 @@ import domain.Categoria
 import domain.ItemCarta
 import domain.Mesa
 import domain.Pedido
-import domain.empleado.Administrador
-import domain.empleado.Cocinero
 import domain.empleado.Empleado
-import domain.empleado.Mozo
 import domain.empleado.TipoEmpleado
 import org.eclipse.xtend.lib.annotations.Accessors
 import repository.EmpleadoRepository

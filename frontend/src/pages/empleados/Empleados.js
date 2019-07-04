@@ -35,10 +35,10 @@ export default class Empleados extends Component {
     this.props.history.push('/menu/empleado')
   }
 
-  verDetalleEmpleado = (empleado) => {
+  verDetalleEmpleado = (idEmpleado) => {
     this.props.history.push({
       pathname: '/detalle/empleado',
-      state: { empleado: empleado }
+      state: { idEmpleado: idEmpleado }
     })
   }
 
