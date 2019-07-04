@@ -4,7 +4,7 @@ import { ControllerDeEmpleado } from './controller/ControllerDeEmpleado';
 import { ControllerDeSesion } from './controller/ControllerDeSesion';
 import { ServiceLocator } from './services/ServiceLocator';
 import { Paper } from '@material-ui/core';
-import VisualizarPedido from './pages/visualizarPedido/VisualizarPedido';
+import VisualizarPedido from './pages/VisualizarPedido/VisualizarPedido';
 import VisualizarPedidoMozo from './pages/visualizarPedidoMozo/VisualizarPedidoMozo';
 import VisualizarPedidoCocina from './pages/visualizarPedidoCocina/VisualizarPedidoCocina';
 import VisualizarCarta from './pages/visualizarCarta/VisualizarCarta';
@@ -19,11 +19,12 @@ import DetalleMesa from './pages/detalleMesa/DetalleMesa';
 import MenuEmpleado from './pages/menuEmpleado/MenuEmpleado';
 import EscanearQR from './pages/escanearQR/EscanearQR';
 import Empleados from './pages/empleados/Empleados';
-import MostrarQR from './pages/mostrarQR/MostrarQR';
+import MostrarQR from './pages/MostrarQR/MostrarQR';
 import Header from './components/Header/Header';
-import Login from './pages/login/Login';
+import Login from './pages/Login/Login';
 import './App.css';
 import CambiarContraseña from './pages/CambiarContraseña/CambiarContraseña';
+import VisualizarMesasAdministrador from './pages/VisualizarMesasAdministrador/VisualizarMesasAdministrador';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -36,6 +37,7 @@ function RouterPrincipal(props) {
           <Route path="/pedido" exact component={VisualizarPedidoMozo} />
           <Route path="/pedido/cocina" exact component={VisualizarPedidoCocina} />
           <Route path="/mesas" exact component={VisualizarMesas} />
+          <Route path="/mesas/admin" exact component={VisualizarMesasAdministrador} />
           <Route path="/detalle/mesa" exact component={DetalleMesa} />
           <Route path="/carta/cliente" exact component={VisualizarCarta} />
           <Route path="/detalle/item/carta/empleado" exact component={DetalleItemCartaEmpleado} />

@@ -46,7 +46,7 @@ export function Sidenav(props) {
           }
         case 'administrar_mesas':
           return {
-            onClick: '/mesas',
+            onClick: '/mesas/admin',
             description: 'Administrar Mesas',
             icon: (<MesaIcon fontSize="large" color="primary" />)
           }
