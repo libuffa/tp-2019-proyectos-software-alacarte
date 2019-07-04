@@ -19,6 +19,10 @@ export class EmpleadoService {
     return client.get(`/empleado/${ControllerDeEmpleado.getSesionActiva()}`).then(res => { return res.data })
   }
 
+  getEmpleadoPorId(id) {
+    return client.get(`/empleado/${id}`).then(res => { return res.data })
+  }
+
   getEmpleadoById(id) {
     return client.get(`/empleado/${id}`).then(res => { return res.data })
   }

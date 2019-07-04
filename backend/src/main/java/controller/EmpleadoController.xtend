@@ -174,11 +174,8 @@ class EmpleadoController {
 			if(!empleado.contraseña.equals(contraseñaActual)) {
 				return badRequest('{ "error" : "Contraseña actual incorrecta" }')
 			}
-			
 			empleado.cambiarContraseña(contraseñaNueva)
-			
 			return ok("Contraseña modificada correctamente")
-			
 		}catch(Exception e) {
 			return ok(e.message)
 		}

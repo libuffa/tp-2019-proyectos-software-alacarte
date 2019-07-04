@@ -39,7 +39,7 @@ export default function ListaEmpleados(props) {
         <div className="dividerLista" />
         {empleados.map((empleado) => {
           return (
-            <ListItem button key={empleado.id} onClick={() => handlers.onChange(empleado)}>
+            <ListItem button key={empleado.id} onClick={() => handlers.onChange(empleado.id)}>
               <ListItemAvatar >
                 <Avatar className={empleado.logueado ? classes.empleadoActivo : classes.empleadoInactivo}>
                   <Typography variant="h5" >
