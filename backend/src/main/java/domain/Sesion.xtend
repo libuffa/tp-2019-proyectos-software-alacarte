@@ -16,7 +16,6 @@ import javax.persistence.Id
 import javax.persistence.OneToMany
 import javax.persistence.OneToOne
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.uqbar.commons.model.exceptions.UserException
 import repository.SesionRepository
 
 @Entity

@@ -2,17 +2,15 @@ package domain
 
 import java.util.ArrayList
 import java.util.List
-import javax.persistence.CollectionTable
 import javax.persistence.Column
 import javax.persistence.ElementCollection
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
-import javax.persistence.JoinColumn
 import org.eclipse.xtend.lib.annotations.Accessors
-import javax.persistence.FetchType
 
 @Entity
 @Accessors
