@@ -10,6 +10,7 @@ import '../estilos.scss'
 import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 import DialogConfirmacion from '../Dialog/DialogConfirmacion';
 import { ServiceLocator } from '../../services/ServiceLocator';
+import { ControllerDeSesion } from '../../controller/ControllerDeSesion';
 
 export function Sidenav(props) {
   const { open, history, handlers, empleado, opcionesMenu } = props;
@@ -67,7 +68,8 @@ export function Sidenav(props) {
   }
 
   const logOut = () => {
-    ControllerDeEmpleado.cerrarSesionActiva()
+    ControllerDeEmpleado.cerrarSesionActiva();
+    ControllerDeSesion.cerrarSesionActiva();
     ServiceLocator.EmpleadoService.cerrarSesion({ idEmpleado: empleado.id })
     window.location.reload();
   }

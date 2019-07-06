@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function IconLabelButtons(props) {
+export default function Botones(props) {
   const { handlersVolver, handlersAgregarAPedido, text1, text2, disabled, eliminar } = props;
   const classes = useStyles();
 
