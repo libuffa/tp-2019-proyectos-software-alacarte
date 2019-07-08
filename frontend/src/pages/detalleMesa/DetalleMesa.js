@@ -7,6 +7,7 @@ import { ServiceLocator } from '../../services/ServiceLocator';
 import { ControllerDeSesion } from '../../controller/ControllerDeSesion';
 import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal';
+import '../estilosPaginas.scss'
 
 export default class DetalleMesa extends Component {
   constructor(props) {
@@ -123,15 +124,17 @@ export default class DetalleMesa extends Component {
       )
     }
 
-    return <div>
-      < div className="dividerLista" />
-      <ListSubheader disableSticky color="inherit" >
-        <ListItemText primary={"Mesa " + mesa.numero} />
-      </ListSubheader>
-      <div className="dividerLista" />
-      <CuerpoMesa mesa={mesa} mozo={mozo} entregarPedido={{ onChange: this.entregarPedido }} mostrarQR={{ onChange: this.mostrarQR }} verPedido={{ onChange: this.verPedido }} sesionMesa={{ onChange: this.sesionMesa }} />
-      <MenuInferior menuButtons={menuButtons} />
-      <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
-    </div >
+    return (
+      <div className="contenedorLista">
+        <div className="dividerLista" />
+        <ListSubheader disableSticky color="inherit" >
+          <ListItemText primary={"Mesa " + mesa.numero} />
+        </ListSubheader>
+        <div className="dividerLista" />
+        <CuerpoMesa mesa={mesa} mozo={mozo} entregarPedido={{ onChange: this.entregarPedido }} mostrarQR={{ onChange: this.mostrarQR }} verPedido={{ onChange: this.verPedido }} sesionMesa={{ onChange: this.sesionMesa }} />
+        <MenuInferior menuButtons={menuButtons} />
+        <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
+      </div >
+    )
   }
 }
