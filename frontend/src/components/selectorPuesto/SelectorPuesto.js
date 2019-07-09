@@ -39,10 +39,7 @@ export default function SelectorPuesto(props) {
           }}
           disabled={disabled}
           fullWidth
-          defaultValue={1}
-          defaultChecked={1}
         >
-          <MenuItem value={""}>-</MenuItem>
           <MenuItem value={"Administrador"}>Administrador</MenuItem>
           <MenuItem value={"Mozo"}>Mozo</MenuItem>
           <MenuItem value={"Cocinero"}>Cocinero</MenuItem>

@@ -32,7 +32,7 @@ class EmpleadoController {
 
 		try {
 			val empleado = repoEmpleados.searchByString(nombreUsuario)
-			if (empleado === null || empleado.logueado) {
+			if (empleado === null || empleado.logueado || empleado.baja) {
 				return ok("Usuario logueado o incorrecto")
 			}
 			if (!empleado.contraseña.equals(contraseña)) {
@@ -51,7 +51,7 @@ class EmpleadoController {
 
 		try {
 			val empleado = repoEmpleados.searchById(idEmpleado)
-			if (empleado === null || !empleado.logueado) {
+			if (empleado === null || !empleado.logueado || empleado.baja) {
 				return ok("Usuario no logueado")
 			}
 			empleado.loguearDesloguear()
@@ -66,7 +66,7 @@ class EmpleadoController {
 		try {
 			val _id = Long.valueOf(id)
 			var empleado = repoEmpleados.searchById(_id)
-			if (empleado === null) {
+			if (empleado === null || empleado.baja) {
 				return badRequest('{ "error" : "usuario inexistente" }')
 			}
 			return ok(empleado.toJson)
@@ -80,7 +80,7 @@ class EmpleadoController {
 		try {
 			val _id = Long.valueOf(id)
 			val empleado = repoEmpleados.searchById(_id)
-			if (empleado === null) {
+			if (empleado === null || empleado.baja) {
 				return badRequest("Usuario incorrecto")
 			}
 			val tipoEmpleado = empleado.tipoEmpleado
@@ -101,7 +101,8 @@ class EmpleadoController {
 	def Result getEmpleados() {
 		try {
 			val empleados = repoEmpleados.allInstances()
-			return ok(empleados.toJson)
+			val empleadosActivos = empleados.filter[empleado | !empleado.baja].toList
+			return ok(empleadosActivos.toJson)
 		} catch (Exception e) {
 			badRequest(e.message)
 		}
@@ -114,8 +115,8 @@ class EmpleadoController {
 			val contraseñaActual = body.getPropertyValue("contraseñaActual")
 			val contraseñaNueva = body.getPropertyValue("contraseñaNueva")
 			val empleado = repoEmpleados.searchById(idEmpleado)
-			if (empleado === null) {
-				return badRequest('{ "error" : "usuario inexistente" }')
+			if (empleado === null || empleado.baja) {
+				return badRequest('{ "error" : "Usuario inexistente" }')
 			}
 			if (!empleado.contraseña.equals(contraseñaActual)) {
 				return badRequest('{ "error" : "Contraseña actual incorrecta" }')
@@ -124,6 +125,22 @@ class EmpleadoController {
 			return ok("Contraseña modificada correctamente")
 		}catch(Exception e) {
 			return ok(e.message)
+		}
+	}
+	
+	@Post("/empleado/eliminar")
+	def Result eliminarEmpleado(@Body String body) {
+		val idEmpleado = Long.valueOf(body.getPropertyValue("id"))
+		
+		try {
+			val empleado = repoEmpleados.searchById(idEmpleado)
+			if(empleado === null || empleado.baja) {
+				return ok('{ "error" : "Usuario inexistente" }')
+			}
+			empleado.darDeBaja()
+			return ok("Usuario eliminado correctamente")
+		} catch(Exception e) {
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 	
@@ -139,7 +156,7 @@ class EmpleadoController {
 		
 		try {
 			var empleado = repoEmpleados.searchById(idEmpleado)
-			if(empleado === null){
+			if(empleado === null || empleado.baja){
 				empleado = new Empleado
 			}
 			empleado.nombreUsuario = nombreUsuarioE
@@ -152,7 +169,7 @@ class EmpleadoController {
 			} else {
 				return ok ('{ "error" : "Puesto no seleccionado" }')
 			}
-			if(empleado.id === null){
+			if(empleado.id === null || empleado.baja){
 				repoEmpleados.create(empleado)
 				return ok("Empleado creado correctamente")
 			} else {

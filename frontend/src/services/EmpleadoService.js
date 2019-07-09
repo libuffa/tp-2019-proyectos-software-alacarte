@@ -44,4 +44,8 @@ export class EmpleadoService {
   agregarEmpleado(data) {
     return client.put('/empleado/agregarEmpleado', data).then(res => { return res.data })
   }
+
+  eliminarEmpleado(data) {
+    return client.post('/empleado/eliminar', data).then(res => { return res.data })
+  }
 }

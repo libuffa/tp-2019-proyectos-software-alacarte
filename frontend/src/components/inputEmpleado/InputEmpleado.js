@@ -21,8 +21,10 @@ export default function InputEmpleado(props) {
   const [value, setValue] = React.useState(previo);
 
   function handleChange(event) {
-    setValue(event.target.value);
-    handlers.onChange(atributo, event.target.value)
+    if (event.target.value.length <= maxLength) {
+      setValue(event.target.value);
+      handlers.onChange(atributo, event.target.value)
+    }
   }
 
   return (
@@ -33,7 +35,6 @@ export default function InputEmpleado(props) {
           value={value}
           onChange={handleChange}
           aria-describedby="component-helper-text"
-          maxLength={maxLength}
           disabled={disabled}
           type={type}
         />

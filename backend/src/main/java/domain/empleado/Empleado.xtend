@@ -41,6 +41,9 @@ class Empleado {
 	@Enumerated(EnumType.STRING)
 	@Column(length=20)
 	TipoEmpleado tipoEmpleado
+	
+	@Column
+	Boolean baja = false
 
 	def loguearDesloguear() {
 		this.logueado = !this.logueado
@@ -49,6 +52,11 @@ class Empleado {
 	
 	def cambiarContraseña(String contraseñaNueva) {
 		this.contraseña = contraseñaNueva
+		EmpleadoRepository.instance.update(this)
+	}
+	
+	def darDeBaja() {
+		this.baja = true
 		EmpleadoRepository.instance.update(this)
 	}
 }
