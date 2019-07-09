@@ -1,5 +1,6 @@
 package controller
 
+import domain.empleado.Empleado
 import domain.empleado.TipoEmpleado
 import java.util.ArrayList
 import java.util.List
@@ -65,11 +66,9 @@ class EmpleadoController {
 		try {
 			val _id = Long.valueOf(id)
 			var empleado = repoEmpleados.searchById(_id)
-
 			if (empleado === null) {
 				return badRequest('{ "error" : "usuario inexistente" }')
 			}
-
 			return ok(empleado.toJson)
 		} catch (Exception e) {
 			badRequest(e.message)
@@ -115,19 +114,53 @@ class EmpleadoController {
 			val contraseñaActual = body.getPropertyValue("contraseñaActual")
 			val contraseñaNueva = body.getPropertyValue("contraseñaNueva")
 			val empleado = repoEmpleados.searchById(idEmpleado)
-
 			if (empleado === null) {
 				return badRequest('{ "error" : "usuario inexistente" }')
 			}
 			if (!empleado.contraseña.equals(contraseñaActual)) {
 				return badRequest('{ "error" : "Contraseña actual incorrecta" }')
 			}
-			
 			empleado.cambiarContraseña(contraseñaNueva)
 			return ok("Contraseña modificada correctamente")
-			
 		}catch(Exception e) {
 			return ok(e.message)
+		}
+	}
+	
+	@Put("/empleado/agregarEmpleado")
+	def Result agregarEmpleado(@Body String body) {
+		val idEmpleado = Long.valueOf(body.getPropertyValue("id"))
+		val nombreUsuarioE = String.valueOf(body.getPropertyValue("nombreUsuario"))
+		val contraseñaE = String.valueOf(body.getPropertyValue("contraseña"))
+		val emailE = String.valueOf(body.getPropertyValue("email"))
+		val nombreE = String.valueOf(body.getPropertyValue("nombre"))
+		val apellidoE = String.valueOf(body.getPropertyValue("apellido"))
+		val tipoEmpleadoE = String.valueOf(body.getPropertyValue("tipoEmpleado"))
+		
+		try {
+			var empleado = repoEmpleados.searchById(idEmpleado)
+			if(empleado === null){
+				empleado = new Empleado
+			}
+			empleado.nombreUsuario = nombreUsuarioE
+			empleado.contraseña = contraseñaE
+			empleado.email = emailE
+			empleado.nombre = nombreE
+			empleado.apellido = apellidoE
+			if(tipoEmpleadoE !== null){
+				empleado.tipoEmpleado = TipoEmpleado.valueOf(tipoEmpleadoE)
+			} else {
+				return ok ('{ "error" : "Puesto no seleccionado" }')
+			}
+			if(empleado.id === null){
+				repoEmpleados.create(empleado)
+				return ok("Empleado creado correctamente")
+			} else {
+				repoEmpleados.update(empleado)
+				return ok("Empleado actualizado correctamente")
+			}
+		}catch(Exception e){
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 }

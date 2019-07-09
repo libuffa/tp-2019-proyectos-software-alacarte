@@ -12,7 +12,7 @@ export default function DialogVolver(props) {
                 <DialogContentText id="alert-dialog-description">{descripcion}</DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handlers.onChange} color="primary">Volver</Button>
+                <Button onClick={handlers.onChange} color="primary">Aceptar</Button>
             </DialogActions>
         </Dialog>
     );

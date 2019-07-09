@@ -41,5 +41,7 @@ export class EmpleadoService {
       .catch(error => { return { error } })
   }
 
-
+  agregarEmpleado(data) {
+    return client.put('/empleado/agregarEmpleado', data).then(res => { return res.data })
+  }
 }

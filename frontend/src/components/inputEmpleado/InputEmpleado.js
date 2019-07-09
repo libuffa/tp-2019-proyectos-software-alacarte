@@ -1,43 +1,44 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
 
-const useStyles = makeStyles({
-  textField: {
-    width: '100%',
+const useStyles = makeStyles(theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
   },
-  input: {
-    paddingTop: '5px',
-    paddingBottom: '5px',
-  }
-});
+  formControl: {
+    margin: theme.spacing(0.8, 0),
+  },
+}));
 
 export default function InputEmpleado(props) {
-  const { type, placeholder, handlers, previo, disabled, atributo, maxLength } = props;
+  const { type, help, handlers, previo, disabled, atributo, maxLength, label } = props;
   const classes = useStyles();
-  const [value, setValue] = React.useState({
-    input: previo,
-  });
+  const [value, setValue] = React.useState(previo);
 
-  const handleChange = input => event => {
-    if (event.target.value.length <= maxLength) {
-      setValue({ ...value, [input]: event.target.value });
-      handlers.onChange(atributo, event.target.value)
-    }
-  };
+  function handleChange(event) {
+    setValue(event.target.value);
+    handlers.onChange(atributo, event.target.value)
+  }
 
   return (
-    <form className={classes.textField} autoComplete="off">
-      <TextField
-        disabled={disabled}
-        value={value.input}
-        onChange={handleChange('input')}
-        placeholder={placeholder}
-        className={classes.input}
-        variant="outlined"
-        fullWidth
-        type={type}
-      />
-    </form>
+    <div className={classes.container}>
+      <FormControl className={classes.formControl} fullWidth >
+        <InputLabel htmlFor="component-helper">{label}</InputLabel>
+        <Input
+          value={value}
+          onChange={handleChange}
+          aria-describedby="component-helper-text"
+          maxLength={maxLength}
+          disabled={disabled}
+          type={type}
+        />
+        <FormHelperText id="component-helper-text">{help}</FormHelperText>
+      </FormControl>
+    </div>
   );
 }

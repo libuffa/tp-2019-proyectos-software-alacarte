@@ -5,18 +5,25 @@ import { CircularProgress, Grid, Typography, Paper, ListSubheader, ListItemText,
 import InputEmpleado from '../../components/inputEmpleado/InputEmpleado.js';
 import BotonesEmpleado from '../../components/botonesEmpleado/BotonesEmpleado.js';
 import DeleteIcon from "@material-ui/icons/Delete";
+import SelectorPuesto from '../../components/selectorPuesto/SelectorPuesto';
+import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal';
+import DialogVolver from '../../components/Dialog/DialogVolver';
 
 export default class DetalleEmpleado extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      mensaje: "",
+      mensajeDialog: "",
+      tituloDialog: "",
+      variant: "",
       empleado: null,
       idEmpleado: this.props.location.state ? this.props.location.state.idEmpleado : null,
       nombre: null,
       apellido: null,
       nombreUsuario: null,
       email: null,
-      puesto: null,
+      tipoEmpleado: null,
       contraseña: null,
       confirmarContraseña: null,
     }
@@ -44,7 +51,23 @@ export default class DetalleEmpleado extends Component {
   }
 
   agregarEmpleado = () => {
-    this.verEmpleados()
+    ServiceLocator.EmpleadoService.agregarEmpleado({
+      "id": this.state.idEmpleado,
+      "nombreUsuario": this.state.nombreUsuario,
+      "contraseña": this.state.contraseña,
+      "email": this.state.email,
+      "nombre": this.state.nombre,
+      "apellido": this.state.apellido,
+      "tipoEmpleado": this.state.tipoEmpleado
+    }).then(respuesta => {
+      if (respuesta) {
+        respuesta.error ?
+          this.generarMensaje(respuesta.error, "error") :
+          this.handleOpen("!Muy Bien¡", respuesta)
+      } else {
+        this.generarMensaje("Error en el servidor", "error")
+      }
+    })
   }
 
   verEmpleados = () => {
@@ -53,13 +76,45 @@ export default class DetalleEmpleado extends Component {
 
   modificarAtributo = (atributo, valor) => {
     this.setState({
-      [atributo]: valor
+      [atributo]: valor,
     })
     console.log(valor)
   }
 
+  generarMensaje(mensaje, variant) {
+    this.setState({
+      mensaje,
+      variant
+    })
+  }
+
+  snackbarOpen() {
+    return this.state.mensaje !== ""
+  }
+
+  snackbarClose = () => {
+    this.setState({
+      mensaje: ""
+    })
+  }
+
+  handleOpen(titulo, mensaje) {
+    this.setState({
+      tituloDialog: titulo,
+      mensajeDialog: mensaje,
+      open: true,
+    })
+  }
+
+  handleClose = () => {
+    this.verEmpleados()
+    this.setState({
+      open: false,
+    })
+  }
+
   render() {
-    const { empleado } = this.state;
+    const { empleado, open, mensaje, variant, mensajeDialog, tituloDialog } = this.state;
 
     if (!empleado) {
       return (
@@ -97,111 +152,77 @@ export default class DetalleEmpleado extends Component {
               <div className="divider" />
             </Grid>
             <Grid item xs={12} >
-              <Typography variant="h5" color="textSecondary">
+              <Typography variant="h6" color="textSecondary">
                 {"Estado: "}{empleado.logueado ? "Conectado" : "Desconectado"}
               </Typography>
             </Grid>
             <Grid item xs={12}>
               <div className="divider" />
             </Grid>
-            <Grid item xs={12} >
-              <Typography variant="h6" color="textPrimary">
-                {"Nombre"}
-              </Typography>
-            </Grid>
             <Grid item xs={12}>
               <InputEmpleado
                 previo={this.state.nombre}
                 atributo={"nombre"}
+                label={"Nombre"}
                 handlers={{ onChange: this.modificarAtributo }}
-                placeholder={"Ej: Monica"}
                 maxLength={20}
               />
-            </Grid>
-            <Grid item xs={12} >
-              <Typography variant="h6" color="textPrimary">
-                {"Apellido"}
-              </Typography>
             </Grid>
             <Grid item xs={12}>
               <InputEmpleado
                 previo={this.state.apellido}
                 atributo={"apellido"}
+                label={"Apellido"}
                 handlers={{ onChange: this.modificarAtributo }}
-                placeholder={"Ej: Dominguez"}
                 maxLength={20}
               />
-            </Grid>
-            <Grid item xs={12} >
-              <Typography variant="h6" color="textPrimary">
-                {"Usuario"}
-              </Typography>
             </Grid>
             <Grid item xs={12}>
               <InputEmpleado
                 previo={this.state.nombreUsuario}
                 atributo={"nombreUsuario"}
                 handlers={{ onChange: this.modificarAtributo }}
-                placeholder={"Ej: moniDominguez"}
+                label={"Usuario"}
                 maxLength={20}
               />
             </Grid>
-            <Grid item xs={12} >
-              <Typography variant="h6" color="textPrimary">
-                {"Puesto"}
-              </Typography>
-            </Grid>
             <Grid item xs={12}>
-              <InputEmpleado
+              <SelectorPuesto
                 previo={this.state.tipoEmpleado}
+                atributo={"puesto"}
+                handlers={{ onChange: this.modificarAtributo }}
+                label={"Puesto"}
               />
-            </Grid>
-            <Grid item xs={12} >
-              <Typography variant="h6" color="textPrimary">
-                {"Mail"}
-              </Typography>
             </Grid>
             <Grid item xs={12}>
               <InputEmpleado
                 previo={this.state.email}
-                atributo={"nombreUsuario"}
+                atributo={"email"}
                 handlers={{ onChange: this.modificarAtributo }}
-                placeholder={"Ej: mdoming@mail.com"}
+                label={"E-mail"}
                 maxLength={30}
               />
             </Grid>
-            {!empleado &&
-              <Grid item xs={12} >
-                <Typography variant="h6" color="textPrimary">
-                  {"Contraseña"}
-                </Typography>
-              </Grid> &&
-              <Grid item xs={12}>
-                <InputEmpleado
-                  previo={this.state.contraseña}
-                  type={"password"}
-                  atributo={"contraseña"}
-                  handlers={{ onChange: this.modificarAtributo }}
-                  placeholder={"******"}
-                  maxLength={15}
-                />
-              </Grid> &&
-              <Grid item xs={12} >
-                <Typography variant="h6" color="textPrimary">
-                  {"Confirmar Contraseña"}
-                </Typography>
-              </Grid> &&
-              <Grid item xs={12}>
-                <InputEmpleado
-                  previo={this.state.confirmarContraseña}
-                  type={"password"}
-                  atributo={"confirmarContraseña"}
-                  handlers={{ onChange: this.modificarAtributo }}
-                  placeholder={"******"}
-                  maxLength={15}
-                />
-              </Grid>
-            }
+            <Grid item xs={12}>
+              <InputEmpleado
+                previo={this.state.contraseña}
+                type={"password"}
+                atributo={"contraseña"}
+                handlers={{ onChange: this.modificarAtributo }}
+                label={"Contraseña"}
+                maxLength={15}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <InputEmpleado
+                previo={this.state.confirmarContraseña}
+                type={"password"}
+                atributo={"confirmarContraseña"}
+                handlers={{ onChange: this.modificarAtributo }}
+                label={"Confirmar contraseña"}
+                maxLength={15}
+              />
+            </Grid>
           </Grid>
           <BotonesEmpleado
             text1={"Cancelar"}
@@ -212,6 +233,13 @@ export default class DetalleEmpleado extends Component {
             disabled2={false}
           />
         </Paper>
+        <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
+        <DialogVolver
+          titulo={tituloDialog}
+          descripcion={mensajeDialog}
+          handlers={{ onChange: this.handleClose }}
+          open={open}
+        />
       </div>
     )
   }
