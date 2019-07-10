@@ -22,14 +22,14 @@ export default class DetalleEmpleado extends Component {
       tituloDialog: "",
       variant: "",
       empleado: null,
-      idEmpleado: this.props.location.state ? this.props.location.state.idEmpleado : null,
-      nombre: null,
-      apellido: null,
-      nombreUsuario: null,
-      email: null,
-      tipoEmpleado: null,
-      contraseña: null,
-      confirmarContraseña: null,
+      idEmpleado: this.props.location.state ? this.props.location.state.idEmpleado : 0,
+      nombre: "",
+      apellido: "",
+      nombreUsuario: "",
+      email: "",
+      tipoEmpleado: "",
+      contraseña: "",
+      confirmarContraseña: "",
       logueado: false,
       modificado: false,
       disabled: false,
@@ -38,7 +38,9 @@ export default class DetalleEmpleado extends Component {
   }
 
   componentDidMount() {
-    this.cargarEmpleado(this.state.idEmpleado)
+    if (this.state.idEmpleado) {
+      this.cargarEmpleado(this.state.idEmpleado)
+    }
   }
 
   cargarEmpleado(idEmpleado) {
@@ -181,9 +183,9 @@ export default class DetalleEmpleado extends Component {
   }
 
   render() {
-    const { disabled, modificado, empleado, open, mensaje, variant, mensajeDialog, tituloDialog, nombreUsuario, contraseña, email, nombre, apellido, tipoEmpleado, confirmarContraseña, logueado } = this.state;
+    const { idEmpleado, disabled, modificado, empleado, open, mensaje, variant, mensajeDialog, tituloDialog, nombreUsuario, contraseña, email, nombre, apellido, tipoEmpleado, confirmarContraseña, logueado } = this.state;
 
-    if (!empleado) {
+    if (!empleado && idEmpleado) {
       return (
         <div className="fullWidth center">
           <CircularProgress size={80} />
@@ -202,36 +204,37 @@ export default class DetalleEmpleado extends Component {
           <Grid container spacing={0}>
             <Grid item xs={10} >
               <Typography variant="h4">
-                {empleado.nombre + " " + empleado.apellido}
+                {empleado ? (empleado.nombre + " " + empleado.apellido) : "Nuevo Empleado"}
               </Typography>
             </Grid>
             <Grid item xs={2} className="botonEliminarContainer">
-              <IconButton disabled={logueado || disabled} onClick={this.eliminarEmpleado} edge="end" >
-                <DeleteIcon />
-              </IconButton>
+              {empleado &&
+                <IconButton disabled={logueado || disabled} onClick={this.eliminarEmpleado} edge="end" >
+                  <DeleteIcon />
+                </IconButton>}
             </Grid>
             <Grid item xs={12} >
               <Typography variant="h5" color="textSecondary">
-                {empleado.nombreUsuario}
+                {empleado ? empleado.nombreUsuario : "Registro"}
               </Typography>
             </Grid>
             <Grid item xs={12}>
               <div className="divider" />
             </Grid>
             <Grid item xs={12} >
-              <Typography variant="h6" color="textSecondary">
+              {empleado && <Typography variant="h6" color="textSecondary">
                 {"Estado: "}{empleado.logueado ? "Conectado" : "Desconectado"}
-              </Typography>
+              </Typography>}
             </Grid>
             <Grid item xs={12}>
-              <div className="divider" />
+              {empleado && <div className="divider" />}
             </Grid>
             <Grid item xs={12}>
               <InputEmpleado
                 previo={nombre}
                 atributo={"nombre"}
                 label={"Nombre"}
-                disabled={logueado || disabled}
+                disabled={disabled}
                 handlers={{ onChange: this.modificarAtributo }}
                 maxLength={20}
               />
@@ -241,7 +244,7 @@ export default class DetalleEmpleado extends Component {
                 previo={apellido}
                 atributo={"apellido"}
                 label={"Apellido"}
-                disabled={logueado || disabled}
+                disabled={disabled}
                 handlers={{ onChange: this.modificarAtributo }}
                 maxLength={20}
               />
@@ -250,7 +253,7 @@ export default class DetalleEmpleado extends Component {
               <InputEmpleado
                 previo={nombreUsuario}
                 atributo={"nombreUsuario"}
-                disabled={logueado || disabled}
+                disabled={disabled}
                 handlers={{ onChange: this.modificarAtributo }}
                 label={"Usuario"}
                 maxLength={20}
@@ -259,8 +262,8 @@ export default class DetalleEmpleado extends Component {
             <Grid item xs={12}>
               <SelectorPuesto
                 previo={tipoEmpleado}
-                atributo={"puesto"}
-                disabled={logueado || disabled}
+                atributo={"tipoEmpleado"}
+                disabled={disabled}
                 handlers={{ onChange: this.modificarAtributo }}
                 label={"Puesto"}
               />
@@ -269,34 +272,38 @@ export default class DetalleEmpleado extends Component {
               <InputEmpleado
                 previo={email}
                 atributo={"email"}
-                disabled={logueado || disabled}
+                disabled={disabled}
                 handlers={{ onChange: this.modificarAtributo }}
                 label={"E-mail"}
                 maxLength={30}
               />
             </Grid>
-            <Grid item xs={12}>
-              <InputEmpleado
-                previo={contraseña}
-                type={"password" || disabled}
-                atributo={"contraseña"}
-                disabled={logueado || disabled}
-                handlers={{ onChange: this.modificarAtributo }}
-                label={"Contraseña"}
-                maxLength={15}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <InputEmpleado
-                previo={confirmarContraseña}
-                type={"password"}
-                atributo={"confirmarContraseña"}
-                disabled={logueado || disabled}
-                handlers={{ onChange: this.modificarAtributo }}
-                label={"Confirmar contraseña"}
-                maxLength={15}
-              />
-            </Grid>
+            {!empleado ?
+              <Grid item xs={12}>
+                <InputEmpleado
+                  previo={contraseña}
+                  type={"password"}
+                  atributo={"contraseña"}
+                  disabled={disabled}
+                  handlers={{ onChange: this.modificarAtributo }}
+                  label={"Contraseña"}
+                  maxLength={15}
+                />
+              </Grid> : ""
+            }
+            {!empleado ?
+              <Grid item xs={12}>
+                <InputEmpleado
+                  previo={confirmarContraseña}
+                  type={"password"}
+                  atributo={"confirmarContraseña"}
+                  disabled={disabled}
+                  handlers={{ onChange: this.modificarAtributo }}
+                  label={"Confirmar contraseña"}
+                  maxLength={15}
+                />
+              </Grid> : ""
+            }
           </Grid>
           <BotonesEmpleado
             text1={"Volver"}
@@ -304,7 +311,7 @@ export default class DetalleEmpleado extends Component {
             cancelar={{ onChange: this.volver }}
             aceptar={{ onChange: this.agregarEmpleado }}
             disabled1={disabled}
-            disabled2={!nombreUsuario || disabled || !contraseña || !email || !nombre || !apellido || !tipoEmpleado || !confirmarContraseña || logueado || !modificado}
+            disabled2={!nombreUsuario || disabled || !contraseña || !email || !nombre || !apellido || !tipoEmpleado || !confirmarContraseña || !modificado}
           />
         </Paper>
         <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />

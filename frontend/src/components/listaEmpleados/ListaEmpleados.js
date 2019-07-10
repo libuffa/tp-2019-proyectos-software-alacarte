@@ -22,6 +22,8 @@ const useStyles = makeStyles(theme => ({
   empleadoInactivo: {
     color: '#ffffff',
     backgroundColor: '#ff0000bf',
+  },
+  add: {
   }
 }));
 
@@ -51,6 +53,16 @@ export default function ListaEmpleados(props) {
             </ListItem>
           )
         })}
+        <ListItem button onClick={() => handlers.onChange(0)}>
+          <ListItemAvatar >
+            <Avatar className={classes.add}>
+              <Typography variant="h4" >
+                +
+              </Typography>
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary={"Nuevo Empleado"} />
+        </ListItem>
       </List>
     </div>
   );

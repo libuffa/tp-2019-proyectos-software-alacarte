@@ -155,8 +155,10 @@ class EmpleadoController {
 		val tipoEmpleadoE = String.valueOf(body.getPropertyValue("tipoEmpleado"))
 		
 		try {
-			var empleado = repoEmpleados.searchById(idEmpleado)
-			if(empleado === null || empleado.baja){
+			var Empleado empleado
+			try {
+				empleado = repoEmpleados.searchById(idEmpleado)
+			} catch (Exception e) {
 				empleado = new Empleado
 			}
 			empleado.nombreUsuario = nombreUsuarioE
