@@ -23,8 +23,6 @@ const useStyles = makeStyles(theme => ({
     color: '#ffffff',
     backgroundColor: '#ff0000bf',
   },
-  add: {
-  }
 }));
 
 export default function ListaEmpleados(props) {
@@ -55,7 +53,7 @@ export default function ListaEmpleados(props) {
         })}
         <ListItem button onClick={() => handlers.onChange(0)}>
           <ListItemAvatar >
-            <Avatar className={classes.add}>
+            <Avatar>
               <Typography variant="h4" >
                 +
               </Typography>

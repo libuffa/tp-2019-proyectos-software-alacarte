@@ -60,7 +60,7 @@ export default class VisualizarMesasAdministrador extends Component {
     })
   }
 
-  crearMesa() {
+  crearMesa = () => {
     ServiceLocator.mesaService.crearMesa({
       "idEmpleado": ControllerDeEmpleado.getSesionActiva()
     }).then((respuesta) => {
@@ -130,14 +130,9 @@ export default class VisualizarMesasAdministrador extends Component {
         <ListaMesasAdministrador
           mesas={mesas}
           cambiarEstado={{ onChange: this.sesionMesa }}
-          eliminarMesa={{ onChange: this.eliminarMesa }} />
-        <Card square elevation={0}>
-          <CardActions >
-            <Button color="primary" variant="outlined" onClick={() => this.crearMesa()} >
-              {"Nueva mesa"}
-            </Button>
-          </CardActions>
-        </Card>
+          eliminarMesa={{ onChange: this.eliminarMesa }}
+          handlers={{ onChange: this.crearMesa }}
+        />
         <MenuInferior menuButtons={menuButtons} />
       </div>
     )
