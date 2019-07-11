@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function InputEmpleado(props) {
-  const { type, help, handlers, previo, disabled, atributo, maxLength, label } = props;
+  const { type, help, handlers, previo, disabled, atributo, maxLength, label, error } = props;
   const classes = useStyles();
   const [value, setValue] = React.useState(previo);
 
@@ -29,7 +29,7 @@ export default function InputEmpleado(props) {
 
   return (
     <div className={classes.container}>
-      <FormControl className={classes.formControl} fullWidth >
+      <FormControl className={classes.formControl} fullWidth error={error ? error : false}>
         <InputLabel htmlFor="component-helper">{label}</InputLabel>
         <Input
           value={value}

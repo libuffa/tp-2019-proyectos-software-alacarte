@@ -33,6 +33,9 @@ export default class DetalleEmpleado extends Component {
       logueado: false,
       modificado: false,
       disabled: false,
+      checkUser: null,
+      usuarioErroneo: false,
+      mensajeUsuario: "",
     }
     this.verEmpleados = this.verEmpleados.bind(this)
   }
@@ -41,6 +44,10 @@ export default class DetalleEmpleado extends Component {
     if (this.state.idEmpleado) {
       this.cargarEmpleado(this.state.idEmpleado)
     }
+  }
+
+  componentWillUnmount() {
+    this.volver()
   }
 
   cargarEmpleado(idEmpleado) {
@@ -144,10 +151,33 @@ export default class DetalleEmpleado extends Component {
   }
 
   modificarAtributo = (atributo, valor) => {
+    if (atributo === "nombreUsuario") {
+      clearTimeout(this.state.checkUser)
+      this.setState({
+        checkUser: setTimeout(() => { this.validarUsuario(valor) }, 1000)
+      })
+    }
     this.setState({
       [atributo]: valor,
       modificado: true,
     })
+  }
+
+  validarUsuario(usuario) {
+    ServiceLocator.EmpleadoService.validarUserName(usuario)
+      .then(respuesta => {
+        if (respuesta === true) {
+          this.setState({
+            usuarioErroneo: false,
+            mensajeUsuario: "",
+          })
+        } else if (respuesta.error) {
+          this.setState({
+            usuarioErroneo: true,
+            mensajeUsuario: respuesta.error
+          })
+        }
+      })
   }
 
   generarMensaje(mensaje, variant) {
@@ -183,7 +213,7 @@ export default class DetalleEmpleado extends Component {
   }
 
   render() {
-    const { idEmpleado, disabled, modificado, empleado, open, mensaje, variant, mensajeDialog, tituloDialog, nombreUsuario, contraseña, email, nombre, apellido, tipoEmpleado, confirmarContraseña, logueado } = this.state;
+    const { mensajeUsuario, usuarioErroneo, idEmpleado, disabled, modificado, empleado, open, mensaje, variant, mensajeDialog, tituloDialog, nombreUsuario, contraseña, email, nombre, apellido, tipoEmpleado, confirmarContraseña, logueado } = this.state;
 
     if (!empleado && idEmpleado) {
       return (
@@ -257,6 +287,8 @@ export default class DetalleEmpleado extends Component {
                 handlers={{ onChange: this.modificarAtributo }}
                 label={"Usuario"}
                 maxLength={20}
+                error={usuarioErroneo}
+                help={usuarioErroneo ? mensajeUsuario : ""}
               />
             </Grid>
             <Grid item xs={12}>
@@ -288,6 +320,7 @@ export default class DetalleEmpleado extends Component {
                   handlers={{ onChange: this.modificarAtributo }}
                   label={"Contraseña"}
                   maxLength={15}
+                  help={"(Maximo 15 caracteres)"}
                 />
               </Grid> : ""
             }
@@ -301,6 +334,8 @@ export default class DetalleEmpleado extends Component {
                   handlers={{ onChange: this.modificarAtributo }}
                   label={"Confirmar contraseña"}
                   maxLength={15}
+                  error={contraseña !== confirmarContraseña}
+                  help={"(Maximo 15 caracteres)"}
                 />
               </Grid> : ""
             }
@@ -311,7 +346,7 @@ export default class DetalleEmpleado extends Component {
             cancelar={{ onChange: this.volver }}
             aceptar={{ onChange: this.agregarEmpleado }}
             disabled1={disabled}
-            disabled2={!nombreUsuario || disabled || !contraseña || !email || !nombre || !apellido || !tipoEmpleado || !confirmarContraseña || !modificado}
+            disabled2={(contraseña !== confirmarContraseña) || usuarioErroneo || !nombreUsuario || disabled || !contraseña || !email || !nombre || !apellido || !tipoEmpleado || !confirmarContraseña || !modificado}
           />
         </Paper>
         <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />

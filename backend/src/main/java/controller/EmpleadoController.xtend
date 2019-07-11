@@ -107,6 +107,21 @@ class EmpleadoController {
 			badRequest(e.message)
 		}
 	}
+	
+	@Get("/empleado/:username/validar")
+	def Result validarUsername() {
+		try {
+			val empleado = repoEmpleados.searchByString(username)
+			if (empleado !== null) {
+				return ok('{ "error" : "El nombre de usuario ya existe" }')
+			} else {
+				return ok("true")
+			}
+		}
+		catch (Exception e) {
+				return ok("true")
+		}
+	}
 
 	@Put("/empleado/cambiarContraseña")
 	def Result cambiarContraseña(@Body String body) {
@@ -159,7 +174,18 @@ class EmpleadoController {
 			try {
 				empleado = repoEmpleados.searchById(idEmpleado)
 			} catch (Exception e) {
-				empleado = new Empleado
+				try {
+					empleado = repoEmpleados.searchByString(nombreUsuarioE)
+					return ok('{ "error" : "El nombre de usuario ya existe" }')
+				} catch (Exception es) {
+					empleado = new Empleado
+				}
+			}
+			if(empleado.nombreUsuario !== nombreUsuarioE){
+				try {
+					empleado = repoEmpleados.searchByString(nombreUsuarioE)
+					return ok('{ "error" : "El nombre de usuario ya existe" }')
+				} catch (Exception es){}
 			}
 			empleado.nombreUsuario = nombreUsuarioE
 			empleado.contraseña = contraseñaE
