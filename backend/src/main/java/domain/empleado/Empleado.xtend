@@ -1,5 +1,6 @@
 package domain.empleado
 
+import domain.EmailSender
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -44,9 +45,11 @@ abstract class Empleado {
 	def cambiarContraseña(String contraseñaNueva) {
 		this.contraseña = contraseñaNueva
 		EmpleadoRepository.instance.update(this)
+		
 	}
 	
 	def recuperarContraseña() {
-//		val correo = new Email
+		val EmailSender emailSender = new EmailSender
+		emailSender.enviarMail(this.email, "prueba", emailSender.generarMail("prueba"))
 	}
 }

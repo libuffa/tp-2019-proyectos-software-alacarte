@@ -5,7 +5,6 @@ import { Container, Typography, Grid } from '@material-ui/core';
 import '../estilosPaginas.scss';
 import DialogVolver from '../../components/Dialog/DialogVolver';
 import { ServiceLocator } from '../../services/ServiceLocator';
-import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 
 export default class RecuperarContraseña extends Component {
 
@@ -20,18 +19,20 @@ export default class RecuperarContraseña extends Component {
 
     handleEnviar = () => {
         const { correoUsuario } = this.state
-        const json = {
-            idEmpleado: ControllerDeEmpleado.getSesionActiva(),
-            correoUsuario: correoUsuario,
+        if(!correoUsuario.includes('@')) {
+            this.generarError('Revisa el formato del mail')
+        } else {
+            const json = {correoUsuario: correoUsuario,}
+            ServiceLocator.EmpleadoService.recuperarContraseña(json)
+                .then((respuesta) => {
+                    if (!respuesta.error) {
+                        this.handleClickOpen()
+                      } else {
+                          console.log(respuesta)
+                        this.generarError(respuesta.error.response.data.error)
+                      }
+                })
         }
-        ServiceLocator.EmpleadoService.recuperarContraseña(json)
-            .then((respuesta) => {
-                if (respuesta) {
-                    this.handleClickOpen()
-                } else {
-                    throw respuesta
-                }
-            })
     }
 
     snackbarOpen() {

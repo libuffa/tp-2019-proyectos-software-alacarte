@@ -2,6 +2,7 @@ package controller
 
 import domain.Sesion
 import domain.empleado.Cocinero
+import domain.empleado.Empleado
 import domain.empleado.Mozo
 import java.util.ArrayList
 import java.util.List
@@ -184,21 +185,22 @@ class EmpleadoController {
 		}
 	}
 	
-	@Get("/empleado/recuperarContraseña")
+	@Put("/empleado/recuperarContraseña")
 	def Result recuperarContraseña(@Body String body) {
 		try{
-			val idEmpleado = Long.valueOf(body.getPropertyValue("idEmpleado"))
 			val correoUsuario = body.getPropertyValue("correoUsuario")
-			val empleado = repoEmpleados.searchById(idEmpleado)
+			var Empleado empleado
 			
-			if(empleado === null){
-				return badRequest('{ "error" : "usuario inexistente" }')
+			try {
+				empleado = repoEmpleados.searchByEmail(correoUsuario)
+			} catch (Exception exception) {
+				return badRequest('{ "error" : "correo inexistente" }')
 			}
 			if(!empleado.email.equals(correoUsuario)) {
 				return badRequest('{ "error" : "Correo de usuario incorrecto" }')
 			}
 			
-			val email = empleado.email
+			empleado.recuperarContraseña
 			
 			return ok("True")
 			

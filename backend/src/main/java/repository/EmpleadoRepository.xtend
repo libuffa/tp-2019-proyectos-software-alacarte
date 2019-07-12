@@ -85,4 +85,18 @@ class EmpleadoRepository extends AbstractRepository<Empleado> {
         }
 	}
 	
+	def searchByEmail(String correoUsuario) {
+		val entityManager = generateEntityManager
+        try {
+            val criteria = entityManager.criteriaBuilder
+            val query = criteria.createQuery(entityType)
+            val camposUsuario = query.from(entityType)
+            query.select(camposUsuario)
+            query.where(criteria.equal(camposUsuario.get("email"), correoUsuario))
+            entityManager.createQuery(query).singleResult
+        } finally {
+            entityManager?.close
+        }
+	}
+	
 }
