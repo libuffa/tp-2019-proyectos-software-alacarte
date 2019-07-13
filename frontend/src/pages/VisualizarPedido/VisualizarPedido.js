@@ -61,6 +61,10 @@ export default class VisualizarPedido extends Component {
     })
   }
 
+  verInstrucciones = () => {
+    this.props.history.push('/minijuego/Instrucciones')
+  }
+
   getPrecioTotal() {
     if (this.state.pedidos.length > 0) {
       return this.state.pedidos.map((pedido) => pedido.cantidad * pedido.itemCarta.precioUnitario)
@@ -155,10 +159,9 @@ export default class VisualizarPedido extends Component {
         icon: (<CartIcon />)
       },
       secondButton: {
-        onChange: null,
+        onChange: this.verInstrucciones,
         name: "Jugar Juego",
         icon: (<GamesIcon />),
-        disabled: true,
       },
       thirdButton: {
         onChange: this.open,

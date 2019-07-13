@@ -25,6 +25,7 @@ import Login from './pages/Login/Login';
 import './App.css';
 import CambiarContraseña from './pages/CambiarContraseña/CambiarContraseña';
 import VisualizarMesasAdministrador from './pages/VisualizarMesasAdministrador/VisualizarMesasAdministrador';
+import InstruccionesJuego from './pages/instruccionesJuego/InstruccionesJuego';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -69,6 +70,7 @@ function RouterCliente() {
           <Route path="/carta" exact component={VisualizarCarta} />
           <Route path="/detalle/item/carta" exact component={DetalleItemCarta} />
           <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
+          <Route path="/minijuego/instrucciones" exact component={InstruccionesJuego} />
           <Route component={RedirectCliente} />
         </Switch>
       </div>
