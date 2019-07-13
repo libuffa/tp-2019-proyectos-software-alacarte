@@ -112,7 +112,7 @@ class MesaController {
 			repoMesas.create(mesaRepo)
 			return ok('{ "ok" : "Mesa creada correctamente" }')
 		} catch (Exception e) {
-			return ok(e.message)
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 	

@@ -72,7 +72,7 @@ export default class VisualizarMesasAdministrador extends Component {
         this.cargarMesas()
       } else {
         this.setState({
-          mensaje: respuesta.error.response.data.error,
+          mensaje: respuesta.error,
           variant: "error",
         })
       }
