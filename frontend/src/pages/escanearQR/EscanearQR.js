@@ -115,6 +115,7 @@ export default class EscanearQR extends Component {
             </Button>
           </Grid>
         </Grid>
+        <br />
         <SnackBarPersonal mensajeError={errorMessage} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={"error"} />
       </Container>
     );
