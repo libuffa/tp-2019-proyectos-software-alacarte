@@ -1,6 +1,5 @@
 package domain
 
-import domain.empleado.Empleado
 import java.util.Properties
 import javax.mail.BodyPart
 import javax.mail.Message
@@ -15,10 +14,9 @@ import org.uqbar.commons.model.exceptions.UserException
 
 class EmailSender {
 
-	Empleado usuario
 	String mensaje = "prueba"
 	String email = "buffalautaro@gmail.com" 
-	String clave = "profesorcocoon"
+	String clave = ""
 	
 	def void enviarMail(String destinatario, String asunto, MimeMultipart mail) {
 
@@ -33,7 +31,8 @@ class EmailSender {
 		val MimeMessage message = new MimeMessage(session);
 
 		try {
-			message.setFrom(new InternetAddress(this.usuario.email))
+			val internetAdress = new InternetAddress(email)
+			message.setFrom(internetAdress)
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario)); // Se podrían añadir varios de la misma manera
 			message.setSubject(asunto);
 			message.setContent(mail);

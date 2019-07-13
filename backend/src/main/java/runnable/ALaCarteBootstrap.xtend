@@ -266,7 +266,7 @@ class ALaCarteBootstrap {
 			nombre = "Roberto"
 			apellido = "Garcia"
 			contraseña = "1234"
-			email = "pepegarcia@gmail.com"
+			email = "buffalautaro@gmail.com"
 		]
 		
 		monica = new Mozo => [
