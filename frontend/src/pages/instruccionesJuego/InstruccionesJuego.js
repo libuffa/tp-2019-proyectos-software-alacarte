@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import '../estilosPaginas.scss';
-import { Typography, Container, Grid, Button } from "@material-ui/core";
-import InputSesion from "../../components/inputSesion/InputSesion.js";
-import SnackBarPersonal from "../../components/snackBarPersonal/SnackBarPersonal.js";
-
+import { Typography, Container, Button } from "@material-ui/core";
+import BotonVolver from "../../components/botonVolver/BotonVolver";
 
 export default class InstruccionesJuego extends Component {
   constructor(props) {
@@ -13,25 +11,15 @@ export default class InstruccionesJuego extends Component {
     }
   }
 
-  generarError(errorMessage) {
-    this.setState({
-      errorMessage: errorMessage
-    })
+  verPedido = () => {
+    this.props.history.push('/pedido')
   }
 
-  snackbarOpen() {
-    return this.state.errorMessage !== ""
-  }
-
-  snackbarClose = () => {
-    this.setState({
-      errorMessage: ""
-    })
+  minijuego = () => {
+    this.props.history.push('/minijuego')
   }
 
   render() {
-    const { errorMessage } = this.state;
-
     return (
       <Container component="main" maxWidth="xl">
         <br />
@@ -39,31 +27,19 @@ export default class InstruccionesJuego extends Component {
           {"¡Jugá y ganá!"}
         </Typography>
         <br />
-        <Typography align='center' variant="h5">
-          {"O ingresá el número de sesion"}
+        <Typography align='center' variant="subtitle1">
+          {"Aca van a ir las instrucciones"}
         </Typography>
         <br />
-        <Grid container>
-          <Grid item xs={7}>
-            <InputSesion handlerSesion={{ onChange: this.modificarSesion }} />
-          </Grid>
-          <Grid item xs={1}>
-
-          </Grid>
-          <Grid item xs={4}>
-            <Button
-              onClick={this.handleEnviar}
-              variant="contained"
-              color="primary"
-              fullWidth
-              className="botonSesion"
-            >
-              INGRESAR
-            </Button>
-          </Grid>
-        </Grid>
+        <Button fullWidth variant="contained" color="primary" onClick={this.minijuego} className="botonVolver">
+          jugar
+        </Button>
         <br />
-        <SnackBarPersonal mensajeError={errorMessage} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={"error"} />
+        <br />
+        <BotonVolver
+          cancelar={{ onChange: this.verPedido }}
+          text={"volver"}
+        />
       </Container>
     );
   }

@@ -26,6 +26,7 @@ import './App.css';
 import CambiarContraseña from './pages/CambiarContraseña/CambiarContraseña';
 import VisualizarMesasAdministrador from './pages/VisualizarMesasAdministrador/VisualizarMesasAdministrador';
 import InstruccionesJuego from './pages/instruccionesJuego/InstruccionesJuego';
+import Minijuego from './pages/minijuego/Minijuego';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -71,6 +72,7 @@ function RouterCliente() {
           <Route path="/detalle/item/carta" exact component={DetalleItemCarta} />
           <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
           <Route path="/minijuego/instrucciones" exact component={InstruccionesJuego} />
+          <Route path="/minijuego" exact component={Minijuego} />
           <Route component={RedirectCliente} />
         </Switch>
       </div>
