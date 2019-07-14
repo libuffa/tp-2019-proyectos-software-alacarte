@@ -6,6 +6,7 @@ export default class Minijuego extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      intentos: 12,
     }
   }
 
@@ -18,6 +19,7 @@ export default class Minijuego extends Component {
   }
 
   render() {
+
     return (
       <Container>
         <Grid container spacing={0}>
