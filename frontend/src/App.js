@@ -25,6 +25,7 @@ import Login from './pages/Login/Login';
 import './App.css';
 import CambiarContraseña from './pages/CambiarContraseña/CambiarContraseña';
 import VisualizarMesasAdministrador from './pages/VisualizarMesasAdministrador/VisualizarMesasAdministrador';
+import FormularioItemCarta from './pages/FormularioItemCarta/FormularioItemCarta';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -52,6 +53,7 @@ function RouterPrincipal(props) {
           <Route path="/mostrar/qr" exact component={MostrarQR} />
           <Route path="/empleados" exact component={Empleados} />
           <Route path="/cambiar/contraseña" exact component={CambiarContraseña} />
+          <Route path="/formulario/item/carta" exact component={FormularioItemCarta} />
           <Route component={RedirectPrincipal} />
         </Switch>
       </div>

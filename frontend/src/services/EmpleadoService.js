@@ -52,4 +52,9 @@ export class EmpleadoService {
   eliminarEmpleado(data) {
     return client.post('/empleado/eliminar', data).then(res => { return res.data })
   }
+
+  validarPermiso(data) {
+    console.log(data)
+    return client.get(`/empleado/permiso/${ControllerDeEmpleado.getSesionActiva()}`).then(res => { return res.data })
+  }
 }

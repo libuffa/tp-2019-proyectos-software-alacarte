@@ -5,6 +5,7 @@ import ListaItemsEmpleado from "../../components/listaItemsEmpleado/ListaItemsEm
 import MenuInferior from '../../components/menuInferior/MenuInferior.js';
 import Menu from '@material-ui/icons/Menu';
 import { CircularProgress } from '@material-ui/core';
+import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado.js';
 
 export default class VisualizarCartaEmpleado extends Component {
   constructor(props) {
@@ -14,12 +15,14 @@ export default class VisualizarCartaEmpleado extends Component {
       selectedItem: null,
       categorias: null,
       categoria: 'Entrada',
+      admin: null,
     }
   }
 
   componentDidMount() {
     this.cargarCarta(this.state.categoria)
     this.cargarCategorias()
+    this.esAdministrador()
   }
 
   cargarCarta(categoria) {
@@ -55,10 +58,17 @@ export default class VisualizarCartaEmpleado extends Component {
   }
 
   seleccionItemCarta = (itemCarta) => {
-    this.props.history.push({
-      pathname: '/detalle/item/carta/empleado',
-      state: { itemCarta: itemCarta }
-    })
+    if(this.state.admin) {
+      this.props.history.push({
+        pathname: '/formulario/item/carta',
+        state: { idItemCarta: itemCarta.id }
+      })
+    } else {
+      this.props.history.push({
+        pathname: '/detalle/item/carta/empleado',
+        state: { idItemCarta: itemCarta.id }
+      })
+    }
   }
 
   cambiarEstadoItemCarta = (itemCartaId) => {
@@ -74,8 +84,23 @@ export default class VisualizarCartaEmpleado extends Component {
     this.props.history.push('/menu/empleado')
   }
 
+  esAdministrador() {
+    ServiceLocator.EmpleadoService.validarPermiso({ "id": ControllerDeEmpleado.getSesionActiva() })
+      .then((respuesta) => {
+        if (respuesta) {
+          this.setState({
+            admin: true,
+          })
+        } else {
+          this.setState({
+            admin: false,
+          })
+        }
+      })
+  }
+
   render() {
-    const { carta } = this.state
+    const { carta, admin } = this.state
     var { categorias } = this.state
 
     const menuButtons = {
@@ -86,7 +111,7 @@ export default class VisualizarCartaEmpleado extends Component {
       },
     }
 
-    if (!carta || !categorias) {
+    if (!carta || !categorias || !admin) {
       return (
         <div className="fullWidth center">
           <CircularProgress size={80} />

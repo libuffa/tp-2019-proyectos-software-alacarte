@@ -208,4 +208,20 @@ class EmpleadoController {
 			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
+	
+	@Get("/empleado/permiso/:id")
+	def Result validarPermiso(@Body String body) {
+		try {
+			val idEmpleado = Long.valueOf(id)
+			val empleado = repoEmpleados.searchById(idEmpleado)
+			if(empleado.tipoEmpleado.equals(TipoEmpleado.Administrador)) {
+				return ok("true")
+			} else {
+				return ok("false")
+			}
+		} catch (Exception e) {
+			badRequest(e.message)
+		}
+	}
+	
 }

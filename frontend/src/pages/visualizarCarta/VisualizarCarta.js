@@ -54,10 +54,10 @@ export default class VisualizarCarta extends Component {
   }
 
   seleccionItemCarta = (idItemCarta) => {
-    this.props.history.push({
-      pathname: '/detalle/item/carta',
-      state: { idItem: idItemCarta }
-    })
+      this.props.history.push({
+        pathname: '/detalle/item/carta',
+        state: { idItem: idItemCarta }
+      })
   }
 
   verPedido = () => {
@@ -90,7 +90,7 @@ export default class VisualizarCarta extends Component {
       <div>
         <div className="contenedorLista">
           <MenuSuperior data={categorias} handlers={{ onChange: this.seleccionEnMenuSuperior }}></MenuSuperior>
-          <ListaItems data={carta} subData={this.subCategoriasCarta()} handlers={{ onChange: this.seleccionItemCarta }}></ListaItems>
+          <ListaItems data={carta} subData={this.subCategoriasCarta()} handlers={{ onChange: this.seleccionItemCarta }} ></ListaItems>
         </div>
         <MenuInferior menuButtons={menuButtons} ></MenuInferior>
       </div>
