@@ -60,6 +60,38 @@ class SesionController {
 		}
 	}
 	
+	@Post("/sesion/:id/jugar")
+	def Result jugar() {
+		try{
+			val _id = Long.valueOf(id)
+			val sesion = repositorioSesion.searchById(_id)
+			if(sesion.fechaBaja === null) {
+				sesion.jugar()
+				return ok("True")
+			} else {
+				return ok(' { "error" : "Sesion cerrada" } ')
+			}
+		}catch(Exception e) {
+			return ok(' { "error" : "La sesion no existe" } ')
+		}
+	}
+	
+	@Post("/sesion/:id/jugar/ganar")
+	def Result ganar() {
+		try{
+			val _id = Long.valueOf(id)
+			val sesion = repositorioSesion.searchById(_id)
+			if(sesion.fechaBaja === null) {
+				sesion.ganarPremio()
+				return ok("True")
+			} else {
+				return ok(' { "error" : "Sesion cerrada" } ')
+			}
+		}catch(Exception e) {
+			return ok(' { "error" : "La sesion no existe" } ')
+		}
+	}
+	
 	@Post("/pedido/actualizarPedido")
 	def Result actualizarPedido(@Body String body) {
 		var idSesion = Long.valueOf(body.getPropertyValue("idSesion"))
