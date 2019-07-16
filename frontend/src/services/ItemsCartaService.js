@@ -1,4 +1,5 @@
 import axios from "axios"
+import FormData from 'form-data'
 
 const client = axios.create()
 
