@@ -103,5 +103,28 @@ text-align: center;
 }
 
 .combinacion{
-  height: 50px;
+  height: 51.2px;
+}
+
+.marginDiv{
+  margin: 6px;
+}
+
+.flexCenter{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex{
+  display: flex;
+}
+
+.indicador{
+  width: 0px;
+  min-height: 100%;
+}
+
+.resultado{
+  margin-left: 8px;
 }

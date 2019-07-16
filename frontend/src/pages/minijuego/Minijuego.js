@@ -1,23 +1,44 @@
 import React, { Component } from "react";
 import '../estilosPaginas.scss';
 import Combinacion from "./Combinacion";
-import { ListSubheader, ListItemText, Container } from "@material-ui/core";
+import { Container, Grid, Typography, Button } from "@material-ui/core";
 import BotonVolver from "../../components/botonVolver/BotonVolver";
 import DialogConfirmacion from "../../components/Dialog/DialogConfirmacion";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import SnackBarPersonal from "../../components/snackBarPersonal/SnackBarPersonal";
 import DialogVolver from "../../components/Dialog/DialogVolver";
+import { withStyles } from '@material-ui/styles';
 
-export default class Minijuego extends Component {
+const styles = {
+  boton: {
+    marginTop: '6px',
+    marginBottom: '6px',
+    width: '70px',
+  },
+  container: {
+    backgroundColor: '#3f51b5',
+    color: '#fff',
+  },
+  uno: { color: '#f900ff', margin: '3px' },
+  dos: { color: '#2500ff', margin: '3px' },
+  tres: { color: '#00c6ff', margin: '3px' },
+  cuatro: { color: '#35ff00', margin: '3px' },
+  cinco: { color: '#ff8b00', margin: '3px' },
+  seis: { color: '#ff0000', margin: '3px' },
+};
+
+class Minijuego extends Component {
   constructor(props) {
     super(props)
     this.state = {
       combinaciones: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
       combinacion: 0,
+      clave: [2, 2, 4, 4],
       openConfirmation: false,
       juegaPorPremio: false,
       snackBarMensaje: "",
       open: false,
+      openInfo: false,
     }
   }
 
@@ -74,16 +95,49 @@ export default class Minijuego extends Component {
   }
 
   siguiente = () => {
-
-    this.setState({
-      combinacion: this.state.combinacion + 1
-    })
+    if ((this.state.combinacion + 1) === 10) {
+      this.setState({
+        combinacion: this.state.combinacion + 1,
+        tituloDialog: "Juego terminado",
+        mensajeDialog: <div>Perdiste, el código era:
+          <div className="flex flexCenter">
+            {this.state.clave.map((numero) => <Typography className=
+              {
+                (numero === 1 && this.props.classes.uno) ||
+                (numero === 2 && this.props.classes.dos) ||
+                (numero === 3 && this.props.classes.tres) ||
+                (numero === 4 && this.props.classes.cuatro) ||
+                (numero === 5 && this.props.classes.cinco) ||
+                (numero === 6 && this.props.classes.seis)
+              }>
+              {"█"}
+            </Typography>)}
+          </div> mejor suerte para la próxima.</div>,
+        open: true
+      })
+    } else {
+      this.setState({
+        combinacion: this.state.combinacion + 1,
+      })
+    }
   }
 
   closeDialog = () => {
     this.verPedido()
     this.setState({
       open: false,
+    })
+  }
+
+  closeDialogInfo = () => {
+    this.setState({
+      openInfo: false,
+    })
+  }
+
+  openDialogInfo = () => {
+    this.setState({
+      openInfo: true,
     })
   }
 
@@ -122,40 +176,71 @@ export default class Minijuego extends Component {
   }
 
   render() {
-    const { combinaciones, combinacion, snackBarMensaje, open, mensajeDialog, tituloDialog } = this.state;
+    const { combinaciones, combinacion, snackBarMensaje, open, mensajeDialog, tituloDialog, clave, openInfo } = this.state;
 
     return (
       <div>
         <div className="dividerLista" />
-        <ListSubheader disableSticky color="inherit">
-          <ListItemText primary={"Mente Maestra"} />
-        </ListSubheader>
-        <div className="dividerLista" />
-        <Container>
+        <div>
+          <Container className={this.props.classes.container}>
+            <Grid container spacing={0}>
+              <Grid item xs={9}>
+                <Grid container spacing={0}>
+                  <Grid item xs={3}>
+                    <div className="full botonCentrado marginDiv"><Typography variant="h6"> {"▼"} </Typography></div>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <div className="full botonCentrado marginDiv"><Typography variant="h6"> {"▼"} </Typography></div>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <div className="full botonCentrado marginDiv"><Typography variant="h6"> {"▼"} </Typography></div>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <div className="full botonCentrado marginDiv"><Typography variant="h6"> {"▼"} </Typography></div>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={3}>
+                <div className="full botonCentrado">
+                  <Button variant="contained" color="secondary" className={this.props.classes.boton} onClick={this.openDialogInfo}><Typography variant="body2">reglas</Typography></Button>
+                </div>
+              </Grid>
+            </Grid>
+          </Container>
           {combinaciones.map(comb => {
             return (
-              <div>
+              <div key={comb}>
                 <Combinacion
                   key={comb}
                   disabled={combinacion !== comb}
                   siguiente={{ onChange: this.siguiente }}
                   ganar={{ onChange: this.ganar }}
                   selected={combinacion === comb}
+                  numero={comb}
+                  clave={clave}
                 />
               </div>
             )
           })}
-          <BotonVolver
-            cancelar={{ onChange: this.volver }}
-            text={"volver"}
-          />
-        </Container>
+          <Container>
+            <BotonVolver
+              cancelar={{ onChange: this.volver }}
+              text={"salir"}
+            />
+          </Container>
+        </div>
         <SnackBarPersonal mensajeError={snackBarMensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={"error"} />
         <DialogVolver
           titulo={tituloDialog}
           descripcion={mensajeDialog}
           handlers={{ onChange: this.closeDialog }}
           open={open}
+        />
+        <DialogVolver
+          titulo={"Reglas"}
+          descripcion={<div><div> - Por cada suposición que sea correcta tanto en color como en posición, obtenes un "Bien" en negro.</div><br /><div>' - Por cada suposición de color correcto pero no de posición, obtenes un "Regular" en rojo.'</div></div>}
+          handlers={{ onChange: this.closeDialogInfo }}
+          open={openInfo}
         />
         <DialogConfirmacion
           titulo={"Cuidado"}
@@ -167,3 +252,5 @@ export default class Minijuego extends Component {
     );
   }
 }
+
+export default withStyles(styles)(Minijuego);

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import '../estilosPaginas.scss';
-import { Container, Grid, FormControl, Select, MenuItem, Typography, Button } from "@material-ui/core";
+import { Container, Grid, FormControl, Select, MenuItem, Typography, Button, Avatar } from "@material-ui/core";
 import { withStyles } from '@material-ui/styles';
 
 const styles = {
@@ -23,27 +23,31 @@ const styles = {
   leftSeparation: {
     marginLeft: '4px',
   },
-  uno: {
-    color: '#f900ff',
-  },
-  dos: {
-    color: '#2500ff',
-  },
-  tres: {
-    color: '#00c6ff',
-  },
-  cuatro: {
-    color: '#35ff00',
-  },
-  cinco: {
-    color: '#ff8b00',
-  },
-  seis: {
-    color: '#ff0000',
-  },
+  uno: { color: '#f900ff', },
+  dos: { color: '#2500ff', },
+  tres: { color: '#00c6ff', },
+  cuatro: { color: '#35ff00', },
+  cinco: { color: '#ff8b00', },
+  seis: { color: '#ff0000', },
   selected: {
     backgroundColor: '#dcdcdc',
-  }
+  },
+  blocked: {
+    backgroundColor: '#dcdcdc91',
+  },
+  arrow: {
+    marginLeft: '-0.8rem',
+    display: 'flex',
+    alignItems: 'center',
+    height: '100%',
+  },
+  resultado: {
+    marginTop: '2px',
+  },
+  av34: { backgroundColor: '#ffea005e' },
+  av56: { backgroundColor: '#ffaf00ab' },
+  av78: { backgroundColor: '#ff7400b5' },
+  av90: { backgroundColor: '#ff0000b5' },
 };
 
 class Combinacion extends Component {
@@ -57,7 +61,7 @@ class Combinacion extends Component {
       bien: 0,
       regular: 0,
       validado: false,
-      clave: [2, 2, 4, 4],
+      clave: this.props.clave,
       valores: [1, 2, 3, 4, 5, 6],
     }
   }
@@ -142,6 +146,7 @@ class Combinacion extends Component {
       <form autoComplete="off">
         <FormControl className={this.props.classes.margin}>
           <Select
+            autoFocus
             value={posicion}
             onChange={this.handleChange(nombrePosicion)}
             disabled={this.props.disabled}
@@ -173,53 +178,73 @@ class Combinacion extends Component {
   render() {
     const { posicion1, posicion2, posicion3, posicion0, bien, regular, validado, valores } = this.state;
 
-    return (
-      <Container className={this.props.selected ? this.props.classes.selected : ""}>
-        <Grid container spacing={0}>
-          <Grid item xs={9}>
-            <Grid container spacing={0}>
-              <Grid item xs={3}>
-                {this.selector(posicion0, "posicion0", valores)}
+    if (this.props.disabled && !validado) {
+      return (
+        <Container className=
+          {
+            ([3, 4].includes(this.props.numero + 1) && this.props.classes.av34) ||
+            ([5, 6].includes(this.props.numero + 1) && this.props.classes.av56) ||
+            ([7, 8].includes(this.props.numero + 1) && this.props.classes.av78) ||
+            ([9, 10].includes(this.props.numero + 1) && this.props.classes.av90)
+          }
+        >
+          <div className="full combinacion botonCentrado flexCenter"><Avatar>{this.props.numero + 1}</Avatar></div>
+        </Container>
+      )
+    } else {
+      return (
+        <Container className={this.props.selected ? this.props.classes.selected : ""}>
+          <Grid container spacing={0}>
+            <Grid item xs={9}>
+              <Grid container spacing={0}>
+                <Grid item xs={3}>
+                  <div className="flex">
+                    <div className="indicador">
+                      {!validado && <Typography className={this.props.classes.arrow}>►</Typography>}
+                    </div>
+                    {this.selector(posicion0, "posicion0", valores)}
+                  </div>
+                </Grid>
+                <Grid item xs={3}>
+                  {this.selector(posicion1, "posicion1", valores)}
+                </Grid>
+                <Grid item xs={3}>
+                  {this.selector(posicion2, "posicion2", valores)}
+                </Grid>
+                <Grid item xs={3}>
+                  {this.selector(posicion3, "posicion3", valores)}
+                </Grid>
               </Grid>
-              <Grid item xs={3}>
-                {this.selector(posicion1, "posicion1", valores)}
-              </Grid>
-              <Grid item xs={3}>
-                {this.selector(posicion2, "posicion2", valores)}
-              </Grid>
-              <Grid item xs={3}>
-                {this.selector(posicion3, "posicion3", valores)}
+            </Grid>
+            <Grid item xs={3}>
+              <Grid container spacing={0} className={this.props.classes.resultado}>
+                {!validado &&
+                  <Grid className="smallButton" item xs={12}>
+                    <div className="full botonCentrado">
+                      <Button disabled={(this.props.disabled) || (posicion0 === 0) || (posicion1 === 0) || (posicion2 === 0) || (posicion3 === 0)} className={this.props.classes.boton} variant="contained" color="secondary" onClick={this.validar}>✓</Button>
+                    </div>
+                  </Grid>
+                }
+                {validado &&
+                  <Grid item xs={12}>
+                    <div className="full resultado">
+                      <Typography>{bien + " Bien"}</Typography>
+                    </div>
+                  </Grid>
+                }
+                {validado &&
+                  <Grid item xs={12}>
+                    <div className="full resultado">
+                      <Typography color="error">{regular + " Reg."}</Typography>
+                    </div>
+                  </Grid>
+                }
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={3}>
-            <Grid container spacing={0}>
-              {!validado &&
-                <Grid className="smallButton" item xs={12}>
-                  <div className="full botonCentrado">
-                    <Button disabled={(this.props.disabled) || (posicion0 === 0) || (posicion1 === 0) || (posicion2 === 0) || (posicion3 === 0)} className={this.props.classes.boton} variant="contained" color="secondary" onClick={this.validar}>✓</Button>
-                  </div>
-                </Grid>
-              }
-              {validado &&
-                <Grid item xs={12}>
-                  <div className="full botonCentrado">
-                    <Typography>{bien + " Bien"}</Typography>
-                  </div>
-                </Grid>
-              }
-              {validado &&
-                <Grid item xs={12}>
-                  <div className="full botonCentrado">
-                    <Typography color="error">{regular + " Reg."}</Typography>
-                  </div>
-                </Grid>
-              }
-            </Grid>
-          </Grid>
-        </Grid>
-      </Container>
-    );
+        </Container>
+      )
+    }
   }
 }
 
