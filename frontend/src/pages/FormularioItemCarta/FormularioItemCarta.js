@@ -27,7 +27,7 @@ export default class FomularioItemCarta extends Component {
             descripcion: "",
             precioUnitario: "",
             categoria: "",
-            subcategoria: "",
+            subCategoria: "",
             modificado: false,
             disabled: false,
             checkUser: null,
@@ -38,7 +38,6 @@ export default class FomularioItemCarta extends Component {
     }
 
     componentDidMount() {
-        console.log(this.state.idItemCarta)
         if (this.state.idItemCarta) {
             this.cargarItemCarta(this.state.idItemCarta)
         }
@@ -57,15 +56,15 @@ export default class FomularioItemCarta extends Component {
                     descripcion: itemCarta.descripcion,
                     precioUnitario: itemCarta.precioUnitario,
                     categoria: itemCarta.categoria,
-                    subcategoria: itemCarta.subcategoria,
+                    subCategoria: itemCarta.subCategoria,
                 })
             })
     }
 
     agregarItemCarta = () => {
-        const { idItemCarta, disabled, modificado, itemCarta, open, mensaje, variant, mensajeDialog, tituloDialog, titulo, descripcion, precioUnitario, categoria, subcategoria, logueado } = this.state;
+        const { idItemCarta, titulo, descripcion, precioUnitario, categoria, subCategoria } = this.state;
 
-        if (!precioUnitario || !categoria || !precioUnitario || !descripcion || !subcategoria) {
+        if (!precioUnitario || !categoria || !precioUnitario || !descripcion || !subCategoria) {
             this.generarMensaje("Debe completar todos los campos", "error")
         } else {
             ServiceLocator.ItemsCartaService.agregarItemCarta({
@@ -73,7 +72,7 @@ export default class FomularioItemCarta extends Component {
                 "titulo": titulo,
                 "descripcion": descripcion,
                 "categoria": categoria,
-                "subcategoria": subcategoria,
+                "subcategoria": subCategoria,
                 "precioUnitario": precioUnitario,
             }).then(respuesta => {
                 if (respuesta) {
@@ -193,7 +192,7 @@ export default class FomularioItemCarta extends Component {
     }
 
     render() {
-        const { mensajeUsuario, usuarioErroneo, idItemCarta, titulo, disabled, modificado, itemCarta, open, mensaje, variant, mensajeDialog, tituloDialog, precioUnitario, descripcion, categoria, subcategoria } = this.state;
+        const { mensajeUsuario, usuarioErroneo, idItemCarta, titulo, disabled, modificado, itemCarta, open, mensaje, variant, mensajeDialog, tituloDialog, precioUnitario, descripcion, categoria, subCategoria } = this.state;
 
         if (!itemCarta && idItemCarta) {
             return (
@@ -277,11 +276,12 @@ export default class FomularioItemCarta extends Component {
                                 disabled={disabled}
                                 handlers={{ onChange: this.modificarAtributo }}
                                 label={"Categoria"}
+                                values={{ list: ["Entrada","Plato_Principal","Postre","Bebida","Cafeteria"]}}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <InputFormulario
-                                previo={subcategoria}
+                                previo={subCategoria}
                                 atributo={"subcategoria"}
                                 label={"Subcategoria"}
                                 disabled={disabled}
@@ -296,7 +296,7 @@ export default class FomularioItemCarta extends Component {
                         cancelar={{ onChange: this.volver }}
                         aceptar={{ onChange: this.agregarItemCarta }}
                         disabled1={disabled}
-                        disabled2={(!titulo || disabled || !titulo || !descripcion || !precioUnitario || !categoria || !subcategoria)}
+                        disabled2={(!titulo || disabled || !titulo || !descripcion || !precioUnitario || !categoria || !subCategoria)}
                     />
                 </Paper>
                 <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />

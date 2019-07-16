@@ -298,6 +298,7 @@ export default class DetalleEmpleado extends Component {
                 disabled={disabled}
                 handlers={{ onChange: this.modificarAtributo }}
                 label={"Puesto"}
+                values={{ list: ["Administrador","Mozo","Cocinero"]}}
               />
             </Grid>
             <Grid item xs={12}>

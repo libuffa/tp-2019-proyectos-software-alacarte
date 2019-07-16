@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SelectorPuesto(props) {
-  const { help, handlers, previo, disabled, atributo, label } = props;
+  const { help, handlers, previo, disabled, atributo, label, values } = props;
   const classes = useStyles();
   const [value, setValue] = React.useState(previo);
 
@@ -40,9 +40,7 @@ export default function SelectorPuesto(props) {
           disabled={disabled}
           fullWidth
         >
-          <MenuItem value={"Administrador"}>Administrador</MenuItem>
-          <MenuItem value={"Mozo"}>Mozo</MenuItem>
-          <MenuItem value={"Cocinero"}>Cocinero</MenuItem>
+        { values.list.map( (_value) => <MenuItem value={_value}>{_value}</MenuItem> ) }
         </Select>
         <FormHelperText id="component-helper-text">{help}</FormHelperText>
       </FormControl>
