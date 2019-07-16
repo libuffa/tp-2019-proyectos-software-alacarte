@@ -2,7 +2,8 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import { TextField, InputLabel } from '@material-ui/core';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -14,7 +15,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function InputEmpleado(props) {
+export default function InputFormulario(props) {
   const { type, help, handlers, previo, disabled, atributo, maxLength, label, error } = props;
   const classes = useStyles();
   const [value, setValue] = React.useState(previo);
@@ -30,17 +31,12 @@ export default function InputEmpleado(props) {
     <div className={classes.container}>
       <FormControl className={classes.formControl} fullWidth error={error ? error : false}>
         <InputLabel htmlFor="component-helper">{label}</InputLabel>
-        <TextField
-            id="descripcion"
-            value={value}
-            onChange={handleChange}
-            multiline
-            rows="4"
-            placeholder="Ingresar comentarios"
-            margin="normal"
-            variant="outlined"
-            disabled={disabled}
-            type={type}
+        <Input
+          value={value}
+          onChange={handleChange}
+          aria-describedby="component-helper-text"
+          disabled={disabled}
+          type={type}
         />
         <FormHelperText id="component-helper-text">{help}</FormHelperText>
       </FormControl>

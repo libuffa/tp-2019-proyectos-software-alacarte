@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import '../estilosPaginas.scss';
 import { ServiceLocator } from "../../services/ServiceLocator.js";
 import { CircularProgress, Grid, Typography, Paper, ListSubheader, ListItemText, IconButton } from '@material-ui/core';
-import InputEmpleado from '../../components/inputEmpleado/InputEmpleado.js';
+import InputFormulario from '../../components/InputFormulario/InputFormulario.js';
 import BotonesEmpleado from '../../components/botonesEmpleado/BotonesEmpleado.js';
 import DeleteIcon from "@material-ui/icons/Delete";
 import SelectorPuesto from '../../components/selectorPuesto/SelectorPuesto';
@@ -260,7 +260,7 @@ export default class DetalleEmpleado extends Component {
               {empleado && <div className="divider" />}
             </Grid>
             <Grid item xs={12}>
-              <InputEmpleado
+              <InputFormulario
                 previo={nombre}
                 atributo={"nombre"}
                 label={"Nombre"}
@@ -270,7 +270,7 @@ export default class DetalleEmpleado extends Component {
               />
             </Grid>
             <Grid item xs={12}>
-              <InputEmpleado
+              <InputFormulario
                 previo={apellido}
                 atributo={"apellido"}
                 label={"Apellido"}
@@ -280,7 +280,7 @@ export default class DetalleEmpleado extends Component {
               />
             </Grid>
             <Grid item xs={12}>
-              <InputEmpleado
+              <InputFormulario
                 previo={nombreUsuario}
                 atributo={"nombreUsuario"}
                 disabled={disabled}
@@ -301,7 +301,7 @@ export default class DetalleEmpleado extends Component {
               />
             </Grid>
             <Grid item xs={12}>
-              <InputEmpleado
+              <InputFormulario
                 previo={email}
                 atributo={"email"}
                 disabled={disabled}
@@ -312,7 +312,7 @@ export default class DetalleEmpleado extends Component {
             </Grid>
             {!empleado ?
               <Grid item xs={12}>
-                <InputEmpleado
+                <InputFormulario
                   previo={contraseña}
                   type={"password"}
                   atributo={"contraseña"}
@@ -326,7 +326,7 @@ export default class DetalleEmpleado extends Component {
             }
             {!empleado ?
               <Grid item xs={12}>
-                <InputEmpleado
+                <InputFormulario
                   previo={confirmarContraseña}
                   type={"password"}
                   atributo={"confirmarContraseña"}

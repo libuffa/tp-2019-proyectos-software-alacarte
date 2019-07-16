@@ -2,14 +2,13 @@ import React, { Component } from 'react'
 import '../estilosPaginas.scss';
 import { ServiceLocator } from "../../services/ServiceLocator.js";
 import { CircularProgress, Grid, Typography, Paper, ListSubheader, ListItemText, IconButton, FormControl, InputLabel, TextField } from '@material-ui/core';
-import InputEmpleado from '../../components/inputEmpleado/InputEmpleado.js';
+import InputFormulario from '../../components/InputFormulario/InputFormulario.js';
 import BotonesEmpleado from '../../components/botonesEmpleado/BotonesEmpleado.js';
 import DeleteIcon from "@material-ui/icons/Delete";
 import SelectorPuesto from '../../components/selectorPuesto/SelectorPuesto';
 import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal';
 import DialogVolver from '../../components/Dialog/DialogVolver';
 import DialogConfirmacion from '../../components/Dialog/DialogConfirmacion';
-import TextFieldFormulario from '../../components/TextFieldFormulario/TextFieldFormulario';
 
 export default class FomularioItemCarta extends Component {
     constructor(props) {
@@ -154,6 +153,13 @@ export default class FomularioItemCarta extends Component {
         })
     }
 
+    modificarTextField = name => event => {
+        this.setState({
+            [name]: event.target.value,
+            modificado: true,
+        });
+    };
+
     generarMensaje(mensaje, variant) {
         this.setState({
             mensaje,
@@ -229,7 +235,7 @@ export default class FomularioItemCarta extends Component {
                             {itemCarta && <div className="divider" />}
                         </Grid>
                         <Grid item xs={12}>
-                            <InputEmpleado
+                            <InputFormulario
                                 previo={titulo}
                                 atributo={"titulo"}
                                 label={"Titulo"}
@@ -239,23 +245,29 @@ export default class FomularioItemCarta extends Component {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextFieldFormulario
-                                previo={descripcion}
-                                atributo={"descripcion"}
-                                label={"Descripcion"}
+                            <InputLabel htmlFor="component-helper">{'Descripcion|'}</InputLabel>
+                            <TextField
+                                id="descripcion"
+                                value={descripcion}
+                                onChange={this.modificarTextField('descripcion')}
+                                fullWidth={true}
+                                multiline
+                                rows="4"
+                                placeholder="Descripcion"
+                                margin="normal"
+                                variant="outlined"
                                 disabled={disabled}
-                                handlers={{ onChange: this.modificarAtributo }}
-                                maxLength={20}
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <InputEmpleado
+                            <InputFormulario
                                 previo={precioUnitario}
                                 atributo={"precioUnitario"}
                                 disabled={disabled}
                                 handlers={{ onChange: this.modificarAtributo }}
                                 label={"PrecioUnitario"}
                                 maxLength={20}
+                                type="number"
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -268,12 +280,13 @@ export default class FomularioItemCarta extends Component {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <SelectorPuesto
+                            <InputFormulario
                                 previo={subcategoria}
                                 atributo={"subcategoria"}
+                                label={"Subcategoria"}
                                 disabled={disabled}
                                 handlers={{ onChange: this.modificarAtributo }}
-                                label={"Subcategoria"}
+                                maxLength={20}
                             />
                         </Grid>
                     </Grid>
