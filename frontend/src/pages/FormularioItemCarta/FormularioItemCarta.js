@@ -9,6 +9,7 @@ import SelectorPuesto from '../../components/selectorPuesto/SelectorPuesto';
 import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal';
 import DialogVolver from '../../components/Dialog/DialogVolver';
 import DialogConfirmacion from '../../components/Dialog/DialogConfirmacion';
+//import { DropzoneArea } from 'material-ui-dropzone'
 
 export default class FomularioItemCarta extends Component {
     constructor(props) {
@@ -70,10 +71,10 @@ export default class FomularioItemCarta extends Component {
             ServiceLocator.ItemsCartaService.agregarItemCarta({
                 "id": idItemCarta,
                 "titulo": titulo,
+                "precioUnitario": precioUnitario,
                 "descripcion": descripcion,
                 "categoria": categoria,
-                "subcategoria": subCategoria,
-                "precioUnitario": precioUnitario,
+                "subcategoria": subCategoria
             }).then(respuesta => {
                 if (respuesta) {
                     respuesta.error ?
@@ -276,7 +277,7 @@ export default class FomularioItemCarta extends Component {
                                 disabled={disabled}
                                 handlers={{ onChange: this.modificarAtributo }}
                                 label={"Categoria"}
-                                values={{ list: ["Entrada","Plato_Principal","Postre","Bebida","Cafeteria"]}}
+                                values={{ list: ["Entrada", "Plato_Principal", "Postre", "Bebida", "Cafeteria"] }}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -290,6 +291,9 @@ export default class FomularioItemCarta extends Component {
                             />
                         </Grid>
                     </Grid>
+                    {/* <DropzoneArea
+                        onChange={this.handleChange.bind(this)}
+                    /> */}
                     <BotonesEmpleado
                         text1={"Volver"}
                         text2={"Guardar"}

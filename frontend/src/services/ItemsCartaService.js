@@ -18,4 +18,13 @@ export class ItemsCartaService {
   updateEstadoItem(id) {
     return client.post(`/carta/${id}/cambiarEstadoPlato`).then(res => { return res.data })
   }
+
+  agregarItemCarta(data) {
+    return client.post(`/carta/agregarItemCarta`).then(res => { return res.data })
+  }
+
+  eliminarItemCarta(data) {
+    return client.post(`/carta/eliminarItemCarta`).then(res => { return res.data })
+  }
+
 }
