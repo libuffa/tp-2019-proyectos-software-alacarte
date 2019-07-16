@@ -9,7 +9,7 @@ import SelectorPuesto from '../../components/selectorPuesto/SelectorPuesto';
 import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal';
 import DialogVolver from '../../components/Dialog/DialogVolver';
 import DialogConfirmacion from '../../components/Dialog/DialogConfirmacion';
-//import { DropzoneArea } from 'material-ui-dropzone'
+import { DropzoneArea } from 'material-ui-dropzone'
 
 export default class FomularioItemCarta extends Component {
     constructor(props) {
@@ -29,6 +29,7 @@ export default class FomularioItemCarta extends Component {
             precioUnitario: "",
             categoria: "",
             subCategoria: "",
+            imagenes: [],
             modificado: false,
             disabled: false,
             checkUser: null,
@@ -63,7 +64,7 @@ export default class FomularioItemCarta extends Component {
     }
 
     agregarItemCarta = () => {
-        const { idItemCarta, titulo, descripcion, precioUnitario, categoria, subCategoria } = this.state;
+        const { idItemCarta, titulo, descripcion, precioUnitario, categoria, subCategoria, imagenes } = this.state;
 
         if (!precioUnitario || !categoria || !precioUnitario || !descripcion || !subCategoria) {
             this.generarMensaje("Debe completar todos los campos", "error")
@@ -74,12 +75,13 @@ export default class FomularioItemCarta extends Component {
                 "precioUnitario": precioUnitario,
                 "descripcion": descripcion,
                 "categoria": categoria,
-                "subcategoria": subCategoria
+                "subcategoria": subCategoria,
+                "imagenes": imagenes
             }).then(respuesta => {
                 if (respuesta) {
                     respuesta.error ?
                         this.generarMensaje(respuesta.error, "error") :
-                        this.handleOpen("!Muy Bien¡", respuesta)
+                        this.handleOpen("!Los cambios se han realizado exitosamente¡", respuesta)
                 } else {
                     this.generarMensaje("Error en el servidor", "error")
                 }
@@ -192,6 +194,13 @@ export default class FomularioItemCarta extends Component {
         })
     }
 
+    handleChange(imagenes){
+        this.setState({
+          imagenes: imagenes,
+          modificado: true,
+        });
+    }
+
     render() {
         const { mensajeUsuario, usuarioErroneo, idItemCarta, titulo, disabled, modificado, itemCarta, open, mensaje, variant, mensajeDialog, tituloDialog, precioUnitario, descripcion, categoria, subCategoria } = this.state;
 
@@ -290,17 +299,19 @@ export default class FomularioItemCarta extends Component {
                                 maxLength={20}
                             />
                         </Grid>
+                        <Grid item xs={12}>
+                            <DropzoneArea
+                                onChange={this.handleChange.bind(this)}
+                            />
+                        </Grid>
                     </Grid>
-                    {/* <DropzoneArea
-                        onChange={this.handleChange.bind(this)}
-                    /> */}
                     <BotonesEmpleado
                         text1={"Volver"}
                         text2={"Guardar"}
                         cancelar={{ onChange: this.volver }}
                         aceptar={{ onChange: this.agregarItemCarta }}
                         disabled1={disabled}
-                        disabled2={(!titulo || disabled || !titulo || !descripcion || !precioUnitario || !categoria || !subCategoria)}
+                        disabled2={(!titulo || disabled || !titulo || !descripcion || !precioUnitario || !categoria || !subCategoria || !modificado)}
                     />
                 </Paper>
                 <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />

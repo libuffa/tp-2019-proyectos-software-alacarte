@@ -1,5 +1,6 @@
 package domain
 
+import java.awt.image.BufferedImage
 import java.util.ArrayList
 import java.util.List
 import javax.persistence.Column
@@ -10,6 +11,7 @@ import javax.persistence.Enumerated
 import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
+import javax.persistence.Transient
 import org.eclipse.xtend.lib.annotations.Accessors
 
 @Entity
@@ -41,6 +43,9 @@ class ItemCarta {
 
 	@ElementCollection(fetch=FetchType.EAGER)
 	List<String> imagenes = new ArrayList<String>();
+	
+	@Transient
+	List<BufferedImage> images = new ArrayList
 	
 	def cambiarEstado(){
 		habilitado = !habilitado

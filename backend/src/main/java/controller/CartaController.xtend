@@ -2,6 +2,7 @@ package controller
 
 import domain.Categoria
 import domain.ItemCarta
+import java.awt.image.BufferedImage
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.xtrest.api.Result
 import org.uqbar.xtrest.api.annotation.Body
@@ -96,6 +97,8 @@ class CartaController {
 
 	@Post("/carta/agregarItemCarta")
 	def Result agregarItemCarta(@Body String body) {
+		
+		val data = body.getPropertyValue("data")
 
 		val idItemCarta = Long.valueOf(body.getPropertyValue("id"))
 		val titulo = String.valueOf(body.getPropertyValue("titulo"))
@@ -103,6 +106,7 @@ class CartaController {
 		val categoria = Categoria.valueOf(body.getPropertyValue("categoria"))
 		val subcategoria = String.valueOf(body.getPropertyValue("subcategoria"))
 		val precioUnitario = Double.valueOf(body.getPropertyValue("precioUnitario"))
+		val imagenes = body.getPropertyValue("imagenes")
 
 		try {
 			

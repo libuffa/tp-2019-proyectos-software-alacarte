@@ -54,7 +54,6 @@ export class EmpleadoService {
   }
 
   validarPermiso(data) {
-    console.log(data)
     return client.get(`/empleado/permiso/${ControllerDeEmpleado.getSesionActiva()}`).then(res => { return res.data })
   }
 }
