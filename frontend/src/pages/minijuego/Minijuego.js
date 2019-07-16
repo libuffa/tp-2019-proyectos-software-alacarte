@@ -185,18 +185,18 @@ class Minijuego extends Component {
           <Container className={this.props.classes.container}>
             <Grid container spacing={0}>
               <Grid item xs={9}>
-                <Grid container spacing={0}>
+                <Grid container spacing={0} className="full">
                   <Grid item xs={3}>
-                    <div className="full botonCentrado marginDiv"><Typography variant="h6"> {"▼"} </Typography></div>
+                    <div className="full flexCenter"><Typography variant="h6"> {"▼"} </Typography></div>
                   </Grid>
                   <Grid item xs={3}>
-                    <div className="full botonCentrado marginDiv"><Typography variant="h6"> {"▼"} </Typography></div>
+                    <div className="full flexCenter"><Typography variant="h6"> {"▼"} </Typography></div>
                   </Grid>
                   <Grid item xs={3}>
-                    <div className="full botonCentrado marginDiv"><Typography variant="h6"> {"▼"} </Typography></div>
+                    <div className="full flexCenter"><Typography variant="h6"> {"▼"} </Typography></div>
                   </Grid>
                   <Grid item xs={3}>
-                    <div className="full botonCentrado marginDiv"><Typography variant="h6"> {"▼"} </Typography></div>
+                    <div className="full flexCenter"><Typography variant="h6"> {"▼"} </Typography></div>
                   </Grid>
                 </Grid>
               </Grid>

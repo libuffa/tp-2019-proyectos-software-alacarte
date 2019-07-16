@@ -143,8 +143,8 @@ class Combinacion extends Component {
 
   selector(posicion, nombrePosicion, valores) {
     return (
-      <form autoComplete="off">
-        <FormControl className={this.props.classes.margin}>
+      <form autoComplete="off" className="full flexCenter">
+        <FormControl>
           <Select
             autoFocus
             value={posicion}
@@ -196,11 +196,11 @@ class Combinacion extends Component {
         <Container className={this.props.selected ? this.props.classes.selected : ""}>
           <Grid container spacing={0}>
             <Grid item xs={9}>
-              <Grid container spacing={0}>
+              <Grid container spacing={0} className="full">
                 <Grid item xs={3}>
-                  <div className="flex">
+                  <div className="flex full flexCenter">
                     <div className="indicador">
-                      {!validado && <Typography className={this.props.classes.arrow}>►</Typography>}
+                      {!validado && <Typography variant="body2" className={this.props.classes.arrow}>►</Typography>}
                     </div>
                     {this.selector(posicion0, "posicion0", valores)}
                   </div>
@@ -217,7 +217,7 @@ class Combinacion extends Component {
               </Grid>
             </Grid>
             <Grid item xs={3}>
-              <Grid container spacing={0} className={this.props.classes.resultado}>
+              <Grid container spacing={0} className="full flexCenter">
                 {!validado &&
                   <Grid className="smallButton" item xs={12}>
                     <div className="full botonCentrado">
