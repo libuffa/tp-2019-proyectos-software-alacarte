@@ -41,7 +41,13 @@ export class EmpleadoService {
 
   cambiarContraseña(data) {
     return client.put('/empleado/cambiarContraseña', data, { timeout: 10000 })
-      .then(res => { return res.data })
+      .then(res => { return res })
+      .catch(error => { return { error } })
+  }
+
+  recuperarContraseña(data) {
+    return client.put('/empleado/recuperarContraseña', data, { timeout: 10000 })
+      .then(res => { return res })
       .catch(error => { return { error } })
   }
 
