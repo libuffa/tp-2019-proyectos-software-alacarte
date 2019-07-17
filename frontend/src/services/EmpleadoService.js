@@ -19,8 +19,16 @@ export class EmpleadoService {
     return client.get(`/empleado/${ControllerDeEmpleado.getSesionActiva()}`).then(res => { return res.data })
   }
 
+  getEmpleadoPorId(id) {
+    return client.get(`/empleado/${id}`).then(res => { return res.data })
+  }
+
   getEmpleadoById(id) {
     return client.get(`/empleado/${id}`).then(res => { return res.data })
+  }
+
+  validarUserName(userName) {
+    return client.get(`/empleado/${userName}/validar`).then(res => { return res.data })
   }
 
   getMenuEmpleado() {
@@ -43,4 +51,11 @@ export class EmpleadoService {
       .catch(error => { return { error } })
   }
 
+  agregarEmpleado(data) {
+    return client.put('/empleado/agregarEmpleado', data).then(res => { return res.data })
+  }
+
+  eliminarEmpleado(data) {
+    return client.post('/empleado/eliminar', data).then(res => { return res.data })
+  }
 }

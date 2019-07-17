@@ -62,4 +62,12 @@ export class SesionService {
   cerrarSesion(data) {
     return client.post('/sesion/cerrarSesion', data).then(res => { return res.data })
   }
+
+  jugar() {
+    return client.post(`/sesion/${ControllerDeSesion.getSesionActiva()}/jugar`).then(res => { return res.data })
+  }
+
+  ganarPremio() {
+    return client.post(`/sesion/${ControllerDeSesion.getSesionActiva()}/jugar/ganar`).then(res => { return res.data })
+  }
 }

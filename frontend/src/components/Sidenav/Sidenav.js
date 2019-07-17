@@ -4,12 +4,13 @@ import PersonIcon from '@material-ui/icons/PersonPin'
 import CartIcon from '@material-ui/icons/LocalLibrary';
 import PedidoIcon from '@material-ui/icons/RestaurantMenu';
 import MesaIcon from '@material-ui/icons/Layers';
-import BuildIcon from '@material-ui/icons/Build'
-import PersonOutlined from '@material-ui/icons/PersonOutline';
+import Lock from '@material-ui/icons/Lock'
+import PowerSettingsNew from '@material-ui/icons/PowerSettingsNew';
 import '../estilos.scss'
 import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 import DialogConfirmacion from '../Dialog/DialogConfirmacion';
 import { ServiceLocator } from '../../services/ServiceLocator';
+import { ControllerDeSesion } from '../../controller/ControllerDeSesion';
 
 export function Sidenav(props) {
   const { open, history, handlers, empleado, opcionesMenu } = props;
@@ -46,7 +47,7 @@ export function Sidenav(props) {
           }
         case 'administrar_mesas':
           return {
-            onClick: '/mesas',
+            onClick: '/mesas/admin',
             description: 'Administrar Mesas',
             icon: (<MesaIcon fontSize="large" color="primary" />)
           }
@@ -67,7 +68,8 @@ export function Sidenav(props) {
   }
 
   const logOut = () => {
-    ControllerDeEmpleado.cerrarSesionActiva()
+    ControllerDeEmpleado.cerrarSesionActiva();
+    ControllerDeSesion.cerrarSesionActiva();
     ServiceLocator.EmpleadoService.cerrarSesion({ idEmpleado: empleado.id })
     window.location.reload();
   }
@@ -118,17 +120,17 @@ export function Sidenav(props) {
             <List>
               <ListItem button onClick={() => history.push('/cambiar/contraseña')}>
                 <ListItemAvatar>
-                  <BuildIcon fontSize="large" />
+                  <Lock fontSize="large" />
                 </ListItemAvatar>
                 <ListItemText primary={
                   <Typography variant="subtitle2">
                     {" Cambiar Contraseña"}
                   </Typography>}
                 />
-                </ListItem>
-                <ListItem button onClick={handleClickOpen}>
+              </ListItem>
+              <ListItem button onClick={handleClickOpen}>
                 <ListItemAvatar>
-                  <PersonOutlined fontSize="large" />
+                  <PowerSettingsNew fontSize="large" />
                 </ListItemAvatar>
                 <ListItemText primary={
                   <Typography variant="subtitle2">

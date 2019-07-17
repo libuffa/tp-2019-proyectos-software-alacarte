@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   empleadoInactivo: {
     color: '#ffffff',
     backgroundColor: '#ff0000bf',
-  }
+  },
 }));
 
 export default function ListaEmpleados(props) {
@@ -39,7 +39,7 @@ export default function ListaEmpleados(props) {
         <div className="dividerLista" />
         {empleados.map((empleado) => {
           return (
-            <ListItem button key={empleado.id} onClick={() => handlers.onChange(empleado)}>
+            <ListItem button key={empleado.id} onClick={() => handlers.onChange(empleado.id)}>
               <ListItemAvatar >
                 <Avatar className={empleado.logueado ? classes.empleadoActivo : classes.empleadoInactivo}>
                   <Typography variant="h5" >
@@ -51,6 +51,16 @@ export default function ListaEmpleados(props) {
             </ListItem>
           )
         })}
+        <ListItem button onClick={() => handlers.onChange(0)}>
+          <ListItemAvatar >
+            <Avatar>
+              <Typography variant="h4" >
+                +
+              </Typography>
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary={"Nuevo Empleado"} />
+        </ListItem>
       </List>
     </div>
   );

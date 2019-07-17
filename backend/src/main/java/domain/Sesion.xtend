@@ -16,7 +16,6 @@ import javax.persistence.Id
 import javax.persistence.OneToMany
 import javax.persistence.OneToOne
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.uqbar.commons.model.exceptions.UserException
 import repository.SesionRepository
 
 @Entity
@@ -46,6 +45,12 @@ class Sesion {
 	Boolean pideCuenta = false
 
 	@Column
+	Boolean juegaPorPremio = true
+	
+	@Column
+	Boolean ganoPremio = false
+	
+	@Column
 	@JsonIgnore LocalDateTime fechaAlta
 
 	@Column
@@ -63,6 +68,16 @@ class Sesion {
 			it.estado = Estado.Creado
 		]
 		this.pedidos.add(pedido)
+		SesionRepository.instance.update(this)
+	}
+	
+	def void jugar() {
+		this.juegaPorPremio = false
+		SesionRepository.instance.update(this)
+	}
+	
+	def void ganarPremio() {
+		this.ganoPremio = true
 		SesionRepository.instance.update(this)
 	}
 

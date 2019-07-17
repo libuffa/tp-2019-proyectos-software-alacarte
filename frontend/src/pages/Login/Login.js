@@ -18,7 +18,7 @@ class Login extends Component {
 
   handleEnviar = () => {
     const { usuario, pass } = this.state
-    if (usuario) {
+    if (usuario && pass) {
       ServiceLocator.EmpleadoService.iniciarSesion({ nombreUsuario: usuario, contraseña: pass })
         .then((respuesta) => {
           if (respuesta) {
@@ -72,19 +72,27 @@ class Login extends Component {
           </Typography>
         </div>
         <div>
-          <input className="inputLogin" placeholder=" Usuario" name="usuario" onChange={this.handleChange}></input>
+          <input maxLength="20" className="inputLogin" placeholder=" Usuario" name="usuario" onChange={this.handleChange}></input>
         </div>
         <div>
-          <input type="password" className="inputLogin" placeholder=" Contraseña" name="pass" onChange={this.handleChange}></input>
+          <input maxLength="15" className="inputLogin" placeholder=" Contraseña" name="pass" onChange={this.handleChange} type="password"></input>
         </div>
         <button className="botonLogin" onClick={this.handleEnviar}>INGRESAR</button>
         <Grid container>
+<<<<<<< HEAD
             <Grid item xs>
               <Link href='#' onClick={() => history.push('/recuperar/contraseña')} variant="body2">
                 {"Recuperar Contraseña"}
               </Link>
             </Grid>
+=======
+          <Grid item xs>
+            <Link href="#" variant="body2">
+              {"Recuperar Contraseña"}
+            </Link>
+>>>>>>> master
           </Grid>
+        </Grid>
         <SnackBarPersonal mensajeError={errorMessage} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={"error"} />
       </Container>
     );

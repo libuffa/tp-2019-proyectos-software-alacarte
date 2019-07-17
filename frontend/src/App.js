@@ -14,6 +14,7 @@ import DetalleItemCarta from './pages/detalleItemCarta/DetalleItemCarta';
 import DetalleItemCartaEmpleado from './pages/detalleItemCartaEmpleado/DetalleItemCartaEmpleado';
 import DetalleItemPedido from './pages/detalleItemPedido/DetalleItemPedido';
 import DetalleItemPedidoCocina from './pages/detalleItemPedidoCocina/DetalleItemPedidoCocina';
+import DetalleEmpleado from './pages/detalleEmpleado/DetalleEmpleado';
 import DetalleMesa from './pages/detalleMesa/DetalleMesa';
 import MenuEmpleado from './pages/menuEmpleado/MenuEmpleado';
 import EscanearQR from './pages/escanearQR/EscanearQR';
@@ -24,6 +25,9 @@ import Login from './pages/Login/Login';
 import './App.css';
 import CambiarContraseña from './pages/CambiarContraseña/CambiarContraseña';
 import RecuperarContraseña from './pages/RecuperarContraseña/RecuperarContraseña';
+import VisualizarMesasAdministrador from './pages/VisualizarMesasAdministrador/VisualizarMesasAdministrador';
+import InstruccionesJuego from './pages/instruccionesJuego/InstruccionesJuego';
+import Minijuego from './pages/minijuego/Minijuego';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -36,6 +40,7 @@ function RouterPrincipal(props) {
           <Route path="/pedido" exact component={VisualizarPedidoMozo} />
           <Route path="/pedido/cocina" exact component={VisualizarPedidoCocina} />
           <Route path="/mesas" exact component={VisualizarMesas} />
+          <Route path="/mesas/admin" exact component={VisualizarMesasAdministrador} />
           <Route path="/detalle/mesa" exact component={DetalleMesa} />
           <Route path="/carta/cliente" exact component={VisualizarCarta} />
           <Route path="/detalle/item/carta/empleado" exact component={DetalleItemCartaEmpleado} />
@@ -43,6 +48,7 @@ function RouterPrincipal(props) {
           <Route path="/detalle/item/pedido/cocina" exact component={DetalleItemPedidoCocina} />
           <Route path="/detalle/item/carta" exact component={DetalleItemCarta} />
           <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
+          <Route path="/detalle/empleado" exact component={DetalleEmpleado} />
           <Route path="/carta" exact component={VisualizarCartaEmpleado} />
           <Route path="/menu/empleado" exact component={MenuEmpleado} />
           <Route path="/escanear/qr" exact component={EscanearQR} />
@@ -66,6 +72,8 @@ function RouterCliente() {
           <Route path="/carta" exact component={VisualizarCarta} />
           <Route path="/detalle/item/carta" exact component={DetalleItemCarta} />
           <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
+          <Route path="/minijuego/instrucciones" exact component={InstruccionesJuego} />
+          <Route path="/minijuego" exact component={Minijuego} />
           <Route component={RedirectCliente} />
         </Switch>
       </div>

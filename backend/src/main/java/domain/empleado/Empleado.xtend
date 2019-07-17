@@ -3,6 +3,8 @@ package domain.empleado
 import domain.EmailSender
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.Inheritance
@@ -13,7 +15,7 @@ import repository.EmpleadoRepository
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 @Accessors
-abstract class Empleado {
+class Empleado {
 
 	@Id
 	@GeneratedValue
@@ -36,6 +38,13 @@ abstract class Empleado {
 	
 	@Column
 	Boolean logueado = false
+	
+	@Enumerated(EnumType.STRING)
+	@Column(length=20)
+	TipoEmpleado tipoEmpleado
+	
+	@Column
+	Boolean baja = false
 
 	def loguearDesloguear() {
 		this.logueado = !this.logueado
@@ -52,5 +61,10 @@ abstract class Empleado {
 		val EmailSender emailSender = new EmailSender
 		val mensaje = "Su contraseña es: " + this.contraseña
 		emailSender.enviarMail(this.email, "aLaCarte - Recupero de clave", mensaje)
+	}
+	
+	def darDeBaja() {
+		this.baja = true
+		EmpleadoRepository.instance.update(this)
 	}
 }

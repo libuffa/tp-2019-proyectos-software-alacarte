@@ -8,7 +8,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function OutlinedTextFields(props) {
+export default function CuadroDeTexto(props) {
   const classes = useStyles();
   const { handlers, comentarioPrevio, disabled } = props;
   const [value, setValue] = React.useState({

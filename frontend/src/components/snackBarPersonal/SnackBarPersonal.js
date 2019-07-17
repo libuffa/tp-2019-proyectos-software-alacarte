@@ -100,7 +100,7 @@ export default function SnackBarPersonal(props) {
       >
         <MySnackbarContentWrapper
           onClose={handleClose}
-          variant={variant}
+          variant={variant ? variant : "error"}
           message={mensajeError}
         />
       </Snackbar>

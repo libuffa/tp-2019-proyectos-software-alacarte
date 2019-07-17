@@ -82,3 +82,50 @@ text-align: center;
 .margenBoton {
   margin-right: 1em;
 }
+
+.detalleEmpleado {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 16px;
+  padding-right: 16px;  
+}
+
+.botonEliminarContainer {
+  text-align: end;
+}
+
+.botonVolver{
+  height: 60px;
+}
+
+.smallButton{
+  width: 25px;
+}
+
+.combinacion{
+  height: 51px;
+}
+
+.marginDiv{
+  margin: 6px;
+}
+
+.flexCenter{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex{
+  display: flex;
+}
+
+.indicador{
+  width: 0px;
+  height: 100%;
+}
+
+.resultado{
+  text-align: center;
+  height: 25.5px;
+}

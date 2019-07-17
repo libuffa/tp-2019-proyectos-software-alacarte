@@ -4,7 +4,6 @@ import domain.empleado.Empleado
 import javax.persistence.criteria.CriteriaBuilder
 import javax.persistence.criteria.CriteriaQuery
 import javax.persistence.criteria.Root
-import domain.empleado.Mozo
 
 class EmpleadoRepository extends AbstractRepository<Empleado> {
 	
@@ -55,8 +54,8 @@ class EmpleadoRepository extends AbstractRepository<Empleado> {
 		val entityManager = generateEntityManager
 		try {
 			val criteria = entityManager.criteriaBuilder
-			val query = criteria.createQuery(Mozo)
-			val camposEmpleado = query.from(Mozo)
+			val query = criteria.createQuery(Empleado)
+			val camposEmpleado = query.from(Empleado)
 //			camposItemCarta.fetch("imagenes", JoinType.LEFT)
 			query.select(camposEmpleado)
 			query.where(criteria.equal(camposEmpleado.get("id"), _id))
@@ -66,7 +65,7 @@ class EmpleadoRepository extends AbstractRepository<Empleado> {
 		}
 	}
 	
-	def searchMozoExampleById(Mozo empl) {
+	def searchMozoExampleById(Empleado empl) {
 		val id = empl.id
 		searchMozoById(id)
 	}
