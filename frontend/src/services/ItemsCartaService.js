@@ -25,14 +25,15 @@ export class ItemsCartaService {
     let formData = new FormData()
     const imagenes = data.imagenes
     console.log(imagenes)
-    imagenes.forEach( (imagen) => formData.append('imagenes', imagen, imagen.name) )
-    formData.append('data', data)
+    imagenes.forEach( (imagen) => formData.append('imagen', imagen, imagen.name) )
+    // formData.append('data', data)
     console.log(formData)
-    return client.post(`/carta/agregarItemCarta`, formData,{
+    const imagen = imagenes[0]
+    return client.post(`/carta/agregarItemCarta`, imagen,{
       headers: {
-        'accept': 'application/json',
-        'Accept-Language': 'en-US,en;q=0.8',
-        'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
+        // 'accept': 'application/json',
+        // 'Accept-Language': 'en-US,en;q=0.8',
+        'Content-Type': imagen.type,
       }}).then(res => { return res.data })
   }
 

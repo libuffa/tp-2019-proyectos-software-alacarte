@@ -2,7 +2,12 @@ package controller
 
 import domain.Categoria
 import domain.ItemCarta
-import java.awt.image.BufferedImage
+import java.io.File
+import java.util.List
+import org.apache.commons.fileupload.FileItem
+import org.apache.commons.fileupload.disk.DiskFileItemFactory
+import org.apache.commons.fileupload.servlet.ServletFileUpload
+import org.apache.commons.fileupload.servlet.ServletRequestContext
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.xtrest.api.Result
 import org.uqbar.xtrest.api.annotation.Body
@@ -19,6 +24,7 @@ class CartaController {
 
 	extension JSONUtils = new JSONUtils
 	ItemCartaRepository carta = ItemCartaRepository.instance
+	final static String UPLOAD_DIRECTORY = '$HOME/' 
 
 	@Get("/carta/:categoria")
 	def Result obtenerCarta() {
@@ -97,51 +103,83 @@ class CartaController {
 
 	@Post("/carta/agregarItemCarta")
 	def Result agregarItemCarta(@Body String body) {
-		
-		val data = body.getPropertyValue("data")
 
-		val idItemCarta = Long.valueOf(body.getPropertyValue("id"))
-		val titulo = String.valueOf(body.getPropertyValue("titulo"))
-		val descripcion = String.valueOf(body.getPropertyValue("descripcion"))
-		val categoria = Categoria.valueOf(body.getPropertyValue("categoria"))
-		val subcategoria = String.valueOf(body.getPropertyValue("subcategoria"))
-		val precioUnitario = Double.valueOf(body.getPropertyValue("precioUnitario"))
-		val imagenes = body.getPropertyValue("imagenes")
+		if (ServletFileUpload.isMultipartContent(request)) {
+			try {
+				System.out.println("inTry");
+				val factory = new DiskFileItemFactory()
+				factory.setSizeThreshold(100000);
+				val servletFIleUpload = new ServletFileUpload(factory)
+				
+				val List<FileItem> multiparts = servletFIleUpload. parseRequest(new ServletRequestContext(request));
+				System.out.println("antes del ciclo");
+				for (FileItem item : multiparts) {
+					System.out.println("entra al ciclo");
+					if (!item.isFormField()) {
+						System.out.println("entra al if");
+						val String name = new File(item.getName()).getName();
+						item.write(new File(UPLOAD_DIRECTORY + File.separator + name));
+						println(item)
+					}
+				}
 
-		try {
-			
-			var ItemCarta itemCarta
+				// File uploaded successfully
+				ok('{ "status" : "OK" }');
 
-			if (idItemCarta !== null) {
-				itemCarta = new ItemCarta => [
-					it.id = idItemCarta
-					it.titulo = titulo
-					it.descripcion = descripcion
-					it.categoria = categoria
-					it.subCategoria = subcategoria
-					it.precioUnitario = precioUnitario
-				]
-				carta.update(itemCarta)
-			} else {
-				itemCarta = new ItemCarta => [
-					it.titulo = titulo
-					it.descripcion = descripcion
-					it.categoria = categoria
-					it.subCategoria = subcategoria
-					it.precioUnitario = precioUnitario
-				]
-				carta.create(itemCarta)
-			}
-			
-			if(itemCarta === null) {
-				return ok('{ "error" : "hubo un error en el servicio" }')
+			} catch (Exception e) {
+				response.getWriter().println("File Upload Failed due to " + e);
+				badRequest(e.message)
 			}
 
-
-			return ok("ok")
-		} catch (Exception e) {
-			badRequest(e.message)
+		} else {
+			response.getWriter().println("Sorry this Servlet only handles file upload request");
+			request.setAttribute("message", "Sorry this Servlet only handles file upload request");
+			badRequest("No hay cosas para subir")
 		}
+
+//		val data = body.getPropertyValue("data")
+//
+//		val idItemCarta = Long.valueOf(body.getPropertyValue("id"))
+//		val titulo = String.valueOf(body.getPropertyValue("titulo"))
+//		val descripcion = String.valueOf(body.getPropertyValue("descripcion"))
+//		val categoria = Categoria.valueOf(body.getPropertyValue("categoria"))
+//		val subcategoria = String.valueOf(body.getPropertyValue("subcategoria"))
+//		val precioUnitario = Double.valueOf(body.getPropertyValue("precioUnitario"))
+//		val imagenes = body.getPropertyValue("imagenes")
+//
+//		try {
+//
+//			var ItemCarta itemCarta
+//
+//			if (idItemCarta !== null) {
+//				itemCarta = new ItemCarta => [
+//					it.id = idItemCarta
+//					it.titulo = titulo
+//					it.descripcion = descripcion
+//					it.categoria = categoria
+//					it.subCategoria = subcategoria
+//					it.precioUnitario = precioUnitario
+//				]
+//				carta.update(itemCarta)
+//			} else {
+//				itemCarta = new ItemCarta => [
+//					it.titulo = titulo
+//					it.descripcion = descripcion
+//					it.categoria = categoria
+//					it.subCategoria = subcategoria
+//					it.precioUnitario = precioUnitario
+//				]
+//				carta.create(itemCarta)
+//			}
+//
+//			if (itemCarta === null) {
+//				return ok('{ "error" : "hubo un error en el servicio" }')
+//			}
+//
+//			return ok("ok")
+//		} catch (Exception e) {
+//			badRequest(e.message)
+//		}
 	}
 
 }
