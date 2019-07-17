@@ -14,11 +14,10 @@ import org.uqbar.commons.model.exceptions.UserException
 
 class EmailSender {
 
-	String mensaje = "prueba"
-	String email = "buffalautaro@gmail.com" 
-	String clave = ""
-	
-	def void enviarMail(String destinatario, String asunto, MimeMultipart mail) {
+	String email = "a.la.carte2019unsam@gmail.com"
+	String clave = "alacarte2019unsam"
+
+	def void enviarMail(String destinatario, String asunto, String mensaje) {
 
 		val Properties props = System.getProperties();
 		props.put("mail.smtp.host", "smtp.gmail.com"); // El servidor SMTP de Google
@@ -35,30 +34,14 @@ class EmailSender {
 			message.setFrom(internetAdress)
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario)); // Se podrían añadir varios de la misma manera
 			message.setSubject(asunto);
-			message.setContent(mail);
-			var Transport transport
-			try {
-				transport.connect("smtp.gmail.com", this.email, this.clave);
-				transport.sendMessage(message, message.getAllRecipients());
-			} catch (MessagingException e) {
-				throw new UserException(e.getMessage)
-			}
+			message.setText(mensaje)
+			val Transport transport = session.getTransport("smtp")
+			transport.connect("smtp.gmail.com", this.email, this.clave);
+			transport.sendMessage(message, message.getAllRecipients());
+			transport.close
 		} catch (MessagingException e) {
 			throw new UserException(e.getMessage)
 		}
 	}
 
-	def MimeMultipart generarMail(String textoCuerpo) {
-		
-		val BodyPart cuerpo = new MimeBodyPart();
-		val MimeMultipart mail = new MimeMultipart();
-
-		try {
-			cuerpo.setText(this.mensaje);
-			mail.addBodyPart(cuerpo);
-		} catch (MessagingException e) {
-			throw new UserException(e.getMessage)
-		}
-		return mail;
-	}
 }

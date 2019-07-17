@@ -50,6 +50,7 @@ abstract class Empleado {
 	
 	def recuperarContraseña() {
 		val EmailSender emailSender = new EmailSender
-		emailSender.enviarMail(this.email, "prueba", emailSender.generarMail("prueba"))
+		val mensaje = "Su contraseña es: " + this.contraseña
+		emailSender.enviarMail(this.email, "aLaCarte - Recupero de clave", mensaje)
 	}
 }
