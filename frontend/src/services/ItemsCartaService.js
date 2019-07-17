@@ -18,4 +18,19 @@ export class ItemsCartaService {
   updateEstadoItem(id) {
     return client.post(`/carta/${id}/cambiarEstadoPlato`).then(res => { return res.data })
   }
+
+  crearItem(dataSend) {
+    let formData = new FormData()
+    let imagefile = document.querySelector(dataSend)
+    formData.append('data', imagefile)
+
+    // let data = {
+    //   title: this.title,
+    //   tagline: this.tagline,
+    //   slug: this.slug,
+    //   body: this.body
+    // }
+
+    return client.post(`/carta/crear`, formData).then(res => { return res.data }).catch(() => { console.log("Fallo el cargado de imagenes") })
+  }
 }
