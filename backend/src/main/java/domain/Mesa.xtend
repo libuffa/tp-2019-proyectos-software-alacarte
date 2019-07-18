@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import org.eclipse.xtend.lib.annotations.Accessors
 import repository.SesionRepository
+import repository.MesaRepository
 
 @Entity
 @Accessors
@@ -18,6 +19,14 @@ class Mesa {
 	
 	@Column
 	Integer numero
+	
+	@Column
+	Boolean baja = false
+	
+	def darDeBaja() {
+		this.baja = true
+		MesaRepository.instance.update(this)
+	}
 	
 	@JsonProperty("sesion")
 	def getSesion() {

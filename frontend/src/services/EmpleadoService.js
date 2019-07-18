@@ -31,6 +31,10 @@ export class EmpleadoService {
     return client.get(`/empleado/${userName}/validar`).then(res => { return res.data })
   }
 
+  validarMail(data) {
+    return client.post(`/empleado/mail/validar`, data).then(res => { return res.data })
+  }
+
   getMenuEmpleado() {
     return client.get(`/empleado/${ControllerDeEmpleado.getSesionActiva()}/menu`).then(res => { return res.data })
   }

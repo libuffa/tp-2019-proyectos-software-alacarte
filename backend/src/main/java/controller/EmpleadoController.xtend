@@ -110,14 +110,40 @@ class EmpleadoController {
 	@Get("/empleado/:username/validar")
 	def Result validarUsername() {
 		try {
-			val empleado = repoEmpleados.searchByString(username)
+			var Empleado empleado
+			try{
+				empleado = repoEmpleados.searchByString(username)
+			} catch(Exception e) {
+				return ok("true")
+			}
 			if (empleado !== null) {
 				return ok('{ "error" : "El nombre de usuario ya existe" }')
 			} else {
 				return ok("true")
 			}
 		} catch (Exception e) {
-			return ok("true")
+			return ok('{ "error" : "Error en el servidor" }')
+		}
+	}
+	
+	@Post("/empleado/mail/validar")
+	def Result validarMail(@Body String body) {
+		val emailE = String.valueOf(body.getPropertyValue("email"))
+		
+		try {
+			var Empleado empleado
+			try{
+				empleado = repoEmpleados.searchByEmail(emailE)
+			} catch(Exception e) {
+				return ok("true")
+			}
+			if (empleado !== null) {
+				return ok('{ "error" : "El mail ya existe" }')
+			} else {
+				return ok("true")
+			}
+		} catch (Exception e) {
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 

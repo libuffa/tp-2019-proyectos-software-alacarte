@@ -17,6 +17,7 @@ export default class DetalleMesa extends Component {
       mozo: null,
       mensaje: "",
       variant: "",
+      admin: false,
     }
     this.verMesas = this.verMesas.bind(this)
   }
@@ -25,6 +26,16 @@ export default class DetalleMesa extends Component {
     if (this.props.location.state && this.state.mesa.sesion) {
       this.cargarMozo()
     }
+    ServiceLocator.EmpleadoService.getEmpleado()
+      .then((resultado) => {
+        if (resultado) {
+          if (resultado.tipoEmpleado === "Administrador") {
+            this.setState({
+              admin: true,
+            })
+          }
+        }
+      })
   }
 
   cargarMozo() {
@@ -50,7 +61,9 @@ export default class DetalleMesa extends Component {
   }
 
   verMesas() {
-    this.props.history.push('/mesas')
+    this.state.admin ?
+      this.props.history.push('/mesas/admin') :
+      this.props.history.push('/mesas')
   }
 
   verPedido = (idSesion) => {
@@ -74,9 +87,22 @@ export default class DetalleMesa extends Component {
       "idMesa": this.state.mesa.id
     }).then((respuesta) => {
       if (respuesta) {
+        if (respuesta.error) {
+          this.setState({
+            mensaje: respuesta.error,
+            variant: "error",
+          })
+          setTimeout(() => { this.verMesas() }, 3000)
+        } else {
+          this.setState({
+            mensaje: respuesta,
+            variant: "success",
+          })
+        }
+      } else {
         this.setState({
-          mensaje: respuesta,
-          variant: "success",
+          mensaje: "Error en el servidor",
+          variant: "error",
         })
       }
       this.cargarMesa()
@@ -128,7 +154,7 @@ export default class DetalleMesa extends Component {
       <div className="contenedorLista">
         <div className="dividerLista" />
         <ListSubheader disableSticky color="inherit" >
-          <ListItemText primary={"Mesa " + mesa.numero} />
+          <ListItemText primary={"Mesa " + (mesa.numero ? mesa.numero : "-")} />
         </ListSubheader>
         <div className="dividerLista" />
         <CuerpoMesa mesa={mesa} mozo={mozo} entregarPedido={{ onChange: this.entregarPedido }} mostrarQR={{ onChange: this.mostrarQR }} verPedido={{ onChange: this.verPedido }} sesionMesa={{ onChange: this.sesionMesa }} />

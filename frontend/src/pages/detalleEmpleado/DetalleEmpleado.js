@@ -36,6 +36,9 @@ export default class DetalleEmpleado extends Component {
       checkUser: null,
       usuarioErroneo: false,
       mensajeUsuario: "",
+      checkMail: null,
+      mailErroneo: false,
+      mensajeMail: "",
     }
     this.verEmpleados = this.verEmpleados.bind(this)
   }
@@ -157,6 +160,12 @@ export default class DetalleEmpleado extends Component {
         checkUser: setTimeout(() => { this.validarUsuario(valor) }, 1000)
       })
     }
+    if (atributo === "email") {
+      clearTimeout(this.state.checkMail)
+      this.setState({
+        checkMail: setTimeout(() => { this.validarMail(valor) }, 1000)
+      })
+    }
     this.setState({
       [atributo]: valor,
       modificado: true,
@@ -164,20 +173,60 @@ export default class DetalleEmpleado extends Component {
   }
 
   validarUsuario(usuario) {
-    ServiceLocator.EmpleadoService.validarUserName(usuario)
-      .then(respuesta => {
-        if (respuesta === true) {
-          this.setState({
-            usuarioErroneo: false,
-            mensajeUsuario: "",
-          })
-        } else if (respuesta.error) {
-          this.setState({
-            usuarioErroneo: true,
-            mensajeUsuario: respuesta.error
-          })
-        }
+    if (usuario !== "") {
+      ServiceLocator.EmpleadoService.validarUserName(usuario)
+        .then(respuesta => {
+          if (respuesta === true) {
+            this.setState({
+              usuarioErroneo: false,
+              mensajeUsuario: "",
+            })
+          } else if (respuesta.error) {
+            this.setState({
+              usuarioErroneo: true,
+              mensajeUsuario: respuesta.error
+            })
+          }
+        })
+    } else {
+      this.setState({
+        usuarioErroneo: false,
+        mensajeUsuario: "",
       })
+    }
+  }
+
+  validarMail(email) {
+    if (email !== "") {
+      ServiceLocator.EmpleadoService.validarMail({
+        "email": email,
+      })
+        .then(respuesta => {
+          if (respuesta === true) {
+            if (email.includes("@") && email.includes(".com")) {
+              this.setState({
+                mailErroneo: false,
+                mensajeMail: "",
+              })
+            } else {
+              this.setState({
+                mailErroneo: true,
+                mensajeMail: "E-Mail invalido"
+              })
+            }
+          } else if (respuesta.error) {
+            this.setState({
+              mailErroneo: true,
+              mensajeMail: respuesta.error
+            })
+          }
+        })
+    } else {
+      this.setState({
+        mailErroneo: false,
+        mensajeMail: "",
+      })
+    }
   }
 
   generarMensaje(mensaje, variant) {
@@ -213,7 +262,7 @@ export default class DetalleEmpleado extends Component {
   }
 
   render() {
-    const { mensajeUsuario, usuarioErroneo, idEmpleado, disabled, modificado, empleado, open, mensaje, variant, mensajeDialog, tituloDialog, nombreUsuario, contraseña, email, nombre, apellido, tipoEmpleado, confirmarContraseña, logueado } = this.state;
+    const { mensajeMail, mailErroneo, mensajeUsuario, usuarioErroneo, idEmpleado, disabled, modificado, empleado, open, mensaje, variant, mensajeDialog, tituloDialog, nombreUsuario, contraseña, email, nombre, apellido, tipoEmpleado, confirmarContraseña, logueado } = this.state;
 
     if (!empleado && idEmpleado) {
       return (
@@ -307,7 +356,9 @@ export default class DetalleEmpleado extends Component {
                 disabled={disabled}
                 handlers={{ onChange: this.modificarAtributo }}
                 label={"E-mail"}
-                maxLength={30}
+                maxLength={40}
+                error={mailErroneo}
+                help={mailErroneo ? mensajeMail : ""}
               />
             </Grid>
             {!empleado ?

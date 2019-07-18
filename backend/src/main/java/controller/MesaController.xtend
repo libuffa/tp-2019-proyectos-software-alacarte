@@ -12,6 +12,7 @@ import org.uqbar.xtrest.json.JSONUtils
 import repository.EmpleadoRepository
 import repository.MesaRepository
 import repository.SesionRepository
+import domain.empleado.TipoEmpleado
 
 @Controller
 @Accessors
@@ -26,9 +27,10 @@ class MesaController {
 	def Result getMesas() {
 		try {
 			val mesas = repoMesas.allInstances()
-			return ok(mesas.toJson)
+			val mesasRepo = mesas.filter(mesa | !mesa.baja).toList
+			return ok(mesasRepo.toJson)
 		} catch (Exception e) {
-			badRequest(e.message)
+			return ok("Error en el servidor")
 		}
 	}
 
@@ -38,9 +40,13 @@ class MesaController {
 		try {
 			val mesas = repoMesas.allInstances()
 			val mesa = mesas.filter[mesa|mesa.id === idMesa].get(0)
-			return ok(mesa.toJson)
+			if(!mesa.baja) {
+				return ok(mesa.toJson)
+			} else {
+				return ok('{ "error" : "Mesa inexistente" }')
+			}
 		} catch (Exception e) {
-			badRequest(e.message)
+			return ok("Error en el servidor")
 		}
 	}
 
@@ -50,8 +56,8 @@ class MesaController {
 		val idMozoBody = Long.valueOf(body.getPropertyValue("idMozo"))
 		try {
 			val mesaRepo = repoMesas.searchById(idMesaBody)
-			if (mesaRepo === null) {
-				return ok("Mesa incorrecta")
+			if (mesaRepo === null || mesaRepo.baja) {
+				return ok('{ "error" : "Mesa inexistente" }')
 			}
 			var sesion = mesaRepo.getSesion()
 			if (sesion === null) {
@@ -69,7 +75,7 @@ class MesaController {
 				return ok("Mesa cerrada correctamente")
 			}
 		} catch (Exception e) {
-			return ok("Error en el servidor")
+				return ok('{ "error" : "Mesa inexistente" }')
 		}
 	}
 
@@ -79,17 +85,21 @@ class MesaController {
 			val idMesaBody = Long.valueOf(body.getPropertyValue("idMesa"))
 			val idEmpleadoBody = Long.valueOf(body.getPropertyValue("idEmpleado"))
 			val empleadoRepo = repoEmpleados.searchById(idEmpleadoBody)
-			if (empleadoRepo === null) {
-				return ok('{ "error" : "Empleado inexistente" }')
+			if (empleadoRepo === null || empleadoRepo.baja || empleadoRepo.tipoEmpleado !== TipoEmpleado.Administrador) {
+				return ok('{ "error" : "Empleado no autorizado" }')
 			}
 			val mesaRepo = repoMesas.searchById(idMesaBody)
-			if (mesaRepo === null) {
+			if (mesaRepo === null || mesaRepo.baja) {
 				return ok('{ "error" : "Mesa inexistente" }')
 			}
-			repoMesas.delete(mesaRepo)
-			return ok('{ "ok" : "Mesa eliminada correctamente" }')
+			try{
+				mesaRepo.darDeBaja()
+				return ok('{ "ok" : "Mesa eliminada correctamente" }')
+			} catch (Exception e) {
+				return ok('{ "error" : "Error en el servidor" }')
+			}
 		} catch (Exception e) {
-			return ok(e.message)
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 	
@@ -98,8 +108,8 @@ class MesaController {
 		try {
 			val idEmpleadoBody = Long.valueOf(body.getPropertyValue("idEmpleado"))
 			val empleadoRepo = repoEmpleados.searchById(idEmpleadoBody)
-			if (empleadoRepo === null) {
-				return ok('{ "error" : "Empleado inexistente" }')
+			if (empleadoRepo === null || empleadoRepo.baja || empleadoRepo.tipoEmpleado !== TipoEmpleado.Administrador) {
+				return ok('{ "error" : "Empleado no autorizado" }')
 			}
 			val mesa = repoMesas.allInstances.maxBy[mesa | mesa.numero]
 			val numeroMesa = mesa.numero

@@ -79,18 +79,10 @@ class Login extends Component {
         </div>
         <button className="botonLogin" onClick={this.handleEnviar}>INGRESAR</button>
         <Grid container>
-<<<<<<< HEAD
-            <Grid item xs>
-              <Link href='#' onClick={() => history.push('/recuperar/contraseña')} variant="body2">
-                {"Recuperar Contraseña"}
-              </Link>
-            </Grid>
-=======
           <Grid item xs>
-            <Link href="#" variant="body2">
+            <Link href='#' onClick={() => history.push('/recuperar/contraseña')} variant="body2">
               {"Recuperar Contraseña"}
             </Link>
->>>>>>> master
           </Grid>
         </Grid>
         <SnackBarPersonal mensajeError={errorMessage} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={"error"} />

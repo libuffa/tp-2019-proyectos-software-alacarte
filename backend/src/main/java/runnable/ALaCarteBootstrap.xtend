@@ -256,7 +256,7 @@ class ALaCarteBootstrap {
 			nombre = "Claudia"
 			apellido = "Morales"
 			contraseña = "1234"
-			email = "cmorales@yahoo.com"
+			email = "javierdevoto96@gmail.com"
 			tipoEmpleado = TipoEmpleado.Mozo
 		]
 		pepe = new Empleado => [

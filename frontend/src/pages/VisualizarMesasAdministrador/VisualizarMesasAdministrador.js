@@ -150,6 +150,7 @@ export default class VisualizarMesasAdministrador extends Component {
           cambiarEstado={{ onChange: this.sesionMesa }}
           eliminarMesa={{ onChange: this.eliminarMesa }}
           handlers={{ onChange: this.crearMesa }}
+          detalleMesa={{ onChange: this.verDetalleMesa }}
         />
         <DialogConfirmacion
           titulo={"Atención"}

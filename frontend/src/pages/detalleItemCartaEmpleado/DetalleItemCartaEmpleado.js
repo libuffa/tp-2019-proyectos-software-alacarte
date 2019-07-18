@@ -22,14 +22,16 @@ export default class DetalleItemCartaEmpleado extends Component {
         </div>
       )
     }
-    return <div>
-      <PasadorDeImagenes
-        imagenes={itemCarta.imagenes}
-      />
-      <ContenedorCuerpoItemMozo
-        itemCarta={itemCarta}
-        history={this.props.history}
-      />
-    </div>
+    return (
+      <div className="contenedorLista">
+        <PasadorDeImagenes
+          imagenes={itemCarta.imagenes}
+        />
+        <ContenedorCuerpoItemMozo
+          itemCarta={itemCarta}
+          history={this.props.history}
+        />
+      </div>
+    )
   }
 }

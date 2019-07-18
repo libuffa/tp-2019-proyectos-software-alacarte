@@ -65,6 +65,7 @@ class Empleado {
 	
 	def darDeBaja() {
 		this.baja = true
+		this.email = ""
 		EmpleadoRepository.instance.update(this)
 	}
 }
