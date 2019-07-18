@@ -96,18 +96,17 @@ class EmpleadoController {
 		}
 	}
 
-	
 	@Get("/empleados")
 	def Result getEmpleados() {
 		try {
 			val empleados = repoEmpleados.allInstances()
-			val empleadosActivos = empleados.filter[empleado | !empleado.baja].toList
+			val empleadosActivos = empleados.filter[empleado|!empleado.baja].toList
 			return ok(empleadosActivos.toJson)
 		} catch (Exception e) {
 			badRequest(e.message)
 		}
 	}
-	
+
 	@Get("/empleado/:username/validar")
 	def Result validarUsername() {
 		try {
@@ -117,9 +116,8 @@ class EmpleadoController {
 			} else {
 				return ok("true")
 			}
-		}
-		catch (Exception e) {
-				return ok("true")
+		} catch (Exception e) {
+			return ok("true")
 		}
 	}
 
@@ -138,27 +136,51 @@ class EmpleadoController {
 			}
 			empleado.cambiarContraseña(contraseñaNueva)
 			return ok("Contraseña modificada correctamente")
-		}catch(Exception e) {
+		} catch (Exception e) {
 			return ok(e.message)
 		}
 	}
-	
+
+	@Put("/empleado/recuperarContraseña")
+	def Result recuperarContraseña(@Body String body) {
+		try {
+			val correoUsuario = body.getPropertyValue("correoUsuario")
+			var Empleado empleado
+
+			try {
+				empleado = repoEmpleados.searchByEmail(correoUsuario)
+			} catch (Exception exception) {
+				return badRequest('{ "error" : "correo inexistente" }')
+			}
+			if (!empleado.email.equals(correoUsuario)) {
+				return badRequest('{ "error" : "Correo de usuario incorrecto" }')
+			}
+
+			empleado.recuperarContraseña
+
+			return ok("True")
+
+		} catch (Exception e) {
+			return ok(e.message)
+		}
+	}
+
 	@Post("/empleado/eliminar")
 	def Result eliminarEmpleado(@Body String body) {
 		val idEmpleado = Long.valueOf(body.getPropertyValue("id"))
-		
+
 		try {
 			val empleado = repoEmpleados.searchById(idEmpleado)
-			if(empleado === null || empleado.baja) {
+			if (empleado === null || empleado.baja) {
 				return ok('{ "error" : "Usuario inexistente" }')
 			}
 			empleado.darDeBaja()
 			return ok("Usuario eliminado correctamente")
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
-	
+
 	@Put("/empleado/agregarEmpleado")
 	def Result agregarEmpleado(@Body String body) {
 		val idEmpleado = Long.valueOf(body.getPropertyValue("id"))
@@ -168,7 +190,7 @@ class EmpleadoController {
 		val nombreE = String.valueOf(body.getPropertyValue("nombre"))
 		val apellidoE = String.valueOf(body.getPropertyValue("apellido"))
 		val tipoEmpleadoE = String.valueOf(body.getPropertyValue("tipoEmpleado"))
-		
+
 		try {
 			var Empleado empleado
 			try {
@@ -181,31 +203,34 @@ class EmpleadoController {
 					empleado = new Empleado
 				}
 			}
-			if(empleado.nombreUsuario !== nombreUsuarioE){
+			if (empleado.nombreUsuario !== nombreUsuarioE) {
 				try {
 					empleado = repoEmpleados.searchByString(nombreUsuarioE)
 					return ok('{ "error" : "El nombre de usuario ya existe" }')
-				} catch (Exception es){}
+				} catch (Exception es) {
+				}
 			}
 			empleado.nombreUsuario = nombreUsuarioE
 			empleado.contraseña = contraseñaE
 			empleado.email = emailE
 			empleado.nombre = nombreE
 			empleado.apellido = apellidoE
-			if(tipoEmpleadoE !== null){
+			if (tipoEmpleadoE !== null) {
 				empleado.tipoEmpleado = TipoEmpleado.valueOf(tipoEmpleadoE)
 			} else {
-				return ok ('{ "error" : "Puesto no seleccionado" }')
+				return ok('{ "error" : "Puesto no seleccionado" }')
 			}
-			if(empleado.id === null || empleado.baja){
+			if (empleado.id === null || empleado.baja) {
 				repoEmpleados.create(empleado)
 				return ok("Empleado creado correctamente")
 			} else {
 				repoEmpleados.update(empleado)
 				return ok("Empleado actualizado correctamente")
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			return ok('{ "error" : "Error en el servidor" }')
+
 		}
 	}
+	
 }

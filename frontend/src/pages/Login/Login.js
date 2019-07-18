@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { ServiceLocator } from '../../services/ServiceLocator';
+import { withRouter } from 'react-router';
 import PersonIcon from '@material-ui/icons/PersonPin';
 import '../estilosPaginas.scss';
 import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal';
 import { Container, Typography, Grid, Link } from '@material-ui/core';
 
-export default class Login extends Component {
+class Login extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -57,6 +58,8 @@ export default class Login extends Component {
 
   render() {
     const { errorMessage } = this.state
+    const { history } = this.props
+    console.log(this.props)
 
     return (
       <Container component="main" maxWidth="xs" >
@@ -76,10 +79,18 @@ export default class Login extends Component {
         </div>
         <button className="botonLogin" onClick={this.handleEnviar}>INGRESAR</button>
         <Grid container>
+<<<<<<< HEAD
+            <Grid item xs>
+              <Link href='#' onClick={() => history.push('/recuperar/contraseña')} variant="body2">
+                {"Recuperar Contraseña"}
+              </Link>
+            </Grid>
+=======
           <Grid item xs>
             <Link href="#" variant="body2">
               {"Recuperar Contraseña"}
             </Link>
+>>>>>>> master
           </Grid>
         </Grid>
         <SnackBarPersonal mensajeError={errorMessage} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={"error"} />
@@ -87,3 +98,5 @@ export default class Login extends Component {
     );
   }
 }
+
+export default withRouter(Login);
