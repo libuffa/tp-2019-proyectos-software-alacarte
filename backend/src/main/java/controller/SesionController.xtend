@@ -48,7 +48,30 @@ class SesionController {
 			if(sesion.fechaBaja === null && !sesion.pideCuenta){
 				val itemCarta = carta.searchById(idItem)
 				if(itemCarta.habilitado){
-					sesion.pedirItem(itemCarta, cantidad, comentario)
+					sesion.pedirItem(itemCarta, cantidad, comentario, false)
+					return ok("True")
+				}
+				return ok("El plato que desea no se encuentra disponible")
+			} else {
+				return ok("La sesion expiro")
+			}
+		}catch(Exception e) {
+			badRequest("La sesion no existe o esta inactiva")
+		}
+	}
+	
+	@Put("/pedido/premio")
+	def Result reckamarPremio(@Body String body) {
+		var idSesion = Long.valueOf(body.getPropertyValue("idSesion"))
+		var idItem = Long.valueOf(body.getPropertyValue("idItem"))
+		var comentario = body.getPropertyValue("comentario")
+		
+		try{
+			val sesion = repositorioSesion.searchById(idSesion)
+			if(sesion.fechaBaja === null && !sesion.pideCuenta){
+				val itemCarta = carta.searchById(idItem)
+				if(itemCarta.habilitado){
+					sesion.pedirItem(itemCarta, 1, comentario, true)
 					return ok("True")
 				}
 				return ok("El plato que desea no se encuentra disponible")

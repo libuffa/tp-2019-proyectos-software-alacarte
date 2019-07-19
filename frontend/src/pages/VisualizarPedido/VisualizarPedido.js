@@ -10,6 +10,8 @@ import DialogConfirmacion from '../../components/Dialog/DialogConfirmacion';
 import { Sesion } from '../../domain/Sesion.js';
 import { ControllerDeSesion } from '../../controller/ControllerDeSesion.js';
 import { Card, CardContent, Typography, Button, CircularProgress } from '@material-ui/core';
+import BotonPremio from '../../components/botonPremio/BotonPremio.js';
+import DialogVolver from '../../components/Dialog/DialogVolver.js';
 
 export default class VisualizarPedido extends Component {
 
@@ -23,6 +25,7 @@ export default class VisualizarPedido extends Component {
       open: false,
       pideCuenta: true,
       sesion: {},
+      openJuego: false,
     }
   }
 
@@ -54,6 +57,13 @@ export default class VisualizarPedido extends Component {
     this.props.history.push('/carta')
   }
 
+  verPremio = () => {
+    this.props.history.push({
+      pathname: '/detalle/item/carta',
+      state: { idItem: 13, premio: true }
+    })
+  }
+
   verDetalleItemPedido = (pedido) => {
     this.props.history.push({
       pathname: '/detalle/item/pedido',
@@ -62,12 +72,18 @@ export default class VisualizarPedido extends Component {
   }
 
   verInstrucciones = () => {
-    this.props.history.push('/minijuego/Instrucciones')
+    if (this.state.pedidos.length === 0) {
+      this.setState({
+        openJuego: true
+      })
+    } else {
+      this.props.history.push('/minijuego/Instrucciones')
+    }
   }
 
   getPrecioTotal() {
     if (this.state.pedidos.length > 0) {
-      return this.state.pedidos.map((pedido) => pedido.cantidad * pedido.itemCarta.precioUnitario)
+      return this.state.pedidos.map((pedido) => (!pedido.premio && (pedido.cantidad * pedido.itemCarta.precioUnitario)))
         .reduce((a, b) => a + b)
     } else {
       return 0
@@ -126,6 +142,12 @@ export default class VisualizarPedido extends Component {
     this.open()
   }
 
+  closeDialog = () => {
+    this.setState({
+      openJuego: false,
+    })
+  }
+
   validarSesion() {
     return this.state.pideCuenta || this.state.fechaBaja !== null
   }
@@ -167,20 +189,20 @@ export default class VisualizarPedido extends Component {
         onChange: this.open,
         name: "Pedir Cuenta",
         icon: (<MoneyIcon />),
-        disabled: this.state.pideCuenta
+        disabled: (this.state.pideCuenta || pedidos.length === 0)
       }
     }
 
 
     return (
-      <div>
+      <div className="contenedorLista">
         <ListaItemsPedido
           pedidos={pedidos ? pedidos : []}
           handlers={{ onChange: this.actualizar }}
           handlersDetalleItemPedido={{ onChange: this.verDetalleItemPedido }}
           disabled={this.validarSesion()}
         />
-        {pedidos &&
+        {pedidos.length > 0 &&
           <Card elevation={0}>
             <CardContent>
               <Typography className="botonCentrado" variant="subtitle1">
@@ -198,16 +220,27 @@ export default class VisualizarPedido extends Component {
                 }).format(this.getPrecioTotal())}
               </Typography>
             </CardContent>
-            <CardContent>
-            </CardContent>
-          </Card>}
+          </Card>
+        }
+        {pedidos.length === 0 &&
+          <div className="full botonCentrado separadorTop">
+            <Typography variant="h4" color="textSecondary">{"No se realizaron pedidos"}</Typography>
+          </div>
+        }
         <DialogConfirmacion
-          titulo={"Pedir Cuenta"}
+          titulo={"Aviso"}
           descripcion={"¿Estas seguro que deseas pedir la cuenta?"}
           handlers={{ onChange: this.pedirCuenta, open: this.open }}
           open={this.state.open}
         />
+        <DialogVolver
+          titulo={"Aviso"}
+          descripcion={"Debe realizar al menos un pedido para jugar"}
+          handlers={{ onChange: this.closeDialog }}
+          open={this.state.openJuego}
+        />
         <MenuInferior menuButtons={menuButtons} />
+        {this.state.sesion.ganoPremio && <BotonPremio handler={{ onChange: this.verPremio }} />}
       </div>
     )
   }

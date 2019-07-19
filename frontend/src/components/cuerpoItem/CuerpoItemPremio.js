@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { Grid } from '@material-ui/core';
-import Fab from '@material-ui/core/Fab';
 import CuadroDeTexto from '../../components/cuadroDeTexto/CuadroDeTexto.js';
 import '../estilos.scss';
 
@@ -31,8 +30,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function CuerpoItem(props) {
-  const { itemCarta, cantidad, handlersCantidad, handlersComentario, comentario, disabled, premio } = props;
+export default function CuerpoItemPremio(props) {
+  const { itemCarta, handlersComentario, comentario, disabled } = props;
   const classes = useStyles();
 
   return (
@@ -57,55 +56,6 @@ export default function CuerpoItem(props) {
               {itemCarta.descripcion}
             </Typography>
           </Grid>
-          {!premio &&
-            <Grid item xs={12}>
-              <div className="divider" />
-            </Grid>
-          }
-          {!premio &&
-            <Grid item xs={9} >
-              <Typography variant="h6">
-                Precio:
-            </Typography>
-            </Grid>
-          }
-          {!premio &&
-            <Grid item xs={3}>
-              <div className="precio">
-                <Typography variant="h6">
-                  ${itemCarta.precioUnitario}
-                </Typography>
-              </div>
-            </Grid>
-          }
-          {!premio &&
-            <Grid item xs={12}>
-              <div className="divider" />
-            </Grid>
-          }
-          {!premio &&
-            <Grid item xs={4}>
-              <Paper elevation={0} className={classes.button}>
-                <Fab disabled={cantidad === 1 ? true : false || disabled} color="secondary" onClick={() => handlersCantidad.onChange(-1)}>
-                  <Typography variant="h5">-</Typography>
-                </Fab>
-              </Paper>
-            </Grid>
-          }
-          {!premio &&
-            <Grid item xs={4}>
-              <Paper elevation={0} className={classes.paper}>{cantidad}</Paper>
-            </Grid>
-          }
-          {!premio &&
-            <Grid item xs={4}>
-              <Paper elevation={0} className={classes.button}>
-                <Fab disabled={disabled} color="primary" onClick={() => handlersCantidad.onChange(1)}>
-                  <Typography variant="h5">+</Typography>
-                </Fab>
-              </Paper>
-            </Grid>
-          }
           <Grid item xs={12}>
             <div className="divider" />
           </Grid>

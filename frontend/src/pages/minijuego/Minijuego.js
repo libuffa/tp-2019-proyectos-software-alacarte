@@ -46,9 +46,11 @@ class Minijuego extends Component {
     ServiceLocator.SesionService.getSesionActiva()
       .then((respuesta) => {
         if (respuesta) {
-          this.setState({
-            juegaPorPremio: respuesta.juegaPorPremio
-          })
+          if (!respuesta.pideCuenta) {
+            this.setState({
+              juegaPorPremio: respuesta.juegaPorPremio
+            })
+          }
         }
       })
     ServiceLocator.SesionService.jugar()

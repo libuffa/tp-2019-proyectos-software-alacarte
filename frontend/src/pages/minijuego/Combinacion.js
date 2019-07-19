@@ -182,10 +182,10 @@ class Combinacion extends Component {
       return (
         <Container className=
           {
-            ([3, 4].includes(this.props.numero + 1) && this.props.classes.av34) ||
-            ([5, 6].includes(this.props.numero + 1) && this.props.classes.av56) ||
-            ([7, 8].includes(this.props.numero + 1) && this.props.classes.av78) ||
-            ([9, 10].includes(this.props.numero + 1) && this.props.classes.av90)
+            ([3, 4].includes(this.props.numero + 1) ? this.props.classes.av34 : "") ||
+            ([5, 6].includes(this.props.numero + 1) ? this.props.classes.av56 : "") ||
+            ([7, 8].includes(this.props.numero + 1) ? this.props.classes.av78 : "") ||
+            ([9, 10].includes(this.props.numero + 1) ? this.props.classes.av90 : "")
           }
         >
           <div className="full combinacion botonCentrado flexCenter"><Avatar>{this.props.numero + 1}</Avatar></div>

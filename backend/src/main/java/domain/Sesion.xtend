@@ -60,13 +60,17 @@ class Sesion {
 		fechaAlta = LocalDateTime.now
 	}
 
-	def pedirItem(ItemCarta itemCarta, Integer cantidad, String comentarios) {
+	def pedirItem(ItemCarta itemCarta, Integer cantidad, String comentarios, Boolean premio) {
 		val pedido = new Pedido => [
 			it.itemCarta = itemCarta
 			it.cantidad = cantidad
 			it.comentarios = comentarios
+			it.premio = premio
 			it.estado = Estado.Creado
 		]
+		if(premio){
+			this.ganoPremio = false
+		}
 		this.pedidos.add(pedido)
 		SesionRepository.instance.update(this)
 	}
@@ -77,7 +81,7 @@ class Sesion {
 	}
 	
 	def void ganarPremio() {
-		this.ganoPremio = true
+		this.ganoPremio = !this.ganoPremio
 		SesionRepository.instance.update(this)
 	}
 

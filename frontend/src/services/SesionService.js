@@ -49,6 +49,10 @@ export class SesionService {
     return client.put(`/pedido/generarPedido`, data).then(res => { return res.data })
   }
 
+  premio(data) {
+    return client.put(`/pedido/premio`, data).then(res => { return res.data })
+  }
+
   actualizarPedido(data) {
     return client.post(`/pedido/actualizarPedido`, data).then(res => { return res.data })
   }

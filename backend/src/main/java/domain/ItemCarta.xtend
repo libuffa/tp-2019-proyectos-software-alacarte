@@ -38,6 +38,9 @@ class ItemCarta {
 
 	@Column
 	Boolean habilitado
+	
+	@Column
+	Boolean esPremio = false
 
 	@ElementCollection(fetch=FetchType.EAGER)
 	List<String> imagenes = new ArrayList<String>();
