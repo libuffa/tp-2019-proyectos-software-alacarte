@@ -42,7 +42,9 @@ export default function PasadorDeImagenes(props) {
         {imagenes.map((imagen) => (
           <GridListTile key={Math.random()} >
             <img onClick={openDialog} src={imagen} alt={imagen} />
-            {open && <ImageDialog abrir={open} imagen={imagen} cerrar={{ onChange: closeDialog }} />}
+            <div className="anulador">
+              {open && <ImageDialog abrir={open} imagen={imagen} cerrar={{ onChange: closeDialog }} />}
+            </div>
           </GridListTile>
         ))}
       </GridList>
