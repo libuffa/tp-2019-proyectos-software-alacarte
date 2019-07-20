@@ -33,7 +33,7 @@ class Minijuego extends Component {
     this.state = {
       combinaciones: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
       combinacion: 0,
-      clave: [2, 2, 4, 4],
+      clave: [6, 2, 3, 5],
       openConfirmation: false,
       juegaPorPremio: false,
       snackBarMensaje: "",
