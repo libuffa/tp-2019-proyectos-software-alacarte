@@ -204,7 +204,7 @@ export default class VisualizarPedidoMozo extends Component {
           handlersDetalleItemPedido={{ onChange: this.verDetalleItemPedido }}
           disabled={this.validarSesion()}
         />
-        {pedidos ?
+        {pedidos.length > 0 &&
           <Card elevation={0}>
             <CardContent>
               <Typography className="botonCentrado" variant="subtitle1">
@@ -225,7 +225,12 @@ export default class VisualizarPedidoMozo extends Component {
             <CardContent>
             </CardContent>
           </Card>
-          : <div></div>}
+        }
+        {pedidos.length === 0 &&
+          <div className="full botonCentrado separadorTop">
+            <Typography variant="h4" color="textSecondary">{"No se realizaron pedidos"}</Typography>
+          </div>
+        }
         <DialogConfirmacion
           titulo={"Pedir Cuenta"}
           descripcion={"¿Estas seguro que deseas pedir la cuenta?"}
