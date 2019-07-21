@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function ListaItemsCocina(props) {
+export default function ListaItemsPedido(props) {
   const classes = useStyles();
   const { pedidos, disabled, handlers, handlersDetalleItemPedido } = props
 

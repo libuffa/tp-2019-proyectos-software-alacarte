@@ -12,6 +12,7 @@ import { ControllerDeSesion } from '../../controller/ControllerDeSesion.js';
 import { Card, CardContent, Typography, Button, CircularProgress } from '@material-ui/core';
 import BotonPremio from '../../components/botonPremio/BotonPremio.js';
 import DialogVolver from '../../components/Dialog/DialogVolver.js';
+import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal.js';
 
 export default class VisualizarPedido extends Component {
 
@@ -23,9 +24,15 @@ export default class VisualizarPedido extends Component {
       pedidos: null,
       fechaBaja: null,
       open: false,
+      openDelete: false,
       pideCuenta: true,
       sesion: {},
-      openJuego: false,
+      openDialog: false,
+      mensajeDialog: "",
+      tituloDialog: "",
+      pedido: null,
+      mensaje: "",
+      variant: "",
     }
   }
 
@@ -73,9 +80,7 @@ export default class VisualizarPedido extends Component {
 
   verInstrucciones = () => {
     if (this.state.pedidos.length === 0) {
-      this.setState({
-        openJuego: true
-      })
+      this.openDialog("Aviso", "Debe realizar al menos un pedido para jugar")
     } else {
       this.props.history.push('/minijuego/Instrucciones')
     }
@@ -90,35 +95,37 @@ export default class VisualizarPedido extends Component {
     }
   }
 
-  generarError(errorMessage) {
-    this.setState({
-      errorMessage: errorMessage
-    })
+  eliminar = (pedido) => {
+    const premio = this.state.pedidos.filter((ped) => ped.id === pedido.id)
+    if ((this.state.pedidos.some((ped) => ped.premio) && this.state.pedidos.length <= 2 && !premio[0].premio)) {
+      this.openDialog("Aviso", "Debe eliminar el premio para poder eliminar este pedido")
+    } else {
+      this.eliminarPedido(pedido)
+    }
   }
 
-  actualizar = (pedido) => {
-    this.bajarPedido(pedido)
-  }
-
-  async bajarPedido(pedido) {
-    try {
-      const res = await ServiceLocator.SesionService.bajaPedido(pedido)
-      let error = ""
-      error = await res.statusText
-
-      if (res.status !== 200) {
-        throw error
-      }
-
-      this.setState({
-        errorMessage: ""
-      })
-
-      this.cargarPedidos()
-
-    } catch (e) {
-      const mensaje = await e.response.data.error
-      this.generarError(mensaje)
+  eliminarPedido = (pedido) => {
+    if (!this.state.openDelete) {
+      this.openDelete(pedido)
+    } else {
+      ServiceLocator.SesionService.bajaPedido(this.state.pedido)
+        .then((respuesta) => {
+          if (respuesta) {
+            if (respuesta.error) {
+              this.openDelete(pedido)
+              this.generarMensaje(respuesta.error, "error")
+              this.cargarPedidos()
+            } else {
+              this.openDelete(pedido)
+              this.generarMensaje(respuesta, "success")
+              this.cargarPedidos()
+            }
+          } else {
+            this.openDelete(pedido)
+            this.generarMensaje("Error en el servidor", "error")
+            this.cargarPedidos()
+          }
+        })
     }
   }
 
@@ -129,11 +136,11 @@ export default class VisualizarPedido extends Component {
           this.cargarPedidos()
           this.setState({
             pideCuenta: !this.state.pideCuenta,
-            errorMessage: ""
+            mensaje: ""
           })
         }
       }).catch(error => {
-        this.generarError(error.response.data.error)
+        this.generarMensaje(error.response.data.error, "error")
       })
   }
 
@@ -142,9 +149,17 @@ export default class VisualizarPedido extends Component {
     this.open()
   }
 
+  openDialog(titulo, mensaje) {
+    this.setState({
+      tituloDialog: titulo,
+      mensajeDialog: mensaje,
+      openDialog: true,
+    })
+  }
+
   closeDialog = () => {
     this.setState({
-      openJuego: false,
+      openDialog: false,
     })
   }
 
@@ -153,18 +168,37 @@ export default class VisualizarPedido extends Component {
   }
 
   open = () => {
-    if (this.state.pideCuenta) {
-      this.generarError("Ya se ha pedido la cuenta")
-    } else {
-      this.setState({
-        open: !this.state.open
-      })
-      return this.state.open
-    }
+    this.setState({
+      open: !this.state.open
+    })
+  }
+
+  openDelete = (pedido) => {
+    this.setState({
+      openDelete: !this.state.openDelete,
+      pedido: this.state.openDelete ? null : pedido,
+    })
+  }
+
+  generarMensaje(mensaje, variant) {
+    this.setState({
+      mensaje,
+      variant,
+    })
+  }
+
+  snackbarOpen() {
+    return this.state.mensaje !== ""
+  }
+
+  snackbarClose = () => {
+    this.setState({
+      mensaje: ""
+    })
   }
 
   render() {
-    const { pedidos } = this.state
+    const { pedidos, mensaje, variant } = this.state
 
     if (!pedidos) {
       return (
@@ -198,7 +232,7 @@ export default class VisualizarPedido extends Component {
       <div className="contenedorLista">
         <ListaItemsPedido
           pedidos={pedidos ? pedidos : []}
-          handlers={{ onChange: this.actualizar }}
+          handlers={{ onChange: this.eliminar }}
           handlersDetalleItemPedido={{ onChange: this.verDetalleItemPedido }}
           disabled={this.validarSesion()}
         />
@@ -229,17 +263,24 @@ export default class VisualizarPedido extends Component {
         }
         <DialogConfirmacion
           titulo={"Aviso"}
-          descripcion={"¿Estas seguro que deseas pedir la cuenta?"}
+          descripcion={"¿Esta seguro que desea pedir la cuenta?"}
           handlers={{ onChange: this.pedirCuenta, open: this.open }}
           open={this.state.open}
         />
-        <DialogVolver
+        <DialogConfirmacion
           titulo={"Aviso"}
-          descripcion={"Debe realizar al menos un pedido para jugar"}
+          descripcion={"¿Esta seguro que desea eliminar el pedido?"}
+          handlers={{ onChange: this.eliminarPedido, open: this.openDelete }}
+          open={this.state.openDelete}
+        />
+        <DialogVolver
+          titulo={this.state.tituloDialog}
+          descripcion={this.state.mensajeDialog}
           handlers={{ onChange: this.closeDialog }}
-          open={this.state.openJuego}
+          open={this.state.openDialog}
         />
         <MenuInferior menuButtons={menuButtons} />
+        <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
         {this.state.sesion.ganoPremio && <BotonPremio handler={{ onChange: this.verPremio }} />}
       </div>
     )

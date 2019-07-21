@@ -34,7 +34,7 @@ export class SesionService {
   }
 
   bajaPedido(data) {
-    return client.put('/pedido/baja', data)
+    return client.put('/pedido/baja', data).then(res => { return res.data })
   }
 
   pedirCuenta(id) {

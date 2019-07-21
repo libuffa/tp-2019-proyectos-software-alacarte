@@ -219,20 +219,28 @@ class SesionController {
 		try {
 			val idPedido = Long.valueOf(body.getPropertyValue("id"))
 			if (idPedido === null) {
-				return badRequest('{ "error" : "pedido inexistente" }')
+				return ok('{ "error" : "Pedido no encontrado" }')
 			}
 			val sesion = repositorioSesion.searchSesionByPedido(idPedido)
 			if(sesion.fechaBaja === null && !sesion.pideCuenta) {
 				if(!sesion.sesionActiva) {
-					return badRequest('{ "error" : "pedido pertenece a una sesion no activa" }')
+					return ok('{ "error" : "Sesion inactiva" }')
 				}
-				sesion.bajaPedido(idPedido)
-				return ok('{"status" : "OK"}')
+				if(sesion.getPedido(idPedido).cancelado) {
+					return ok('{"error" : "Pedido no encontrado"}')
+				} else {
+					try{
+						sesion.bajaPedido(idPedido)
+						return ok("Pedido eliminado correctamente")
+					} catch(Exception e){
+						return ok('{"error" : "Error al eliminar pedido"}')
+					}
+				}
 			} else {
-				return ok('{"error" : "Sesion Inactiva"}')
+				return ok('{"error" : "Sesion inactivo"}')
 			}
 		} catch (Exception e) {
-			return badRequest(e.message)
+			return ok('{"error" : "Error en el servidor"}')
 		}
 	}
 	
