@@ -15,6 +15,7 @@ export default class EscanearQR extends Component {
       delay: 100,
       result: 'No result',
       errorMessage: "",
+      escanear: false,
     }
     this.handleScan = this.handleScan.bind(this)
   }
@@ -37,6 +38,12 @@ export default class EscanearQR extends Component {
           }
         })
     }
+  }
+
+  escanear = () => {
+    this.setState({
+      escanear: true,
+    })
   }
 
   generarError(errorMessage) {
@@ -85,11 +92,20 @@ export default class EscanearQR extends Component {
         </Typography>
         <br />
         <Container>
-          <QrReader
+          {!this.state.escanear && <Button
+            fullWidth
+            color="primary"
+            className="botonAlto"
+            variant="contained"
+            onClick={this.escanear}
+          >
+            Escanear
+          </Button>}
+          {this.state.escanear && <QrReader
             delay={this.state.delay}
             onError={this.handleError}
             onScan={this.handleScan}
-          />
+          />}
         </Container>
         <br />
         <Typography align='center' variant="h5">
