@@ -50,7 +50,7 @@ export default class MostrarQR extends Component {
       }
 
       return (
-        <div>
+        <div className="contenedorLista">
           <Container component="main" maxWidth="xs">
             <br />
             <Typography align='center' variant="h5">

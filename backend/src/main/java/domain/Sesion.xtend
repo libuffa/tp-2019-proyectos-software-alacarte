@@ -88,7 +88,6 @@ class Sesion {
 	def cambiarEstado(Long idPedido) {
 		pedidos.findFirst[pedido|pedido.id.equals(idPedido)].siguienteEstado
 		SesionRepository.instance.update(this)
-//		return true
 	}
 
 	def contienePedido(Long id) {

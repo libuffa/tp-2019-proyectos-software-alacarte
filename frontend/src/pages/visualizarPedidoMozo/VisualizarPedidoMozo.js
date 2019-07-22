@@ -197,7 +197,7 @@ export default class VisualizarPedidoMozo extends Component {
     }
 
     return (
-      <div>
+      <div className="contenedorLista">
         <ListaItemsPedido
           pedidos={pedidos ? pedidos : []}
           handlers={{ onChange: this.eliminarPedido }}

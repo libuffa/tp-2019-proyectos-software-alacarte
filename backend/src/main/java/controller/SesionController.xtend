@@ -49,19 +49,19 @@ class SesionController {
 				val itemCarta = carta.searchById(idItem)
 				if(itemCarta.habilitado){
 					sesion.pedirItem(itemCarta, cantidad, comentario, false)
-					return ok("True")
+					return ok("El plato se agrego correctamente")
 				}
-				return ok("El plato que desea no se encuentra disponible")
+					return ok(' { "error" : "El plato no se encuentra disponible" } ')
 			} else {
-				return ok("La sesion expiro")
+				return ok(' { "error" : "La sesion expiro" } ')
 			}
 		}catch(Exception e) {
-			badRequest("La sesion no existe o esta inactiva")
+			return ok(' { "error" : "La sesion no existe o esta inactiva" } ')
 		}
 	}
 	
 	@Put("/pedido/premio")
-	def Result reckamarPremio(@Body String body) {
+	def Result reclamarPremio(@Body String body) {
 		var idSesion = Long.valueOf(body.getPropertyValue("idSesion"))
 		var idItem = Long.valueOf(body.getPropertyValue("idItem"))
 		var comentario = body.getPropertyValue("comentario")
@@ -70,16 +70,20 @@ class SesionController {
 			val sesion = repositorioSesion.searchById(idSesion)
 			if(sesion.fechaBaja === null && !sesion.pideCuenta){
 				val itemCarta = carta.searchById(idItem)
-				if(itemCarta.habilitado){
-					sesion.pedirItem(itemCarta, 1, comentario, true)
-					return ok("True")
+				if(sesion.pedidosActivos.size() > 0) {
+					if(itemCarta.habilitado){
+						sesion.pedirItem(itemCarta, 1, comentario, true)
+						return ok("Premio agregado correctamente")
+					}
+					return ok(' { "error" : "El plato no se encuentra disponible" } ')
+				} else {
+					return ok(' { "error" : "Debe tener al menos un pedido activo" } ')
 				}
-				return ok("El plato que desea no se encuentra disponible")
 			} else {
-				return ok("La sesion expiro")
+				return ok(' { "error" : "La sesion expiro" } ')
 			}
 		}catch(Exception e) {
-			badRequest("La sesion no existe o esta inactiva")
+			return ok(' { "error" : "La sesion no existe o esta inactiva" } ')
 		}
 	}
 	

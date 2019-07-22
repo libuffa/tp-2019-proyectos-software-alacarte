@@ -23,6 +23,7 @@ export default function PasadorDeImagenes(props) {
   const classes = useStyles();
   const imagenesPorDefecto = ["https://media.istockphoto.com/vectors/knife-plate-and-fork-cutlery-vector-retro-illustration-of-a-hand-vector-id871919954", "https://media.istockphoto.com/vectors/knife-plate-and-fork-cutlery-vector-retro-illustration-of-a-hand-vector-id871919954", "https://media.istockphoto.com/vectors/knife-plate-and-fork-cutlery-vector-retro-illustration-of-a-hand-vector-id871919954"];
   const [open, setOpen] = React.useState(false);
+  const [image, setImage] = React.useState("");
 
   const openDialog = () => {
     setOpen(true)
@@ -30,6 +31,11 @@ export default function PasadorDeImagenes(props) {
 
   const closeDialog = () => {
     setOpen(false)
+  }
+
+  function seleccionarImagen(imagen) {
+    setImage(imagen);
+    openDialog();
   }
 
   if (imagenes.length === 0) {
@@ -41,13 +47,13 @@ export default function PasadorDeImagenes(props) {
       <GridList className={classes.gridList} spacing={0} cols={1}>
         {imagenes.map((imagen) => (
           <GridListTile key={Math.random()} >
-            <img onClick={openDialog} src={imagen} alt={imagen} />
-            <div className="anulador">
-              {open && <ImageDialog abrir={open} imagen={imagen} cerrar={{ onChange: closeDialog }} />}
-            </div>
+            <img onClick={() => seleccionarImagen(imagen)} src={imagen} alt={imagen} />
           </GridListTile>
         ))}
       </GridList>
+      <div className="anulador">
+        {open && <ImageDialog abrir={open} imagen={image} cerrar={{ onChange: closeDialog }} />}
+      </div>
     </div>
   );
 }

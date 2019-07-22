@@ -163,12 +163,12 @@ class Combinacion extends Component {
     return result;
   }
 
-  selector(posicion, nombrePosicion, valores) {
+  selector(posicion, nombrePosicion, valores, autoFocus) {
     return (
       <form autoComplete="off" className="full flexCenter">
         <FormControl>
           <Select
-            autoFocus
+            autoFocus={autoFocus}
             value={posicion}
             onChange={this.handleChange(nombrePosicion)}
             disabled={this.props.disabled}
@@ -224,7 +224,7 @@ class Combinacion extends Component {
                     <div className="indicador">
                       {!validado && <Typography variant="body2" className={this.props.classes.arrow}>►</Typography>}
                     </div>
-                    {this.selector(posicion0, "posicion0", valores)}
+                    {this.selector(posicion0, "posicion0", valores, true)}
                   </div>
                 </Grid>
                 <Grid item xs={3}>
