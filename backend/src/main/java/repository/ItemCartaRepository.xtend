@@ -68,5 +68,5 @@ class ItemCartaRepository extends AbstractRepository<ItemCarta> {
 			entityManager?.close
 		}
 	}
-
+	
 }

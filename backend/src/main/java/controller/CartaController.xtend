@@ -111,7 +111,7 @@ class CartaController {
 				factory.setSizeThreshold(100000);
 				val servletFIleUpload = new ServletFileUpload(factory)
 				
-				val List<FileItem> multiparts = servletFIleUpload. parseRequest(new ServletRequestContext(request));
+				val List<FileItem> multiparts = servletFIleUpload. parseRequest(request);
 				System.out.println("antes del ciclo");
 				for (FileItem item : multiparts) {
 					System.out.println("entra al ciclo");
@@ -180,6 +180,27 @@ class CartaController {
 //		} catch (Exception e) {
 //			badRequest(e.message)
 //		}
+	}
+	
+	@Post("/carta/eliminarItemCarta")
+	def Result eliminarItemCarta(@Body String body) {
+
+		val idItemCarta = Long.valueOf(body.getPropertyValue("id"))
+
+		try {
+
+			if (idItemCarta === null) {
+				return ok('{ "error" : "no existe el item de carta" }')
+			}
+
+			val itemCarta = carta.searchById(idItemCarta)
+			
+			carta.delete(itemCarta)			
+
+			return ok("ok")
+		} catch (Exception e) {
+			badRequest(e.message)
+		}
 	}
 
 }

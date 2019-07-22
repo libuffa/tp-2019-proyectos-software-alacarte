@@ -4,7 +4,7 @@ import MenuSuperior from "../../components/menuSuperior/MenuSuperior";
 import ListaItemsEmpleado from "../../components/listaItemsEmpleado/ListaItemsEmpleado";
 import MenuInferior from '../../components/menuInferior/MenuInferior.js';
 import Menu from '@material-ui/icons/Menu';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, List, ListItem, ListItemAvatar, Avatar, Typography, ListItemText } from '@material-ui/core';
 import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado.js';
 
 export default class VisualizarCartaEmpleado extends Component {
@@ -58,7 +58,7 @@ export default class VisualizarCartaEmpleado extends Component {
   }
 
   seleccionItemCarta = (itemCarta) => {
-    if(this.state.admin) {
+    if (this.state.admin) {
       this.props.history.push({
         pathname: '/formulario/item/carta',
         state: { idItemCarta: itemCarta.id }
@@ -66,7 +66,7 @@ export default class VisualizarCartaEmpleado extends Component {
     } else {
       this.props.history.push({
         pathname: '/detalle/item/carta/empleado',
-        state: { idItemCarta: itemCarta.id }
+        state: { itemCarta: itemCarta }
       })
     }
   }
@@ -99,6 +99,10 @@ export default class VisualizarCartaEmpleado extends Component {
       })
   }
 
+  crearItemCarta() {
+    this.props.history.push('/formulario/item/carta')
+  }
+
   render() {
     const { carta, admin } = this.state
     var { categorias } = this.state
@@ -111,7 +115,7 @@ export default class VisualizarCartaEmpleado extends Component {
       },
     }
 
-    if (!carta || !categorias || !admin) {
+    if (!carta || !categorias ) {
       return (
         <div className="fullWidth center">
           <CircularProgress size={80} />
@@ -125,10 +129,28 @@ export default class VisualizarCartaEmpleado extends Component {
       <div>
         <div className="contenedorLista">
           <MenuSuperior data={categorias} handlers={{ onChange: this.seleccionEnMenuSuperior }}></MenuSuperior>
-          <ListaItemsEmpleado data={carta} subData={this.subCategoriasCarta()} handlers={{ onChange: this.seleccionItemCarta }} disableFunction={{ onChange: this.cambiarEstadoItemCarta }}></ListaItemsEmpleado>
+          <ListaItemsEmpleado 
+            data={carta} 
+            subData={this.subCategoriasCarta()} 
+            handlers={{ onChange: this.seleccionItemCarta }} 
+            disableFunction={{ onChange: this.cambiarEstadoItemCarta }}></ListaItemsEmpleado>
+          {(admin) &&
+            (<List>
+              <ListItem button onClick={() => this.crearItemCarta()}>
+                <ListItemAvatar >
+                  <Avatar>
+                    <Typography variant="h4" >
+                      +
+              </Typography>
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={"Nuevo item"} />
+              </ListItem>
+            </List>)
+          }
         </div>
         <MenuInferior menuButtons={menuButtons} />
-      </div>
+      </div >
     )
   }
 }
