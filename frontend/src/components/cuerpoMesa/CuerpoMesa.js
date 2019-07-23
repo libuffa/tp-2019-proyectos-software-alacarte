@@ -97,8 +97,8 @@ export default function CuerpoMesa(props) {
             <div className="divider" />
           </Grid>
           <Grid item xs={12}>
-            <Button className={classes.boton} disabled={mesa.sesion ? false : true} variant="contained" color="primary">
-              <Typography color="inherit" variant="h6" onClick={() => mostrarQR.onChange()}>
+            <Button className={classes.boton} disabled={mesa.sesion ? false : true} variant="contained" color="primary" onClick={() => mostrarQR.onChange()}>
+              <Typography color="inherit" variant="h6" >
                 {"Mostrar QR"}
               </Typography>
             </Button>

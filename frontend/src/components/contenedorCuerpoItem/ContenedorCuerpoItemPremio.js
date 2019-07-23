@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import CuerpoItem from '../../components/cuerpoItem/CuerpoItem.js';
 import Botones from '../../components/botones/Botones';
+import CuerpoItemPremio from '../cuerpoItem/CuerpoItemPremio.js';
 
-export default class ContenedorCuerpoItem extends Component {
+export default class ContenedorCuerpoItemPremio extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -33,18 +33,17 @@ export default class ContenedorCuerpoItem extends Component {
   render() {
     const { itemCarta } = this.state;
     const { cantidad, comentario } = this.state;
-    const { texto1, texto2, handlersVolver, disabled, premio } = this.props;
+    const { texto1, texto2, handlersVolver, disabled } = this.props;
 
     return (
       <div>
-        <CuerpoItem
+        <CuerpoItemPremio
           itemCarta={itemCarta}
           cantidad={cantidad}
           comentario={comentario}
           handlersCantidad={{ onChange: this.modificarCantidad }}
           handlersComentario={{ onChange: this.modificarComentario }}
           disabled={disabled}
-          premio={premio}
         />
         <Botones
           text1={texto1}

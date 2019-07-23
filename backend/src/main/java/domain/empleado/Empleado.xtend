@@ -1,5 +1,6 @@
 package domain.empleado
 
+import domain.EmailSender
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
@@ -53,10 +54,18 @@ class Empleado {
 	def cambiarContraseña(String contraseñaNueva) {
 		this.contraseña = contraseñaNueva
 		EmpleadoRepository.instance.update(this)
+		
+	}
+	
+	def recuperarContraseña() {
+		val EmailSender emailSender = new EmailSender
+		val mensaje = "Su contraseña es: " + this.contraseña
+		emailSender.enviarMail(this.email, "aLaCarte - Recupero de clave", mensaje)
 	}
 	
 	def darDeBaja() {
 		this.baja = true
+		this.email = ""
 		EmpleadoRepository.instance.update(this)
 	}
 }

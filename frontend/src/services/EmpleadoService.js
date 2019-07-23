@@ -31,6 +31,10 @@ export class EmpleadoService {
     return client.get(`/empleado/${userName}/validar`).then(res => { return res.data })
   }
 
+  validarMail(data) {
+    return client.post(`/empleado/mail/validar`, data).then(res => { return res.data })
+  }
+
   getMenuEmpleado() {
     return client.get(`/empleado/${ControllerDeEmpleado.getSesionActiva()}/menu`).then(res => { return res.data })
   }
@@ -41,7 +45,13 @@ export class EmpleadoService {
 
   cambiarContraseña(data) {
     return client.put('/empleado/cambiarContraseña', data, { timeout: 10000 })
-      .then(res => { return res.data })
+      .then(res => { return res })
+      .catch(error => { return { error } })
+  }
+
+  recuperarContraseña(data) {
+    return client.put('/empleado/recuperarContraseña', data, { timeout: 10000 })
+      .then(res => { return res })
       .catch(error => { return { error } })
   }
 

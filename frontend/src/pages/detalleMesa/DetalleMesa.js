@@ -8,6 +8,7 @@ import { ControllerDeSesion } from '../../controller/ControllerDeSesion';
 import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal';
 import '../estilosPaginas.scss'
+import DialogConfirmacion from '../../components/Dialog/DialogConfirmacion';
 
 export default class DetalleMesa extends Component {
   constructor(props) {
@@ -17,6 +18,8 @@ export default class DetalleMesa extends Component {
       mozo: null,
       mensaje: "",
       variant: "",
+      admin: false,
+      openDelete: false,
     }
     this.verMesas = this.verMesas.bind(this)
   }
@@ -25,6 +28,16 @@ export default class DetalleMesa extends Component {
     if (this.props.location.state && this.state.mesa.sesion) {
       this.cargarMozo()
     }
+    ServiceLocator.EmpleadoService.getEmpleado()
+      .then((resultado) => {
+        if (resultado) {
+          if (resultado.tipoEmpleado === "Administrador") {
+            this.setState({
+              admin: true,
+            })
+          }
+        }
+      })
   }
 
   cargarMozo() {
@@ -50,7 +63,9 @@ export default class DetalleMesa extends Component {
   }
 
   verMesas() {
-    this.props.history.push('/mesas')
+    this.state.admin ?
+      this.props.history.push('/mesas/admin') :
+      this.props.history.push('/mesas')
   }
 
   verPedido = (idSesion) => {
@@ -68,19 +83,55 @@ export default class DetalleMesa extends Component {
     })
   }
 
-  sesionMesa = () => {
+  asignacion = () => {
+    if (!this.state.mesa.sesion) {
+      this.asignar()
+    } else {
+      this.desasignar()
+    }
+  }
+
+  asignar = () => {
     ServiceLocator.mesaService.cambiarEstado({
       "idMozo": ControllerDeEmpleado.getSesionActiva(),
       "idMesa": this.state.mesa.id
     }).then((respuesta) => {
       if (respuesta) {
-        this.setState({
-          mensaje: respuesta,
-          variant: "success",
-        })
+        if (respuesta.error) {
+          this.generarMensaje(respuesta.error, "error")
+        } else {
+          this.generarMensaje(respuesta, "success")
+        }
+      } else {
+        this.generarMensaje("Error en el servidor", "error")
       }
       this.cargarMesa()
     })
+  }
+
+  desasignar = () => {
+    if (!this.state.openDelete) {
+      this.openDelete()
+    } else {
+      ServiceLocator.mesaService.cambiarEstado({
+        "idMozo": ControllerDeEmpleado.getSesionActiva(),
+        "idMesa": this.state.mesa.id
+      }).then((respuesta) => {
+        if (respuesta) {
+          if (respuesta.error) {
+            this.generarMensaje(respuesta.error, "error")
+            this.openDelete()
+          } else {
+            this.generarMensaje(respuesta, "success")
+            this.openDelete()
+          }
+        } else {
+          this.generarMensaje("Error en el servidor", "error")
+          this.openDelete()
+        }
+        this.cargarMesa()
+      })
+    }
   }
 
   entregarPedido = (idPedido) => {
@@ -94,6 +145,19 @@ export default class DetalleMesa extends Component {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  openDelete = () => {
+    this.setState({
+      openDelete: !this.state.openDelete,
+    })
+  }
+
+  generarMensaje(mensaje, variant) {
+    this.setState({
+      mensaje,
+      variant,
+    })
   }
 
   snackbarOpen() {
@@ -128,11 +192,17 @@ export default class DetalleMesa extends Component {
       <div className="contenedorLista">
         <div className="dividerLista" />
         <ListSubheader disableSticky color="inherit" >
-          <ListItemText primary={"Mesa " + mesa.numero} />
+          <ListItemText primary={"Mesa " + (mesa.numero ? mesa.numero : "-")} />
         </ListSubheader>
         <div className="dividerLista" />
-        <CuerpoMesa mesa={mesa} mozo={mozo} entregarPedido={{ onChange: this.entregarPedido }} mostrarQR={{ onChange: this.mostrarQR }} verPedido={{ onChange: this.verPedido }} sesionMesa={{ onChange: this.sesionMesa }} />
+        <CuerpoMesa mesa={mesa} mozo={mozo} entregarPedido={{ onChange: this.entregarPedido }} mostrarQR={{ onChange: this.mostrarQR }} verPedido={{ onChange: this.verPedido }} sesionMesa={{ onChange: this.asignacion }} />
         <MenuInferior menuButtons={menuButtons} />
+        <DialogConfirmacion
+          titulo={"Aviso"}
+          descripcion={"¿Esta seguro que desea cerrar la sesión?"}
+          handlers={{ onChange: this.desasignar, open: this.openDelete }}
+          open={this.state.openDelete}
+        />
         <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
       </div >
     )

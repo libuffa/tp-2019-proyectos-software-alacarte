@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
-import CartIcon from '@material-ui/icons/ListAlt';
+import ArrowBack from '@material-ui/icons/ArrowBack';
 import LocalDining from '@material-ui/icons/LocalDining';
 import DeleteIcon from "@material-ui/icons/Delete";
 
@@ -45,7 +45,7 @@ export default function Botones(props) {
           <div className={classes.buttonContainer}>
             <Button variant="contained" color="primary" className={classes.button} onClick={() => handlersVolver.onChange()}>
               {text1}
-              <CartIcon className={classes.rightIcon} />
+              <ArrowBack className={classes.rightIcon} />
             </Button>
           </div>
         </Grid>

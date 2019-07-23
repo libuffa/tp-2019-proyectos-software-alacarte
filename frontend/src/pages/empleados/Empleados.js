@@ -61,7 +61,7 @@ export default class Empleados extends Component {
       )
     }
     return (
-      <div>
+      <div className="contenedorLista">
         <ListaEmpleados empleados={empleados} handlers={{ onChange: this.verDetalleEmpleado }} />
         <MenuInferior menuButtons={menuButtons} />
       </div>

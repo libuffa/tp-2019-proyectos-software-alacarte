@@ -88,7 +88,7 @@ export default class VisualizarPedidoCocina extends Component {
       )
     }
     return (
-      <div>
+      <div className="contenedorLista">
         <ListaItemsCocina pedidos={pedidos} handlers={{ onChange: this.actualizarEstadoPedido }} handlersDetalleItem={{ onChange: this.verDetalleItemPedido }} />
         <MenuInferior menuButtons={menuButtons} />
       </div>

@@ -76,6 +76,7 @@ export default class DetalleItemPedido extends Component {
         handlersVolver={{ onChange: this.verPedido }}
         handlersAgregarAPedido={{ onChange: this.actualizarPedido }}
         disabled={pedido.estado !== "Creado"}
+        premio={pedido.premio}
       />
     </div>
   }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/CloseOutlined';
-import DoneIcon from '@material-ui/icons/DoneOutline';
+import Close from '@material-ui/icons/Close';
+import Check from '@material-ui/icons/Check';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { ListItem, ListItemAvatar, ListItemText, List, ListSubheader, Typography, ListItemSecondaryAction, IconButton, Avatar } from '@material-ui/core';
 
@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ListaMesasAdministrador(props) {
-  const { mesas, cambiarEstado, eliminarMesa, handlers } = props;
+  const { mesas, cambiarEstado, eliminarMesa, handlers, detalleMesa } = props;
   const classes = useStyles();
 
   return (
@@ -42,7 +42,7 @@ export default function ListaMesasAdministrador(props) {
         <div className="dividerLista" />
         {mesas.map((mesa) => {
           return (
-            <ListItem button key={mesa.id} >
+            <ListItem button key={mesa.id} onClick={() => { detalleMesa.onChange(mesa) }} >
               <ListItemAvatar >
                 <Avatar className={mesa.sesion ? classes.mesaOcupada : classes.mesaLibre} >
                   <Typography variant="h5" >
@@ -52,12 +52,12 @@ export default function ListaMesasAdministrador(props) {
               </ListItemAvatar>
               <ListItemText secondary={mesa.sesion ? "Ocupada" : "Disponible"} />
               <ListItemSecondaryAction>
-                {mesa.sesion ?
+                {!mesa.sesion ?
                   <IconButton edge="end" onClick={() => cambiarEstado.onChange(mesa.id)} >
-                    <DoneIcon color="primary" fontSize="large" />
+                    <Check color="primary" fontSize="large" />
                   </IconButton> :
                   <IconButton edge="end" onClick={() => cambiarEstado.onChange(mesa.id)} >
-                    <CloseIcon color="error" fontSize="large" />
+                    <Close color="error" fontSize="large" />
                   </IconButton>
                 }
                 <IconButton

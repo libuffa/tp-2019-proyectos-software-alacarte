@@ -34,7 +34,7 @@ export class SesionService {
   }
 
   bajaPedido(data) {
-    return client.put('/pedido/baja', data)
+    return client.put('/pedido/baja', data).then(res => { return res.data })
   }
 
   pedirCuenta(id) {
@@ -49,6 +49,10 @@ export class SesionService {
     return client.put(`/pedido/generarPedido`, data).then(res => { return res.data })
   }
 
+  premio(data) {
+    return client.put(`/pedido/premio`, data).then(res => { return res.data })
+  }
+
   actualizarPedido(data) {
     return client.post(`/pedido/actualizarPedido`, data).then(res => { return res.data })
   }
@@ -61,5 +65,13 @@ export class SesionService {
 
   cerrarSesion(data) {
     return client.post('/sesion/cerrarSesion', data).then(res => { return res.data })
+  }
+
+  jugar() {
+    return client.post(`/sesion/${ControllerDeSesion.getSesionActiva()}/jugar`).then(res => { return res.data })
+  }
+
+  ganarPremio() {
+    return client.post(`/sesion/${ControllerDeSesion.getSesionActiva()}/jugar/ganar`).then(res => { return res.data })
   }
 }

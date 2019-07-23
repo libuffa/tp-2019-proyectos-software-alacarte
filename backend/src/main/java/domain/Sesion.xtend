@@ -45,6 +45,12 @@ class Sesion {
 	Boolean pideCuenta = false
 
 	@Column
+	Boolean juegaPorPremio = true
+	
+	@Column
+	Boolean ganoPremio = false
+	
+	@Column
 	@JsonIgnore LocalDateTime fechaAlta
 
 	@Column
@@ -54,21 +60,34 @@ class Sesion {
 		fechaAlta = LocalDateTime.now
 	}
 
-	def pedirItem(ItemCarta itemCarta, Integer cantidad, String comentarios) {
+	def pedirItem(ItemCarta itemCarta, Integer cantidad, String comentarios, Boolean premio) {
 		val pedido = new Pedido => [
 			it.itemCarta = itemCarta
 			it.cantidad = cantidad
 			it.comentarios = comentarios
+			it.premio = premio
 			it.estado = Estado.Creado
 		]
+		if(premio){
+			this.ganoPremio = false
+		}
 		this.pedidos.add(pedido)
+		SesionRepository.instance.update(this)
+	}
+	
+	def void jugar() {
+		this.juegaPorPremio = false
+		SesionRepository.instance.update(this)
+	}
+	
+	def void ganarPremio() {
+		this.ganoPremio = !this.ganoPremio
 		SesionRepository.instance.update(this)
 	}
 
 	def cambiarEstado(Long idPedido) {
 		pedidos.findFirst[pedido|pedido.id.equals(idPedido)].siguienteEstado
 		SesionRepository.instance.update(this)
-//		return true
 	}
 
 	def contienePedido(Long id) {

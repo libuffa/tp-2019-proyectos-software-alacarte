@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Typography, Card, CardContent, Snackbar, Button, CircularProgress } from '@material-ui/core';
+import { Typography, Card, CardContent, Button, CircularProgress } from '@material-ui/core';
 import { ServiceLocator } from "../../services/ServiceLocator.js";
 import MenuInferior from '../../components/menuInferior/MenuInferior';
 import CartIcon from '@material-ui/icons/ListAlt';
@@ -10,6 +10,7 @@ import DialogConfirmacion from '../../components/Dialog/DialogConfirmacion';
 import { Sesion } from '../../domain/Sesion.js';
 import { ControllerDeSesion } from '../../controller/ControllerDeSesion.js';
 import '../estilosPaginas.scss';
+import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal.js';
 
 export default class VisualizarPedidoMozo extends Component {
 
@@ -20,6 +21,10 @@ export default class VisualizarPedidoMozo extends Component {
       open: false,
       sesion: null,
       sesionJson: null,
+      openDelete: false,
+      pedido: null,
+      mensaje: "",
+      variant: "",
     }
   }
 
@@ -70,46 +75,35 @@ export default class VisualizarPedidoMozo extends Component {
 
   getPrecioTotal() {
     if (this.state.pedidos.length > 0) {
-      return this.state.pedidos.map((pedido) => pedido.cantidad * pedido.itemCarta.precioUnitario)
+      return this.state.pedidos.map((pedido) => (!pedido.premio && (pedido.cantidad * pedido.itemCarta.precioUnitario)))
         .reduce((a, b) => a + b)
     } else {
       return 0
     }
   }
 
-  snackbarOpen() {
-    return this.state.errorMessage
-  }
-
-  generarError(errorMessage) {
-    this.setState({
-      errorMessage: errorMessage
-    })
-  }
-
-  actualizar = (pedido) => {
-    this.bajarPedido(pedido)
-  }
-
-  async bajarPedido(pedido) {
-    try {
-      const res = await ServiceLocator.SesionService.bajaPedido(pedido)
-      let error = ""
-      error = await res.statusText
-
-      if (res.status !== 200) {
-        throw error
-      }
-
-      this.setState({
-        errorMessage: ""
-      })
-
-      this.cargarPedidos()
-
-    } catch (e) {
-      const mensaje = await e.response.data.error
-      this.generarError(mensaje)
+  eliminarPedido = (pedido) => {
+    if (!this.state.openDelete) {
+      this.openDelete(pedido)
+    } else {
+      ServiceLocator.SesionService.bajaPedido(this.state.pedido)
+        .then((respuesta) => {
+          if (respuesta) {
+            if (respuesta.error) {
+              this.openDelete(pedido)
+              this.generarMensaje(respuesta.error, "error")
+              this.cargarPedidos()
+            } else {
+              this.openDelete(pedido)
+              this.generarMensaje(respuesta, "success")
+              this.cargarPedidos()
+            }
+          } else {
+            this.openDelete(pedido)
+            this.generarMensaje("Error en el servidor", "error")
+            this.cargarPedidos()
+          }
+        })
     }
   }
 
@@ -148,8 +142,32 @@ export default class VisualizarPedidoMozo extends Component {
     }
   }
 
+  openDelete = (pedido) => {
+    this.setState({
+      openDelete: !this.state.openDelete,
+      pedido: this.state.openDelete ? null : pedido,
+    })
+  }
+
+  generarMensaje(mensaje, variant) {
+    this.setState({
+      mensaje,
+      variant,
+    })
+  }
+
+  snackbarOpen() {
+    return this.state.mensaje !== ""
+  }
+
+  snackbarClose = () => {
+    this.setState({
+      mensaje: ""
+    })
+  }
+
   render() {
-    const { pedidos, errorMessage } = this.state
+    const { pedidos, mensaje, variant } = this.state
 
     if (!pedidos) {
       return (
@@ -178,16 +196,15 @@ export default class VisualizarPedidoMozo extends Component {
       }
     }
 
-
     return (
-      <div>
+      <div className="contenedorLista">
         <ListaItemsPedido
           pedidos={pedidos ? pedidos : []}
-          handlers={{ onChange: this.actualizar }}
+          handlers={{ onChange: this.eliminarPedido }}
           handlersDetalleItemPedido={{ onChange: this.verDetalleItemPedido }}
           disabled={this.validarSesion()}
         />
-        {pedidos ?
+        {pedidos.length > 0 &&
           <Card elevation={0}>
             <CardContent>
               <Typography className="botonCentrado" variant="subtitle1">
@@ -208,18 +225,26 @@ export default class VisualizarPedidoMozo extends Component {
             <CardContent>
             </CardContent>
           </Card>
-          : <div></div>}
+        }
+        {pedidos.length === 0 &&
+          <div className="full botonCentrado separadorTop">
+            <Typography variant="h4" color="textSecondary">{"No se realizaron pedidos"}</Typography>
+          </div>
+        }
         <DialogConfirmacion
           titulo={"Pedir Cuenta"}
           descripcion={"¿Estas seguro que deseas pedir la cuenta?"}
           handlers={{ onChange: this.pedirCuenta, open: this.open }}
           open={this.state.open}
         />
-        <Snackbar
-          open={this.snackbarOpen()}
-          message={errorMessage}
-          autoHideDuration={4000} />
+        <DialogConfirmacion
+          titulo={"Aviso"}
+          descripcion={"¿Esta seguro que desea eliminar el pedido?"}
+          handlers={{ onChange: this.eliminarPedido, open: this.openDelete }}
+          open={this.state.openDelete}
+        />
         <MenuInferior menuButtons={menuButtons} />
+        <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
       </div>
     )
   }

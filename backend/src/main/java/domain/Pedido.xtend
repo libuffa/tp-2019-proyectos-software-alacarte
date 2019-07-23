@@ -34,6 +34,9 @@ class Pedido {
 
 	@Column
 	Boolean cancelado = false
+	
+	@Column
+	Boolean premio = false
 
 	new() {
 		comentarios = ""

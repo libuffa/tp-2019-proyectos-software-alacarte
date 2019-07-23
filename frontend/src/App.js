@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ControllerDeEmpleado } from './controller/ControllerDeEmpleado';
 import { ControllerDeSesion } from './controller/ControllerDeSesion';
 import { ServiceLocator } from './services/ServiceLocator';
-import { Paper } from '@material-ui/core';
+import { Paper, CircularProgress } from '@material-ui/core';
 import VisualizarPedido from './pages/VisualizarPedido/VisualizarPedido';
 import VisualizarPedidoMozo from './pages/visualizarPedidoMozo/VisualizarPedidoMozo';
 import VisualizarPedidoCocina from './pages/visualizarPedidoCocina/VisualizarPedidoCocina';
@@ -26,6 +26,8 @@ import './App.css';
 import CambiarContraseña from './pages/CambiarContraseña/CambiarContraseña';
 import VisualizarMesasAdministrador from './pages/VisualizarMesasAdministrador/VisualizarMesasAdministrador';
 import FormularioItemCarta from './pages/FormularioItemCarta/FormularioItemCarta';
+import InstruccionesJuego from './pages/instruccionesJuego/InstruccionesJuego';
+import Minijuego from './pages/minijuego/Minijuego';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -35,23 +37,22 @@ function RouterPrincipal(props) {
       <div className="fullPaper">
         <Header empleado={empleado} opcionesMenu={opcionesMenu} />
         <Switch>
-          <Route path="/pedido" exact component={VisualizarPedidoMozo} />
-          <Route path="/pedido/cocina" exact component={VisualizarPedidoCocina} />
-          <Route path="/mesas" exact component={VisualizarMesas} />
-          <Route path="/mesas/admin" exact component={VisualizarMesasAdministrador} />
-          <Route path="/detalle/mesa" exact component={DetalleMesa} />
-          <Route path="/carta/cliente" exact component={VisualizarCarta} />
+          {(empleado.tipoEmpleado === "Mozo" || empleado.tipoEmpleado === "Administrador") && <Route path="/pedido" exact component={VisualizarPedidoMozo} />}
+          {empleado.tipoEmpleado === "Cocinero" && <Route path="/pedido/cocina" exact component={VisualizarPedidoCocina} />}
+          {empleado.tipoEmpleado === "Mozo" && <Route path="/mesas" exact component={VisualizarMesas} />}
+          {empleado.tipoEmpleado === "Administrador" && <Route path="/mesas/admin" exact component={VisualizarMesasAdministrador} />}
+          {(empleado.tipoEmpleado === "Mozo" || empleado.tipoEmpleado === "Administrador") && <Route path="/detalle/mesa" exact component={DetalleMesa} />}
+          {(empleado.tipoEmpleado === "Mozo" || empleado.tipoEmpleado === "Administrador") && <Route path="/carta/cliente" exact component={VisualizarCarta} />}
           <Route path="/detalle/item/carta/empleado" exact component={DetalleItemCartaEmpleado} />
-          <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
-          <Route path="/detalle/item/pedido/cocina" exact component={DetalleItemPedidoCocina} />
-          <Route path="/detalle/item/carta" exact component={DetalleItemCarta} />
-          <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
-          <Route path="/detalle/empleado" exact component={DetalleEmpleado} />
+          {(empleado.tipoEmpleado === "Mozo" || empleado.tipoEmpleado === "Administrador") && <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />}
+          {empleado.tipoEmpleado === "Cocinero" && <Route path="/detalle/item/pedido/cocina" exact component={DetalleItemPedidoCocina} />}
+          {(empleado.tipoEmpleado === "Mozo" || empleado.tipoEmpleado === "Administrador") && <Route path="/detalle/item/carta" exact component={DetalleItemCarta} />}
+          {(empleado.tipoEmpleado === "Mozo" || empleado.tipoEmpleado === "Administrador") && <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />}
+          {empleado.tipoEmpleado === "Administrador" && <Route path="/detalle/empleado" exact component={DetalleEmpleado} />}
           <Route path="/carta" exact component={VisualizarCartaEmpleado} />
           <Route path="/menu/empleado" exact component={MenuEmpleado} />
-          <Route path="/escanear/qr" exact component={EscanearQR} />
-          <Route path="/mostrar/qr" exact component={MostrarQR} />
-          <Route path="/empleados" exact component={Empleados} />
+          {(empleado.tipoEmpleado === "Mozo" || empleado.tipoEmpleado === "Administrador") && <Route path="/mostrar/qr" exact component={MostrarQR} />}
+          {empleado.tipoEmpleado === "Administrador" && <Route path="/empleados" exact component={Empleados} />}
           <Route path="/cambiar/contraseña" exact component={CambiarContraseña} />
           <Route path="/formulario/item/carta" exact component={FormularioItemCarta} />
           <Route component={RedirectPrincipal} />
@@ -71,6 +72,8 @@ function RouterCliente() {
           <Route path="/carta" exact component={VisualizarCarta} />
           <Route path="/detalle/item/carta" exact component={DetalleItemCarta} />
           <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />
+          <Route path="/minijuego/instrucciones" exact component={InstruccionesJuego} />
+          <Route path="/minijuego" exact component={Minijuego} />
           <Route component={RedirectCliente} />
         </Switch>
       </div>
@@ -122,13 +125,21 @@ class App extends Component {
     this.state = {
       sesionActiva: ControllerDeSesion.getSesionActiva(),
       sesionEmpleadoActiva: ControllerDeEmpleado.getSesionActiva(),
+      sesion: null,
       empleado: null,
       opcionesMenu: null,
+      mostrar: false,
     }
   }
 
   componentDidMount() {
-    this.abrirSesionEmpleado()
+    if (ControllerDeEmpleado.getSesionActiva()) {
+      this.abrirSesionEmpleado()
+    }
+    if (ControllerDeSesion.getSesionActiva()) {
+      this.abrirSesion()
+    }
+    setTimeout(() => { this.mostrar() }, 1000)
   }
 
   componentWillUnmount() {
@@ -146,6 +157,8 @@ class App extends Component {
         const empleado = await ServiceLocator.EmpleadoService.getEmpleado()
         const opcionesMenu = await ServiceLocator.EmpleadoService.getMenuEmpleado()
 
+        console.log(empleado)
+
         this.setState({
           empleado: empleado,
           opcionesMenu: opcionesMenu,
@@ -156,11 +169,34 @@ class App extends Component {
     }
   }
 
+  async abrirSesion() {
+    if (ControllerDeSesion.getSesionActiva()) {
+      try {
+        const sesion = await ServiceLocator.SesionService.getSesionActiva()
+
+        console.log(sesion)
+
+        this.setState({
+          sesion: sesion,
+        })
+      } catch (error) {
+        console.error({ error })
+      }
+    }
+  }
+
+  mostrar() {
+    this.setState({
+      mostrar: true,
+    })
+  }
+
   handleAbrirSesion = (sesion) => {
     ControllerDeSesion.setSesionActiva(sesion)
     this.setState({
       sesionActiva: sesion
     })
+    this.abrirSesion()
   }
 
   handleAbrirSesionEmpleado = (empleado) => {
@@ -172,23 +208,37 @@ class App extends Component {
   }
 
   render() {
-    return (
-      <div className="contenedorGeneral">
-        <div className="contenedor600pix">
-          <Paper square className="fullPaper">
-            {
-              (this.state.sesionActiva && !this.state.sesionEmpleadoActiva && <RouterCliente />)
-              ||
-              (this.state.sesionActiva && this.state.sesionEmpleadoActiva && <RouterPrincipal empleado={this.state.empleado} opcionesMenu={this.state.opcionesMenu} />)
-              ||
-              (this.state.sesionEmpleadoActiva && <RouterPrincipal empleado={this.state.empleado} opcionesMenu={this.state.opcionesMenu} />)
-              ||
-              (<RouterInicial iniciarSesion={{ sesion: this.handleAbrirSesion, empleado: this.handleAbrirSesionEmpleado }} />)
-            }
-          </Paper>
+    if (!this.state.mostrar) {
+      return (
+        <div className="contenedorGeneral">
+          <div className="contenedor600pix">
+            <Paper square className="fullPaper">
+              <div className="contenedorGeneral flexCenter">
+                <CircularProgress size={80} color="secondary" />
+              </div>
+            </Paper>
+          </div>
         </div>
-      </div>
-    )
+      )
+    } else {
+      return (
+        <div className="contenedorGeneral">
+          <div className="contenedor600pix">
+            <Paper square className="fullPaper">
+              {
+                (this.state.sesionActiva && this.state.sesion && !this.state.sesionEmpleadoActiva && <RouterCliente />)
+                ||
+                (this.state.sesionActiva && this.state.sesionEmpleadoActiva && this.state.empleado && <RouterPrincipal empleado={this.state.empleado} opcionesMenu={this.state.opcionesMenu} />)
+                ||
+                (this.state.sesionEmpleadoActiva && this.state.empleado && <RouterPrincipal empleado={this.state.empleado} opcionesMenu={this.state.opcionesMenu} />)
+                ||
+                (<RouterInicial iniciarSesion={{ sesion: this.handleAbrirSesion, empleado: this.handleAbrirSesionEmpleado }} />)
+              }
+            </Paper>
+          </div>
+        </div>
+      )
+    }
   }
 }
 
