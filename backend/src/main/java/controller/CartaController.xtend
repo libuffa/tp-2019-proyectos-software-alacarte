@@ -54,10 +54,18 @@ class CartaController {
 		var platoAModificar = carta.searchById(new Long(id))
 		try {
 			platoAModificar.cambiarEstado()
-			carta.update(platoAModificar)
-			return ok("True")
+			try{
+				carta.update(platoAModificar)
+			} catch(Exception e) {
+				return ok('{ "error" : "Error en el servidor" }')
+			}
+			if(platoAModificar.habilitado){
+				return ok("Plato habilitado correctamente")
+			} else {
+				return ok("Plato deshabilitado correctamente")
+			}
 		} catch(Exception e) {
-			badRequest(e.message)
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 	
