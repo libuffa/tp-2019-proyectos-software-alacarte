@@ -62,4 +62,8 @@ export class EmpleadoService {
   eliminarEmpleado(data) {
     return client.post('/empleado/eliminar', data).then(res => { return res.data })
   }
+
+  enviarMailCrear(data) {
+    return client.post('/crear/mail', data).then(res => { return res.data })
+  }
 }

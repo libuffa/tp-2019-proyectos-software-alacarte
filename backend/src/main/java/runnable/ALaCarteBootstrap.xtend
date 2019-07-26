@@ -114,7 +114,7 @@ class ALaCarteBootstrap {
 			imagenes = #["https://2.bp.blogspot.com/-6j9KmOdpaFM/Tg4Ev26mO7I/AAAAAAAACbs/6OASavNaJbk/s1600/DSC07094.JPG","https://2.bp.blogspot.com/-6j9KmOdpaFM/Tg4Ev26mO7I/AAAAAAAACbs/6OASavNaJbk/s1600/DSC07094.JPG","https://2.bp.blogspot.com/-6j9KmOdpaFM/Tg4Ev26mO7I/AAAAAAAACbs/6OASavNaJbk/s1600/DSC07094.JPG"]
 		]
 		plato7 = new ItemCarta => [
-			titulo = "Pizza grande a la napolitana"
+			titulo = "Pizza grande napolitana"
 			descripcion = "Pizza de 8 porciones con salsa de tomate, queso muzzarella y rodajas de tomate"
 			categoria = Categoria.Plato_Principal
 			subCategoria = "Pizzas"
@@ -169,7 +169,7 @@ class ALaCarteBootstrap {
 		]
 		plato13 = new ItemCarta => [
 			titulo = "Mousse de chocolate"
-			descripcion = "Suave mouse de chocolate con ralladura de chocolate blanco"
+			descripcion = "Suave mousse de chocolate con ralladura de chocolate blanco"
 			categoria = Categoria.Postre
 			subCategoria = "Cremas"
 			precioUnitario = 200.doubleValue
@@ -178,7 +178,7 @@ class ALaCarteBootstrap {
 		]
 		plato14 = new ItemCarta => [
 			titulo = "2 Bochas de heladas"
-			descripcion = "2 bolas de los mejores gustos seleccionados de helado"
+			descripcion = "2 bochas de gustos a elección (chocolate, crema americana, frutilla, dulce de leche)"
 			categoria = Categoria.Postre
 			subCategoria = "Helados"
 			precioUnitario = 150.doubleValue
@@ -204,8 +204,8 @@ class ALaCarteBootstrap {
 			imagenes = #["https://previews.123rf.com/images/serezniy/serezniy1302/serezniy130205710/18042837-taza-de-caf%C3%A9-crema-batida-en-la-mesa-de-madera-de-cerca.jpg","https://previews.123rf.com/images/serezniy/serezniy1302/serezniy130205710/18042837-taza-de-caf%C3%A9-crema-batida-en-la-mesa-de-madera-de-cerca.jpg"]
 		]
 		plato17 = new ItemCarta => [
-			titulo = "Cafe con licor"
-			descripcion = "Cafe fuerte con un toque de licor de chocolate"
+			titulo = "Café con licor"
+			descripcion = "Café fuerte con un toque de licor de chocolate"
 			categoria = Categoria.Cafeteria
 			subCategoria = "Cafe"
 			precioUnitario = 100.doubleValue

@@ -231,10 +231,11 @@ class EmpleadoController {
 			}
 			if (empleado.nombreUsuario !== nombreUsuarioE) {
 				try {
-					empleado = repoEmpleados.searchByString(nombreUsuarioE)
-					return ok('{ "error" : "El nombre de usuario ya existe" }')
-				} catch (Exception es) {
-				}
+					val empleadoDos = repoEmpleados.searchByString(nombreUsuarioE)
+					if (empleadoDos.nombreUsuario === empleado.nombreUsuario){
+						return ok('{ "error" : "El nombre de usuario ya existe" }')
+					}
+				} catch(Exception esa) {}
 			}
 			empleado.nombreUsuario = nombreUsuarioE
 			empleado.contraseña = contraseñaE
@@ -256,6 +257,22 @@ class EmpleadoController {
 		} catch (Exception e) {
 			return ok('{ "error" : "Error en el servidor" }')
 
+		}
+	}
+	
+	@Put('/crear/mail')
+	def Result enviarMailCrear(@Body String body){
+		val nombreUsuarioE = String.valueOf(body.getPropertyValue("nombreUsuario"))
+		
+		try {
+			val empleado = repoEmpleados.searchByString(nombreUsuarioE)
+			if(empleado === null || empleado.baja){
+				return ok('{ "error" : "Empleado erróneo" }')
+			}
+			empleado.altaDeUsuario()
+			return ok("Mail enviado correctamente")
+		} catch(Exception e) {
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 	

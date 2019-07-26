@@ -77,7 +77,7 @@ export default class DetalleEmpleado extends Component {
       this.generarMensaje("Debe completar todos los campos", "error")
     } else {
       if (contraseña !== confirmarContraseña) {
-        this.generarMensaje("La contraseña no se confirmo correctamente", "error")
+        this.generarMensaje("Las contraseñas no coinciden", "error")
       } else {
         ServiceLocator.EmpleadoService.agregarEmpleado({
           "id": idEmpleado,
@@ -91,7 +91,10 @@ export default class DetalleEmpleado extends Component {
           if (respuesta) {
             respuesta.error ?
               this.generarMensaje(respuesta.error, "error") :
-              this.handleOpen("!Muy Bien¡", respuesta)
+              (
+                this.handleOpen("¡Muy Bien!", respuesta) &&
+                ServiceLocator.EmpleadoService.enviarMailCrear({ "nombreUsuario": this.state.nombreUsuario })
+              )
           } else {
             this.generarMensaje("Error en el servidor", "error")
           }
@@ -173,7 +176,7 @@ export default class DetalleEmpleado extends Component {
   }
 
   validarUsuario(usuario) {
-    if (usuario !== "") {
+    if (usuario !== "" && usuario !== this.state.empleado.nombreUsuario) {
       ServiceLocator.EmpleadoService.validarUserName(usuario)
         .then(respuesta => {
           if (respuesta === true) {
@@ -211,7 +214,7 @@ export default class DetalleEmpleado extends Component {
             } else {
               this.setState({
                 mailErroneo: true,
-                mensajeMail: "E-Mail invalido"
+                mensajeMail: "E-mail inválido"
               })
             }
           } else if (respuesta.error) {
@@ -371,7 +374,7 @@ export default class DetalleEmpleado extends Component {
                   handlers={{ onChange: this.modificarAtributo }}
                   label={"Contraseña"}
                   maxLength={15}
-                  help={"(Maximo 15 caracteres)"}
+                  help={"(Máximo 15 caracteres)"}
                 />
               </Grid> : ""
             }
@@ -386,7 +389,7 @@ export default class DetalleEmpleado extends Component {
                   label={"Confirmar contraseña"}
                   maxLength={15}
                   error={contraseña !== confirmarContraseña}
-                  help={"(Maximo 15 caracteres)"}
+                  help={"(Máximo 15 caracteres)"}
                 />
               </Grid> : ""
             }
@@ -409,13 +412,13 @@ export default class DetalleEmpleado extends Component {
         />
         <DialogConfirmacion
           titulo={"Atención"}
-          descripcion={"Se perderan los cambios realizados"}
+          descripcion={"Se perderán los cambios realizados"}
           handlers={{ onChange: this.volver, open: this.openConfirmation }}
           open={this.state.openConfirmation}
         />
         <DialogConfirmacion
           titulo={"Atención"}
-          descripcion={"¿Seguro que quiere eliminar el usuario?"}
+          descripcion={"¿Estás seguro de eliminar el usuario?"}
           handlers={{ onChange: this.eliminarEmpleado, open: this.openConfirmationDelete }}
           open={this.state.openConfirmationDelete}
         />

@@ -59,7 +59,6 @@ class Login extends Component {
   render() {
     const { errorMessage } = this.state
     const { history } = this.props
-    console.log(this.props)
 
     return (
       <Container component="main" maxWidth="xs" >

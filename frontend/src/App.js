@@ -27,6 +27,7 @@ import CambiarContraseña from './pages/CambiarContraseña/CambiarContraseña';
 import VisualizarMesasAdministrador from './pages/VisualizarMesasAdministrador/VisualizarMesasAdministrador';
 import InstruccionesJuego from './pages/instruccionesJuego/InstruccionesJuego';
 import Minijuego from './pages/minijuego/Minijuego';
+import RecuperarContraseña from './pages/RecuperarContraseña/RecuperarContraseña';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -87,8 +88,9 @@ function RouterInicial(props) {
       <div className="fullPaper">
         <Header />
         <Switch>
-          <Route path="/login" render={() => <Login iniciarSesion={iniciarSesion.empleado} />} />
-          <Route path="/escanearQR" render={() => <EscanearQR iniciarSesion={iniciarSesion.sesion} />} />
+          <Route path="/login" exact render={() => <Login iniciarSesion={iniciarSesion.empleado} />} />
+          <Route path="/escanearQR" exact render={() => <EscanearQR iniciarSesion={iniciarSesion.sesion} />} />
+          <Route path="/recuperar/contraseña" exact component={RecuperarContraseña} />
           <Route component={RedirectInicial} />
         </Switch>
       </div>
@@ -155,8 +157,6 @@ class App extends Component {
         const empleado = await ServiceLocator.EmpleadoService.getEmpleado()
         const opcionesMenu = await ServiceLocator.EmpleadoService.getMenuEmpleado()
 
-        console.log(empleado)
-
         this.setState({
           empleado: empleado,
           opcionesMenu: opcionesMenu,
@@ -171,8 +171,6 @@ class App extends Component {
     if (ControllerDeSesion.getSesionActiva()) {
       try {
         const sesion = await ServiceLocator.SesionService.getSesionActiva()
-
-        console.log(sesion)
 
         this.setState({
           sesion: sesion,
