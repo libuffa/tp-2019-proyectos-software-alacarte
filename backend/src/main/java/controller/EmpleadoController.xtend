@@ -170,7 +170,7 @@ class EmpleadoController {
 	@Put("/empleado/recuperarContraseña")
 	def Result recuperarContraseña(@Body String body) {
 		try {
-			val correoUsuario = body.getPropertyValue("correoUsuario")
+			val correoUsuario = body.getPropertyValue("email")
 			var Empleado empleado
 
 			try {
