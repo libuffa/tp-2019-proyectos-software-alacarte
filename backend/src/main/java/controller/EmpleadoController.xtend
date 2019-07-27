@@ -32,16 +32,20 @@ class EmpleadoController {
 
 		try {
 			val empleado = repoEmpleados.searchByString(nombreUsuario)
-			if (empleado === null || empleado.logueado || empleado.baja) {
-				return ok("Usuario logueado o incorrecto")
+			if (empleado === null || empleado.baja) {
+				return ok('{ "error" : "Usuario incorrecto" }')
 			}
 			if (!empleado.contraseña.equals(contraseña)) {
-				return ok("Contraseña incorrecta")
+				return ok('{ "error" : "Contraseña incorrecta" }')
+			}
+			if (empleado.logueado) {
+				empleado.loguearDesloguear()
+				return ok('{ "error" : "Usuario logueado" }')
 			}
 			empleado.loguearDesloguear()
 			return ok(empleado.toJson)
 		} catch (Exception e) {
-			return ok("Usuario incorrecto")
+				return ok('{ "error" : "Usuario incorrecto" }')
 		}
 	}
 
@@ -175,19 +179,15 @@ class EmpleadoController {
 
 			try {
 				empleado = repoEmpleados.searchByEmail(correoUsuario)
-			} catch (Exception exception) {
-				return badRequest('{ "error" : "correo inexistente" }')
+			} catch (Exception ex) {
+				return ok('{ "error" : "correo inexistente" }')
 			}
 			if (!empleado.email.equals(correoUsuario)) {
-				return badRequest('{ "error" : "Correo de usuario incorrecto" }')
+				return ok('{ "error" : "Correo de usuario incorrecto" }')
 			}
-
-			empleado.recuperarContraseña
-
 			return ok("True")
-
 		} catch (Exception e) {
-			return ok(e.message)
+			return ok('{ "error" : "correo inexistente" }')
 		}
 	}
 
@@ -276,4 +276,24 @@ class EmpleadoController {
 		}
 	}
 	
+	@Put('/recuperar/mail')
+	def Result enviarMailRecuperar(@Body String body){
+		try {
+			val correoUsuario = body.getPropertyValue("email")
+			var Empleado empleado
+
+			try {
+				empleado = repoEmpleados.searchByEmail(correoUsuario)
+			} catch (Exception ex) {
+				return ok('{ "error" : "correo inexistente" }')
+			}
+			if (!empleado.email.equals(correoUsuario)) {
+				return ok('{ "error" : "Correo de usuario incorrecto" }')
+			}
+			empleado.recuperarContraseña
+			return ok("True")
+		} catch (Exception e) {
+			return ok('{ "error" : "correo inexistente" }')
+		}
+	}
 }

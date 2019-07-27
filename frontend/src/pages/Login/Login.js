@@ -4,7 +4,8 @@ import { withRouter } from 'react-router';
 import PersonIcon from '@material-ui/icons/PersonPin';
 import '../estilosPaginas.scss';
 import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal';
-import { Container, Typography, Grid, Link } from '@material-ui/core';
+import { Container, Typography, Grid, Link, Button } from '@material-ui/core';
+import InputEmpleado from '../../components/inputEmpleado/InputEmpleado';
 
 class Login extends Component {
   constructor(props) {
@@ -12,7 +13,11 @@ class Login extends Component {
     this.state = {
       usuario: "",
       pass: "",
-      errorMessage: "",
+      mensaje: "",
+      userError: false,
+      mensajeUser: "",
+      passError: false,
+      mensajePass: "",
     }
   }
 
@@ -22,42 +27,63 @@ class Login extends Component {
       ServiceLocator.EmpleadoService.iniciarSesion({ nombreUsuario: usuario, contraseña: pass })
         .then((respuesta) => {
           if (respuesta) {
-            if (respuesta.id) {
-              this.props.iniciarSesion(respuesta.id)
+            if (respuesta.error) {
+              if (respuesta.error.includes("Usuario")) {
+                this.setState({
+                  userError: true,
+                  mensajeUser: respuesta.error,
+                })
+              } else {
+                this.setState({
+                  passError: true,
+                  mensajePass: respuesta.error,
+                })
+              }
+              this.generarMensaje(respuesta.error)
             } else {
-              this.generarError(respuesta)
+              this.props.iniciarSesion(respuesta.id)
             }
           } else {
-            this.generarError("Error en el servidor")
+            this.generarMensaje("Error en el servidor")
           }
         })
+    } else {
+      this.generarMensaje("Debe completar los campos")
+    }
+  }
+
+  modificarAtributo = (atributo, valor) => {
+    if (atributo === "pass") {
+      this.setState({
+        pass: valor,
+        passError: false,
+      })
+    } else {
+      this.setState({
+        usuario: valor,
+        userError: false,
+      })
     }
   }
 
   snackbarOpen() {
-    return this.state.errorMessage !== ""
+    return this.state.mensaje !== ""
   }
 
   snackbarClose = () => {
     this.setState({
-      errorMessage: ""
+      mensaje: ""
     })
   }
 
-  handleChange = event => {
+  generarMensaje(mensaje) {
     this.setState({
-      [event.target.name]: event.target.value
-    })
-  }
-
-  generarError(errorMessage) {
-    this.setState({
-      errorMessage: errorMessage
+      mensaje
     })
   }
 
   render() {
-    const { errorMessage } = this.state
+    const { mensaje, userError, passError, mensajeUser, mensajePass } = this.state
     const { history } = this.props
 
     return (
@@ -67,16 +93,38 @@ class Login extends Component {
             <PersonIcon fontSize="large"></PersonIcon>
           </Typography>
           <Typography variant="h5" color="textSecondary">
-            {"Login A La Carte"}
+            {"Login À La Carte"}
           </Typography>
         </div>
-        <div>
-          <input maxLength="20" className="inputLogin" placeholder=" Usuario" name="usuario" onChange={this.handleChange}></input>
-        </div>
-        <div>
-          <input maxLength="15" className="inputLogin" placeholder=" Contraseña" name="pass" onChange={this.handleChange} type="password"></input>
-        </div>
-        <button className="botonLogin" onClick={this.handleEnviar}>INGRESAR</button>
+        <InputEmpleado
+          previo={""}
+          atributo={"usuario"}
+          disabled={false}
+          handlers={{ onChange: this.modificarAtributo }}
+          label={"Usuario"}
+          maxLength={20}
+          error={userError}
+          help={userError ? mensajeUser : ""}
+        />
+        <InputEmpleado
+          previo={""}
+          atributo={"pass"}
+          disabled={false}
+          handlers={{ onChange: this.modificarAtributo }}
+          label={"Contraseña"}
+          type={"password"}
+          maxLength={15}
+          error={passError}
+          help={passError ? mensajePass : ""}
+        />
+        <br />
+        <Button fullWidth variant="contained" color="primary" onClick={this.handleEnviar}>
+          <Typography variant="overline">
+            ingresar
+          </Typography>
+        </Button>
+        <br />
+        <br />
         <Grid container>
           <Grid item xs>
             <Link href='#' onClick={() => history.push('/recuperar/contraseña')} variant="body2">
@@ -84,7 +132,7 @@ class Login extends Component {
             </Link>
           </Grid>
         </Grid>
-        <SnackBarPersonal mensajeError={errorMessage} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={"error"} />
+        <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={"error"} />
       </Container>
     );
   }

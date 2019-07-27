@@ -50,9 +50,7 @@ export class EmpleadoService {
   }
 
   recuperarContraseña(data) {
-    return client.put('/empleado/recuperarContraseña', data, { timeout: 10000 })
-      .then(res => { return res })
-      .catch(error => { return { error } })
+    return client.put('/empleado/recuperarContraseña', data).then(res => { return res.data })
   }
 
   agregarEmpleado(data) {
@@ -64,6 +62,10 @@ export class EmpleadoService {
   }
 
   enviarMailCrear(data) {
-    return client.post('/crear/mail', data).then(res => { return res.data })
+    return client.put('/crear/mail', data, { timeout: 10000 }).then(res => { return res.data })
+  }
+
+  enviarMailRecuperar(data) {
+    return client.put('/recuperar/mail', data, { timeout: 10000 }).then(res => { return res.data })
   }
 }

@@ -89,12 +89,12 @@ export default class DetalleEmpleado extends Component {
           "tipoEmpleado": tipoEmpleado
         }).then(respuesta => {
           if (respuesta) {
-            respuesta.error ?
-              this.generarMensaje(respuesta.error, "error") :
-              (
-                this.handleOpen("¡Muy Bien!", respuesta) &&
-                ServiceLocator.EmpleadoService.enviarMailCrear({ "nombreUsuario": this.state.nombreUsuario })
-              )
+            if (respuesta.error) {
+              this.generarMensaje(respuesta.error, "error")
+            } else {
+              ServiceLocator.EmpleadoService.enviarMailCrear({ "nombreUsuario": this.state.nombreUsuario })
+              this.handleOpen("¡Muy Bien!", respuesta)
+            }
           } else {
             this.generarMensaje("Error en el servidor", "error")
           }
@@ -176,7 +176,7 @@ export default class DetalleEmpleado extends Component {
   }
 
   validarUsuario(usuario) {
-    if (usuario !== "" && usuario !== this.state.empleado.nombreUsuario) {
+    if (usuario !== "" && (this.state.idEmpleado ? usuario !== this.state.empleado.nombreUsuario : true)) {
       ServiceLocator.EmpleadoService.validarUserName(usuario)
         .then(respuesta => {
           if (respuesta === true) {

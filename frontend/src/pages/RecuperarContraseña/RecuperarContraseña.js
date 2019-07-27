@@ -27,6 +27,7 @@ class RecuperarContraseña extends Component {
       mensajeMail: "",
       mensaje: "",
       variant: "",
+      disabled: false,
     }
   }
 
@@ -37,20 +38,35 @@ class RecuperarContraseña extends Component {
   handleEnviar = () => {
     const { email } = this.state
     if (email.includes("@") && email.includes(".com")) {
+      this.setState({
+        disabled: true,
+      })
       ServiceLocator.EmpleadoService.recuperarContraseña({ "email": email })
         .then((respuesta) => {
           if (respuesta) {
             if (respuesta.error) {
               this.generarMensaje(respuesta.error, "error")
+              this.setState({
+                mailErroneo: true,
+                mensajeMail: respuesta.error,
+                disabled: false,
+              })
             } else {
+              ServiceLocator.EmpleadoService.enviarMailRecuperar({ "email": email })
               this.openDialog()
             }
           } else {
             this.generarMensaje("E-mail inválido", "error")
+            this.setState({
+              disabled: false,
+            })
           }
         })
     } else {
       this.generarMensaje("E-mail inválido", "error")
+      this.setState({
+        disabled: false,
+      })
     }
   }
 
@@ -63,7 +79,6 @@ class RecuperarContraseña extends Component {
     }
     this.setState({
       [atributo]: valor,
-      modificado: true,
     })
   }
 
@@ -118,7 +133,7 @@ class RecuperarContraseña extends Component {
   generarMensaje(mensaje, variant) {
     this.setState({
       mensaje,
-      variant
+      variant,
     })
   }
 
@@ -146,7 +161,7 @@ class RecuperarContraseña extends Component {
   }
 
   render() {
-    const { open, mailErroneo, mensajeMail, mensaje, variant, email } = this.state
+    const { open, mailErroneo, mensajeMail, mensaje, variant, email, disabled } = this.state
 
     return (
       <div>
@@ -159,7 +174,6 @@ class RecuperarContraseña extends Component {
               {"Recuperar contraseña"}
             </Typography>
           </div>
-          <br />
           <InputEmpleado
             previo={""}
             atributo={"email"}
@@ -180,7 +194,7 @@ class RecuperarContraseña extends Component {
             </Grid>
             <Grid item xs={2} > </Grid>
             <Grid item xs={5}>
-              <Button fullWidth variant="contained" color="primary" onClick={this.handleEnviar} className={this.props.classes.boton} disabled={!email.includes("@") || !email.includes(".com") || mailErroneo || (email.length < 10)}>
+              <Button fullWidth variant="contained" color="primary" onClick={this.handleEnviar} className={this.props.classes.boton} disabled={!email.includes("@") || !email.includes(".com") || (email.length < 10) || disabled}>
                 <Typography variant="overline">
                   confirmar
                 </Typography>
