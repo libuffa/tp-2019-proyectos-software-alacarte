@@ -1,13 +1,22 @@
 import React, { Component } from 'react'
 import PersonIcon from '@material-ui/icons/PersonPin';
 import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal';
-import { Container, Typography, Grid } from '@material-ui/core';
+import { Container, Typography, Grid, Button } from '@material-ui/core';
 import '../estilosPaginas.scss';
 import DialogVolver from '../../components/Dialog/DialogVolver';
 import { ServiceLocator } from '../../services/ServiceLocator';
 import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
+import InputEmpleado from '../../components/inputEmpleado/InputEmpleado';
+import { withStyles } from '@material-ui/styles';
 
-export default class CambiarContraseña extends Component {
+const styles = {
+  boton: {
+    marginTop: '18px',
+    marginBottom: '18px',
+  },
+};
+
+class CambiarContraseña extends Component {
 
   constructor(props) {
     super(props)
@@ -16,7 +25,8 @@ export default class CambiarContraseña extends Component {
       contraseñaNueva: "",
       confirmarContraseñaNueva: "",
       open: false,
-      errorMessage: ""
+      errorMessage: "",
+      actualPassError: false,
     }
   }
 
@@ -33,14 +43,25 @@ export default class CambiarContraseña extends Component {
         }
         ServiceLocator.EmpleadoService.cambiarContraseña(json)
           .then((respuesta) => {
-            if (!respuesta.error) {
-              this.handleClickOpen()
+            if (respuesta) {
+              if (respuesta.error) {
+                if (respuesta.error.includes("actual")) {
+                  this.setState({
+                    actualPassError: true,
+                  })
+                  this.generarError(respuesta.error)
+                } else {
+                  this.generarError(respuesta.error)
+                }
+              } else {
+                this.handleClickOpen()
+              }
             } else {
-              this.generarError(respuesta.error.response.data.error)
+              this.generarError("Error en el servidor")
             }
           })
       } else {
-        this.generarError("Contraseña nueva no se confirmo correctamente")
+        this.generarError("")
       }
     }
   }
@@ -55,9 +76,14 @@ export default class CambiarContraseña extends Component {
     })
   }
 
-  handleChange = event => {
+  modificarAtributo = (atributo, valor) => {
+    if (atributo === "contraseñaActual") {
+      this.setState({
+        actualPassError: false,
+      })
+    }
     this.setState({
-      [event.target.name]: event.target.value
+      [atributo]: valor,
     })
   }
 
@@ -80,12 +106,12 @@ export default class CambiarContraseña extends Component {
     })
   };
 
-  validarConfirmar() {
-    return !(this.state.contraseñaActual && this.state.contraseñaNueva && this.state.confirmarContraseñaNueva)
+  verMenu = () => {
+    this.props.history.push('/')
   }
 
   render() {
-    const { errorMessage, open } = this.state
+    const { errorMessage, open, contraseñaActual, contraseñaNueva, confirmarContraseñaNueva, actualPassError } = this.state
 
     return (
       <div>
@@ -98,36 +124,60 @@ export default class CambiarContraseña extends Component {
               {"Cambiar contraseña"}
             </Typography>
           </div>
-          <div>
-            <input maxLength="15" type="password" className="inputLogin" placeholder=" Contraseña actual" name="contraseñaActual" onChange={this.handleChange}></input>
-          </div>
-          <div>
-            <input maxLength="15" type="password" className="inputLogin" placeholder=" Contraseña nueva (máximo 15 caracteres)" name="contraseñaNueva" onChange={this.handleChange}></input>
-          </div>
-          <div>
-            <input maxLength="15" type="password" className="inputLogin" placeholder=" Confirmar contraseña nueva" name="confirmarContraseñaNueva" onChange={this.handleChange}></input>
-          </div>
+          <InputEmpleado
+            previo={""}
+            atributo={"contraseñaActual"}
+            disabled={false}
+            type={"password"}
+            handlers={{ onChange: this.modificarAtributo }}
+            label={"Contraseña actual"}
+            maxLength={15}
+            help={"Ingresar contraseña vigente"}
+            error={actualPassError}
+          />
+          <InputEmpleado
+            previo={""}
+            atributo={"contraseñaNueva"}
+            disabled={false}
+            type={"password"}
+            handlers={{ onChange: this.modificarAtributo }}
+            label={"Nueva contraseña"}
+            maxLength={15}
+            help={"Máximo 15 caracteres"}
+          />
+          <InputEmpleado
+            previo={""}
+            atributo={"confirmarContraseñaNueva"}
+            disabled={false}
+            type={"password"}
+            handlers={{ onChange: this.modificarAtributo }}
+            label={"Confirmar nueva contraseña"}
+            maxLength={15}
+            error={contraseñaNueva !== confirmarContraseñaNueva}
+            help={"Máximo 15 caracteres"}
+          />
           <Grid container spacing={0}>
-            <Grid item xs={5} className="margenBoton">
-              <button
-                className="botonLogin"
-                onClick={() => this.handleClose()}>
-                Volver
-                            </button>
+            <Grid item xs={5}>
+              <Button fullWidth variant="contained" color="primary" onClick={this.verMenu} className={this.props.classes.boton}>
+                <Typography variant="overline">
+                  volver
+                </Typography>
+              </Button>
             </Grid>
             <Grid item xs={2} > </Grid>
             <Grid item xs={5}>
-              <button
-                className="botonLogin"
-                onClick={this.handleEnviar}
-                disabled={this.validarConfirmar()}>Confirmar</button>
+              <Button fullWidth variant="contained" color="primary" onClick={this.handleEnviar} className={this.props.classes.boton} disabled={!contraseñaActual || !contraseñaNueva || !confirmarContraseñaNueva || actualPassError}>
+                <Typography variant="overline">
+                  confirmar
+                </Typography>
+              </Button>
             </Grid>
           </Grid>
-          <SnackBarPersonal mensajeError={errorMessage} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={"error"} />
         </Container>
+        <SnackBarPersonal mensajeError={errorMessage} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={"error"} />
         <DialogVolver
           titulo={"Contraseña modificada"}
-          descripcion={"Le confirmamos que su contraseña se modificó exitosamente"}
+          descripcion={"Su contraseña se modificó correctamente"}
           handlers={{ onChange: this.handleClose }}
           open={open}
         />
@@ -135,3 +185,5 @@ export default class CambiarContraseña extends Component {
     )
   }
 }
+
+export default withStyles(styles)(CambiarContraseña);

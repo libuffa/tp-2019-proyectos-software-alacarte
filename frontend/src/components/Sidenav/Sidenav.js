@@ -4,7 +4,8 @@ import PersonIcon from '@material-ui/icons/PersonPin'
 import CartIcon from '@material-ui/icons/LocalLibrary';
 import PedidoIcon from '@material-ui/icons/RestaurantMenu';
 import MesaIcon from '@material-ui/icons/Layers';
-import Lock from '@material-ui/icons/Lock'
+import Lock from '@material-ui/icons/Lock';
+import Person from '@material-ui/icons/Person';
 import PowerSettingsNew from '@material-ui/icons/PowerSettingsNew';
 import '../estilos.scss'
 import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
@@ -125,6 +126,19 @@ export function Sidenav(props) {
                 <ListItemText primary={
                   <Typography variant="subtitle2">
                     {" Cambiar Contraseña"}
+                  </Typography>}
+                />
+              </ListItem>
+              <ListItem button onClick={() => history.push({
+                pathname: '/detalle/empleado',
+                state: { idEmpleado: ControllerDeEmpleado.getSesionActiva() }
+              })}>
+                <ListItemAvatar>
+                  <Person fontSize="large" />
+                </ListItemAvatar>
+                <ListItemText primary={
+                  <Typography variant="subtitle2">
+                    {" Mis Datos"}
                   </Typography>}
                 />
               </ListItem>

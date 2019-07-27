@@ -159,15 +159,15 @@ class EmpleadoController {
 			val contraseñaNueva = body.getPropertyValue("contraseñaNueva")
 			val empleado = repoEmpleados.searchById(idEmpleado)
 			if (empleado === null || empleado.baja) {
-				return badRequest('{ "error" : "Usuario inexistente" }')
+				return ok('{ "error" : "Usuario incorrecto" }')
 			}
 			if (!empleado.contraseña.equals(contraseñaActual)) {
-				return badRequest('{ "error" : "Contraseña actual incorrecta" }')
+				return ok('{ "error" : "Contraseña actual incorrecta" }')
 			}
 			empleado.cambiarContraseña(contraseñaNueva)
 			return ok("Contraseña modificada correctamente")
 		} catch (Exception e) {
-			return ok(e.message)
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 

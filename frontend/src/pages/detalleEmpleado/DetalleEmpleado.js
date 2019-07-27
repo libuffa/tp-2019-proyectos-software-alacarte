@@ -9,6 +9,7 @@ import SelectorPuesto from '../../components/selectorPuesto/SelectorPuesto';
 import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal';
 import DialogVolver from '../../components/Dialog/DialogVolver';
 import DialogConfirmacion from '../../components/Dialog/DialogConfirmacion';
+import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 
 export default class DetalleEmpleado extends Component {
   constructor(props) {
@@ -200,7 +201,7 @@ export default class DetalleEmpleado extends Component {
   }
 
   validarMail(email) {
-    if (email !== "") {
+    if (email !== "" && (this.state.idEmpleado ? email !== this.state.empleado.email : true)) {
       ServiceLocator.EmpleadoService.validarMail({
         "email": email,
       })
@@ -290,7 +291,7 @@ export default class DetalleEmpleado extends Component {
               </Typography>
             </Grid>
             <Grid item xs={2} className="botonEliminarContainer">
-              {empleado &&
+              {empleado && idEmpleado !== ControllerDeEmpleado.getSesionActiva() &&
                 <IconButton disabled={logueado || disabled} onClick={this.eliminarEmpleado} edge="end" >
                   <DeleteIcon />
                 </IconButton>}
@@ -304,12 +305,12 @@ export default class DetalleEmpleado extends Component {
               <div className="divider" />
             </Grid>
             <Grid item xs={12} >
-              {empleado && <Typography variant="h6" color="textSecondary">
+              {empleado && idEmpleado !== ControllerDeEmpleado.getSesionActiva() && <Typography variant="h6" color="textSecondary">
                 {"Estado: "}{empleado.logueado ? "Conectado" : "Desconectado"}
               </Typography>}
             </Grid>
             <Grid item xs={12}>
-              {empleado && <div className="divider" />}
+              {empleado && idEmpleado !== ControllerDeEmpleado.getSesionActiva() && <div className="divider" />}
             </Grid>
             <Grid item xs={12}>
               <InputEmpleado

@@ -48,7 +48,7 @@ function RouterPrincipal(props) {
           {empleado.tipoEmpleado === "Cocinero" && <Route path="/detalle/item/pedido/cocina" exact component={DetalleItemPedidoCocina} />}
           {(empleado.tipoEmpleado === "Mozo" || empleado.tipoEmpleado === "Administrador") && <Route path="/detalle/item/carta" exact component={DetalleItemCarta} />}
           {(empleado.tipoEmpleado === "Mozo" || empleado.tipoEmpleado === "Administrador") && <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />}
-          {empleado.tipoEmpleado === "Administrador" && <Route path="/detalle/empleado" exact component={DetalleEmpleado} />}
+          <Route path="/detalle/empleado" exact component={DetalleEmpleado} />
           <Route path="/carta" exact component={VisualizarCartaEmpleado} />
           <Route path="/menu/empleado" exact component={MenuEmpleado} />
           {(empleado.tipoEmpleado === "Mozo" || empleado.tipoEmpleado === "Administrador") && <Route path="/mostrar/qr" exact component={MostrarQR} />}
