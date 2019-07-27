@@ -210,7 +210,7 @@ class App extends Component {
           <div className="contenedor600pix">
             <Paper square className="fullPaper">
               <div className="contenedorGeneral flexCenter">
-                <CircularProgress size={80} color="secondary" />
+                <CircularProgress size={80} color="primary" />
               </div>
             </Paper>
           </div>

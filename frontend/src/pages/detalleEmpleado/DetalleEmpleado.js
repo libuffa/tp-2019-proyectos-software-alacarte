@@ -93,7 +93,9 @@ export default class DetalleEmpleado extends Component {
             if (respuesta.error) {
               this.generarMensaje(respuesta.error, "error")
             } else {
-              ServiceLocator.EmpleadoService.enviarMailCrear({ "nombreUsuario": this.state.nombreUsuario })
+              if (respuesta.includes("creado")) {
+                ServiceLocator.EmpleadoService.enviarMailCrear({ "nombreUsuario": this.state.nombreUsuario })
+              }
               this.handleOpen("¡Muy Bien!", respuesta)
             }
           } else {

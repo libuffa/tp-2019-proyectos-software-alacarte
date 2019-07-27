@@ -143,7 +143,7 @@ class CambiarContraseña extends Component {
             handlers={{ onChange: this.modificarAtributo }}
             label={"Nueva contraseña"}
             maxLength={15}
-            help={"Máximo 15 caracteres"}
+            help={"(Máximo 15 caracteres)"}
           />
           <InputEmpleado
             previo={""}
@@ -154,7 +154,7 @@ class CambiarContraseña extends Component {
             label={"Confirmar nueva contraseña"}
             maxLength={15}
             error={contraseñaNueva !== confirmarContraseñaNueva}
-            help={"Máximo 15 caracteres"}
+            help={"Repetir la nueva contraseña"}
           />
           <Grid container spacing={0}>
             <Grid item xs={5}>
