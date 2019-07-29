@@ -28,6 +28,7 @@ import VisualizarMesasAdministrador from './pages/VisualizarMesasAdministrador/V
 import InstruccionesJuego from './pages/instruccionesJuego/InstruccionesJuego';
 import Minijuego from './pages/minijuego/Minijuego';
 import RecuperarContraseña from './pages/RecuperarContraseña/RecuperarContraseña';
+import SnackBarPersonal from './components/snackBarPersonal/SnackBarPersonal';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -125,10 +126,14 @@ class App extends Component {
     this.state = {
       sesionActiva: ControllerDeSesion.getSesionActiva(),
       sesionEmpleadoActiva: ControllerDeEmpleado.getSesionActiva(),
+      checkSesion: setInterval(() => { this.abrirSesion() }, 5000),
+      checkEmpleado: setInterval(() => { this.abrirSesionEmpleado() }, 5000),
       sesion: null,
       empleado: null,
       opcionesMenu: null,
       mostrar: false,
+      mensaje: "",
+      variant: "",
     }
   }
 
@@ -151,34 +156,110 @@ class App extends Component {
     ControllerDeEmpleado.cerrarSesionActiva()
   }
 
-  async abrirSesionEmpleado() {
+  abrirSesionEmpleado() {
     if (ControllerDeEmpleado.getSesionActiva()) {
-      try {
-        const empleado = await ServiceLocator.EmpleadoService.getEmpleado()
-        const opcionesMenu = await ServiceLocator.EmpleadoService.getMenuEmpleado()
-
-        this.setState({
-          empleado: empleado,
-          opcionesMenu: opcionesMenu,
+      ServiceLocator.EmpleadoService.getEmpleado()
+        .then(respuesta => {
+          if (respuesta) {
+            if (respuesta.error) {
+              this.generarMensaje(respuesta.error, "error")
+              this.cerrarSesionEmpleado()
+            } else {
+              if (respuesta.logueado) {
+                if (!this.state.empleado) {
+                  this.setState({
+                    empleado: respuesta,
+                  })
+                  if (!this.state.opcionesMenu) {
+                    this.cargarOpcionesMenu()
+                  }
+                }
+              } else {
+                this.generarMensaje("Usuario no logueado", "error")
+                this.cerrarSesionEmpleado()
+              }
+            }
+          } else {
+            this.generarMensaje("Error en el servidor", "error")
+            this.cerrarSesionEmpleado()
+          }
         })
-      } catch (error) {
-        console.error({ error })
-      }
     }
   }
 
-  async abrirSesion() {
-    if (ControllerDeSesion.getSesionActiva()) {
-      try {
-        const sesion = await ServiceLocator.SesionService.getSesionActiva()
-
-        this.setState({
-          sesion: sesion,
+  cargarOpcionesMenu() {
+    if (ControllerDeEmpleado.getSesionActiva()) {
+      ServiceLocator.EmpleadoService.getMenuEmpleado()
+        .then((respuesta) => {
+          if (respuesta) {
+            if (!respuesta.error) {
+              this.setState({
+                opcionesMenu: respuesta,
+              })
+            }
+          }
         })
-      } catch (error) {
-        console.error({ error })
-      }
     }
+  }
+
+  abrirSesion() {
+    if (ControllerDeSesion.getSesionActiva()) {
+      ServiceLocator.SesionService.getSesionActiva()
+        .then((respuesta) => {
+          if (respuesta) {
+            if (respuesta.error) {
+              this.generarMensaje(respuesta.error, "error")
+              this.cerrarSesion()
+            } else {
+              if (!this.state.sesion) {
+                this.setState({
+                  sesion: respuesta
+                })
+              }
+            }
+          } else {
+            this.generarMensaje("Error en el servidor", "error")
+            this.cerrarSesion()
+          }
+        })
+    }
+  }
+
+  cerrarSesion = () => {
+    ControllerDeSesion.cerrarSesionActiva()
+    if (ControllerDeEmpleado.getSesionActiva()) {
+      this.setState({
+        sesion: null,
+        sesionActiva: null,
+      })
+    } else {
+      this.setState({
+        sesion: null,
+        sesionActiva: null,
+        mostrar: false,
+      })
+      setTimeout(() => { this.mostrar() }, 1000)
+    }
+  }
+
+  cerrarSesionEmpleado = () => {
+    ControllerDeEmpleado.cerrarSesionActiva()
+    this.setState({
+      sesion: null,
+      sesionActiva: null,
+      empleado: null,
+      sesionEmpleadoActiva: null,
+      opcionesMenu: null,
+      mostrar: false,
+    })
+    setTimeout(() => { this.mostrar() }, 1000)
+  }
+
+  generarMensaje(mensaje, variant) {
+    this.setState({
+      mensaje,
+      variant,
+    })
   }
 
   mostrar() {
@@ -203,7 +284,19 @@ class App extends Component {
     this.abrirSesionEmpleado()
   }
 
+  snackbarOpen() {
+    return this.state.mensaje !== ""
+  }
+
+  snackbarClose = () => {
+    this.setState({
+      mensaje: ""
+    })
+  }
+
   render() {
+    const { mensaje, variant } = this.state
+
     if (!this.state.mostrar) {
       return (
         <div className="contenedorGeneral">
@@ -232,6 +325,7 @@ class App extends Component {
               }
             </Paper>
           </div>
+          <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
         </div>
       )
     }

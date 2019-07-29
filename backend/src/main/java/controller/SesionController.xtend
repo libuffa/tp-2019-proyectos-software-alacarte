@@ -12,6 +12,7 @@ import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.json.JSONUtils
 import repository.ItemCartaRepository
 import repository.SesionRepository
+import domain.Sesion
 
 @Controller
 @Accessors
@@ -25,14 +26,19 @@ class SesionController {
 	def Result iniciarSesion(@Body String body) {
 		var id = Long.valueOf(body.getPropertyValue("idSesion"))
 		try{
-			val sesion = repositorioSesion.searchById(id)
+			var Sesion sesion
+			try {
+				sesion = repositorioSesion.searchById(id)
+			} catch(Exception ex) {
+				return ok(' { "error" : "Sesión incorrecta" } ')
+			}
 			if(sesion.fechaBaja === null) {
-				return ok("True")
+				return ok("Sesión correcta")
 			} else {
-				return ok("Sesion Cerrada")
+				return ok(' { "error" : "La sesión expiró" } ')
 			}
 		}catch(Exception e) {
-			badRequest("La sesion no existe o esta inactiva")
+			return ok(' { "error" : "Error en el servidor" } ')
 		}
 	}
 	
@@ -149,10 +155,18 @@ class SesionController {
 	def Result sesion() {
 		try {
 			val _id = Long.valueOf(id)
-			val sesion = repositorioSesion.searchById(_id)
+			var Sesion sesion
+			try {
+				sesion = repositorioSesion.searchById(_id)
+			} catch(Exception e) {
+				return ok('{ "error" : "La sesión no existe" }')
+			}
+			if(sesion.fechaBaja !== null) {
+				return ok('{ "error" : "La sesión expiró" }')
+			}
 			return ok(sesion.toJson)
 		} catch(Exception e) {
-			badRequest(e.message)
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 	
@@ -228,20 +242,20 @@ class SesionController {
 			val sesion = repositorioSesion.searchSesionByPedido(idPedido)
 			if(sesion.fechaBaja === null && !sesion.pideCuenta) {
 				if(!sesion.sesionActiva) {
-					return ok('{ "error" : "Sesion inactiva" }')
+					return ok('{ "error" : "Sesión inactiva" }')
 				}
 				if(sesion.getPedido(idPedido).cancelado) {
 					return ok('{"error" : "Pedido no encontrado"}')
 				} else {
 					try{
 						sesion.bajaPedido(idPedido)
-						return ok("Pedido eliminado correctamente")
+						return ok("Pedido cancelado")
 					} catch(Exception e){
 						return ok('{"error" : "Error al eliminar pedido"}')
 					}
 				}
 			} else {
-				return ok('{"error" : "Sesion inactivo"}')
+				return ok('{"error" : "Sesión inactiva"}')
 			}
 		} catch (Exception e) {
 			return ok('{"error" : "Error en el servidor"}')
@@ -251,18 +265,24 @@ class SesionController {
 	@Put("/pedido/cuenta/:id")
 	def Result pedirCuenta() {
 		try {
-			val _id = Long.valueOf(id) 
-			val sesion =repositorioSesion.searchById(_id)
-			if (sesion === null) {
-				return badRequest('{ "error" : "sesion inexistente" }')
+			val idSesion = Long.valueOf(id)
+			var Sesion sesion
+			try {
+				sesion = repositorioSesion.searchById(idSesion)
+			} catch(Exception ex) {
+				return ok('{ "error" : "La sesión no existe" }')
 			}
-			if(!sesion.sesionActiva) {
-				return badRequest('{ "error" : "sesion no activa" }')
+			if(sesion.fechaBaja !== null) {
+				return ok('{"error" : "Sesión inactiva"}')
 			}
 			sesion.pedirCuenta()
-			ok('{"status" : "OK"}')
+			if (sesion.pideCuenta) {
+				return ok("Se pidió la cuenta")
+			} else {
+				return ok("Se canceló la cuenta")
+			}
 		} catch (Exception e) {
-			badRequest(e.message)
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 	

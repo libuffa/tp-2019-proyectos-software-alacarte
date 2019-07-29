@@ -7,10 +7,10 @@ import MoneyIcon from '@material-ui/icons/AttachMoney';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import ListaItemsPedido from '../../components/listaItemsPedido/ListaItemsPedido.js';
 import DialogConfirmacion from '../../components/Dialog/DialogConfirmacion';
-import { Sesion } from '../../domain/Sesion.js';
 import { ControllerDeSesion } from '../../controller/ControllerDeSesion.js';
 import '../estilosPaginas.scss';
 import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal.js';
+import DialogVolver from '../../components/Dialog/DialogVolver.js';
 
 export default class VisualizarPedidoMozo extends Component {
 
@@ -18,10 +18,13 @@ export default class VisualizarPedidoMozo extends Component {
     super(props)
     this.state = {
       timer: setInterval(() => { this.cargarPedidos(); }, 10000),
-      open: false,
       sesion: null,
-      sesionJson: null,
+      pedidos: [],
+      open: false,
       openDelete: false,
+      openDialog: false,
+      tituloDialog: "",
+      mensajeDialog: "",
       pedido: null,
       mensaje: "",
       variant: "",
@@ -38,28 +41,36 @@ export default class VisualizarPedidoMozo extends Component {
 
   cargarPedidos() {
     ServiceLocator.SesionService.getSesionActiva()
-      .then((sesionJSON) => {
-        const sesion = Sesion.fromJson(sesionJSON)
-        return sesion
-      }).then((_sesion) => {
-        this.setState({
-          pedidos: _sesion.pedidos.filter((pedido) => !pedido.cancelado),
-          sesion: _sesion,
-          idSesion: _sesion.id,
-          fechaBaja: _sesion.fechaBaja,
-          pideCuenta: _sesion.pideCuenta,
-        })
+      .then((respuesta) => {
+        if (respuesta) {
+          if (respuesta.error) {
+            this.generarMensaje(respuesta.error, "error")
+          } else {
+            this.setState({
+              pedidos: respuesta.pedidos.filter((pedido) => !pedido.cancelado),
+              sesion: respuesta,
+            })
+          }
+        } else {
+          this.generarMensaje("Error en el servidor", "error")
+        }
       })
   }
 
+  verCartaCliente = () => {
+    this.props.history.push("/carta/cliente")
+  }
+
   verDetalleMesa = () => {
-    ControllerDeSesion.cerrarSesionActiva()
-    ServiceLocator.mesaService.getMesa(this.state.sesion.idMesa).then((mesa) => {
+    if (ControllerDeSesion.getSesionActiva()) {
+      ControllerDeSesion.cerrarSesionActiva()
       this.props.history.push({
         pathname: '/detalle/mesa',
-        state: { mesa: mesa }
+        state: { mesa: this.state.sesion.idMesa }
       })
-    })
+    } else {
+      this.props.history.push("/mesas")
+    }
   }
 
   verDetalleItemPedido = (pedido) => {
@@ -69,13 +80,10 @@ export default class VisualizarPedidoMozo extends Component {
     })
   }
 
-  verCartaCliente = () => {
-    this.props.history.push("/carta/cliente")
-  }
-
   getPrecioTotal() {
-    if (this.state.pedidos.length > 0) {
-      return this.state.pedidos.map((pedido) => (!pedido.premio && (pedido.cantidad * pedido.itemCarta.precioUnitario)))
+    const { pedidos } = this.state
+    if (pedidos.length > 0) {
+      return pedidos.map((pedido) => (!pedido.premio && (pedido.cantidad * pedido.itemCarta.precioUnitario)))
         .reduce((a, b) => a + b)
     } else {
       return 0
@@ -107,39 +115,41 @@ export default class VisualizarPedidoMozo extends Component {
     }
   }
 
-  pidiendoCuenta() {
+  cuenta() {
     ServiceLocator.SesionService.pedirCuenta(ControllerDeSesion.getSesionActiva())
       .then((respuesta) => {
-        if (respuesta.status === 200) {
+        if (respuesta) {
+          if (respuesta.error) {
+            this.generarMensaje(respuesta.error, "error")
+            this.cargarPedidos()
+          } else {
+            this.generarMensaje(respuesta, "success")
+            this.cargarPedidos()
+          }
+        } else {
+          this.generarMensaje("Error en el servidor", "error")
           this.cargarPedidos()
-          this.setState({
-            pideCuenta: !this.state.pideCuenta,
-            errorMessage: ""
-          })
         }
-      }).catch(error => {
-        this.generarError(error.response.data.error)
       })
   }
 
   pedirCuenta = () => {
-    this.pidiendoCuenta()
-    this.open()
-  }
-
-  validarSesion() {
-    return this.state.pideCuenta || this.state.fechaBaja !== null
+    if (this.state.pedidos.length === 0) {
+      this.openDialog("Aviso", "Debe tener al menos un pedido para solicitar la cuenta")
+    } else {
+      if (!this.state.open) {
+        this.open()
+      } else {
+        this.cuenta()
+        this.open()
+      }
+    }
   }
 
   open = () => {
-    if (this.state.pideCuenta) {
-      this.generarError("Ya se ha pedido la cuenta")
-    } else {
-      this.setState({
-        open: !this.state.open
-      })
-      return this.state.open
-    }
+    this.setState({
+      open: !this.state.open
+    })
   }
 
   openDelete = (pedido) => {
@@ -166,16 +176,22 @@ export default class VisualizarPedidoMozo extends Component {
     })
   }
 
-  render() {
-    const { pedidos, mensaje, variant } = this.state
+  openDialog(titulo, mensaje) {
+    this.setState({
+      tituloDialog: titulo,
+      mensajeDialog: mensaje,
+      openDialog: true,
+    })
+  }
 
-    if (!pedidos) {
-      return (
-        <div className="fullWidth center">
-          <CircularProgress size={80} />
-        </div>
-      )
-    }
+  closeDialog = () => {
+    this.setState({
+      openDialog: false,
+    })
+  }
+
+  render() {
+    const { sesion, pedidos, mensaje, variant } = this.state
 
     const menuButtons = {
       firstButton: {
@@ -189,63 +205,76 @@ export default class VisualizarPedidoMozo extends Component {
         icon: (<CartIcon />)
       },
       thirdButton: {
-        onChange: this.open,
+        onChange: this.pedirCuenta,
         name: "Pedir Cuenta",
         icon: (<MoneyIcon />),
-        disabled: this.state.pideCuenta
+        disabled: (sesion ? sesion.pideCuenta : true)
       }
     }
 
-    return (
-      <div className="contenedorLista">
-        <ListaItemsPedido
-          pedidos={pedidos ? pedidos : []}
-          handlers={{ onChange: this.eliminarPedido }}
-          handlersDetalleItemPedido={{ onChange: this.verDetalleItemPedido }}
-          disabled={this.validarSesion()}
-        />
-        {pedidos.length > 0 &&
-          <Card elevation={0}>
-            <CardContent>
-              <Typography className="botonCentrado" variant="subtitle1">
-                {
-                  (this.state.pideCuenta) &&
-                  <Button color="secondary" size="small" onClick={() => this.pidiendoCuenta()}>
-                    {"Cancelar Pedido cuenta"}
-                  </Button>
-                }
-              </Typography>
-              <Typography className="precioFinal" variant="subtitle1">
-                Precio final: {new Intl.NumberFormat('en-US', {
-                  style: 'currency',
-                  currency: 'USD'
-                }).format(this.getPrecioTotal())}
-              </Typography>
-            </CardContent>
-            <CardContent>
-            </CardContent>
-          </Card>
-        }
-        {pedidos.length === 0 &&
-          <div className="full botonCentrado separadorTop">
-            <Typography variant="h4" color="textSecondary">{"No se realizaron pedidos"}</Typography>
-          </div>
-        }
-        <DialogConfirmacion
-          titulo={"Pedir Cuenta"}
-          descripcion={"¿Estas seguro que deseas pedir la cuenta?"}
-          handlers={{ onChange: this.pedirCuenta, open: this.open }}
-          open={this.state.open}
-        />
-        <DialogConfirmacion
-          titulo={"Aviso"}
-          descripcion={"¿Esta seguro que desea eliminar el pedido?"}
-          handlers={{ onChange: this.eliminarPedido, open: this.openDelete }}
-          open={this.state.openDelete}
-        />
-        <MenuInferior menuButtons={menuButtons} />
-        <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
-      </div>
-    )
+    if (!pedidos || !sesion) {
+      return (
+        <div className="fullWidth center">
+          <CircularProgress size={80} />
+          <MenuInferior menuButtons={menuButtons} />
+        </div>
+      )
+    } else {
+      return (
+        <div className="contenedorLista">
+          <ListaItemsPedido
+            pedidos={pedidos ? pedidos : []}
+            handlers={{ onChange: this.eliminarPedido }}
+            handlersDetalleItemPedido={{ onChange: this.verDetalleItemPedido }}
+            disabled={sesion.pideCuenta || sesion.fechaBaja}
+          />
+          {pedidos.length > 0 &&
+            <Card elevation={0}>
+              <CardContent>
+                <Typography className="botonCentrado" variant="subtitle1">
+                  {
+                    (sesion.pideCuenta) &&
+                    <Button color="secondary" size="small" onClick={() => this.cuenta()}>
+                      {"Cancelar Pedido cuenta"}
+                    </Button>
+                  }
+                </Typography>
+                <Typography className="precioFinal" variant="subtitle1">
+                  Precio final: {new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                  }).format(this.getPrecioTotal())}
+                </Typography>
+              </CardContent>
+            </Card>
+          }
+          {pedidos.length === 0 &&
+            <div className="full botonCentrado separadorTop">
+              <Typography variant="h4" color="textSecondary">{"No se realizaron pedidos"}</Typography>
+            </div>
+          }
+          <DialogConfirmacion
+            titulo={"Aviso"}
+            descripcion={"¿Estas seguro que deseas pedir la cuenta?"}
+            handlers={{ onChange: this.pedirCuenta, open: this.open }}
+            open={this.state.open}
+          />
+          <DialogConfirmacion
+            titulo={"Aviso"}
+            descripcion={"¿Esta seguro que desea eliminar el pedido?"}
+            handlers={{ onChange: this.eliminarPedido, open: this.openDelete }}
+            open={this.state.openDelete}
+          />
+          <DialogVolver
+            titulo={this.state.tituloDialog}
+            descripcion={this.state.mensajeDialog}
+            handlers={{ onChange: this.closeDialog }}
+            open={this.state.openDialog}
+          />
+          <MenuInferior menuButtons={menuButtons} />
+          <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
+        </div>
+      )
+    }
   }
 }

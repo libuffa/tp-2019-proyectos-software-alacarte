@@ -43,41 +43,49 @@ export default class DetalleItemCarta extends Component {
   }
 
   agregarAPedido = (cantidad, comentario) => {
-    ServiceLocator.SesionService.generarPedido({
-      "idSesion": ControllerDeSesion.getSesionActiva(),
-      "cantidad": cantidad,
-      "comentario": comentario,
-      "idItem": this.state.itemCarta.id
-    }).then(respuesta => {
-      if (respuesta) {
-        if (respuesta.error) {
-          this.generarMensaje(respuesta.error, "error")
+    if (ControllerDeSesion.getSesionActiva()) {
+      ServiceLocator.SesionService.generarPedido({
+        "idSesion": ControllerDeSesion.getSesionActiva(),
+        "cantidad": cantidad,
+        "comentario": comentario,
+        "idItem": this.state.itemCarta.id
+      }).then(respuesta => {
+        if (respuesta) {
+          if (respuesta.error) {
+            this.generarMensaje(respuesta.error, "error")
+          } else {
+            this.props.history.push(`/pedido`)
+          }
         } else {
-          this.props.history.push(`/pedido`)
+          this.generarMensaje("Error en el servidor", "error")
         }
-      } else {
-        this.generarMensaje("Error en el servidor", "error")
-      }
-    })
+      })
+    } else {
+      this.generarMensaje("Sesión inactiva", "error")
+    }
   }
 
   reclamarPremio = (cantidad, comentario) => {
-    ServiceLocator.SesionService.premio({
-      "idSesion": ControllerDeSesion.getSesionActiva(),
-      "cantidad": cantidad,
-      "comentario": comentario,
-      "idItem": this.state.itemCarta.id
-    }).then(respuesta => {
-      if (respuesta) {
-        if (respuesta.error) {
-          this.generarMensaje(respuesta.error, "error")
+    if (ControllerDeSesion.getSesionActiva()) {
+      ServiceLocator.SesionService.premio({
+        "idSesion": ControllerDeSesion.getSesionActiva(),
+        "cantidad": cantidad,
+        "comentario": comentario,
+        "idItem": this.state.itemCarta.id
+      }).then(respuesta => {
+        if (respuesta) {
+          if (respuesta.error) {
+            this.generarMensaje(respuesta.error, "error")
+          } else {
+            this.props.history.push(`/pedido`)
+          }
         } else {
-          this.props.history.push(`/pedido`)
+          this.generarMensaje("Error en el servidor", "error")
         }
-      } else {
-        this.generarMensaje("Error en el servidor", "error")
-      }
-    })
+      })
+    } else {
+      this.generarMensaje("Sesión inactiva", "error")
+    }
   }
 
   generarMensaje(mensaje, variant) {

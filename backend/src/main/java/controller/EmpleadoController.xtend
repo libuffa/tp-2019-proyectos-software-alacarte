@@ -45,7 +45,7 @@ class EmpleadoController {
 			empleado.loguearDesloguear()
 			return ok(empleado.toJson)
 		} catch (Exception e) {
-				return ok('{ "error" : "Usuario incorrecto" }')
+			return ok('{ "error" : "Usuario incorrecto" }')
 		}
 	}
 
@@ -54,14 +54,19 @@ class EmpleadoController {
 		val idEmpleado = Long.valueOf(body.getPropertyValue("idEmpleado"))
 
 		try {
-			val empleado = repoEmpleados.searchById(idEmpleado)
+			var Empleado empleado
+			try{
+				empleado = repoEmpleados.searchById(idEmpleado)
+			} catch(Exception ex) {
+				return ok('{ "error" : "Usuario incorrecto" }')
+			}
 			if (empleado === null || !empleado.logueado || empleado.baja) {
-				return ok("Usuario no logueado")
+				return ok('{ "error" : "Usuario no logueado" }')
 			}
 			empleado.loguearDesloguear()
 			return ok("Usuario cerrado correctamente")
 		} catch (Exception e) {
-			badRequest(e.message)
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 
@@ -69,13 +74,18 @@ class EmpleadoController {
 	def Result getEmpleado() {
 		try {
 			val _id = Long.valueOf(id)
-			var empleado = repoEmpleados.searchById(_id)
+			var Empleado empleado
+			try{
+				empleado = repoEmpleados.searchById(_id)
+			} catch(Exception ex) {
+				return ok('{ "error" : "Usuario inexistente" }')
+			}
 			if (empleado === null || empleado.baja) {
-				return badRequest('{ "error" : "usuario inexistente" }')
+				return ok('{ "error" : "Usuario inexistente" }')
 			}
 			return ok(empleado.toJson)
 		} catch (Exception e) {
-			badRequest(e.message)
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 

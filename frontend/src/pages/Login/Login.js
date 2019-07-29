@@ -18,6 +18,7 @@ class Login extends Component {
       mensajeUser: "",
       passError: false,
       mensajePass: "",
+      disabled: false,
     }
   }
 
@@ -25,19 +26,26 @@ class Login extends Component {
     const { usuario, pass } = this.state
     if (usuario && pass) {
       ServiceLocator.EmpleadoService.iniciarSesion({ nombreUsuario: usuario, contraseña: pass })
-        .then((respuesta) => {
+        .then(respuesta => {
           if (respuesta) {
             if (respuesta.error) {
-              if (respuesta.error.includes("Usuario")) {
+              if (respuesta.error === "Usuario logueado") {
                 this.setState({
-                  userError: true,
-                  mensajeUser: respuesta.error,
+                  disabled: true,
                 })
+                setTimeout(() => { this.setState({ disabled: false }) }, 5020)
               } else {
-                this.setState({
-                  passError: true,
-                  mensajePass: respuesta.error,
-                })
+                if (respuesta.error.includes("Usuario")) {
+                  this.setState({
+                    userError: true,
+                    mensajeUser: respuesta.error,
+                  })
+                } else {
+                  this.setState({
+                    passError: true,
+                    mensajePass: respuesta.error,
+                  })
+                }
               }
               this.generarMensaje(respuesta.error)
             } else {
@@ -83,7 +91,7 @@ class Login extends Component {
   }
 
   render() {
-    const { mensaje, userError, passError, mensajeUser, mensajePass } = this.state
+    const { mensaje, userError, passError, mensajeUser, mensajePass, disabled } = this.state
     const { history } = this.props
 
     return (
@@ -118,7 +126,7 @@ class Login extends Component {
           help={passError ? mensajePass : ""}
         />
         <br />
-        <Button fullWidth variant="contained" color="primary" onClick={this.handleEnviar}>
+        <Button fullWidth variant="contained" color="primary" onClick={this.handleEnviar} disabled={disabled}>
           <Typography variant="overline">
             ingresar
           </Typography>

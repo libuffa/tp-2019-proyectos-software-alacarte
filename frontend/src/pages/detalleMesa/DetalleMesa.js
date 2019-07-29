@@ -14,7 +14,9 @@ export default class DetalleMesa extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      mesa: this.props.location.state ? this.props.location.state.mesa : null,
+      idMesa: this.props.location.state ? this.props.location.state.mesa : null,
+      mesa: null,
+      timer: setInterval(() => { this.cargarMesa() }, 5000),
       mozo: null,
       mensaje: "",
       variant: "",
@@ -25,8 +27,8 @@ export default class DetalleMesa extends Component {
   }
 
   componentDidMount() {
-    if (this.props.location.state && this.state.mesa.sesion) {
-      this.cargarMozo()
+    if (this.props.location.state) {
+      this.cargarMesa()
     }
     ServiceLocator.EmpleadoService.getEmpleado()
       .then((resultado) => {
@@ -40,6 +42,10 @@ export default class DetalleMesa extends Component {
       })
   }
 
+  componentWillUnmount() {
+    clearInterval(this.state.timer)
+  }
+
   cargarMozo() {
     ServiceLocator.EmpleadoService.getEmpleadoById(this.state.mesa.sesion.idMozo)
       .then((resultado) => {
@@ -50,14 +56,27 @@ export default class DetalleMesa extends Component {
   }
 
   cargarMesa() {
-    ServiceLocator.mesaService.getMesa(this.state.mesa.id)
+    ServiceLocator.mesaService.getMesa(this.state.idMesa)
       .then((resultado) => {
-        this.setState({
-          mesa: resultado,
-          mozo: null,
-        })
-        if (this.state.mesa.sesion) {
-          this.cargarMozo()
+        if (resultado) {
+          if (resultado.sesion) {
+            ControllerDeSesion.setSesionActiva(resultado.sesion.id)
+            if (resultado.sesion.idMozo) {
+              this.setState({
+                mesa: resultado,
+              })
+            }
+          } else {
+            this.setState({
+              mesa: resultado,
+              mozo: null,
+            })
+          }
+          if (this.state.mesa.sesion) {
+            this.cargarMozo()
+          }
+        } else {
+          this.generarMensaje("Error en el servidor", "error")
         }
       })
   }
@@ -70,16 +89,19 @@ export default class DetalleMesa extends Component {
 
   verPedido = (idSesion) => {
     ControllerDeSesion.setSesionActiva(idSesion)
-    this.props.history.push({
-      pathname: '/pedido',
-      state: { mesa: this.state.mesa }
-    })
+    if (ControllerDeSesion.getSesionActiva()) {
+      this.props.history.push({
+        pathname: '/pedido',
+        state: { mesa: this.state.mesa }
+      })
+    }
   }
 
   mostrarQR = () => {
+    ControllerDeSesion.cerrarSesionActiva()
     this.props.history.push({
       pathname: '/mostrar/qr',
-      state: { mesa: this.state.mesa }
+      state: { mesa: this.state.idMesa }
     })
   }
 
@@ -113,6 +135,7 @@ export default class DetalleMesa extends Component {
     if (!this.state.openDelete) {
       this.openDelete()
     } else {
+      ControllerDeSesion.cerrarSesionActiva()
       ServiceLocator.mesaService.cambiarEstado({
         "idMozo": ControllerDeEmpleado.getSesionActiva(),
         "idMesa": this.state.mesa.id

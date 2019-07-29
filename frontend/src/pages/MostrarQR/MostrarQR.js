@@ -4,28 +4,42 @@ import MenuInferior from '../../components/menuInferior/MenuInferior';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import '../estilosPaginas.scss';
 import QRCode from 'qrcode.react';
+import { ServiceLocator } from '../../services/ServiceLocator';
 
 export default class MostrarQR extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      mesa: null
+      idMesa: null,
+      mesa: null,
     }
   }
 
   componentDidMount() {
     if (this.props.location.state) {
       this.setState({
-        mesa: this.props.location.state.mesa,
+        idMesa: this.props.location.state.mesa,
       })
     }
+    this.cargarMesa()
+  }
+
+  cargarMesa() {
+    ServiceLocator.mesaService.getMesa(this.props.location.state.mesa)
+      .then((resultado) => {
+        if (resultado) {
+          this.setState({
+            mesa: resultado,
+          })
+        }
+      })
   }
 
   verDetalleMesa = () => {
     this.props.history.push({
       pathname: '/detalle/mesa',
-      state: { mesa: this.state.mesa }
+      state: { mesa: this.state.idMesa }
     })
   }
 
@@ -39,7 +53,7 @@ export default class MostrarQR extends Component {
         </div>
       )
     } else {
-      const sesion = `${this.props.location.state.mesa.sesion.id}`
+      const sesion = `${this.state.mesa.sesion.id}`
 
       const menuButtons = {
         firstButton: {
@@ -62,7 +76,7 @@ export default class MostrarQR extends Component {
             </div>
             <br />
             <Typography align="center" variant="h5">
-              {"Sesion: " + this.props.location.state.mesa.sesion.id}
+              {"Sesion: " + this.state.mesa.sesion.id}
             </Typography>
           </Container>
           <MenuInferior menuButtons={menuButtons} />

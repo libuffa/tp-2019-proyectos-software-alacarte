@@ -3,8 +3,9 @@ import { ServiceLocator } from "../../services/ServiceLocator.js";
 import { Typography, Container, Grid, Button } from "@material-ui/core";
 import QrReader from 'react-qr-reader';
 import '../estilosPaginas.scss';
-import InputSesion from "../../components/inputSesion/InputSesion.js";
 import SnackBarPersonal from "../../components/snackBarPersonal/SnackBarPersonal.js";
+import PersonIcon from '@material-ui/icons/PersonPin';
+import InputEmpleado from "../../components/inputEmpleado/InputEmpleado.js";
 
 
 export default class EscanearQR extends Component {
@@ -31,13 +32,23 @@ export default class EscanearQR extends Component {
     if (sesion !== "") {
       ServiceLocator.SesionService.iniciarSesion({ idSesion: sesion })
         .then(respuesta => {
-          if (respuesta === "True") {
-            this.props.iniciarSesion(sesion)
+          if (respuesta) {
+            if (respuesta.error) {
+              this.generarError(respuesta.error)
+            } else {
+              this.props.iniciarSesion(sesion)
+            }
           } else {
-            this.generarError(respuesta)
+            this.generarError("Error en el servidor")
           }
         })
     }
+  }
+
+  modificarAtributo = (atributo, valor) => {
+    this.setState({
+      [atributo]: valor,
+    })
   }
 
   escanear = () => {
@@ -82,52 +93,70 @@ export default class EscanearQR extends Component {
   }
 
   render() {
-    const { errorMessage } = this.state;
+    const { errorMessage, sesion } = this.state;
 
     return (
       <Container component="main" maxWidth="xs">
+        <div className="contenedorTitulo">
+          <Typography variant="h3" color="textSecondary">
+            <PersonIcon fontSize="large"></PersonIcon>
+          </Typography>
+          <Typography variant="h5" color="textSecondary">
+            {"Inicio À La Carte"}
+          </Typography>
+        </div>
+        <div className="contenedorTitulo">
+          <Typography variant="h6" color="textSecondary">
+            {"Escaneá el código y empezá a pedir"}
+          </Typography>
+        </div>
         <br />
-        <Typography align='center' variant="h5">
-          {"¡Escaneá el código y empezá a pedir!"}
-        </Typography>
-        <br />
-        <Container>
-          {!this.state.escanear && <Button
-            fullWidth
-            color="primary"
-            className="botonAlto"
-            variant="contained"
-            onClick={this.escanear}
-          >
+        {!this.state.escanear && <Button
+          fullWidth
+          color="primary"
+          variant="contained"
+          onClick={this.escanear}
+        >
+          <Typography variant="overline">
             Escanear
-          </Button>}
+          </Typography>
+        </Button>}
+        <Container>
           {this.state.escanear && <QrReader
             delay={this.state.delay}
             onError={this.handleError}
             onScan={this.handleScan}
           />}
         </Container>
-        <br />
-        <Typography align='center' variant="h5">
-          {"O ingresá el número de sesion"}
-        </Typography>
+        <div className="contenedorTitulo">
+          <Typography variant="h6" color="textSecondary">
+            {"O ingresá el número de sesión"}
+          </Typography>
+        </div>
         <br />
         <Grid container>
-          <Grid item xs={7}>
-            <InputSesion handlerSesion={{ onChange: this.modificarSesion }} />
+          <Grid item xs={12}>
+            <InputEmpleado
+              previo={""}
+              atributo={"sesion"}
+              disabled={false}
+              handlers={{ onChange: this.modificarAtributo }}
+              label={"Sesión"}
+              type={"number"}
+              maxLength={15}
+            />
           </Grid>
-          <Grid item xs={1}>
-
-          </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={12}>
             <Button
-              onClick={this.handleEnviar}
-              variant="contained"
-              color="primary"
               fullWidth
-              className="botonSesion"
+              color="primary"
+              variant="contained"
+              onClick={this.handleEnviar}
+              disabled={sesion === ""}
             >
-              INGRESAR
+              <Typography variant="overline">
+                Ingresar
+              </Typography>
             </Button>
           </Grid>
         </Grid>

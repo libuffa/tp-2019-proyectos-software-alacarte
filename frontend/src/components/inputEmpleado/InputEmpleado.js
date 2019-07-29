@@ -21,9 +21,18 @@ export default function InputEmpleado(props) {
   const [value, setValue] = React.useState(previo);
 
   function handleChange(event) {
-    if (event.target.value.length <= maxLength) {
-      setValue(event.target.value);
-      handlers.onChange(atributo, event.target.value)
+    if (type === "number") {
+      if (event.target.value.length <= maxLength) {
+        if (event.target.value >= 0) {
+          setValue(event.target.value);
+          handlers.onChange(atributo, event.target.value)
+        }
+      }
+    } else {
+      if (event.target.value.length <= maxLength) {
+        setValue(event.target.value);
+        handlers.onChange(atributo, event.target.value)
+      }
     }
   }
 

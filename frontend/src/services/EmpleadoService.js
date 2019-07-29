@@ -1,14 +1,12 @@
-import axios from "axios"
 import { ControllerDeEmpleado } from "../controller/ControllerDeEmpleado";
+import axios from "axios"
 
 const client = axios.create()
 
 export class EmpleadoService {
 
   iniciarSesion(data) {
-    return client.post('/empleado/iniciarSesion', data, { timeout: 10000 })
-      .then(res => { return res.data })
-      .catch(error => { console.error({ error }) })
+    return client.post('/empleado/iniciarSesion', data).then(res => { return res.data })
   }
 
   cerrarSesion(data) {

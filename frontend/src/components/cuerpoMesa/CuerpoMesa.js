@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { Grid, Button } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
+import { ControllerDeSesion } from '../../controller/ControllerDeSesion';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,6 +36,11 @@ const useStyles = makeStyles(theme => ({
 export default function CuerpoMesa(props) {
   const { mesa, mozo, verPedido, mostrarQR, sesionMesa, entregarPedido } = props;
   const classes = useStyles();
+
+  function verMesa(idSesion) {
+    ControllerDeSesion.setSesionActiva(idSesion)
+    verPedido.onChange(idSesion)
+  }
 
   return (
     <div>
@@ -87,7 +93,7 @@ export default function CuerpoMesa(props) {
             <div className="divider" />
           </Grid>
           <Grid item xs={12}>
-            <Button onClick={() => verPedido.onChange(mesa.sesion.id)} className={classes.boton} disabled={mesa.sesion ? false : true} variant="contained" color="primary">
+            <Button onClick={() => { verMesa(mesa.sesion.id) }} className={classes.boton} disabled={mesa.sesion ? false : true} variant="contained" color="primary">
               <Typography color="inherit" variant="h6">
                 {"Ver pedido"}
               </Typography>
