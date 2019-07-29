@@ -51,17 +51,14 @@ export default function ListaItemsPedido(props) {
                 secondary={"Cantidad: " + pedido.cantidad}
               />
               <ListItemText
-                secondary={
-                  <Typography
-                    color="textSecondary"
-                    align="right"
-                    className={classes.estado}
-                  >
-                    {pedido.estado.replace('_', ' ')}
-                  </Typography>
-                }
+                secondary={<div className="fondoEstado"></div>}
               />
               <ListItemSecondaryAction>
+                <IconButton edge="end" disabled={true}>
+                  <Typography color="textSecondary">
+                    {pedido.estado.replace('_', ' ')}
+                  </Typography>
+                </IconButton>
                 <IconButton disabled={validarBajaPedido(pedido)} edge="end" aria-label="Comments" onClick={() => handlers.onChange(pedido)}>
                   <DeleteIcon />
                 </IconButton>

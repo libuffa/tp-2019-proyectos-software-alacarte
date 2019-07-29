@@ -350,7 +350,7 @@ export default class DetalleEmpleado extends Component {
               <SelectorPuesto
                 previo={tipoEmpleado}
                 atributo={"tipoEmpleado"}
-                disabled={disabled}
+                disabled={disabled || empleado.logueado}
                 handlers={{ onChange: this.modificarAtributo }}
                 label={"Puesto"}
               />

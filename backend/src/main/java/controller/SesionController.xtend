@@ -13,6 +13,7 @@ import org.uqbar.xtrest.json.JSONUtils
 import repository.ItemCartaRepository
 import repository.SesionRepository
 import domain.Sesion
+import domain.ItemCarta
 
 @Controller
 @Accessors
@@ -50,19 +51,31 @@ class SesionController {
 		var cantidad = Integer.valueOf(body.getPropertyValue("cantidad"))
 		
 		try{
-			val sesion = repositorioSesion.searchById(idSesion)
-			if(sesion.fechaBaja === null && !sesion.pideCuenta){
-				val itemCarta = carta.searchById(idItem)
-				if(itemCarta.habilitado){
-					sesion.pedirItem(itemCarta, cantidad, comentario, false)
-					return ok("El plato se agrego correctamente")
-				}
-					return ok(' { "error" : "El plato no se encuentra disponible" } ')
-			} else {
-				return ok(' { "error" : "La sesion expiro" } ')
+			var Sesion sesion
+			var ItemCarta itemCarta
+			try {
+				sesion = repositorioSesion.searchById(idSesion)
+			} catch(Exception ex) {
+				return ok(' { "error" : "La sesión expiro" } ')
 			}
+			if (sesion.fechaBaja !== null) {
+				return ok(' { "error" : "La sesión expiro" } ')
+			}
+			if (sesion.pideCuenta) {
+				return ok(' { "error" : "Cancelar pedido de cuenta" } ')
+			}
+			try {
+				itemCarta = carta.searchById(idItem)
+			} catch(Exception exc) {
+				return ok(' { "error" : "El plato no se encuentra disponible" } ')
+			}
+			if(!itemCarta.habilitado){
+				return ok(' { "error" : "El plato no se encuentra disponible" } ')
+			}
+			sesion.pedirItem(itemCarta, cantidad, comentario, false)
+			return ok("El plato se agrego correctamente")
 		}catch(Exception e) {
-			return ok(' { "error" : "La sesion no existe o esta inactiva" } ')
+			return ok(' { "error" : "Error en el servidor" } ')
 		}
 	}
 	
@@ -73,23 +86,37 @@ class SesionController {
 		var comentario = body.getPropertyValue("comentario")
 		
 		try{
-			val sesion = repositorioSesion.searchById(idSesion)
-			if(sesion.fechaBaja === null && !sesion.pideCuenta){
-				val itemCarta = carta.searchById(idItem)
-				if(sesion.pedidosActivos.size() > 0) {
-					if(itemCarta.habilitado){
-						sesion.pedirItem(itemCarta, 1, comentario, true)
-						return ok("Premio agregado correctamente")
-					}
-					return ok(' { "error" : "El plato no se encuentra disponible" } ')
-				} else {
-					return ok(' { "error" : "Debe tener al menos un pedido activo" } ')
-				}
-			} else {
-				return ok(' { "error" : "La sesion expiro" } ')
+			var Sesion sesion
+			var ItemCarta itemCarta
+			try {
+				sesion = repositorioSesion.searchById(idSesion)
+			} catch(Exception ex) {
+				return ok(' { "error" : "La sesión expiro" } ')
 			}
+			if (sesion.fechaBaja !== null) {
+				return ok(' { "error" : "La sesión expiro" } ')
+			}
+			if (sesion.pideCuenta) {
+				return ok(' { "error" : "Cancelar pedido de cuenta" } ')
+			}
+			try {
+				itemCarta = carta.searchById(idItem)
+			} catch(Exception exc) {
+				return ok(' { "error" : "El plato no se encuentra disponible" } ')
+			}
+			if(!itemCarta.habilitado){
+				return ok(' { "error" : "El plato no se encuentra disponible" } ')
+			}
+			if(sesion.pedidosActivos.size() <= 0) {
+				return ok(' { "error" : "Debe tener un pedido activo" } ')
+			}
+			if(!sesion.ganoPremio) {
+				return ok(' { "error" : "El premio ya fue reclamado" } ')
+			}
+			sesion.pedirItem(itemCarta, 1, comentario, true)
+			return ok("Premio agregado correctamente")
 		}catch(Exception e) {
-			return ok(' { "error" : "La sesion no existe o esta inactiva" } ')
+			return ok(' { "error" : "Error en el servidor" } ')
 		}
 	}
 	

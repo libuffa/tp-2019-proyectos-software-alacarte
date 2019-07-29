@@ -166,11 +166,11 @@ class App extends Component {
               this.cerrarSesionEmpleado()
             } else {
               if (respuesta.logueado) {
-                if (!this.state.empleado) {
+                if (!this.state.empleado || (this.state.empleado.tipoEmpleado !== respuesta.tipoEmpleado)) {
                   this.setState({
                     empleado: respuesta,
                   })
-                  if (!this.state.opcionesMenu) {
+                  if (!this.state.opcionesMenu || (this.state.empleado.tipoEmpleado !== respuesta.tipoEmpleado)) {
                     this.cargarOpcionesMenu()
                   }
                 }
