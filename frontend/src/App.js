@@ -29,6 +29,7 @@ import InstruccionesJuego from './pages/instruccionesJuego/InstruccionesJuego';
 import Minijuego from './pages/minijuego/Minijuego';
 import RecuperarContraseña from './pages/RecuperarContraseña/RecuperarContraseña';
 import SnackBarPersonal from './components/snackBarPersonal/SnackBarPersonal';
+import DetalleItemCartaAdmin from './pages/detalleItemCartaAdmin/DetalleItemCartaAdmin';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -45,6 +46,7 @@ function RouterPrincipal(props) {
           {(empleado.tipoEmpleado === "Mozo" || empleado.tipoEmpleado === "Administrador") && <Route path="/detalle/mesa" exact component={DetalleMesa} />}
           {(empleado.tipoEmpleado === "Mozo" || empleado.tipoEmpleado === "Administrador") && <Route path="/carta/cliente" exact component={VisualizarCarta} />}
           <Route path="/detalle/item/carta/empleado" exact component={DetalleItemCartaEmpleado} />
+          {empleado.tipoEmpleado === "Administrador" && <Route path="/detalle/item/carta/admin" exact component={DetalleItemCartaAdmin} />}
           {(empleado.tipoEmpleado === "Mozo" || empleado.tipoEmpleado === "Administrador") && <Route path="/detalle/item/pedido" exact component={DetalleItemPedido} />}
           {empleado.tipoEmpleado === "Cocinero" && <Route path="/detalle/item/pedido/cocina" exact component={DetalleItemPedidoCocina} />}
           {(empleado.tipoEmpleado === "Mozo" || empleado.tipoEmpleado === "Administrador") && <Route path="/detalle/item/carta" exact component={DetalleItemCarta} />}

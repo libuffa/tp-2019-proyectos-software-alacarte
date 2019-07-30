@@ -11,6 +11,7 @@ import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import org.eclipse.xtend.lib.annotations.Accessors
+import repository.ItemCartaRepository
 
 @Entity
 @Accessors
@@ -37,16 +38,25 @@ class ItemCarta {
 	Double precioUnitario
 
 	@Column
-	Boolean habilitado
+	Boolean habilitado = true
 	
 	@Column
 	Boolean esPremio = false
+	
+	@Column
+	Boolean baja = false
 
 	@ElementCollection(fetch=FetchType.EAGER)
 	List<String> imagenes = new ArrayList<String>();
 	
+	def darDeBaja() {
+		this.baja = true
+		ItemCartaRepository.instance.update(this)
+	}
+	
 	def cambiarEstado(){
 		habilitado = !habilitado
+		ItemCartaRepository.instance.update(this)
 	}
 	
 	def noEsBebida() {

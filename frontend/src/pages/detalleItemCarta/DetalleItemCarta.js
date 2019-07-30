@@ -35,7 +35,7 @@ export default class DetalleItemCarta extends Component {
   }
 
   verCarta = () => {
-    this.props.history.push('/carta')
+    this.props.history.push('/carta/cliente')
   }
 
   verPedido = () => {

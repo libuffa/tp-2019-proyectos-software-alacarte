@@ -50,9 +50,7 @@ export default function ListaItemsPedido(props) {
                 primary={pedido.itemCarta.titulo}
                 secondary={"Cantidad: " + pedido.cantidad}
               />
-              <ListItemText
-                secondary={<div className="fondoEstado"></div>}
-              />
+              <div className="fondoEstado"></div>
               <ListItemSecondaryAction>
                 <IconButton edge="end" disabled={true}>
                   <Typography color="textSecondary">

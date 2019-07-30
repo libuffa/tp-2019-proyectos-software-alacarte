@@ -5,6 +5,7 @@ import ListaItemsEmpleado from "../../components/listaItemsEmpleado/ListaItemsEm
 import MenuInferior from '../../components/menuInferior/MenuInferior.js';
 import Menu from '@material-ui/icons/Menu';
 import { CircularProgress } from '@material-ui/core';
+import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal.js';
 
 export default class VisualizarCartaEmpleado extends Component {
   constructor(props) {
@@ -14,12 +15,16 @@ export default class VisualizarCartaEmpleado extends Component {
       selectedItem: null,
       categorias: null,
       categoria: 'Entrada',
+      empleado: null,
+      mensaje: "",
+      variant: "",
     }
   }
 
   componentDidMount() {
     this.cargarCarta(this.state.categoria)
     this.cargarCategorias()
+    this.cargarEmpleado()
   }
 
   cargarCarta(categoria) {
@@ -42,6 +47,23 @@ export default class VisualizarCartaEmpleado extends Component {
       })
   }
 
+  cargarEmpleado() {
+    ServiceLocator.EmpleadoService.getEmpleado()
+      .then(respuesta => {
+        if (respuesta) {
+          if (respuesta.error) {
+            this.generarMensaje(respuesta.error, "error")
+          } else {
+            this.setState({
+              empleado: respuesta
+            })
+          }
+        } else {
+          this.generarMensaje("Error en el servidor", "error")
+        }
+      })
+  }
+
   subCategoriasCarta() {
     var subCategoriasMapeadoas = this.state.carta.map((itemCarta) => { return itemCarta.subCategoria })
     var subCategorias = new Set(subCategoriasMapeadoas)
@@ -55,10 +77,17 @@ export default class VisualizarCartaEmpleado extends Component {
   }
 
   seleccionItemCarta = (itemCarta) => {
-    this.props.history.push({
-      pathname: '/detalle/item/carta/empleado',
-      state: { itemCarta: itemCarta }
-    })
+    if (this.state.empleado.tipoEmpleado === "Administrador") {
+      this.props.history.push({
+        pathname: '/detalle/item/carta/admin',
+        state: { idItemCarta: itemCarta.id }
+      })
+    } else {
+      this.props.history.push({
+        pathname: '/detalle/item/carta/empleado',
+        state: { itemCarta: itemCarta }
+      })
+    }
   }
 
   cambiarEstadoItemCarta = (itemCartaId) => {
@@ -74,8 +103,25 @@ export default class VisualizarCartaEmpleado extends Component {
     this.props.history.push('/menu/empleado')
   }
 
+  generarMensaje(mensaje, variant) {
+    this.setState({
+      mensaje,
+      variant
+    })
+  }
+
+  snackbarOpen() {
+    return this.state.mensaje !== ""
+  }
+
+  snackbarClose = () => {
+    this.setState({
+      mensaje: ""
+    })
+  }
+
   render() {
-    const { carta } = this.state
+    const { carta, mensaje, variant } = this.state
     var { categorias } = this.state
 
     const menuButtons = {
@@ -90,20 +136,23 @@ export default class VisualizarCartaEmpleado extends Component {
       return (
         <div className="fullWidth center">
           <CircularProgress size={80} />
+          <MenuInferior menuButtons={menuButtons} />
+          <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
         </div>
       )
     } else {
       categorias = categorias.map((categoria) => categoria.replace('_', ' '))
-    }
 
-    return (
-      <div>
-        <div className="contenedorLista">
-          <MenuSuperior data={categorias} handlers={{ onChange: this.seleccionEnMenuSuperior }}></MenuSuperior>
-          <ListaItemsEmpleado data={carta} subData={this.subCategoriasCarta()} handlers={{ onChange: this.seleccionItemCarta }} disableFunction={{ onChange: this.cambiarEstadoItemCarta }}></ListaItemsEmpleado>
+      return (
+        <div>
+          <div className="contenedorLista">
+            <MenuSuperior data={categorias} handlers={{ onChange: this.seleccionEnMenuSuperior }}></MenuSuperior>
+            <ListaItemsEmpleado data={carta} subData={this.subCategoriasCarta()} handlers={{ onChange: this.seleccionItemCarta }} disableFunction={{ onChange: this.cambiarEstadoItemCarta }}></ListaItemsEmpleado>
+          </div>
+          <MenuInferior menuButtons={menuButtons} />
+          <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
         </div>
-        <MenuInferior menuButtons={menuButtons} />
-      </div>
-    )
+      )
+    }
   }
 }

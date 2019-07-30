@@ -11,6 +11,11 @@ import org.uqbar.xtrest.api.annotation.Post
 import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.json.JSONUtils
 import repository.ItemCartaRepository
+import java.util.ArrayList
+import java.util.List
+import java.util.Set
+import java.util.HashSet
+import com.fasterxml.jackson.databind.ObjectMapper
 
 @Controller
 @Accessors
@@ -23,10 +28,15 @@ class CartaController {
 	def Result obtenerCarta() {
 		try {
 			val _categoria = Categoria.valueOf(categoria)
-			val items = carta.searchByCategoria(_categoria)
+			var List<ItemCarta> items = new ArrayList()
+			try {
+				items = carta.searchByCategoria(_categoria).filter(item | !item.baja).toList
+			} catch(Exception ex) {
+				return ok('{ "error" : "Imposible cargar categoría" }')
+			}
 			return ok(items.toJson)
 		} catch(Exception e) {
-			badRequest(e.message)
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 	
@@ -35,31 +45,61 @@ class CartaController {
 		try {
 			return ok(Categoria.values.toJson)
 		} catch(Exception e) {
-			badRequest(e.message)
+			return ok('{ "error" : "Error en el servidor" }')
+		}
+	}
+	
+	@Get("/carta/subCategorias")
+	def Result obtenerSubCategorias() {
+		try {
+			var List<ItemCarta> items = new ArrayList()
+			try {
+				items = carta.allInstances().toList
+			} catch(Exception ex) {
+				return ok('{ "error" : "Error en el servidor" }')
+			}
+			var List<String> subCategoriasCrudas = items.map(item | item.subCategoria)
+			val Set<String> subCategorias = new HashSet()
+			subCategoriasCrudas.forEach(categoria | subCategorias.add(categoria))
+			return ok(subCategorias.toList.toJson)
+		} catch(Exception e) {
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 	
 	@Get("/carta/:id/obtenerPlato")
 	def Result obteberPlato() {
-		var platoSolicitado = carta.searchById(new Long(id))
 		try {
-			return ok(platoSolicitado.toJson)
+			var ItemCarta itemCarta
+			try {
+				itemCarta = carta.searchById(new Long(id))
+			} catch(Exception ex) {
+				return ok('{ "error" : "Plato no encontrado" }')
+			}
+			if (itemCarta.baja) {
+				return ok('{ "error" : "Plato no encontrado" }')
+			}
+			return ok(itemCarta.toJson)
 		} catch(Exception e) {
-			badRequest(e.message)
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 
 	@Post("/carta/:id/cambiarEstadoPlato")
 	def Result cambiarEstadoPlato() {
-		var platoAModificar = carta.searchById(new Long(id))
 		try {
-			platoAModificar.cambiarEstado()
-			try{
-				carta.update(platoAModificar)
-			} catch(Exception e) {
-				return ok('{ "error" : "Error en el servidor" }')
+			var ItemCarta itemCarta
+			try {
+				itemCarta = carta.searchById(new Long(id))
+			} catch(Exception ex) {
+				return ok('{ "error" : "Plato no encontrado" }')
 			}
-			if(platoAModificar.habilitado){
+			try {
+				itemCarta.cambiarEstado()
+			} catch(Exception exs) {
+				return ok('{ "error" : "Plato no encontrado" }')
+			}
+			if(itemCarta.habilitado){
 				return ok("Plato habilitado correctamente")
 			} else {
 				return ok("Plato deshabilitado correctamente")
@@ -69,36 +109,77 @@ class CartaController {
 		}
 	}
 	
-	@Put("/carta/crearPlato")
+	@Put("/carta/amItemCarta")
 	def Result crearPlato(@Body String body) {
-		var nuevoPlato = body.fromJson(ItemCarta)
+		val idItemCarta = Long.valueOf(body.getPropertyValue("id"))
+		val tituloE = String.valueOf(body.getPropertyValue("titulo"))
+		val descripcionE = String.valueOf(body.getPropertyValue("descripcion"))
+		val categoriaE = String.valueOf(body.getPropertyValue("categoria"))
+		val subCategoriaE = String.valueOf(body.getPropertyValue("subCategoria"))
+		val precioUnitarioE = Double.valueOf(body.getPropertyValue("precioUnitario"))
+		val List<String> imagenesE = new ArrayList()
+		val imagen1 = String.valueOf(body.getPropertyValue("imagen1"))
+		val imagen2 = String.valueOf(body.getPropertyValue("imagen2"))
+		val imagen3 = String.valueOf(body.getPropertyValue("imagen3"))
+		val imagen4 = String.valueOf(body.getPropertyValue("imagen4"))
+		val imagen5 = String.valueOf(body.getPropertyValue("imagen5"))
+	
+		if (imagen1 !== "") {
+			imagenesE.add(imagen1)
+		}	
+		if (imagen2 !== "") {
+			imagenesE.add(imagen2)
+		}
+		if (imagen3 !== "") {
+			imagenesE.add(imagen3)
+		}
+		if (imagen4 !== "") {
+			imagenesE.add(imagen4)
+		}
+		if (imagen5 !== "") {
+			imagenesE.add(imagen5)
+		}
 		try {
-			carta.create(nuevoPlato)
-			return ok()
+			var ItemCarta itemCarta
+			try {
+				itemCarta = carta.searchById(new Long(idItemCarta))
+			} catch (Exception e) {
+				itemCarta = new ItemCarta
+			}
+			if (itemCarta.baja) {
+				return ok('{ "error" : "Plato no encontrado" }')
+			}
+			itemCarta.titulo = tituloE
+			itemCarta.descripcion = descripcionE
+			itemCarta.categoria = Categoria.valueOf(categoriaE)
+			itemCarta.subCategoria = subCategoriaE
+			itemCarta.precioUnitario = precioUnitarioE
+			itemCarta.imagenes = imagenesE
+			if (itemCarta.id === null) {
+				carta.create(itemCarta)
+				return ok("Plato creado correctamente")
+			} else {
+				carta.update(itemCarta)
+				return ok("Plato actualizado correctamente")
+			}
 		} catch(Exception e) {
-			badRequest(e.message)
+			return ok('{ "error" : "Error en el servidor" }')
 		} 
 	}
 	
-	@Post("/carta/:id/modificarPlato")
-	def Result modificarPlato(@Body String body) {
-		var platoModificado = body.fromJson(ItemCarta)
-		try {
-			carta.update(platoModificado)
-			return ok()
-		} catch(Exception e) {
-			badRequest(e.message)
-		} 
-	}
-	
-	@Put("/carta/:id/eliminarPlato")
+	@Post("/carta/:id/eliminarPlato")
 	def Result eliminarPlato() {
-		var platoAEliminar = carta.searchById(new Long(id))
 		try {
-			carta.delete(platoAEliminar)
-			return ok()
+			var ItemCarta itemCarta
+			try {
+				itemCarta = carta.searchById(new Long(id))
+			} catch(Exception ex) {
+				return ok('{ "error" : "Plato no encontrado" }')
+			} 
+			itemCarta.darDeBaja()
+			return ok("Plato eliminado")
 		} catch(Exception e) {
-			badRequest(e.message)
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 	

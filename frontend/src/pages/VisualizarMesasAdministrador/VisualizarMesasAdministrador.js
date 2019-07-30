@@ -46,7 +46,7 @@ export default class VisualizarMesasAdministrador extends Component {
   verDetalleMesa = (mesa) => {
     this.props.history.push({
       pathname: '/detalle/mesa',
-      state: { mesa: mesa }
+      state: { mesa: mesa.id }
     })
   }
 

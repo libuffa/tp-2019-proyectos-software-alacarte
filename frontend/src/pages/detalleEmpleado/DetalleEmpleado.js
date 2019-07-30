@@ -15,6 +15,7 @@ export default class DetalleEmpleado extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      empleadoActivo: null,
       open: false,
       openConfirmation: false,
       openConfirmationDelete: false,
@@ -48,10 +49,24 @@ export default class DetalleEmpleado extends Component {
     if (this.state.idEmpleado) {
       this.cargarEmpleado(this.state.idEmpleado)
     }
+    this.cargarEmpleadoActivo()
   }
 
-  componentWillUnmount() {
-    this.volver()
+  cargarEmpleadoActivo() {
+    ServiceLocator.EmpleadoService.getEmpleado()
+      .then(respuesta => {
+        if (respuesta) {
+          if (respuesta.error) {
+            this.generarMensaje(respuesta.error, "error")
+          } else {
+            this.setState({
+              empleadoActivo: respuesta
+            })
+          }
+        } else {
+          this.generarMensaje("Error en el servidor", "error")
+        }
+      })
   }
 
   cargarEmpleado(idEmpleado) {
@@ -268,164 +283,166 @@ export default class DetalleEmpleado extends Component {
   }
 
   render() {
-    const { mensajeMail, mailErroneo, mensajeUsuario, usuarioErroneo, idEmpleado, disabled, modificado, empleado, open, mensaje, variant, mensajeDialog, tituloDialog, nombreUsuario, contraseña, email, nombre, apellido, tipoEmpleado, confirmarContraseña, logueado } = this.state;
+    const { empleadoActivo, mensajeMail, mailErroneo, mensajeUsuario, usuarioErroneo, idEmpleado, disabled, modificado, empleado, open, mensaje, variant, mensajeDialog, tituloDialog, nombreUsuario, contraseña, email, nombre, apellido, tipoEmpleado, confirmarContraseña, logueado } = this.state;
 
-    if (!empleado && idEmpleado) {
+
+    if ((!empleado && idEmpleado) || (empleadoActivo ? (empleadoActivo.tipoEmpleado !== "Administrador" && !idEmpleado) : true)) {
       return (
         <div className="fullWidth center">
           <CircularProgress size={80} />
         </div>
       )
-    }
-
-    return (
-      <div>
-        <div className="dividerLista" />
-        <ListSubheader disableSticky color="inherit">
-          <ListItemText primary={"Empleado"} />
-        </ListSubheader>
-        <div className="dividerLista" />
-        <Paper elevation={0} square className="detalleEmpleado">
-          <Grid container spacing={0}>
-            <Grid item xs={10} >
-              <Typography variant="h4">
-                {empleado ? (empleado.nombre + " " + empleado.apellido) : "Nuevo Empleado"}
-              </Typography>
-            </Grid>
-            <Grid item xs={2} className="botonEliminarContainer">
-              {empleado && idEmpleado !== ControllerDeEmpleado.getSesionActiva() &&
-                <IconButton disabled={logueado || disabled} onClick={this.eliminarEmpleado} edge="end" >
-                  <DeleteIcon />
-                </IconButton>}
-            </Grid>
-            <Grid item xs={12} >
-              <Typography variant="h5" color="textSecondary">
-                {empleado ? empleado.nombreUsuario : "Registro"}
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <div className="divider" />
-            </Grid>
-            <Grid item xs={12} >
-              {empleado && idEmpleado !== ControllerDeEmpleado.getSesionActiva() && <Typography variant="h6" color="textSecondary">
-                {"Estado: "}{empleado.logueado ? "Conectado" : "Desconectado"}
-              </Typography>}
-            </Grid>
-            <Grid item xs={12}>
-              {empleado && idEmpleado !== ControllerDeEmpleado.getSesionActiva() && <div className="divider" />}
-            </Grid>
-            <Grid item xs={12}>
-              <InputEmpleado
-                previo={nombre}
-                atributo={"nombre"}
-                label={"Nombre"}
-                disabled={disabled}
-                handlers={{ onChange: this.modificarAtributo }}
-                maxLength={20}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <InputEmpleado
-                previo={apellido}
-                atributo={"apellido"}
-                label={"Apellido"}
-                disabled={disabled}
-                handlers={{ onChange: this.modificarAtributo }}
-                maxLength={20}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <InputEmpleado
-                previo={nombreUsuario}
-                atributo={"nombreUsuario"}
-                disabled={disabled}
-                handlers={{ onChange: this.modificarAtributo }}
-                label={"Usuario"}
-                maxLength={20}
-                error={usuarioErroneo}
-                help={usuarioErroneo ? mensajeUsuario : ""}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <SelectorPuesto
-                previo={tipoEmpleado}
-                atributo={"tipoEmpleado"}
-                disabled={disabled || empleado.logueado}
-                handlers={{ onChange: this.modificarAtributo }}
-                label={"Puesto"}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <InputEmpleado
-                previo={email}
-                atributo={"email"}
-                disabled={disabled}
-                handlers={{ onChange: this.modificarAtributo }}
-                label={"E-mail"}
-                maxLength={40}
-                error={mailErroneo}
-                help={mailErroneo ? mensajeMail : ""}
-              />
-            </Grid>
-            {!empleado ?
+    } else {
+      return (
+        <div>
+          <div className="dividerLista" />
+          <ListSubheader disableSticky color="inherit">
+            <ListItemText primary={"Empleado"} />
+          </ListSubheader>
+          <div className="dividerLista" />
+          <Paper elevation={0} square className="detalleEmpleado">
+            <Grid container spacing={0}>
+              <Grid item xs={10} >
+                <Typography variant="h4">
+                  {empleado ? (empleado.nombre + " " + empleado.apellido) : "Nuevo Empleado"}
+                </Typography>
+              </Grid>
+              <Grid item xs={2} className="botonEliminarContainer">
+                {empleado && idEmpleado !== ControllerDeEmpleado.getSesionActiva() &&
+                  <IconButton disabled={logueado || disabled} onClick={this.eliminarEmpleado} edge="end" >
+                    <DeleteIcon />
+                  </IconButton>}
+              </Grid>
+              <Grid item xs={12} >
+                <Typography variant="h5" color="textSecondary">
+                  {empleado ? empleado.nombreUsuario : "Registro"}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <div className="divider" />
+              </Grid>
+              <Grid item xs={12} >
+                {empleado && idEmpleado !== ControllerDeEmpleado.getSesionActiva() && <Typography variant="h6" color="textSecondary">
+                  {"Estado: "}{empleado.logueado ? "Conectado" : "Desconectado"}
+                </Typography>}
+              </Grid>
+              <Grid item xs={12}>
+                {empleado && idEmpleado !== ControllerDeEmpleado.getSesionActiva() && <div className="divider" />}
+              </Grid>
               <Grid item xs={12}>
                 <InputEmpleado
-                  previo={contraseña}
-                  type={"password"}
-                  atributo={"contraseña"}
+                  previo={nombre}
+                  atributo={"nombre"}
+                  label={"Nombre"}
                   disabled={disabled}
                   handlers={{ onChange: this.modificarAtributo }}
-                  label={"Contraseña"}
-                  maxLength={15}
-                  help={"(Máximo 15 caracteres)"}
+                  maxLength={20}
                 />
-              </Grid> : ""
-            }
-            {!empleado ?
+              </Grid>
               <Grid item xs={12}>
                 <InputEmpleado
-                  previo={confirmarContraseña}
-                  type={"password"}
-                  atributo={"confirmarContraseña"}
+                  previo={apellido}
+                  atributo={"apellido"}
+                  label={"Apellido"}
                   disabled={disabled}
                   handlers={{ onChange: this.modificarAtributo }}
-                  label={"Confirmar contraseña"}
-                  maxLength={15}
-                  error={contraseña !== confirmarContraseña}
-                  help={"(Máximo 15 caracteres)"}
+                  maxLength={20}
                 />
-              </Grid> : ""
-            }
-          </Grid>
-          <BotonesEmpleado
-            text1={"Volver"}
-            text2={"Guardar"}
-            cancelar={{ onChange: this.volver }}
-            aceptar={{ onChange: this.agregarEmpleado }}
-            disabled1={disabled}
-            disabled2={(contraseña !== confirmarContraseña) || usuarioErroneo || !nombreUsuario || disabled || !contraseña || !email || !nombre || !apellido || !tipoEmpleado || !confirmarContraseña || !modificado}
+              </Grid>
+              <Grid item xs={12}>
+                <InputEmpleado
+                  previo={nombreUsuario}
+                  atributo={"nombreUsuario"}
+                  disabled={disabled}
+                  handlers={{ onChange: this.modificarAtributo }}
+                  label={"Usuario"}
+                  maxLength={20}
+                  error={usuarioErroneo}
+                  help={usuarioErroneo ? mensajeUsuario : ""}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <SelectorPuesto
+                  previo={tipoEmpleado}
+                  atributo={"tipoEmpleado"}
+                  disabled={disabled || (empleado ? empleado.logueado : disabled)}
+                  handlers={{ onChange: this.modificarAtributo }}
+                  label={"Puesto"}
+                  lista={["Administrador", "Mozo", "Cocinero"]}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <InputEmpleado
+                  previo={email}
+                  atributo={"email"}
+                  disabled={disabled}
+                  handlers={{ onChange: this.modificarAtributo }}
+                  label={"E-mail"}
+                  maxLength={40}
+                  error={mailErroneo}
+                  help={mailErroneo ? mensajeMail : ""}
+                />
+              </Grid>
+              {!empleado ?
+                <Grid item xs={12}>
+                  <InputEmpleado
+                    previo={contraseña}
+                    type={"password"}
+                    atributo={"contraseña"}
+                    disabled={disabled}
+                    handlers={{ onChange: this.modificarAtributo }}
+                    label={"Contraseña"}
+                    maxLength={15}
+                    help={"(Máximo 15 caracteres)"}
+                  />
+                </Grid> : ""
+              }
+              {!empleado ?
+                <Grid item xs={12}>
+                  <InputEmpleado
+                    previo={confirmarContraseña}
+                    type={"password"}
+                    atributo={"confirmarContraseña"}
+                    disabled={disabled}
+                    handlers={{ onChange: this.modificarAtributo }}
+                    label={"Confirmar contraseña"}
+                    maxLength={15}
+                    error={contraseña !== confirmarContraseña}
+                    help={"(Máximo 15 caracteres)"}
+                  />
+                </Grid> : ""
+              }
+            </Grid>
+            <BotonesEmpleado
+              text1={"Volver"}
+              text2={"Guardar"}
+              cancelar={{ onChange: this.volver }}
+              aceptar={{ onChange: this.agregarEmpleado }}
+              disabled1={disabled}
+              disabled2={(contraseña !== confirmarContraseña) || usuarioErroneo || !nombreUsuario || disabled || !contraseña || !email || !nombre || !apellido || !tipoEmpleado || !confirmarContraseña || !modificado}
+            />
+          </Paper>
+          <DialogVolver
+            titulo={tituloDialog}
+            descripcion={mensajeDialog}
+            handlers={{ onChange: this.handleClose }}
+            open={open}
           />
-        </Paper>
-        <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
-        <DialogVolver
-          titulo={tituloDialog}
-          descripcion={mensajeDialog}
-          handlers={{ onChange: this.handleClose }}
-          open={open}
-        />
-        <DialogConfirmacion
-          titulo={"Atención"}
-          descripcion={"Se perderán los cambios realizados"}
-          handlers={{ onChange: this.volver, open: this.openConfirmation }}
-          open={this.state.openConfirmation}
-        />
-        <DialogConfirmacion
-          titulo={"Atención"}
-          descripcion={"¿Estás seguro de eliminar el usuario?"}
-          handlers={{ onChange: this.eliminarEmpleado, open: this.openConfirmationDelete }}
-          open={this.state.openConfirmationDelete}
-        />
-      </div>
-    )
+          <DialogConfirmacion
+            titulo={"Atención"}
+            descripcion={"Se perderán los cambios realizados"}
+            handlers={{ onChange: this.volver, open: this.openConfirmation }}
+            open={this.state.openConfirmation}
+          />
+          <DialogConfirmacion
+            titulo={"Atención"}
+            descripcion={"¿Estás seguro de eliminar el usuario?"}
+            handlers={{ onChange: this.eliminarEmpleado, open: this.openConfirmationDelete }}
+            open={this.state.openConfirmationDelete}
+          />
+          <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
+        </div>
+      )
+    }
   }
 }
