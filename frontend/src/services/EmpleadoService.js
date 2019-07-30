@@ -64,4 +64,8 @@ export class EmpleadoService {
   enviarMailRecuperar(data) {
     return client.put('/recuperar/mail', data, { timeout: 10000 }).then(res => { return res.data })
   }
+
+  limpiarNotificaciones() {
+    return client.post(`/empleado/${ControllerDeEmpleado.getSesionActiva()}/notificaciones`).then(res => { return res.data })
+  }
 }

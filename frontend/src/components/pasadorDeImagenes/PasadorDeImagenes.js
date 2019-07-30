@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
 export default function PasadorDeImagenes(props) {
   var { imagenes } = props;
   const classes = useStyles();
-  const imagenesPorDefecto = ["https://media.istockphoto.com/vectors/knife-plate-and-fork-cutlery-vector-retro-illustration-of-a-hand-vector-id871919954", "https://media.istockphoto.com/vectors/knife-plate-and-fork-cutlery-vector-retro-illustration-of-a-hand-vector-id871919954", "https://media.istockphoto.com/vectors/knife-plate-and-fork-cutlery-vector-retro-illustration-of-a-hand-vector-id871919954"];
+  const imagenesPorDefecto = ["/imagenes/default.jpg"];
   const [open, setOpen] = React.useState(false);
   const [image, setImage] = React.useState("");
 

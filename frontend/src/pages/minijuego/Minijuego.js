@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import '../estilosPaginas.scss';
 import Combinacion from "./Combinacion";
 import { Container, Grid, Typography, Button } from "@material-ui/core";
-import BotonVolver from "../../components/botonVolver/BotonVolver";
 import DialogConfirmacion from "../../components/Dialog/DialogConfirmacion";
 import { ServiceLocator } from "../../services/ServiceLocator";
 import SnackBarPersonal from "../../components/snackBarPersonal/SnackBarPersonal";
@@ -14,6 +13,9 @@ const styles = {
     marginTop: '6px',
     marginBottom: '6px',
     width: '70px',
+  },
+  botonSalir: {
+    width: '150px',
   },
   container: {
     backgroundColor: '#3f51b5',
@@ -204,7 +206,11 @@ class Minijuego extends Component {
               </Grid>
               <Grid item xs={3}>
                 <div className="full botonCentrado">
-                  <Button variant="contained" color="secondary" className={this.props.classes.boton} onClick={this.openDialogInfo}><Typography variant="body2">reglas</Typography></Button>
+                  <Button variant="contained" color="secondary" className={this.props.classes.boton} onClick={this.openDialogInfo}>
+                    <Typography variant="overline">
+                      reglas
+                    </Typography>
+                  </Button>
                 </div>
               </Grid>
             </Grid>
@@ -224,12 +230,15 @@ class Minijuego extends Component {
               </div>
             )
           })}
+          <br />
           <Container>
-            <BotonVolver
-              cancelar={{ onChange: this.volver }}
-              text={"salir"}
-            />
+            <Button variant="contained" color="primary" className={this.props.classes.botonSalir} onClick={this.volver}>
+              <Typography variant="overline">
+                salir
+              </Typography>
+            </Button>
           </Container>
+          <br />
         </div>
         <SnackBarPersonal mensajeError={snackBarMensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={"error"} />
         <DialogVolver

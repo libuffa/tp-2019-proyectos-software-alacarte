@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import '../estilosPaginas.scss';
 import { Typography, Container, Button, ListSubheader, ListItemText } from "@material-ui/core";
-import BotonVolver from "../../components/botonVolver/BotonVolver";
 
 export default class InstruccionesJuego extends Component {
 
@@ -52,22 +51,30 @@ export default class InstruccionesJuego extends Component {
           </Typography>
           <br />
           <Typography align='center' variant="subtitle1">
-            {"PREMIO: Si logras adivinarlo antes de las diez filas, te llevas un postre pre-seleccionado GRATIS!"}
+            {"Si logras adivinarlo antes de las diez filas"}
+          </Typography>
+          <Typography align='center' variant="subtitle1">
+            {"¡TE LLEVAS UN PREMIO!"}
           </Typography>
           <br />
           <Typography align='center' variant="h5">
             {"¡Buena suerte!"}
           </Typography>
           <br />
-          <Button fullWidth variant="contained" color="primary" onClick={this.minijuego} className="botonVolver">
-            jugar
+          <Button fullWidth variant="contained" color="primary" onClick={this.minijuego}>
+            <Typography variant="overline">
+              jugar
+            </Typography>
           </Button>
           <br />
           <br />
-          <BotonVolver
-            cancelar={{ onChange: this.verPedido }}
-            text={"volver"}
-          />
+          <Button fullWidth variant="contained" color="primary" onClick={this.verPedido}>
+            <Typography variant="overline">
+              volver
+            </Typography>
+          </Button>
+          <br />
+          <br />
         </Container>
       </div>
     );

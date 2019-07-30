@@ -45,6 +45,16 @@ class Empleado {
 	
 	@Column
 	Boolean baja = false
+	
+	@Column
+	Boolean notificaciones = false
+	
+	def cambiarEstadoNotificaciones() {
+		if(this.tipoEmpleado === TipoEmpleado.valueOf("Mozo")) {
+			this.notificaciones = !this.notificaciones
+			EmpleadoRepository.instance.update(this)
+		}
+	}
 
 	def loguearDesloguear() {
 		this.logueado = !this.logueado

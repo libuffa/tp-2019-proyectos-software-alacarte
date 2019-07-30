@@ -81,6 +81,14 @@ export default class DetalleMesa extends Component {
       })
   }
 
+  verItemPedido = (pedido) => {
+    this.entregarPedido(pedido.id)
+    this.props.history.push({
+      pathname: '/detalle/item/pedido',
+      state: { pedido: pedido, estado: true, idMesa: this.state.idMesa }
+    })
+  }
+
   verMesas() {
     this.state.admin ?
       this.props.history.push('/mesas/admin') :
@@ -218,7 +226,7 @@ export default class DetalleMesa extends Component {
           <ListItemText primary={"Mesa " + (mesa.numero ? mesa.numero : "-")} />
         </ListSubheader>
         <div className="dividerLista" />
-        <CuerpoMesa mesa={mesa} mozo={mozo} entregarPedido={{ onChange: this.entregarPedido }} mostrarQR={{ onChange: this.mostrarQR }} verPedido={{ onChange: this.verPedido }} sesionMesa={{ onChange: this.asignacion }} />
+        <CuerpoMesa mesa={mesa} mozo={mozo} entregarPedido={{ onChange: this.entregarPedido }} mostrarQR={{ onChange: this.mostrarQR }} verItemPedido={{ onChange: this.verItemPedido }} verPedido={{ onChange: this.verPedido }} sesionMesa={{ onChange: this.asignacion }} />
         <MenuInferior menuButtons={menuButtons} />
         <DialogConfirmacion
           titulo={"Aviso"}

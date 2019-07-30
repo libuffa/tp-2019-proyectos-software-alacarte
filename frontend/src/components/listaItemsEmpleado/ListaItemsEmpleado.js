@@ -44,7 +44,7 @@ export default function ListaItemsEmpleado(props) {
           {filtrarData(subCategoria).map((object) => {
             return <ListItem button key={object.id} onClick={() => handlers.onChange(object)}>
               <ListItemAvatar>
-                <Avatar src={object.imagenes[0]} />
+                <Avatar src={object.imagenes[0] ? object.imagenes[0] : "/imagenes/default.jpg"} />
               </ListItemAvatar>
               <ListItemText
                 primary={

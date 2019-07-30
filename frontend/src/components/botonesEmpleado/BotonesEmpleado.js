@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -32,14 +32,18 @@ export default function BotonesEmpleado(props) {
         <Grid item xs={6} className={classes.noBorder}>
           <div className={classes.buttonContainer}>
             <Button disabled={disabled1} variant="contained" color="primary" className={classes.button} onClick={() => cancelar.onChange()}>
-              {text1}
+              <Typography variant="overline">
+                {text1}
+              </Typography>
             </Button>
           </div>
         </Grid>
         <Grid item xs={6} className={classes.noBorder}>
           <div className={classes.buttonContainer}>
             <Button disabled={disabled2} variant="contained" color="primary" className={classes.button} onClick={() => aceptar.onChange()}>
-              {text2}
+              <Typography variant="overline">
+                {text2}
+              </Typography>
             </Button>
           </div>
         </Grid>

@@ -39,30 +39,65 @@ export default function ListaItemsPedido(props) {
         </ListSubheader>
         <div className="dividerLista" />
         {pedidos ? pedidos.map((pedido) => {
-          return (
-            <ListItem key={pedido.id} button disabled={disabled} onClick={() => handlersDetalleItemPedido.onChange(pedido)}>
-              <ListItemAvatar>
-                <Avatar
-                  src={pedido.itemCarta.imagenes[0]}
+          if (pedido.itemCarta.categoria === "Bebida") {
+            return (
+              <ListItem key={pedido.id} button disabled={disabled} onClick={() => handlersDetalleItemPedido.onChange(pedido)}>
+                <ListItemAvatar>
+                  <Avatar
+                    src={pedido.itemCarta.imagenes[0] ? pedido.itemCarta.imagenes[0] : "/imagenes/default.jpg"}
+                  />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={pedido.itemCarta.titulo}
+                  secondary={"Cantidad: " + pedido.cantidad}
                 />
-              </ListItemAvatar>
-              <ListItemText
-                primary={pedido.itemCarta.titulo}
-                secondary={"Cantidad: " + pedido.cantidad}
-              />
-              <div className="fondoEstado"></div>
-              <ListItemSecondaryAction>
-                <IconButton edge="end" disabled={true}>
-                  <Typography color="textSecondary">
-                    {pedido.estado.replace('_', ' ')}
-                  </Typography>
-                </IconButton>
-                <IconButton disabled={validarBajaPedido(pedido)} edge="end" aria-label="Comments" onClick={() => handlers.onChange(pedido)}>
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          );
+                <div className="fondoEstado"></div>
+                <ListItemSecondaryAction>
+                  <IconButton edge="end" disabled={true}>
+                    <Typography color="textSecondary">
+                      {pedido.estado.replace('_', ' ')}
+                    </Typography>
+                  </IconButton>
+                  <IconButton disabled={validarBajaPedido(pedido)} edge="end" aria-label="Comments" onClick={() => handlers.onChange(pedido)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            )
+          } else {
+            return (<div></div>)
+          }
+        }) : <div></div>}
+        <div className="dividerLista" />
+        {pedidos ? pedidos.map((pedido) => {
+          if (pedido.itemCarta.categoria !== "Bebida") {
+            return (
+              <ListItem key={pedido.id} button disabled={disabled} onClick={() => handlersDetalleItemPedido.onChange(pedido)}>
+                <ListItemAvatar>
+                  <Avatar
+                    src={pedido.itemCarta.imagenes[0] ? pedido.itemCarta.imagenes[0] : "/imagenes/default.jpg"}
+                  />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={pedido.itemCarta.titulo}
+                  secondary={"Cantidad: " + pedido.cantidad}
+                />
+                <div className="fondoEstado"></div>
+                <ListItemSecondaryAction>
+                  <IconButton edge="end" disabled={true}>
+                    <Typography color="textSecondary">
+                      {pedido.estado.replace('_', ' ')}
+                    </Typography>
+                  </IconButton>
+                  <IconButton disabled={validarBajaPedido(pedido)} edge="end" aria-label="Comments" onClick={() => handlers.onChange(pedido)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            )
+          } else {
+            return (<div></div>)
+          }
         }) : <div></div>}
       </List>
     </div>

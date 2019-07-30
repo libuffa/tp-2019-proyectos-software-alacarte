@@ -30,6 +30,7 @@ import Minijuego from './pages/minijuego/Minijuego';
 import RecuperarContraseña from './pages/RecuperarContraseña/RecuperarContraseña';
 import SnackBarPersonal from './components/snackBarPersonal/SnackBarPersonal';
 import DetalleItemCartaAdmin from './pages/detalleItemCartaAdmin/DetalleItemCartaAdmin';
+import SnackBarPersonalMozo from './components/snackBarPersonal/SnackBarPersonalMozo';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -136,6 +137,8 @@ class App extends Component {
       mostrar: false,
       mensaje: "",
       variant: "",
+      mensajeMozo: "",
+      variantMozo: "",
     }
   }
 
@@ -168,13 +171,17 @@ class App extends Component {
               this.cerrarSesionEmpleado()
             } else {
               if (respuesta.logueado) {
-                if (!this.state.empleado || (this.state.empleado.tipoEmpleado !== respuesta.tipoEmpleado)) {
+                if (!this.state.empleado) {
                   this.setState({
                     empleado: respuesta,
                   })
                   if (!this.state.opcionesMenu || (this.state.empleado.tipoEmpleado !== respuesta.tipoEmpleado)) {
                     this.cargarOpcionesMenu()
                   }
+                }
+                if (respuesta.notificaciones) {
+                  this.generarMensajeMozo("Nuevas notificaciones en las mesas", "info")
+                  ServiceLocator.EmpleadoService.limpiarNotificaciones()
                 }
               } else {
                 this.generarMensaje("Usuario no logueado", "error")
@@ -296,8 +303,25 @@ class App extends Component {
     })
   }
 
+  generarMensajeMozo(mensaje, variant) {
+    this.setState({
+      mensajeMozo: mensaje,
+      variantMozo: variant,
+    })
+  }
+
+  snackbarMozoOpen() {
+    return this.state.mensajeMozo !== ""
+  }
+
+  snackbarMozoClose = () => {
+    this.setState({
+      mensajeMozo: ""
+    })
+  }
+
   render() {
-    const { mensaje, variant } = this.state
+    const { mensaje, variant, mensajeMozo, variantMozo } = this.state
 
     if (!this.state.mostrar) {
       return (
@@ -328,6 +352,7 @@ class App extends Component {
             </Paper>
           </div>
           <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
+          <SnackBarPersonalMozo click={{ onChange: this.snackbarMozoClose }} mensajeError={mensajeMozo} abrir={this.snackbarMozoOpen()} cerrar={{ onChange: this.snackbarMozoClose }} variant={variantMozo} />
         </div>
       )
     }

@@ -5,6 +5,7 @@ import { ServiceLocator } from "../../services/ServiceLocator.js";
 import '../estilosPaginas.scss';
 import ContenedorCuerpoItem from '../../components/contenedorCuerpoItem/ContenedorCuerpoItem.js';
 import { CircularProgress } from '@material-ui/core';
+import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal.js';
 
 export default class DetalleItemPedido extends Component {
   constructor(props) {
@@ -14,47 +15,70 @@ export default class DetalleItemPedido extends Component {
       comentario: this.props.location.state ? this.props.location.state.pedido.comentarios : null,
       itemCarta: this.props.location.state ? this.props.location.state.pedido.itemCarta : null,
       history: this.props.location.state ? this.props.location.state.history : null,
-      pedido: this.props.location.state ? this.props.location.state.pedido : null
-    }
-  }
-
-  modificarCantidad = (modificador) => {
-    if (this.state.cantidad + modificador <= 1) {
-      this.setState({ cantidad: 1 })
-    } else {
-      this.setState({ cantidad: (this.state.cantidad + modificador) })
-    }
-  }
-
-  modificarComentario = (texto) => {
-    if (texto !== null && texto !== "") {
-      this.setState({ comentario: texto })
+      pedido: this.props.location.state ? this.props.location.state.pedido : null,
+      estado: this.props.location.state ? this.props.location.state.estado : null,
+      idMesa: this.props.location.state ? this.props.location.state.idMesa : null,
+      mensaje: "",
+      variant: "",
     }
   }
 
   verPedido = () => {
-    this.props.history.push('/pedido')
+    if(this.state.idMesa) {
+      this.props.history.push({
+        pathname: '/detalle/mesa',
+        state: { mesa: this.state.idMesa }
+      })
+    } else {
+      this.props.history.push('/pedido')
+    }
   }
 
-  actualizarPedido = (cantidad, comentario) => {
-    ServiceLocator.SesionService.actualizarPedido({
-      "idSesion": ControllerDeSesion.getSesionActiva(),
-      "idPedido": this.state.pedido.id,
-      "idItem": this.state.itemCarta.id,
-      "cantidad": cantidad,
-      "comentario": comentario,
-    }).then(resultado => {
-      if (resultado === "True") {
-        this.props.history.push(`/pedido`)
-      } else {
-        console.log(resultado)
-      }
+  actualizarPedido = (cantidad, comentario, modificado) => {
+    if (modificado) {
+      ServiceLocator.SesionService.actualizarPedido({
+        "idSesion": ControllerDeSesion.getSesionActiva(),
+        "idPedido": this.state.pedido.id,
+        "idItem": this.state.itemCarta.id,
+        "cantidad": cantidad,
+        "comentario": comentario,
+      }).then(resultado => {
+        if (resultado) {
+          if (resultado.error) {
+            this.generarMensaje(resultado.error, "error")
+            this.props.history.push(`/pedido`)
+          } else {
+            this.props.history.push(`/pedido`)
+          }
+        } else {
+          this.generarMensaje("Error en el servidor", "error")
+        }
+      })
+    } else {
+      this.props.history.push(`/pedido`)
+    }
+  }
+
+  generarMensaje(mensaje, variant) {
+    this.setState({
+      mensaje,
+      variant,
+    })
+  }
+
+  snackbarOpen() {
+    return this.state.mensaje !== ""
+  }
+
+  snackbarClose = () => {
+    this.setState({
+      mensaje: ""
     })
   }
 
   render() {
     const { itemCarta, pedido } = this.state;
-    const { cantidad, comentario } = this.state;
+    const { cantidad, comentario, mensaje, variant } = this.state;
 
     if (!itemCarta) {
       return (
@@ -62,22 +86,26 @@ export default class DetalleItemPedido extends Component {
           <CircularProgress size={80} />
         </div>
       )
+    } else {
+      return (
+        <div>
+          <PasadorDeImagenes
+            imagenes={itemCarta.imagenes}
+          />
+          <ContenedorCuerpoItem
+            texto1="volver"
+            texto2="modificar"
+            cantidad={cantidad}
+            comentario={comentario}
+            itemCarta={itemCarta}
+            handlersVolver={{ onChange: this.verPedido }}
+            handlersAgregarAPedido={{ onChange: this.actualizarPedido }}
+            disabled={pedido.estado !== "Creado" || this.state.estado}
+            premio={pedido.premio}
+          />
+          <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
+        </div>
+      )
     }
-    return <div>
-      <PasadorDeImagenes
-        imagenes={itemCarta.imagenes}
-      />
-      <ContenedorCuerpoItem
-        texto1="volver"
-        texto2="modificar"
-        cantidad={cantidad}
-        comentario={comentario}
-        itemCarta={itemCarta}
-        handlersVolver={{ onChange: this.verPedido }}
-        handlersAgregarAPedido={{ onChange: this.actualizarPedido }}
-        disabled={pedido.estado !== "Creado"}
-        premio={pedido.premio}
-      />
-    </div>
   }
 }

@@ -245,6 +245,8 @@ export default class VisualizarPedidoMozo extends Component {
                     currency: 'USD'
                   }).format(this.getPrecioTotal())}
                 </Typography>
+                <br />
+                <br />
               </CardContent>
             </Card>
           }

@@ -258,6 +258,8 @@ export default class VisualizarPedido extends Component {
                     currency: 'USD'
                   }).format(this.getPrecioTotal())}
                 </Typography>
+                <br/>
+                <br/>
               </CardContent>
             </Card>
           }

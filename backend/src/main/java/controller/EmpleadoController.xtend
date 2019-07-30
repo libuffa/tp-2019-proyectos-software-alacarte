@@ -306,4 +306,29 @@ class EmpleadoController {
 			return ok('{ "error" : "correo inexistente" }')
 		}
 	}
+
+	@Post("/empleado/:id/notificaciones")
+	def Result cambiarEstadoNotificaciones() {
+		try {
+			var Empleado empleado
+			val idEmpleado = Long.valueOf(id)
+			try {
+				empleado = repoEmpleados.searchById(idEmpleado)
+			} catch(Exception ex) {
+				return ok('{ "error" : "Usuario inexistente" }')
+			}
+			if (empleado.baja) {
+				return ok('{ "error" : "Usuario inexistente" }')
+			}
+			if (TipoEmpleado.valueOf("Mozo") !== empleado.tipoEmpleado) {
+				return ok('{ "error" : "Usuario incorrecto" }')
+			}
+			empleado.cambiarEstadoNotificaciones()
+			return ok("Exito")
+		} catch (Exception e) {
+			return ok('{ "error" : "Error en el servidor" }')
+		}
+	}
+	
+	
 }

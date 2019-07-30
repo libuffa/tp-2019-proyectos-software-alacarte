@@ -9,6 +9,7 @@ export default class ContenedorCuerpoItem extends Component {
       cantidad: this.props.cantidad,
       comentario: this.props.comentario,
       itemCarta: this.props.itemCarta,
+      modificado: false,
     }
   }
 
@@ -16,18 +17,24 @@ export default class ContenedorCuerpoItem extends Component {
     if (this.state.cantidad + modificador <= 1) {
       this.setState({ cantidad: 1 })
     } else {
-      this.setState({ cantidad: (this.state.cantidad + modificador) })
+      this.setState({
+        cantidad: (this.state.cantidad + modificador),
+        modificado: true,
+      })
     }
   }
 
   modificarComentario = (texto) => {
     if (texto !== null && texto !== "") {
-      this.setState({ comentario: texto })
+      this.setState({
+        comentario: texto,
+        modificado: true,
+      })
     }
   }
 
   agregarAPedido = () => {
-    this.props.handlersAgregarAPedido.onChange(this.state.cantidad, this.state.comentario)
+    this.props.handlersAgregarAPedido.onChange(this.state.cantidad, this.state.comentario, this.state.modificado)
   }
 
   render() {

@@ -14,6 +14,9 @@ import repository.ItemCartaRepository
 import repository.SesionRepository
 import domain.Sesion
 import domain.ItemCarta
+import domain.Categoria
+import repository.EmpleadoRepository
+import domain.Pedido
 
 @Controller
 @Accessors
@@ -73,6 +76,13 @@ class SesionController {
 				return ok(' { "error" : "El plato no se encuentra disponible" } ')
 			}
 			sesion.pedirItem(itemCarta, cantidad, comentario, false)
+			if(itemCarta.categoria.equals(Categoria.Bebida)) {
+				try {
+					EmpleadoRepository.instance.searchById(sesion.idMozo).cambiarEstadoNotificaciones()
+				} catch(Exception excep) {
+					return ok("El plato se agrego correctamente")
+				}
+			}
 			return ok("El plato se agrego correctamente")
 		}catch(Exception e) {
 			return ok(' { "error" : "Error en el servidor" } ')
@@ -114,6 +124,13 @@ class SesionController {
 				return ok(' { "error" : "El premio ya fue reclamado" } ')
 			}
 			sesion.pedirItem(itemCarta, 1, comentario, true)
+			if(itemCarta.categoria.equals(Categoria.Bebida)) {
+				try {
+					EmpleadoRepository.instance.searchById(sesion.idMozo).cambiarEstadoNotificaciones()
+				} catch(Exception excep) {
+					return ok("Premio agregado correctamente")
+				}
+			}
 			return ok("Premio agregado correctamente")
 		}catch(Exception e) {
 			return ok(' { "error" : "Error en el servidor" } ')
@@ -160,21 +177,36 @@ class SesionController {
 		var cantidad = Integer.valueOf(body.getPropertyValue("cantidad"))
 		
 		try{
-			val sesion = repositorioSesion.searchById(idSesion)
-			if(sesion.fechaBaja === null && !sesion.pideCuenta) {
-				var pedido = sesion.getPedido(idPedido)
-				if(pedido.estado.equals(Estado.Creado)){
-					pedido.cantidad = cantidad
-					pedido.comentarios = comentario
-					repositorioSesion.update(sesion)
-					return ok("True")
-				}
-				return ok("No fue posible modificar el plato")
-			} else {
-				return ok("La sesion expiro")
+			var Sesion sesion
+			var Pedido pedido
+			try {
+				sesion = repositorioSesion.searchById(idSesion)
+			} catch(Exception ex) {
+				return ok(' { "error" : "Sesión no encontrada" } ')
 			}
-		}catch(Exception e) {
-			badRequest("La sesion no existe o esta inactiva")
+			if (sesion.fechaBaja !== null) {
+				return ok(' { "error" : "La sesión expiro" } ')
+			}
+			if (sesion.pideCuenta) {
+				return ok(' { "error" : "Cancelar pedido de cuenta" } ')
+			}
+			pedido = sesion.getPedido(idPedido)
+			if(!pedido.estado.equals(Estado.Creado)){
+				return ok(' { "error" : "Pedido en curso" } ')
+			}
+			pedido.cantidad = cantidad
+			pedido.comentarios = comentario
+			repositorioSesion.update(sesion)
+			if (pedido.itemCarta.categoria.equals(Categoria.Bebida)) {
+				try {
+					EmpleadoRepository.instance.searchById(sesion.idMozo).cambiarEstadoNotificaciones()
+				} catch(Exception excep) {
+					return ok("Pedido modificado")
+				}
+			}
+			return ok("Pedido modificado")
+		} catch(Exception e) {
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 

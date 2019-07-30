@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import LocalDining from '@material-ui/icons/LocalDining';
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -32,6 +32,9 @@ const useStyles = makeStyles(theme => ({
     margin: '0',
     backgroundColor: '#fff',
   },
+  root: {
+    padding: theme.spacing(1, 2),
+  },
 }));
 
 export default function Botones(props) {
@@ -39,28 +42,30 @@ export default function Botones(props) {
   const classes = useStyles();
 
   return (
-    <div>
-      <Grid container spacing={0} className={classes.noBorder}>
-        <Grid item xs={6} className={classes.noBorder}>
-          <div className={classes.buttonContainer}>
-            <Button variant="contained" color="primary" className={classes.button} onClick={() => handlersVolver.onChange()}>
+    <div className={classes.root}>
+      <Grid container spacing={0}>
+        <Grid item xs={5}>
+          <Button fullWidth variant="contained" color="primary" onClick={() => handlersVolver.onChange()}>
+            <Typography variant="overline">
               {text1}
-              <ArrowBack className={classes.rightIcon} />
-            </Button>
-          </div>
+            </Typography>
+            <ArrowBack className={classes.rightIcon} />
+          </Button>
         </Grid>
-        <Grid item xs={6} className={classes.noBorder}>
-          <div className={classes.buttonContainer}>
-            <Button disabled={disabled} variant="contained" color="primary" className={classes.button} onClick={() => handlersAgregarAPedido.onChange()}>
+        <Grid item xs={2} />
+        <Grid item xs={5} >
+          <Button fullWidth disabled={disabled} variant="contained" color="primary" onClick={() => handlersAgregarAPedido.onChange()}>
+            <Typography variant="overline">
               {text2}
-              {eliminar ?
-                <DeleteIcon className={classes.rightIcon} /> :
-                <LocalDining className={classes.rightIcon} />
-              }
-            </Button>
-          </div>
+            </Typography>
+            {eliminar ?
+              <DeleteIcon className={classes.rightIcon} /> :
+              <LocalDining className={classes.rightIcon} />
+            }
+          </Button>
         </Grid>
       </Grid>
+      <br/>
     </div>
   );
 }
