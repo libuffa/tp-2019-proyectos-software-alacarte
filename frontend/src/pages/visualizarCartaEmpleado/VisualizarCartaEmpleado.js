@@ -4,10 +4,20 @@ import MenuSuperior from "../../components/menuSuperior/MenuSuperior";
 import ListaItemsEmpleado from "../../components/listaItemsEmpleado/ListaItemsEmpleado";
 import MenuInferior from '../../components/menuInferior/MenuInferior.js';
 import Menu from '@material-ui/icons/Menu';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Typography } from '@material-ui/core';
 import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal.js';
+import AddIcon from '@material-ui/icons/Add';
+import { withStyles } from '@material-ui/styles';
 
-export default class VisualizarCartaEmpleado extends Component {
+const styles = {
+  add: {
+    position: 'absolute',
+    bottom: '60px',
+    marginLeft: '15px',
+  },
+};
+
+class VisualizarCartaEmpleado extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -103,6 +113,10 @@ export default class VisualizarCartaEmpleado extends Component {
     this.props.history.push('/menu/empleado')
   }
 
+  nuevoPlato = () => {
+    this.props.history.push('/detalle/item/carta/admin')
+  }
+
   generarMensaje(mensaje, variant) {
     this.setState({
       mensaje,
@@ -121,16 +135,44 @@ export default class VisualizarCartaEmpleado extends Component {
   }
 
   render() {
-    const { carta, mensaje, variant } = this.state
+    const { carta, mensaje, variant, empleado } = this.state
     var { categorias } = this.state
+    var menuButtons
 
-    const menuButtons = {
-      firstButton: {
-        onChange: this.verMenu,
-        name: "Ver Menu",
-        icon: (<Menu />)
-      },
+    if (empleado) {
+      if (empleado.tipoEmpleado === "Administrador") {
+        menuButtons = {
+          firstButton: {
+            onChange: this.verMenu,
+            name: "Ver Menu",
+            icon: (<Menu />)
+          },
+          secondButton: {
+            onChange: this.nuevoPlato,
+            name: "Nuevo item",
+            icon: (<AddIcon />),
+          },
+        }
+      } else {
+        menuButtons = {
+          firstButton: {
+            onChange: this.verMenu,
+            name: "Ver Menu",
+            icon: (<Menu />)
+          },
+        }
+      }
+    } else {
+      menuButtons = {
+        firstButton: {
+          onChange: this.verMenu,
+          name: "Ver Menu",
+          icon: (<Menu />)
+        },
+      }
     }
+
+
 
     if (!carta || !categorias) {
       return (
@@ -147,6 +189,10 @@ export default class VisualizarCartaEmpleado extends Component {
         <div>
           <div className="contenedorLista">
             <MenuSuperior data={categorias} handlers={{ onChange: this.seleccionEnMenuSuperior }}></MenuSuperior>
+            {this.subCategoriasCarta().length === 0 &&
+              <div className="full botonCentrado separadorTop">
+                <Typography variant="h4" color="textSecondary">{"No se encontraron items"}</Typography>
+              </div>}
             <ListaItemsEmpleado data={carta} subData={this.subCategoriasCarta()} handlers={{ onChange: this.seleccionItemCarta }} disableFunction={{ onChange: this.cambiarEstadoItemCarta }}></ListaItemsEmpleado>
           </div>
           <MenuInferior menuButtons={menuButtons} />
@@ -156,3 +202,5 @@ export default class VisualizarCartaEmpleado extends Component {
     }
   }
 }
+
+export default withStyles(styles)(VisualizarCartaEmpleado);

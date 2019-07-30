@@ -2,6 +2,10 @@ package controller
 
 import domain.Categoria
 import domain.ItemCarta
+import java.util.ArrayList
+import java.util.HashSet
+import java.util.List
+import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.xtrest.api.Result
 import org.uqbar.xtrest.api.annotation.Body
@@ -11,11 +15,6 @@ import org.uqbar.xtrest.api.annotation.Post
 import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.json.JSONUtils
 import repository.ItemCartaRepository
-import java.util.ArrayList
-import java.util.List
-import java.util.Set
-import java.util.HashSet
-import com.fasterxml.jackson.databind.ObjectMapper
 
 @Controller
 @Accessors

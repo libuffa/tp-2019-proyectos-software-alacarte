@@ -65,8 +65,7 @@ class ALaCarteBootstrap {
 			categoria = Categoria.Entrada
 			subCategoria = "Picadas"
 			precioUnitario = 250.doubleValue
-			imagenes = #["https://www.landolakes.com/RecipeManagementSystem/media/Recipe-Media-Files/Recipes/Retail/x17/16556-marinated-antipasto-platter-600x600.jpg?ext=.jpg","https://www.landolakes.com/RecipeManagementSystem/media/Recipe-Media-Files/Recipes/Retail/x17/16556-marinated-antipasto-platter-600x600.jpg?ext=.jpg","https://www.landolakes.com/RecipeManagementSystem/media/Recipe-Media-Files/Recipes/Retail/x17/16556-marinated-antipasto-platter-600x600.jpg?ext=.jpg"]
-			habilitado = true
+			imagenes = #["/imagenes/picada.jpg", "/imagenes/picada.jpg", "/imagenes/picada.jpg"]
 		]
 		plato2 = new ItemCarta => [
 			titulo = "Milanesa de ternera con papas fritas"
@@ -74,8 +73,7 @@ class ALaCarteBootstrap {
 			categoria = Categoria.Plato_Principal
 			subCategoria = "Carnes"
 			precioUnitario = 520.doubleValue
-			habilitado = true
-			imagenes = #["https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg","https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg","https://www.viajejet.com/wp-content/viajes/Milanesa-con-papas-fritas.jpg"]
+			imagenes = #["/imagenes/milanesa.jpg", "/imagenes/milanesa.jpg", "/imagenes/milanesa.jpg"]
 		]
 		plato3 = new ItemCarta => [
 			titulo = "Pizza grande de muzzarella"
@@ -83,8 +81,7 @@ class ALaCarteBootstrap {
 			categoria = Categoria.Plato_Principal
 			subCategoria = "Pizzas"
 			precioUnitario = 350.doubleValue
-			habilitado = true
-			imagenes = #["https://www.closetcooking.com/wp-content/uploads/2008/06/Shrimp-Scampi-Pizza-1200-3859.jpg","https://www.closetcooking.com/wp-content/uploads/2008/06/Shrimp-Scampi-Pizza-1200-3859.jpg","https://www.closetcooking.com/wp-content/uploads/2008/06/Shrimp-Scampi-Pizza-1200-3859.jpg"]
+			imagenes = #["/imagenes/pizza.jpg", "/imagenes/pizza.jpg", "/imagenes/pizza.jpg"]
 		]
 		plato4 = new ItemCarta => [
 			titulo = "Coca Cola Regular"
@@ -92,8 +89,7 @@ class ALaCarteBootstrap {
 			categoria = Categoria.Bebida
 			subCategoria = "Gaseosas"
 			precioUnitario = 100.doubleValue
-			habilitado = true
-			imagenes = #["https://images-na.ssl-images-amazon.com/images/I/5156FefjlqL._SX425_.jpg"]
+			imagenes = #["/imagenes/cocaReg.jpg", "/imagenes/cocaReg.jpg", "/imagenes/cocaReg.jpg"]
 		]
 		plato5 = new ItemCarta => [
 			titulo = "Asado"
@@ -101,8 +97,7 @@ class ALaCarteBootstrap {
 			categoria = Categoria.Plato_Principal
 			subCategoria = "Carnes"
 			precioUnitario = 400.doubleValue
-			habilitado = true
-			imagenes = #["http://www.primeranota.cl/web/wp-content/uploads/2018/10/asado-de-tira-1024x682.jpg"]
+			imagenes = #["/imagenes/asado.jpg", "/imagenes/asado.jpg", "/imagenes/asado.jpg"]
 		]
 		plato6 = new ItemCarta => [
 			titulo = "Lomo con pure"
@@ -110,8 +105,7 @@ class ALaCarteBootstrap {
 			categoria = Categoria.Plato_Principal
 			subCategoria = "Carnes"
 			precioUnitario = 630.doubleValue
-			habilitado = true
-			imagenes = #["https://2.bp.blogspot.com/-6j9KmOdpaFM/Tg4Ev26mO7I/AAAAAAAACbs/6OASavNaJbk/s1600/DSC07094.JPG","https://2.bp.blogspot.com/-6j9KmOdpaFM/Tg4Ev26mO7I/AAAAAAAACbs/6OASavNaJbk/s1600/DSC07094.JPG","https://2.bp.blogspot.com/-6j9KmOdpaFM/Tg4Ev26mO7I/AAAAAAAACbs/6OASavNaJbk/s1600/DSC07094.JPG"]
+			imagenes = #["/imagenes/lomo.jpg", "/imagenes/lomo.jpg", "/imagenes/lomo.jpg"]
 		]
 		plato7 = new ItemCarta => [
 			titulo = "Pizza grande napolitana"
@@ -119,8 +113,7 @@ class ALaCarteBootstrap {
 			categoria = Categoria.Plato_Principal
 			subCategoria = "Pizzas"
 			precioUnitario = 450.doubleValue
-			habilitado = true
-			imagenes = #["https://i0.wp.com/locosxlapizza.com/wp-content/uploads/2015/02/receta-pizza-napolitana-original-locosxlapizza.jpg?fit=650%2C382","https://i0.wp.com/locosxlapizza.com/wp-content/uploads/2015/02/receta-pizza-napolitana-original-locosxlapizza.jpg?fit=650%2C382", "https://i0.wp.com/locosxlapizza.com/wp-content/uploads/2015/02/receta-pizza-napolitana-original-locosxlapizza.jpg?fit=650%2C382"]
+			imagenes = #["/imagenes/pizzaNapo.jpg", "/imagenes/pizzaNapo.jpg", "/imagenes/pizzaNapo.jpg"]
 		]
 		plato8 = new ItemCarta => [
 			titulo = "Rabas a la provenzal"
@@ -128,8 +121,7 @@ class ALaCarteBootstrap {
 			categoria = Categoria.Entrada
 			subCategoria = "Para Compartir"
 			precioUnitario = 600.doubleValue
-			habilitado = true
-			imagenes = #["http://www.utimujer.com/wp-content/uploads/2014/07/2003-09-17_Goose_bumps13.jpg", "http://www.utimujer.com/wp-content/uploads/2014/07/2003-09-17_Goose_bumps13.jpg", "http://www.utimujer.com/wp-content/uploads/2014/07/2003-09-17_Goose_bumps13.jpg"]
+			imagenes = #["/imagenes/rabas.jpg", "/imagenes/rabas.jpg", "/imagenes/rabas.jpg"]
 		]
 		plato9 = new ItemCarta => [
 			titulo = "Papas fritas a la provenzal"
@@ -137,8 +129,7 @@ class ALaCarteBootstrap {
 			categoria = Categoria.Entrada
 			subCategoria = "Para Compartir"
 			precioUnitario = 200.doubleValue
-			habilitado = true
-			imagenes = #["https://i.pinimg.com/originals/1f/d7/e7/1fd7e7860291f6419ee94417a5b0c3ed.jpg","https://i.pinimg.com/originals/1f/d7/e7/1fd7e7860291f6419ee94417a5b0c3ed.jpg","https://i.pinimg.com/originals/1f/d7/e7/1fd7e7860291f6419ee94417a5b0c3ed.jpg"]
+			imagenes = #["/imagenes/papasFritas.jpg", "/imagenes/papasFritas.jpg", "/imagenes/papasFritas.jpg"]
 		]
 		plato10 = new ItemCarta => [
 			titulo = "Coca Cola light"
@@ -146,8 +137,7 @@ class ALaCarteBootstrap {
 			categoria = Categoria.Bebida
 			subCategoria = "Gaseosas"
 			precioUnitario = 100.doubleValue
-			habilitado = true
-			imagenes = #["https://http2.mlstatic.com/coca-cola-light-15-zona-norte-D_NQ_NP_804517-MLA29578679830_032019-Q.jpg", "https://http2.mlstatic.com/coca-cola-light-15-zona-norte-D_NQ_NP_804517-MLA29578679830_032019-Q.jpg", "https://http2.mlstatic.com/coca-cola-light-15-zona-norte-D_NQ_NP_804517-MLA29578679830_032019-Q.jpg"]
+			imagenes = #["/imagenes/cocaLight.jpg", "/imagenes/cocaLight.jpg", "/imagenes/cocaLight.jpg"]
 		]
 		plato11 = new ItemCarta => [
 			titulo = "Ravioles con salsa bolognesa"
@@ -155,8 +145,7 @@ class ALaCarteBootstrap {
 			categoria = Categoria.Plato_Principal
 			subCategoria = "Pastas"
 			precioUnitario = 350.doubleValue
-			habilitado = true
-			imagenes = #["https://cordobatimes.com/showup/wp-content/uploads/2014/08/18-10-www.cocinatipo.com-Lasa%C3%B1a-de-ravioles-y-zuchini.jpg","https://cordobatimes.com/showup/wp-content/uploads/2014/08/18-10-www.cocinatipo.com-Lasa%C3%B1a-de-ravioles-y-zuchini.jpg","https://cordobatimes.com/showup/wp-content/uploads/2014/08/18-10-www.cocinatipo.com-Lasa%C3%B1a-de-ravioles-y-zuchini.jpg"]
+			imagenes = #["/imagenes/ravioles.jpg", "/imagenes/ravioles.jpg", "/imagenes/ravioles.jpg"]
 		]
 		plato12 = new ItemCarta => [
 			titulo = "Tallarines con salsa filleto"
@@ -164,8 +153,7 @@ class ALaCarteBootstrap {
 			categoria = Categoria.Plato_Principal
 			subCategoria = "Pastas"
 			precioUnitario = 320.doubleValue
-			habilitado = true
-			imagenes = #["https://www.organicbuyersgroup.com.au/shop/images/categories/pasta%20with%20sauce.jpg", "https://www.organicbuyersgroup.com.au/shop/images/categories/pasta%20with%20sauce.jpg","https://www.organicbuyersgroup.com.au/shop/images/categories/pasta%20with%20sauce.jpg"]
+			imagenes = #["/imagenes/tallarines.jpg", "/imagenes/tallarines.jpg", "/imagenes/tallarines.jpg"]
 		]
 		plato13 = new ItemCarta => [
 			titulo = "Mousse de chocolate"
@@ -173,8 +161,7 @@ class ALaCarteBootstrap {
 			categoria = Categoria.Postre
 			subCategoria = "Cremas"
 			precioUnitario = 200.doubleValue
-			habilitado = true
-			imagenes = #["https://www.recipetineats.com/wp-content/uploads/2018/09/Chocolate-Mousse_9.jpg", "https://www.recipetineats.com/wp-content/uploads/2018/09/Chocolate-Mousse_9.jpg", "https://www.recipetineats.com/wp-content/uploads/2018/09/Chocolate-Mousse_9.jpg"]
+			imagenes = #["/imagenes/mouse.jpg", "/imagenes/mouse.jpg", "/imagenes/mouse.jpg"]
 		]
 		plato14 = new ItemCarta => [
 			titulo = "2 Bochas de heladas"
@@ -182,8 +169,7 @@ class ALaCarteBootstrap {
 			categoria = Categoria.Postre
 			subCategoria = "Helados"
 			precioUnitario = 150.doubleValue
-			habilitado = true
-			imagenes = #["https://beermagazine.net/wp-content/uploads/2019/01/Como-hacer-helado-de-cerveza.jpg","https://beermagazine.net/wp-content/uploads/2019/01/Como-hacer-helado-de-cerveza.jpg","https://beermagazine.net/wp-content/uploads/2019/01/Como-hacer-helado-de-cerveza.jpg"]
+			imagenes = #["/imagenes/bochas.jpg", "/imagenes/bochas.jpg", "/imagenes/bochas.jpg"]
 		]
 		plato15 = new ItemCarta => [
 			titulo = "Panqueque clasico con dulce de leche"
@@ -191,8 +177,7 @@ class ALaCarteBootstrap {
 			categoria = Categoria.Postre
 			subCategoria = "Panqueques"
 			precioUnitario = 200.doubleValue
-			habilitado = true
-			imagenes = #["https://www.casafe.org/wp-content/uploads/2017/10/encabezado-receta-panqueques.jpg","https://www.casafe.org/wp-content/uploads/2017/10/encabezado-receta-panqueques.jpg","https://www.casafe.org/wp-content/uploads/2017/10/encabezado-receta-panqueques.jpg"]
+			imagenes = #["/imagenes/panqueque.jpg", "/imagenes/panqueque.jpg", "/imagenes/panqueque.jpg"]
 		]
 		plato16 = new ItemCarta => [
 			titulo = "Cafe con crema"
@@ -201,7 +186,7 @@ class ALaCarteBootstrap {
 			subCategoria = "Cafe"
 			precioUnitario = 100.doubleValue
 			habilitado = true
-			imagenes = #["https://previews.123rf.com/images/serezniy/serezniy1302/serezniy130205710/18042837-taza-de-caf%C3%A9-crema-batida-en-la-mesa-de-madera-de-cerca.jpg","https://previews.123rf.com/images/serezniy/serezniy1302/serezniy130205710/18042837-taza-de-caf%C3%A9-crema-batida-en-la-mesa-de-madera-de-cerca.jpg"]
+			imagenes = #["/imagenes/cafe1.jpg", "/imagenes/cafe1.jpg", "/imagenes/cafe1.jpg"]
 		]
 		plato17 = new ItemCarta => [
 			titulo = "Café con licor"
@@ -210,7 +195,7 @@ class ALaCarteBootstrap {
 			subCategoria = "Cafe"
 			precioUnitario = 100.doubleValue
 			habilitado = true
-			imagenes = #["https://img.blogs.es/phillips/wp-content/uploads/2013/10/cafe_irlandes.jpg","https://img.blogs.es/phillips/wp-content/uploads/2013/10/cafe_irlandes.jpg","https://img.blogs.es/phillips/wp-content/uploads/2013/10/cafe_irlandes.jpg"]
+			imagenes = #["/imagenes/cafe2.jpg", "/imagenes/cafe2.jpg", "/imagenes/cafe2.jpg"]
 		]
 		plato18 = new ItemCarta => [
 			titulo = "Vino añejo de la casa"
@@ -219,7 +204,7 @@ class ALaCarteBootstrap {
 			subCategoria = "Vinos"
 			precioUnitario = 1500.doubleValue
 			habilitado = true
-			imagenes = #["https://cdn.shopify.com/s/files/1/0005/4634/0925/products/milpiedras-malbec_2048x2048.jpg?v=1557844325","https://cdn.shopify.com/s/files/1/0005/4634/0925/products/milpiedras-malbec_2048x2048.jpg?v=1557844325","https://cdn.shopify.com/s/files/1/0005/4634/0925/products/milpiedras-malbec_2048x2048.jpg?v=1557844325"]
+			imagenes = #["/imagenes/vino.jpg", "/imagenes/vino.jpg", "/imagenes/vino.jpg"]
 		]
 		plato19 = new ItemCarta => [
 			titulo = "Filet de merluza con ensalada"
@@ -227,8 +212,7 @@ class ALaCarteBootstrap {
 			categoria = Categoria.Plato_Principal
 			subCategoria = "Pescados"
 			precioUnitario = 350.doubleValue
-			habilitado = true
-			imagenes = #["https://bucket.glanacion.com/anexos/fotos/19/1682019.jpg","https://bucket.glanacion.com/anexos/fotos/19/1682019.jpg","https://bucket.glanacion.com/anexos/fotos/19/1682019.jpg"]
+			imagenes = #["/imagenes/filet.jpg", "/imagenes/filet.jpg", "/imagenes/filet.jpg"]
 		]
 		plato20 = new ItemCarta => [
 			titulo = "Serranitos enrollados "
@@ -236,8 +220,7 @@ class ALaCarteBootstrap {
 			categoria = Categoria.Entrada
 			subCategoria = "Picadas"
 			precioUnitario = 360.doubleValue
-			habilitado = true
-			imagenes = #["//estag.fimagenes.com/img/1/2/f/J/h/2fJh_900.jpg","//estag.fimagenes.com/img/1/2/f/J/h/2fJh_900.jpg","//estag.fimagenes.com/img/1/2/f/J/h/2fJh_900.jpg"]
+			imagenes = #["/imagenes/serranitos.jpg", "/imagenes/serranitos.jpg", "/imagenes/serranitos.jpg"]
 		]
 		
 		mesa1 = new Mesa => [numero = 1]

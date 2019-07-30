@@ -5,7 +5,7 @@ import ListaItems from "../../components/listaItems/ListaItems";
 import MenuInferior from '../../components/menuInferior/MenuInferior.js';
 import PedidoIcon from '@material-ui/icons/RestaurantMenu';
 import '../estilosPaginas.scss';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Typography } from '@material-ui/core';
 
 export default class VisualizarCarta extends Component {
   constructor(props) {
@@ -42,7 +42,8 @@ export default class VisualizarCarta extends Component {
   }
 
   subCategoriasCarta() {
-    var subCategoriasMapeadoas = this.state.carta.map((itemCarta) => { return itemCarta.subCategoria })
+    var cartaLocal = this.state.carta.filter((item) => item.habilitado)
+    var subCategoriasMapeadoas = cartaLocal.map((itemCarta) => { return itemCarta.subCategoria })
     var subCategorias = new Set(subCategoriasMapeadoas)
     var arraySubCategorias = []
     subCategorias.forEach((subCategoria) => arraySubCategorias.push(subCategoria))
@@ -90,6 +91,10 @@ export default class VisualizarCarta extends Component {
       <div>
         <div className="contenedorLista">
           <MenuSuperior data={categorias} handlers={{ onChange: this.seleccionEnMenuSuperior }}></MenuSuperior>
+          {this.subCategoriasCarta().length === 0 &&
+            <div className="full botonCentrado separadorTop">
+              <Typography variant="h4" color="textSecondary">{"No se encontraron items"}</Typography>
+            </div>}
           <ListaItems data={carta} subData={this.subCategoriasCarta()} handlers={{ onChange: this.seleccionItemCarta }}></ListaItems>
         </div>
         <MenuInferior menuButtons={menuButtons} ></MenuInferior>

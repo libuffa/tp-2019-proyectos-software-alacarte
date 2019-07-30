@@ -9,6 +9,7 @@ import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal
 import DialogVolver from '../../components/Dialog/DialogVolver';
 import DialogConfirmacion from '../../components/Dialog/DialogConfirmacion';
 import InputEmpleado from '../../components/inputEmpleado/InputEmpleado';
+import ImageDialog from '../../components/imageDialog/ImageDialog';
 
 export default class DetalleItemCartaAdmin extends Component {
   constructor(props) {
@@ -36,6 +37,8 @@ export default class DetalleItemCartaAdmin extends Component {
       disabled: false,
       nuevaSubCategoria: false,
       rutaImagen: "",
+      image: "",
+      openImage: false,
     }
     this.verCarta = this.verCarta.bind(this)
   }
@@ -310,8 +313,22 @@ export default class DetalleItemCartaAdmin extends Component {
     });
   }
 
+  openImage = (imagen) => {
+    this.setState({
+      image: imagen,
+      openImage: true,
+    })
+  }
+
+  closeImage = () => {
+    this.setState({
+      image: "",
+      openImage: false,
+    })
+  }
+
   render() {
-    const { rutaImagen, imagenes, nuevaSubCategoria, categorias, subCategorias, idItemCarta, titulo, disabled, modificado, itemCarta, open, mensaje, variant, mensajeDialog, tituloDialog, precioUnitario, descripcion, categoria, subCategoria } = this.state;
+    const { openImage, image, rutaImagen, imagenes, nuevaSubCategoria, categorias, subCategorias, idItemCarta, titulo, disabled, modificado, itemCarta, open, mensaje, variant, mensajeDialog, tituloDialog, precioUnitario, descripcion, categoria, subCategoria } = this.state;
 
     if (!itemCarta && idItemCarta) {
       return (
@@ -331,7 +348,7 @@ export default class DetalleItemCartaAdmin extends Component {
             <Grid container spacing={0}>
               <Grid item xs={10} >
                 <Typography variant="h4">
-                  {itemCarta ? itemCarta.titulo : "Nuevo Plato"}
+                  {itemCarta ? itemCarta.titulo : "Nuevo Item"}
                 </Typography>
               </Grid>
               <Grid item xs={2} className="botonEliminarContainer">
@@ -342,7 +359,7 @@ export default class DetalleItemCartaAdmin extends Component {
               </Grid>
               <Grid item xs={12} >
                 <Typography variant="h5" color="textSecondary">
-                  {itemCarta ? itemCarta.subCategoria : "Alta"}
+                  {itemCarta ? itemCarta.subCategoria : "Alta de item"}
                 </Typography>
               </Grid>
               <Grid item xs={12}>
@@ -376,6 +393,22 @@ export default class DetalleItemCartaAdmin extends Component {
                   disabled={disabled}
                   handlers={{ onChange: this.modificarAtributo }}
                   maxLength={30}
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <div className="full flexCenter">
+                  <Typography variant="h5" color="textSecondary">$</Typography>
+                </div>
+              </Grid>
+              <Grid item xs={11}>
+                <InputEmpleado
+                  previo={precioUnitario}
+                  atributo={"precioUnitario"}
+                  label={"Precio"}
+                  disabled={disabled}
+                  handlers={{ onChange: this.modificarAtributo }}
+                  maxLength={10}
+                  type={"number"}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -448,17 +481,6 @@ export default class DetalleItemCartaAdmin extends Component {
                     </Button>
                   </div>
                 </Grid> : ""}
-              <Grid item xs={12}>
-                <InputEmpleado
-                  previo={precioUnitario}
-                  atributo={"precioUnitario"}
-                  label={"Precio"}
-                  disabled={disabled}
-                  handlers={{ onChange: this.modificarAtributo }}
-                  maxLength={10}
-                  type={"number"}
-                />
-              </Grid>
               <Grid item xs={8}>
                 <div className="full flexCenter contenedorInput">
                   <input type="file" onChange={this.cargarRuta} className="fullWidth" />
@@ -482,6 +504,7 @@ export default class DetalleItemCartaAdmin extends Component {
                         key={Math.random()}
                         avatar={<Avatar><img src={imagen} alt={""} /></Avatar>}
                         label="Foto"
+                        onClick={() => this.openImage(imagen)}
                         onDelete={() => this.removeImage(imagen)}
                         className="marginChips"
                         disabled={disabled}
@@ -525,6 +548,7 @@ export default class DetalleItemCartaAdmin extends Component {
             handlers={{ onChange: this.deshabilitar, open: this.openConfirmationDeshabilitar }}
             open={this.state.openConfirmationDeshabilitar}
           />
+          {(image !== "") && <ImageDialog abrir={openImage} imagen={image} cerrar={{ onChange: this.closeImage }} />}
           <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
         </div>
       )
