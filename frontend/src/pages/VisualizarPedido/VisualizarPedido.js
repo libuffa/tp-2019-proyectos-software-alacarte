@@ -159,6 +159,23 @@ export default class VisualizarPedido extends Component {
     }
   }
 
+  llamarMozo = () => {
+    ServiceLocator.SesionService.llamarMozo()
+      .then(respuesta => {
+        if (respuesta) {
+          if (respuesta.error) {
+            this.generarMensaje(respuesta.error, "error")
+            this.cargarPedidos()
+          } else {
+            this.cargarPedidos()
+          }
+        } else {
+          this.generarMensaje("Error en el servidor", "error")
+          this.cargarPedidos()
+        }
+      })
+  }
+
   open = () => {
     this.setState({
       open: !this.state.open
@@ -240,6 +257,8 @@ export default class VisualizarPedido extends Component {
             handlers={{ onChange: this.eliminar }}
             handlersDetalleItemPedido={{ onChange: this.verDetalleItemPedido }}
             disabled={sesion.pideCuenta || sesion.fechaBaja}
+            llamarMozo={{ onChange: this.llamarMozo }}
+            mozoLLamado={sesion.llamarMozo}
           />
           {pedidos.length > 0 &&
             <Card elevation={0}>
@@ -258,8 +277,8 @@ export default class VisualizarPedido extends Component {
                     currency: 'USD'
                   }).format(this.getPrecioTotal())}
                 </Typography>
-                <br/>
-                <br/>
+                <br />
+                <br />
               </CardContent>
             </Card>
           }

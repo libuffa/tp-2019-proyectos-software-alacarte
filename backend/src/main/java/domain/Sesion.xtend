@@ -51,6 +51,9 @@ class Sesion {
 	Boolean ganoPremio = false
 	
 	@Column
+	Boolean llamarMozo = false
+	
+	@Column
 	@JsonIgnore LocalDateTime fechaAlta
 
 	@Column
@@ -58,6 +61,11 @@ class Sesion {
 
 	new() {
 		fechaAlta = LocalDateTime.now
+	}
+	
+	def solicitarMozo() {
+		this.llamarMozo = !this.llamarMozo
+		SesionRepository.instance.update(this)
 	}
 
 	def pedirItem(ItemCarta itemCarta, Integer cantidad, String comentarios, Boolean premio) {

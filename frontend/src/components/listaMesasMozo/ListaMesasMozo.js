@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Restaurant from '@material-ui/icons/Restaurant';
 import MoneyIcon from '@material-ui/icons/AttachMoney';
 import LocalBar from '@material-ui/icons/LocalBar';
+import PanTool from "@material-ui/icons/PanTool";
 import { ListItem, ListItemAvatar, ListItemText, List, ListSubheader, Typography, ListItemSecondaryAction, IconButton, Avatar } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -29,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ListaMesasMozo(props) {
-  const { mesas, handlers, entregarPedido } = props;
+  const { mesas, handlers, verItemPedido, limpiarLLamadoMozo } = props;
   const classes = useStyles();
 
   return (
@@ -58,13 +59,18 @@ export default function ListaMesasMozo(props) {
                   </IconButton> : "" : ""
                 }
                 {mesa.sesion ? mesa.sesion.pedidos.some((pedido) => pedido.estado === "Creado" && pedido.itemCarta.categoria === "Bebida" && !pedido.cancelado) ?
-                  <IconButton edge="end" onClick={() => entregarPedido.onChange(mesa.sesion.pedidos.filter((pedido) => pedido.estado === "Creado" && pedido.itemCarta.categoria === "Bebida")[0].id)}>
+                  <IconButton edge="end" onClick={() => verItemPedido.onChange(mesa.sesion.pedidos.filter((pedido) => pedido.estado === "Creado" && pedido.itemCarta.categoria === "Bebida")[0])}>
                     <LocalBar color="error" fontSize="large" />
                   </IconButton> : "" : ""
                 }
                 {mesa.sesion ? mesa.sesion.pedidos.some((pedido) => pedido.estado === "Finalizado" && !pedido.cancelado) ?
-                  <IconButton edge="end" onClick={() => entregarPedido.onChange(mesa.sesion.pedidos.filter((pedido) => pedido.estado === "Finalizado")[0].id)}>
+                  <IconButton edge="end" onClick={() => verItemPedido.onChange(mesa.sesion.pedidos.filter((pedido) => pedido.estado === "Finalizado")[0])}>
                     <Restaurant color="error" fontSize="large" />
+                  </IconButton> : "" : ""
+                }
+                {mesa.sesion ? mesa.sesion.llamarMozo ?
+                  <IconButton edge="end" onClick={() => limpiarLLamadoMozo.onChange(mesa.sesion.id)}>
+                    <PanTool color="error" fontSize="large" />
                   </IconButton> : "" : ""
                 }
               </ListItemSecondaryAction>

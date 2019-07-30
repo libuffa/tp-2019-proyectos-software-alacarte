@@ -66,6 +66,10 @@ export class EmpleadoService {
   }
 
   limpiarNotificaciones() {
+    return client.post(`/empleado/${ControllerDeEmpleado.getSesionActiva()}/limpiar/notificaciones`).then(res => { return res.data })
+  }
+
+  limpiarNuevasNotificaciones() {
     return client.post(`/empleado/${ControllerDeEmpleado.getSesionActiva()}/notificaciones`).then(res => { return res.data })
   }
 }

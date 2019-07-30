@@ -179,9 +179,14 @@ class App extends Component {
                     this.cargarOpcionesMenu()
                   }
                 }
-                if (respuesta.notificaciones) {
+                if (respuesta.nuevasNotificaciones) {
                   this.generarMensajeMozo("Nuevas notificaciones en las mesas", "info")
-                  ServiceLocator.EmpleadoService.limpiarNotificaciones()
+                  ServiceLocator.EmpleadoService.limpiarNuevasNotificaciones()
+                }
+                if (respuesta.notificaciones !== this.state.empleado.notificaciones) {
+                  this.setState({
+                    empleado: respuesta,
+                  })
                 }
               } else {
                 this.generarMensaje("Usuario no logueado", "error")
@@ -253,6 +258,7 @@ class App extends Component {
 
   cerrarSesionEmpleado = () => {
     ControllerDeEmpleado.cerrarSesionActiva()
+    ControllerDeSesion.cerrarSesionActiva()
     this.setState({
       sesion: null,
       sesionActiva: null,

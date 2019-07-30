@@ -78,7 +78,7 @@ class SesionController {
 			sesion.pedirItem(itemCarta, cantidad, comentario, false)
 			if(itemCarta.categoria.equals(Categoria.Bebida)) {
 				try {
-					EmpleadoRepository.instance.searchById(sesion.idMozo).cambiarEstadoNotificaciones()
+					EmpleadoRepository.instance.searchById(sesion.idMozo).cambiarEstadoNuevasNotificaciones()
 				} catch(Exception excep) {
 					return ok("El plato se agrego correctamente")
 				}
@@ -126,7 +126,7 @@ class SesionController {
 			sesion.pedirItem(itemCarta, 1, comentario, true)
 			if(itemCarta.categoria.equals(Categoria.Bebida)) {
 				try {
-					EmpleadoRepository.instance.searchById(sesion.idMozo).cambiarEstadoNotificaciones()
+					EmpleadoRepository.instance.searchById(sesion.idMozo).cambiarEstadoNuevasNotificaciones()
 				} catch(Exception excep) {
 					return ok("Premio agregado correctamente")
 				}
@@ -199,7 +199,7 @@ class SesionController {
 			repositorioSesion.update(sesion)
 			if (pedido.itemCarta.categoria.equals(Categoria.Bebida)) {
 				try {
-					EmpleadoRepository.instance.searchById(sesion.idMozo).cambiarEstadoNotificaciones()
+					EmpleadoRepository.instance.searchById(sesion.idMozo).cambiarEstadoNuevasNotificaciones()
 				} catch(Exception excep) {
 					return ok("Pedido modificado")
 				}
@@ -232,7 +232,6 @@ class SesionController {
 	@Get("/sesion")
 	def Result sesiones() {
 		try {
-//			val sesionesActivas = sesiones.filter[sesion | sesion.sesionActiva ].toList
 			val sesiones = repositorioSesion.allInstances
 			return ok(sesiones.toJson)
 		} catch(Exception e) {
@@ -275,10 +274,10 @@ class SesionController {
 			val pedidos = sesionesActivas.map[pedidosActivos].toList
 			val todosLosPedidos = new ArrayList
 			pedidos.forEach[listaPedidos | listaPedidos.forEach[pedido | todosLosPedidos.add(pedido)]]
-			val pedidosCocina = todosLosPedidos.filter[ pedido | !pedido.estado.equals(Estado.Finalizado) && !pedido.estado.equals(Estado.Entregado) && pedido.itemCarta.noEsBebida ].toList
+			val pedidosCocina = todosLosPedidos.filter[ pedido | !pedido.estado.equals(Estado.Entregado) && pedido.itemCarta.noEsBebida ].toList
 			return ok(pedidosCocina.toJson)
 		} catch(Exception e) {
-			badRequest(e.message)
+			return ok('{"error" : "Error en el servidor"}')
 		}
 	}
 	
@@ -349,10 +348,72 @@ class SesionController {
 	def Result cambiarEstado() {
 		try {
 			val idPedido = new Long(id)
-			repositorioSesion.searchSesionByPedido(idPedido).cambiarEstado(idPedido)
-			return ok('{"status" : "True"}')
+			var Sesion sesion
+			try {
+				sesion = repositorioSesion.searchSesionByPedido(idPedido)
+			} catch(Exception ex) {
+				return ok('{ "error" : "Sesión no encontrada" }')
+			}
+			if(sesion.fechaBaja !== null) {
+				return ok('{"error" : "Sesión inactiva"}')
+			}
+			sesion.cambiarEstado(idPedido)
+			if(sesion.getPedido(idPedido).estado.equals(Estado.Finalizado)) {
+				try {
+					EmpleadoRepository.instance.searchById(sesion.idMozo).cambiarEstadoNuevasNotificaciones()
+				} catch(Exception excep) {
+					return ok("Pedido actualizado")
+				}
+			}
+			return ok("Pedido actualizado")
 		} catch (Exception e) {
-			return badRequest(e.message)
+			return ok('{ "error" : "Error en el servidor" }')
+		}
+	}
+	
+	@Post("/sesion/:id/llamarMozo")
+	def Result llamarAlMozo() {
+		try {
+			val idSesion = Long.valueOf(id)
+			var Sesion sesion
+			try {
+				sesion = repositorioSesion.searchById(idSesion)
+			} catch(Exception ex) {
+				return ok('{ "error" : "Sesión no encontrada" }')
+			}
+			if(sesion.fechaBaja !== null) {
+				return ok('{"error" : "Sesión inactiva"}')
+			}
+			sesion.solicitarMozo()
+			try {
+				EmpleadoRepository.instance.searchById(sesion.idMozo).cambiarEstadoNuevasNotificaciones()
+			} catch(Exception excep) {
+				return ok("Mozo solicitado")
+			}
+			return ok("Mozo solicitado")
+		} catch (Exception e) {
+			return ok('{ "error" : "Error en el servidor" }')
+		}
+	}
+	
+	
+	@Post("/sesion/:id/limpiar/llamadoMozo")
+	def Result limpiarLlamadoMozo() {
+		try {
+			val idSesion = Long.valueOf(id)
+			var Sesion sesion
+			try {
+				sesion = repositorioSesion.searchById(idSesion)
+			} catch(Exception ex) {
+				return ok('{ "error" : "Sesión no encontrada" }')
+			}
+			if(sesion.fechaBaja !== null) {
+				return ok('{"error" : "Sesión inactiva"}')
+			}
+			sesion.solicitarMozo()
+			return ok("Notificacion limpiada")
+		} catch (Exception e) {
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 }

@@ -1,7 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from "@material-ui/icons/Delete";
-import { ListItem, IconButton, Typography, ListItemAvatar, Avatar, ListItemText, List, ListItemSecondaryAction, ListSubheader } from '@material-ui/core';
+import PanTool from "@material-ui/icons/PanTool";
+import { ListItem, IconButton, Typography, ListItemAvatar, Avatar, ListItemText, List, ListItemSecondaryAction } from '@material-ui/core';
 import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 
 const useStyles = makeStyles(theme => ({
@@ -20,11 +21,15 @@ const useStyles = makeStyles(theme => ({
   estado: {
     padding: theme.spacing(0, 2),
   },
+  listItemTitulo: {
+    marginTop: '4px',
+    marginBottom: '4px',
+  }
 }));
 
 export default function ListaItemsPedido(props) {
   const classes = useStyles();
-  const { pedidos, disabled, handlers, handlersDetalleItemPedido } = props
+  const { pedidos, disabled, handlers, handlersDetalleItemPedido, llamarMozo, mozoLLamado } = props
 
   function validarBajaPedido(pedido) {
     return (((pedido.estado !== "Creado") && (ControllerDeEmpleado.getSesionActiva() === null)) || disabled)
@@ -34,9 +39,16 @@ export default function ListaItemsPedido(props) {
     <div className={classes.root}>
       <List className={classes.lista}>
         <div className="dividerLista" />
-        <ListSubheader disableSticky color="inherit" key={-1}>
+        <ListItem color="inherit" key={-1} className={classes.listItemTitulo}>
           <ListItemText primary="Tu Pedido" />
-        </ListSubheader>
+          {!ControllerDeEmpleado.getSesionActiva() &&
+            <ListItemSecondaryAction>
+              <IconButton disabled={mozoLLamado} color="primary" edge="end" aria-label="Comments" onClick={() => llamarMozo.onChange()}>
+                <PanTool />
+              </IconButton>
+            </ListItemSecondaryAction>
+          }
+        </ListItem>
         <div className="dividerLista" />
         {pedidos ? pedidos.map((pedido) => {
           if (pedido.itemCarta.categoria === "Bebida") {
@@ -68,7 +80,7 @@ export default function ListaItemsPedido(props) {
             return (<div></div>)
           }
         }) : <div></div>}
-        <div className="dividerLista" />
+        {pedidos.some(pedido => pedido.itemCarta.categoria === "Bebida") && pedidos.some(pedido => pedido.itemCarta.categoria !== "Bebida") ? <div className="dividerLista" /> : ""}
         {pedidos ? pedidos.map((pedido) => {
           if (pedido.itemCarta.categoria !== "Bebida") {
             return (

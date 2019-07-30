@@ -16,15 +16,11 @@ export default class MesaService {
   }
 
   crearMesa(data) {
-    return client.post('/mesas/crear', data, { timeout: 10000 })
-      .then(res => { return res.data })
-      .catch(error => { return { error } })
+    return client.post('/mesas/crear', data).then(res => { return res.data })
   }
 
   eliminarMesa(data) {
-    return client.post('/mesas/eliminar', data, { timeout: 10000 })
-      .then(res => { return res.data })
-      .catch(error => { return { error } })
+    return client.post('/mesas/eliminar', data).then(res => { return res.data })
   }
-  
+
 }

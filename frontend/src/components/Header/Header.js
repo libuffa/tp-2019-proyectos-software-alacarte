@@ -5,17 +5,13 @@ import { withRouter } from 'react-router';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Sidenav } from '../Sidenav/Sidenav';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import Notifications from '@material-ui/icons/Notifications';
 import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
 import { ControllerDeSesion } from '../../controller/ControllerDeSesion';
 
 function Header(props) {
   const [open, setOpen] = React.useState(false);
   const { location, history, empleado, opcionesMenu } = props;
-
-  let pageName = location.pathname.replace(/\//g, ' ').toLowerCase();
-  pageName = pageName.replace(/[0-9]/g, '').toLowerCase();
-  if (pageName.length > 0)
-    pageName = pageName[0].toUpperCase() + pageName.substr(1);
 
   function handleClickOpen() {
     setOpen(true);
@@ -33,6 +29,10 @@ function Header(props) {
     }
   }
 
+  function irAMesas() {
+    history.push('/mesas');
+  }
+
   return (
     <div>
       <AppBar elevation={0} position="static">
@@ -48,13 +48,20 @@ function Header(props) {
             </IconButton>)
           }
           <Typography className="title" variant="h6">
-            À la carte {/*" - " + pageName*/}
+            À la carte
           </Typography>
           {
             !ControllerDeEmpleado.getSesionActiva() &&
             !ControllerDeSesion.getSesionActiva() &&
             <IconButton edge="end" color="inherit" onClick={() => irALogin()}>
               <AccountCircle />
+            </IconButton>
+          }
+          {
+            empleado &&
+            empleado.tipoEmpleado === "Mozo" &&
+            <IconButton edge="end" color={empleado.notificaciones ? "secondary" : "inherit"} onClick={() => irAMesas()}>
+              <Notifications />
             </IconButton>
           }
         </Toolbar>

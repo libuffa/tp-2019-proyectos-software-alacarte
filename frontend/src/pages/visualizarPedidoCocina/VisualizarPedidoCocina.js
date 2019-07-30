@@ -4,6 +4,7 @@ import ListaItemsCocina from '../../components/listaItemsCocina/ListaItemsCocina
 import MenuInferior from '../../components/menuInferior/MenuInferior';
 import Menu from '@material-ui/icons/Menu';
 import { CircularProgress } from '@material-ui/core';
+import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal';
 
 export default class VisualizarPedidoCocina extends Component {
   constructor(props) {
@@ -11,6 +12,8 @@ export default class VisualizarPedidoCocina extends Component {
     this.state = {
       pedidos: null,
       timer: setInterval(() => { this.cargarPedidos(); }, 4000),
+      mensaje: "",
+      variant: "",
     }
   }
 
@@ -24,24 +27,36 @@ export default class VisualizarPedidoCocina extends Component {
 
   cargarPedidos() {
     ServiceLocator.SesionService.getPedidosCocina()
-      .then((pedidos) => {
-        this.setState({
-          pedidos,
-        })
+      .then((respuesta) => {
+        if (respuesta) {
+          if (respuesta.error) {
+            this.generarMensaje(respuesta.error, "error")
+          } else {
+            this.setState({
+              pedidos: respuesta,
+            })
+          }
+        } else {
+          this.generarMensaje("Error en el servidor", "error")
+        }
       })
   }
 
   cambiarEstadoPedido(idPedido) {
-    try {
-      ServiceLocator.SesionService.cambiarEstadoPedido(idPedido)
-        .then((respuesta) => {
-          if (respuesta.status === "True") {
+    ServiceLocator.SesionService.cambiarEstadoPedido(idPedido)
+      .then((respuesta) => {
+        if (respuesta) {
+          if (respuesta.error) {
+            this.generarMensaje(respuesta.error, "error")
+            this.cargarPedidos()
+          } else {
             this.cargarPedidos()
           }
-        })
-    } catch (error) {
-      this.generarError(error.response.data)
-    }
+        } else {
+          this.generarMensaje("Error en el servidor", "error")
+          this.cargarPedidos()
+        }
+      })
   }
 
   actualizarEstadoPedido = (idPedido) => {
@@ -59,18 +74,25 @@ export default class VisualizarPedidoCocina extends Component {
     this.props.history.push('/menu/empleado')
   }
 
-  snackbarOpen() {
-    return this.state.errorMessage
+  generarMensaje(mensaje, variant) {
+    this.setState({
+      mensaje,
+      variant,
+    })
   }
 
-  generarError(errorMessage) {
+  snackbarOpen() {
+    return this.state.mensaje !== ""
+  }
+
+  snackbarClose = () => {
     this.setState({
-      errorMessage: errorMessage
+      mensaje: ""
     })
   }
 
   render() {
-    const { pedidos } = this.state
+    const { pedidos, mensaje, variant } = this.state
 
     const menuButtons = {
       firstButton: {
@@ -91,6 +113,7 @@ export default class VisualizarPedidoCocina extends Component {
       <div className="contenedorLista">
         <ListaItemsCocina pedidos={pedidos} handlers={{ onChange: this.actualizarEstadoPedido }} handlersDetalleItem={{ onChange: this.verDetalleItemPedido }} />
         <MenuInferior menuButtons={menuButtons} />
+        <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
       </div>
     )
   }

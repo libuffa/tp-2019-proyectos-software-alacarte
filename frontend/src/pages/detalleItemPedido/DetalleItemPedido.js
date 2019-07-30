@@ -29,6 +29,8 @@ export default class DetalleItemPedido extends Component {
         pathname: '/detalle/mesa',
         state: { mesa: this.state.idMesa }
       })
+    } else if (this.state.estado) {
+      this.props.history.push('/mesas')
     } else {
       this.props.history.push('/pedido')
     }

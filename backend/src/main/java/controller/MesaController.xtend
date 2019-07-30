@@ -26,11 +26,11 @@ class MesaController {
 	@Get("/mesas")
 	def Result getMesas() {
 		try {
-			val mesas = repoMesas.allInstances()
-			val mesasRepo = mesas.filter(mesa | !mesa.baja).toList
-			return ok(mesasRepo.toJson)
+			val mesasRepo = repoMesas.allInstances()
+			val mesas = mesasRepo.filter(mesa | !mesa.baja).toList
+			return ok(mesas.toJson)
 		} catch (Exception e) {
-			return ok("Error en el servidor")
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 

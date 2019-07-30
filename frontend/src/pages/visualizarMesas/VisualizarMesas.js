@@ -4,6 +4,7 @@ import ListaMesasMozo from '../../components/listaMesasMozo/ListaMesasMozo';
 import MenuInferior from '../../components/menuInferior/MenuInferior.js';
 import Menu from '@material-ui/icons/Menu';
 import { CircularProgress } from '@material-ui/core';
+import SnackBarPersonal from '../../components/snackBarPersonal/SnackBarPersonal';
 
 export default class VisualizarMesas extends Component {
 
@@ -12,11 +13,14 @@ export default class VisualizarMesas extends Component {
     this.state = {
       timer: window.setInterval(() => { this.cargarMesas(); }, 4000),
       mesas: null,
+      mensaje: "",
+      variant: "",
     };
   }
 
   componentDidMount() {
     this.cargarMesas()
+    ServiceLocator.EmpleadoService.limpiarNotificaciones()
   }
 
   componentWillUnmount() {
@@ -25,10 +29,54 @@ export default class VisualizarMesas extends Component {
 
   cargarMesas() {
     ServiceLocator.mesaService.getMesas()
-      .then((respuesta) => {
-        this.setState({
-          mesas: respuesta,
-        })
+      .then(respuesta => {
+        if (respuesta) {
+          if (respuesta.error) {
+            this.generarMensaje(respuesta.error, "error")
+          } else {
+            this.setState({
+              mesas: respuesta,
+            })
+          }
+        } else {
+          this.generarMensaje("Error en el servidor", "error")
+        }
+      })
+  }
+
+  entregarPedido = (idPedido) => {
+    ServiceLocator.SesionService.cambiarEstadoPedido(idPedido)
+      .then(respuesta => {
+        if (respuesta) {
+          if (respuesta.error) {
+            this.generarMensaje(respuesta.error, "error")
+            this.cargarMesas()
+          } else {
+            this.cargarMesas()
+            ServiceLocator.EmpleadoService.limpiarNotificaciones()
+          }
+        } else {
+          this.generarMensaje("Error en el servidor", "error")
+          this.cargarMesas()
+        }
+      })
+  }
+
+  limpiarLLamadoMozo = (idSesion) => {
+    ServiceLocator.SesionService.limpiarLlamadoMozo(idSesion)
+      .then(respuesta => {
+        if (respuesta) {
+          if (respuesta.error) {
+            this.generarMensaje(respuesta.error, "error")
+            this.cargarMesas()
+          } else {
+            this.cargarMesas()
+            ServiceLocator.EmpleadoService.limpiarNotificaciones()
+          }
+        } else {
+          this.generarMensaje("Error en el servidor", "error")
+          this.cargarMesas()
+        }
       })
   }
 
@@ -43,21 +91,33 @@ export default class VisualizarMesas extends Component {
     })
   }
 
-  entregarPedido = (idPedido) => {
-    try {
-      ServiceLocator.SesionService.cambiarEstadoPedido(idPedido)
-        .then((respuesta) => {
-          if (respuesta.status === "True") {
-            this.cargarMesas()
-          }
-        })
-    } catch (error) {
-      console.log(error)
-    }
+  verItemPedido = (pedido) => {
+    this.entregarPedido(pedido.id)
+    this.props.history.push({
+      pathname: '/detalle/item/pedido',
+      state: { pedido: pedido, estado: true }
+    })
+  }
+
+  generarMensaje(mensaje, variant) {
+    this.setState({
+      mensaje,
+      variant,
+    })
+  }
+
+  snackbarOpen() {
+    return this.state.mensaje !== ""
+  }
+
+  snackbarClose = () => {
+    this.setState({
+      mensaje: ""
+    })
   }
 
   render() {
-    const { mesas } = this.state;
+    const { mesas, mensaje, variant } = this.state;
 
     const menuButtons = {
       firstButton: {
@@ -73,13 +133,15 @@ export default class VisualizarMesas extends Component {
           <CircularProgress size={80} />
         </div>
       )
+    } else {
+      return (
+        <div className="contenedorLista">
+          <ListaMesasMozo mesas={mesas} limpiarLLamadoMozo={{ onChange: this.limpiarLLamadoMozo }} verItemPedido={{ onChange: this.verItemPedido }} handlers={{ onChange: this.verDetalleMesa }} />
+          <MenuInferior menuButtons={menuButtons} />
+          <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
+        </div>
+      )
     }
-    return (
-      <div className="contenedorLista">
-        <ListaMesasMozo mesas={mesas} handlers={{ onChange: this.verDetalleMesa }} entregarPedido={{ onChange: this.entregarPedido }} />
-        <MenuInferior menuButtons={menuButtons} />
-      </div>
-    )
   }
 }
 

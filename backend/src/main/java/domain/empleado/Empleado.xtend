@@ -49,9 +49,28 @@ class Empleado {
 	@Column
 	Boolean notificaciones = false
 	
-	def cambiarEstadoNotificaciones() {
+	@Column
+	Boolean nuevasNotificaciones = false
+	
+	def agregarNotificacion() {
 		if(this.tipoEmpleado === TipoEmpleado.valueOf("Mozo")) {
-			this.notificaciones = !this.notificaciones
+			this.notificaciones = true
+		}
+	}
+	
+	def limpiarNotificaciones() {
+		if(this.tipoEmpleado === TipoEmpleado.valueOf("Mozo")) {
+			this.notificaciones = false
+			EmpleadoRepository.instance.update(this)
+		}
+	}
+	
+	def cambiarEstadoNuevasNotificaciones() {
+		if(this.tipoEmpleado === TipoEmpleado.valueOf("Mozo")) {
+			if(!this.nuevasNotificaciones) {
+				this.agregarNotificacion()
+			}
+			this.nuevasNotificaciones = !this.nuevasNotificaciones
 			EmpleadoRepository.instance.update(this)
 		}
 	}

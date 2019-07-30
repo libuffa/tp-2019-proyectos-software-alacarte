@@ -323,7 +323,7 @@ class EmpleadoController {
 			if (TipoEmpleado.valueOf("Mozo") !== empleado.tipoEmpleado) {
 				return ok('{ "error" : "Usuario incorrecto" }')
 			}
-			empleado.cambiarEstadoNotificaciones()
+			empleado.cambiarEstadoNuevasNotificaciones()
 			return ok("Exito")
 		} catch (Exception e) {
 			return ok('{ "error" : "Error en el servidor" }')
@@ -331,4 +331,26 @@ class EmpleadoController {
 	}
 	
 	
+	@Post("/empleado/:id/limpiar/notificaciones")
+	def Result limpiarNotificaciones() {
+		try {
+			var Empleado empleado
+			val idEmpleado = Long.valueOf(id)
+			try {
+				empleado = repoEmpleados.searchById(idEmpleado)
+			} catch(Exception ex) {
+				return ok('{ "error" : "Usuario inexistente" }')
+			}
+			if (empleado.baja) {
+				return ok('{ "error" : "Usuario inexistente" }')
+			}
+			if (TipoEmpleado.valueOf("Mozo") !== empleado.tipoEmpleado) {
+				return ok('{ "error" : "Usuario incorrecto" }')
+			}
+			empleado.limpiarNotificaciones()
+			return ok("Exito")
+		} catch (Exception e) {
+			return ok('{ "error" : "Error en el servidor" }')
+		}
+	}
 }

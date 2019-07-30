@@ -82,6 +82,7 @@ export default class DetalleMesa extends Component {
   }
 
   verItemPedido = (pedido) => {
+    ControllerDeSesion.cerrarSesionActiva()
     this.entregarPedido(pedido.id)
     this.props.history.push({
       pathname: '/detalle/item/pedido',
@@ -90,6 +91,7 @@ export default class DetalleMesa extends Component {
   }
 
   verMesas() {
+    ControllerDeSesion.cerrarSesionActiva()
     this.state.admin ?
       this.props.history.push('/mesas/admin') :
       this.props.history.push('/mesas')
@@ -166,16 +168,20 @@ export default class DetalleMesa extends Component {
   }
 
   entregarPedido = (idPedido) => {
-    try {
-      ServiceLocator.SesionService.cambiarEstadoPedido(idPedido)
-        .then((respuesta) => {
-          if (respuesta.status === "True") {
+    ServiceLocator.SesionService.cambiarEstadoPedido(idPedido)
+      .then((respuesta) => {
+        if (respuesta) {
+          if (respuesta.error) {
+            this.generarMensaje(respuesta.error, "error")
+            this.cargarMesa()
+          } else {
             this.cargarMesa()
           }
-        })
-    } catch (error) {
-      console.log(error)
-    }
+        } else {
+          this.generarMensaje("Error en el servidor", "error")
+          this.cargarMesa()
+        }
+      })
   }
 
   openDelete = () => {

@@ -74,7 +74,7 @@ export default class DetalleItemPedidoCocina extends Component {
   }
 
   render() {
-    const { itemCarta, cantidad, comentario, mensaje, variant } = this.state;
+    const { itemCarta, cantidad, comentario, mensaje, variant, pedido } = this.state;
 
     if (!itemCarta) {
       return (
@@ -82,31 +82,34 @@ export default class DetalleItemPedidoCocina extends Component {
           <CircularProgress size={80} />
         </div>
       )
+    } else {
+      return (
+        <div>
+          <PasadorDeImagenes
+            imagenes={itemCarta.imagenes}
+          />
+          <CuerpoItemCocina
+            itemCarta={itemCarta}
+            cantidad={cantidad}
+            comentario={comentario}
+          />
+          <Botones
+            text1="volver"
+            text2="eliminar"
+            handlersVolver={{ onChange: this.verPedidoCocina }}
+            handlersAgregarAPedido={{ onChange: this.eliminarPedido }}
+            disabled={pedido.estado === "Finalizado"}
+            eliminar={true}
+          />
+          <DialogConfirmacion
+            titulo={"Aviso"}
+            descripcion={"¿Esta seguro que desea eliminar el pedido?"}
+            handlers={{ onChange: this.eliminarPedido, open: this.openDelete }}
+            open={this.state.openDelete}
+          />
+          <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
+        </div>
+      )
     }
-    return <div>
-      <PasadorDeImagenes
-        imagenes={itemCarta.imagenes}
-      />
-      <CuerpoItemCocina
-        itemCarta={itemCarta}
-        cantidad={cantidad}
-        comentario={comentario}
-      />
-      <Botones
-        text1="volver"
-        text2="eliminar"
-        handlersVolver={{ onChange: this.verPedidoCocina }}
-        handlersAgregarAPedido={{ onChange: this.eliminarPedido }}
-        disabled={false}
-        eliminar={true}
-      />
-      <DialogConfirmacion
-        titulo={"Aviso"}
-        descripcion={"¿Esta seguro que desea eliminar el pedido?"}
-        handlers={{ onChange: this.eliminarPedido, open: this.openDelete }}
-        open={this.state.openDelete}
-      />
-      <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />
-    </div>
   }
 }

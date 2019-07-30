@@ -74,4 +74,12 @@ export class SesionService {
   ganarPremio() {
     return client.post(`/sesion/${ControllerDeSesion.getSesionActiva()}/jugar/ganar`).then(res => { return res.data })
   }
+
+  llamarMozo() {
+    return client.post(`/sesion/${ControllerDeSesion.getSesionActiva()}/llamarMozo`).then(res => { return res.data })
+  }
+
+  limpiarLlamadoMozo(id) {
+    return client.post(`/sesion/${id}/limpiar/llamadoMozo`).then(res => { return res.data })
+  }
 }

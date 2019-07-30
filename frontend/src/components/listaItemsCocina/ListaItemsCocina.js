@@ -38,26 +38,56 @@ export default function ListaItemsCocina(props) {
           </ListSubheader>
           <div className="dividerLista" />
           {pedidos.map((pedido) => {
-            return (
-              <ListItem key={pedido.id} button onClick={() => handlersDetalleItem.onChange(pedido)}>
-                <ListItemText
-                  primary={pedido.comentarios === "" ?
-                    pedido.itemCarta.titulo :
-                    <div>{pedido.itemCarta.titulo + " "}
-                      <Error color="error" fontSize="small" />
-                    </div>}
-                  secondary={"Cantidad: " + pedido.cantidad}
-                />
-                <ListItemText secondary={
-                  <Typography color="textSecondary" align="right" className={classes.estado}>{pedido.estado.replace('_', ' ')}</Typography>
-                } />
-                <ListItemSecondaryAction>
-                  <IconButton edge="end" aria-label="Comments" onClick={() => handlers.onChange(pedido.id)}>
-                    <PlayCircleFilled color="primary" fontSize="large" />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            );
+            if (pedido.estado !== "Finalizado") {
+              return (
+                <ListItem key={pedido.id} button onClick={() => handlersDetalleItem.onChange(pedido)}>
+                  <ListItemText
+                    primary={pedido.comentarios === "" ?
+                      pedido.itemCarta.titulo :
+                      <div>{pedido.itemCarta.titulo + " "}
+                        <Error color="error" fontSize="small" />
+                      </div>}
+                    secondary={"Cantidad: " + pedido.cantidad}
+                  />
+                  <ListItemText secondary={
+                    <Typography color="textSecondary" align="right" className={classes.estado}>{pedido.estado.replace('_', ' ')}</Typography>
+                  } />
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="Comments" onClick={() => handlers.onChange(pedido.id)}>
+                      <PlayCircleFilled color="primary" fontSize="large" />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              )
+            } else {
+              return (
+                <div></div>
+              )
+            }
+          })}
+          {(pedidos.some(pedido => pedido.estado === "Finalizado")) && (pedidos.some(pedido => pedido.estado !== "Finalizado")) ? <div className="dividerLista" /> : ""}
+          {pedidos.map((pedido) => {
+            if (pedido.estado === "Finalizado") {
+              return (
+                <ListItem key={pedido.id} button onClick={() => handlersDetalleItem.onChange(pedido)}>
+                  <ListItemText
+                    primary={pedido.comentarios === "" ?
+                      pedido.itemCarta.titulo :
+                      <div>{pedido.itemCarta.titulo + " "}
+                        <Error color="error" fontSize="small" />
+                      </div>}
+                    secondary={"Cantidad: " + pedido.cantidad}
+                  />
+                  <ListItemText secondary={
+                    <Typography color="textSecondary" align="right" className={classes.estado}>{pedido.estado.replace('_', ' ')}</Typography>
+                  } />
+                </ListItem>
+              )
+            } else {
+              return (
+                <div></div>
+              )
+            }
           })}
         </List>
       </div>
