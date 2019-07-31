@@ -23,8 +23,14 @@ export default class DetalleItemPedido extends Component {
     }
   }
 
+  componentDidMount() {
+    if (this.state.estado) {
+      this.generarMensaje("Pedido entregado", "success")
+    }
+  }
+
   verPedido = () => {
-    if(this.state.idMesa) {
+    if (this.state.idMesa) {
       this.props.history.push({
         pathname: '/detalle/mesa',
         state: { mesa: this.state.idMesa }

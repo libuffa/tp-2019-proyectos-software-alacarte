@@ -1,5 +1,7 @@
 package controller
 
+import domain.Estado
+import domain.Pedido
 import domain.empleado.Empleado
 import domain.empleado.TipoEmpleado
 import java.util.ArrayList
@@ -13,6 +15,7 @@ import org.uqbar.xtrest.api.annotation.Post
 import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.json.JSONUtils
 import repository.EmpleadoRepository
+import repository.ItemCartaRepository
 import repository.MesaRepository
 import repository.SesionRepository
 
@@ -92,32 +95,42 @@ class EmpleadoController {
 	@Get("/empleado/:id/menu")
 	def Result getMenuEmpleado() {
 		try {
-			val _id = Long.valueOf(id)
-			val empleado = repoEmpleados.searchById(_id)
-			if (empleado === null || empleado.baja) {
-				return badRequest("Usuario incorrecto")
+			val idEmpleado = Long.valueOf(id)
+			var Empleado empleado
+			try {
+				empleado = repoEmpleados.searchById(idEmpleado)
+			} catch(Exception ex) {
+				return ok('{ "error" : "Usuario inexistente" }')
+			}
+			if (empleado.baja) {
+				return ok('{ "error" : "Usuario inexistente" }')
 			}
 			val tipoEmpleado = empleado.tipoEmpleado
 			var List<String> opciones = new ArrayList
 			switch tipoEmpleado {
 				case TipoEmpleado.Mozo: opciones = #["carta", "mesas"]
 				case TipoEmpleado.Cocinero: opciones = #["carta", "pedidos"]
-				default: opciones = #["carta", "administrar_mesas", "empleados"]
+				default: opciones = #["carta", "administrar_mesas", "empleados", "reportes"]
 			}
 			return ok(opciones.toJson)
 		} catch (Exception e) {
-			badRequest(e.message)
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 
 	@Get("/empleados")
 	def Result getEmpleados() {
 		try {
-			val empleados = repoEmpleados.allInstances()
+			var List<Empleado> empleados
+			try {
+				empleados = repoEmpleados.allInstances()
+			} catch(Exception ex) {
+				return ok('{ "error" : "Error en el servidor" }')
+			}
 			val empleadosActivos = empleados.filter[empleado|!empleado.baja].toList
 			return ok(empleadosActivos.toJson)
 		} catch (Exception e) {
-			badRequest(e.message)
+			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}
 
@@ -350,6 +363,34 @@ class EmpleadoController {
 			empleado.limpiarNotificaciones()
 			return ok("Exito")
 		} catch (Exception e) {
+			return ok('{ "error" : "Error en el servidor" }')
+		}
+	}
+	
+	@Get("/empleado/reporte/mozos")
+	def Result reporteMejoresMozos() {
+		try {
+			val sesiones = repoSesiones.allInstances().filter(sesion | sesion.pedidos.filter(pedido | pedido.estado.equals(Estado.Entregado)).size() > 0).toList
+			val empleados = repoEmpleados.allInstances().filter(empleado | empleado.tipoEmpleado.equals(TipoEmpleado.Mozo)).toList
+			val mesasAtendidasPor = sesiones.map(sesion | sesion.idMozo)
+			mesasAtendidasPor.forEach(mesa | empleados.filter(empleado | empleado.id === mesa).get(0).mesasAtendidas = empleados.filter(empleado | empleado.id === mesa).get(0).mesasAtendidas + 1 )
+			return ok(empleados.toJson)
+		} catch(Exception e) {
+			return ok('{ "error" : "Error en el servidor" }')
+		}
+	}
+	
+	@Get("/empleado/reporte/platos")
+	def Result reporteMejoresPlatos() {
+		try {
+			val sesiones = repoSesiones.allInstances().filter(sesion | sesion.pedidos.filter(pedido | pedido.estado.equals(Estado.Entregado)).size() > 0).toList
+			val items = ItemCartaRepository.instance.allInstances().toList
+			val pedidosSesion = sesiones.map(sesion | sesion.pedidos).toList
+			val List<Pedido> pedidos = new ArrayList()
+			pedidosSesion.forEach(pedido | pedidos.addAll(pedido.map(ped | ped).toList))
+			pedidos.filter(pedido | pedido.estado.equals(Estado.Entregado)).forEach(pedido | items.filter(item | item.id === pedido.itemCarta.id).get(0).vecesComprado = items.filter(item | item.id === pedido.itemCarta.id).get(0).vecesComprado + pedido.cantidad)
+			return ok(items.toJson)
+		} catch(Exception e) {
 			return ok('{ "error" : "Error en el servidor" }')
 		}
 	}

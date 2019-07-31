@@ -24,14 +24,14 @@ class ItemCarta {
 	@Column(length=50)
 	String titulo
 
-	@Column(length=100)
+	@Column(length=250)
 	String descripcion
 
 	@Enumerated(EnumType.STRING)
-	@Column(length=20)
+	@Column(length=30)
 	Categoria categoria
 	
-	@Column
+	@Column(length=30)
 	String subCategoria
 	
 	@Column
@@ -45,6 +45,8 @@ class ItemCarta {
 	
 	@Column
 	Boolean baja = false
+	
+	transient Integer vecesComprado = 0
 
 	@ElementCollection(fetch=FetchType.EAGER)
 	List<String> imagenes = new ArrayList<String>();
@@ -56,6 +58,11 @@ class ItemCarta {
 	
 	def cambiarEstado(){
 		habilitado = !habilitado
+		ItemCartaRepository.instance.update(this)
+	}
+	
+	def cambiarPremio(){
+		this.esPremio = !this.esPremio
 		ItemCartaRepository.instance.update(this)
 	}
 	

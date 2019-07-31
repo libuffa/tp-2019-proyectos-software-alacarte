@@ -18,6 +18,7 @@ export default class DetalleItemCartaAdmin extends Component {
       open: false,
       openConfirmation: false,
       openConfirmationDelete: false,
+      openConfirmationPremio: false,
       openConfirmationDeshabilitar: false,
       mensaje: "",
       mensajeDialog: "",
@@ -215,6 +216,31 @@ export default class DetalleItemCartaAdmin extends Component {
     }
   }
 
+  cambioPremio = () => {
+    if (!this.state.openConfirmationPremio) {
+      this.openConfirmationPremio()
+    } else {
+      this.cambiarPremio()
+      this.openConfirmationPremio()
+    }
+  }
+
+  cambiarPremio = () => {
+    ServiceLocator.ItemsCartaService.cambiarPremio(this.state.idItemCarta)
+      .then(respuesta => {
+        if (respuesta) {
+          if (respuesta.error) {
+            this.generarMensaje(respuesta.error, "error")
+          } else {
+            this.generarMensaje(respuesta, "success")
+            this.cargarItemCarta()
+          }
+        } else {
+          this.generarMensaje("Error en el servidor", "error")
+        }
+      })
+  }
+
   cargarRuta = event => {
     var path = event.target.value.slice(12)
     path = "/imagenes/" + path
@@ -250,6 +276,12 @@ export default class DetalleItemCartaAdmin extends Component {
     })
   }
 
+  openConfirmationPremio = () => {
+    this.setState({
+      openConfirmationPremio: !this.state.openConfirmationPremio
+    })
+  }
+
   openConfirmationDeshabilitar = () => {
     this.setState({
       openConfirmationDeshabilitar: !this.state.openConfirmationDeshabilitar
@@ -268,10 +300,12 @@ export default class DetalleItemCartaAdmin extends Component {
   }
 
   modificarTextField = name => event => {
-    this.setState({
-      [name]: event.target.value,
-      modificado: true,
-    });
+    if (event.target.value.length <= 250) {
+      this.setState({
+        [name]: event.target.value,
+        modificado: true,
+      });
+    }
   };
 
   generarMensaje(mensaje, variant) {
@@ -341,7 +375,7 @@ export default class DetalleItemCartaAdmin extends Component {
         <div>
           <div className="dividerLista" />
           <ListSubheader disableSticky color="inherit">
-            <ListItemText primary={"ItemCarta"} />
+            <ListItemText primary={"Item de carta"} />
           </ListSubheader>
           <div className="dividerLista" />
           <Paper elevation={0} square className="detalleEmpleado">
@@ -375,6 +409,18 @@ export default class DetalleItemCartaAdmin extends Component {
                   <Switch size="small" checked={itemCarta.habilitado} onChange={() => { this.deshabilitar() }} disabled={disabled} />}
               </Grid>
               <Grid item xs={12}>
+                {itemCarta && <div className="divider" />}
+              </Grid>
+              <Grid item xs={10} >
+                {itemCarta && <Typography variant="h6" color="textSecondary">
+                  {"Premio"}
+                </Typography>}
+              </Grid>
+              <Grid item xs={2} className="botonEliminarContainer">
+                {itemCarta &&
+                  <Switch size="small" checked={itemCarta.esPremio} onChange={() => { this.cambioPremio() }} disabled={disabled} />}
+              </Grid>
+              <Grid item xs={12}>
                 <div className="divider" />
               </Grid>
               <Grid item xs={12} >
@@ -392,7 +438,7 @@ export default class DetalleItemCartaAdmin extends Component {
                   label={"Titulo"}
                   disabled={disabled}
                   handlers={{ onChange: this.modificarAtributo }}
-                  maxLength={30}
+                  maxLength={50}
                 />
               </Grid>
               <Grid item xs={1}>
@@ -547,6 +593,12 @@ export default class DetalleItemCartaAdmin extends Component {
             descripcion={"¿Seguro que quiere deshabilitar el plato?"}
             handlers={{ onChange: this.deshabilitar, open: this.openConfirmationDeshabilitar }}
             open={this.state.openConfirmationDeshabilitar}
+          />
+          <DialogConfirmacion
+            titulo={"Atención"}
+            descripcion={"¿Seguro que quiere seleccionar el premio? Se desactivará cualquier otro premio"}
+            handlers={{ onChange: this.cambioPremio, open: this.openConfirmationPremio }}
+            open={this.state.openConfirmationPremio}
           />
           {(image !== "") && <ImageDialog abrir={openImage} imagen={image} cerrar={{ onChange: this.closeImage }} />}
           <SnackBarPersonal mensajeError={mensaje} abrir={this.snackbarOpen()} cerrar={{ onChange: this.snackbarClose }} variant={variant} />

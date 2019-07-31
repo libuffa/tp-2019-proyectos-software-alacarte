@@ -24,6 +24,9 @@ const useStyles = makeStyles(theme => ({
   listItemTitulo: {
     marginTop: '4px',
     marginBottom: '4px',
+  },
+  premio: {
+    backgroundColor: '#d4c22691',
   }
 }));
 
@@ -53,7 +56,7 @@ export default function ListaItemsPedido(props) {
         {pedidos ? pedidos.map((pedido) => {
           if (pedido.itemCarta.categoria === "Bebida") {
             return (
-              <ListItem key={pedido.id} button disabled={disabled} onClick={() => handlersDetalleItemPedido.onChange(pedido)}>
+              <ListItem className={pedido.premio ? classes.premio : ""} key={pedido.id} button disabled={disabled} onClick={() => handlersDetalleItemPedido.onChange(pedido)}>
                 <ListItemAvatar>
                   <Avatar
                     src={pedido.itemCarta.imagenes[0] ? pedido.itemCarta.imagenes[0] : "/imagenes/default.jpg"}
@@ -77,14 +80,14 @@ export default function ListaItemsPedido(props) {
               </ListItem>
             )
           } else {
-            return (<div></div>)
+            return (<div key={pedido.id}></div>)
           }
         }) : <div></div>}
         {pedidos.some(pedido => pedido.itemCarta.categoria === "Bebida") && pedidos.some(pedido => pedido.itemCarta.categoria !== "Bebida") ? <div className="dividerLista" /> : ""}
         {pedidos ? pedidos.map((pedido) => {
           if (pedido.itemCarta.categoria !== "Bebida") {
             return (
-              <ListItem key={pedido.id} button disabled={disabled} onClick={() => handlersDetalleItemPedido.onChange(pedido)}>
+              <ListItem className={pedido.premio ? classes.premio : ""} key={pedido.id} button disabled={disabled} onClick={() => handlersDetalleItemPedido.onChange(pedido)}>
                 <ListItemAvatar>
                   <Avatar
                     src={pedido.itemCarta.imagenes[0] ? pedido.itemCarta.imagenes[0] : "/imagenes/default.jpg"}
@@ -108,7 +111,7 @@ export default function ListaItemsPedido(props) {
               </ListItem>
             )
           } else {
-            return (<div></div>)
+            return (<div key={pedido.id}></div>)
           }
         }) : <div></div>}
       </List>

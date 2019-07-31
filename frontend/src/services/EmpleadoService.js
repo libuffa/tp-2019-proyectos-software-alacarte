@@ -72,4 +72,12 @@ export class EmpleadoService {
   limpiarNuevasNotificaciones() {
     return client.post(`/empleado/${ControllerDeEmpleado.getSesionActiva()}/notificaciones`).then(res => { return res.data })
   }
+
+  getReporteMozos() {
+    return client.get(`/empleado/reporte/mozos`).then(res => { return res.data })
+  }
+
+  getReportePlatos() {
+    return client.get(`/empleado/reporte/platos`).then(res => { return res.data })
+  }
 }

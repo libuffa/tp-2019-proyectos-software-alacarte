@@ -6,6 +6,7 @@ import PedidoIcon from '@material-ui/icons/RestaurantMenu';
 import MesaIcon from '@material-ui/icons/Layers';
 import Lock from '@material-ui/icons/Lock';
 import Person from '@material-ui/icons/Person';
+import Assessment from '@material-ui/icons/Assessment';
 import PowerSettingsNew from '@material-ui/icons/PowerSettingsNew';
 import '../estilos.scss'
 import { ControllerDeEmpleado } from '../../controller/ControllerDeEmpleado';
@@ -57,6 +58,12 @@ export function Sidenav(props) {
             onClick: '/empleados',
             description: 'Empleados',
             icon: (<PersonIcon fontSize="large" color="primary" />)
+          }
+        case 'reportes':
+          return {
+            onClick: '/reportes',
+            description: 'Reportes',
+            icon: (<Assessment fontSize="large" color="primary" />)
           }
         default:
           return {

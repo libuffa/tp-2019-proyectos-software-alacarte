@@ -35,7 +35,7 @@ class Minijuego extends Component {
     this.state = {
       combinaciones: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
       combinacion: 0,
-      clave: [6, 2, 3, 5],
+      clave: [this.generarNumeroRandom(), this.generarNumeroRandom(), this.generarNumeroRandom(), this.generarNumeroRandom()],
       openConfirmation: false,
       juegaPorPremio: false,
       snackBarMensaje: "",
@@ -63,6 +63,10 @@ class Minijuego extends Component {
           }
         }
       })
+  }
+
+  generarNumeroRandom = () => {
+    return Math.floor(Math.random() * (6 - 1 + 1)) + 1;
   }
 
   generarMensaje(mensaje) {
@@ -181,6 +185,7 @@ class Minijuego extends Component {
 
   render() {
     const { combinaciones, combinacion, snackBarMensaje, open, mensajeDialog, tituloDialog, clave, openInfo } = this.state;
+    console.log(clave)
 
     return (
       <div>

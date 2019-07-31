@@ -30,4 +30,12 @@ export class ItemsCartaService {
   bajaItemCarta(id) {
     return client.post(`/carta/${id}/eliminarPlato`).then(res => { return res.data })
   }
+
+  cambiarPremio(id) {
+    return client.post(`/carta/${id}/cambiarPremio`).then(res => { return res.data })
+  }
+
+  getPremio() {
+    return client.get(`/carta/premio`).then(res => { return res.data })
+  }
 }

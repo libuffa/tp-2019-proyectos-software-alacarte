@@ -31,6 +31,7 @@ import RecuperarContraseña from './pages/RecuperarContraseña/RecuperarContrase
 import SnackBarPersonal from './components/snackBarPersonal/SnackBarPersonal';
 import DetalleItemCartaAdmin from './pages/detalleItemCartaAdmin/DetalleItemCartaAdmin';
 import SnackBarPersonalMozo from './components/snackBarPersonal/SnackBarPersonalMozo';
+import Reportes from './pages/reportes/Reportes';
 
 function RouterPrincipal(props) {
   const { empleado, opcionesMenu } = props
@@ -58,6 +59,7 @@ function RouterPrincipal(props) {
           {(empleado.tipoEmpleado === "Mozo" || empleado.tipoEmpleado === "Administrador") && <Route path="/mostrar/qr" exact component={MostrarQR} />}
           {empleado.tipoEmpleado === "Administrador" && <Route path="/empleados" exact component={Empleados} />}
           <Route path="/cambiar/contraseña" exact component={CambiarContraseña} />
+          {empleado.tipoEmpleado === "Administrador" && <Route path="/reportes" exact component={Reportes} />}
           <Route component={RedirectPrincipal} />
         </Switch>
       </div>

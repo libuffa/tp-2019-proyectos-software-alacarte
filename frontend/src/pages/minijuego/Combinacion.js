@@ -72,21 +72,38 @@ class Combinacion extends Component {
 
   validar = () => {
     const { clave, posicion1, posicion2, posicion3, posicion0 } = this.state;
-    var resultado = { bien: 0, regular: 0, repetidos: [] };
+    var resultado = { bien: 0, regular: 0, repetidos: [], posicionesRepetidas: [] };
     var posiciones = [posicion0, posicion1, posicion2, posicion3];
-    var posicionesRepetidas = [];
 
     this.buscarDuplicados(clave).forEach((repe) => {
       resultado.repetidos.push({ repetido: repe, veces: clave.filter((posicion) => posicion === repe).length, encontrado: 0 })
     })
+
     this.buscarDuplicados(posiciones).forEach((repe) => {
-      posicionesRepetidas.push({ repetido: repe, veces: posiciones.filter((posicion) => posicion === repe).length, encontrado: 0 })
+      resultado.posicionesRepetidas.push({ repetido: repe, veces: posiciones.filter((posicion) => posicion === repe).length, encontrado: 0 })
     })
 
-    resultado = this.validarPosicion(clave, 0, posicion0, resultado, posicionesRepetidas);
-    resultado = this.validarPosicion(clave, 1, posicion1, resultado, posicionesRepetidas);
-    resultado = this.validarPosicion(clave, 2, posicion2, resultado, posicionesRepetidas);
-    resultado = this.validarPosicion(clave, 3, posicion3, resultado, posicionesRepetidas);
+    resultado.posicionesRepetidas.forEach((repe) => {
+      if (clave.includes(repe.repetido)) {
+        if (resultado.repetidos.map(rep => rep.repetido).includes(repe.repetido)) {
+          resultado.repetidos.forEach(rep => {
+            if (rep.repetido === repe.repetido) {
+              repe.veces = rep.veces
+            }
+          })
+        } else {
+          repe.veces = 1
+        }
+      } else {
+        repe.repetido = 0
+        repe.veces = 0
+      }
+    })
+
+    resultado = this.validarPosicion(clave, 0, posicion0, resultado);
+    resultado = this.validarPosicion(clave, 1, posicion1, resultado);
+    resultado = this.validarPosicion(clave, 2, posicion2, resultado);
+    resultado = this.validarPosicion(clave, 3, posicion3, resultado);
 
     this.setState({
       bien: resultado.bien,
@@ -101,7 +118,7 @@ class Combinacion extends Component {
     }
   }
 
-  validarPosicion(clave, posicion, valorPosicion, resultado, posicionesRepetidas) {
+  validarPosicion(clave, posicion, valorPosicion, resultado) {
     if (clave[posicion] === valorPosicion) {
       resultado.bien++
       resultado.repetidos.forEach(repe => {
@@ -113,9 +130,9 @@ class Combinacion extends Component {
           }
         }
       })
-      posicionesRepetidas.forEach(repe => {
+      resultado.posicionesRepetidas.forEach(repe => {
         if (repe.repetido === valorPosicion) {
-          if (repe.encontrado < 1) {
+          if (repe.encontrado < repe.veces) {
             repe.encontrado++
           } else {
             resultado.regular--
@@ -124,7 +141,7 @@ class Combinacion extends Component {
       })
     } else if (clave.includes(valorPosicion)) {
       const repetidos = resultado.repetidos.map(repe => repe.repetido)
-      const posRepetidos = posicionesRepetidas.map(repe => repe.repetido)
+      const posRepetidos = resultado.posicionesRepetidas.map(repe => repe.repetido)
       if (repetidos.includes(valorPosicion)) {
         resultado.repetidos.forEach(repe => {
           if (repe.repetido === valorPosicion && repe.encontrado < repe.veces) {
@@ -133,8 +150,8 @@ class Combinacion extends Component {
           }
         })
       } else if (posRepetidos.includes(valorPosicion)) {
-        posicionesRepetidas.forEach(repe => {
-          if (repe.repetido === valorPosicion && repe.encontrado < 1) {
+        resultado.posicionesRepetidas.forEach(repe => {
+          if (repe.repetido === valorPosicion && repe.encontrado < repe.veces) {
             repe.encontrado++
             resultado.regular++
           }
@@ -143,6 +160,7 @@ class Combinacion extends Component {
         resultado.regular++
       }
     }
+    console.log(resultado)
     return resultado
   }
 

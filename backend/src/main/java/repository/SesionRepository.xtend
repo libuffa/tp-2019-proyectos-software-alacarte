@@ -23,21 +23,6 @@ class SesionRepository extends AbstractRepository<Sesion> {
 		}
 	}
 	
-//	override allInstances() {
-//		val entityManager = generateEntityManager
-//		try {
-//			val criteria = entityManager.criteriaBuilder
-//			val query = criteria.createQuery(entityType)
-//			val camposSesion = query.from(entityType)
-//			camposSesion.fetch("pedidos", JoinType.LEFT)
-//			val from = query.from(entityType)
-//			query.select(from)
-//			entityManager.createQuery(query).resultList
-//		} finally {
-//			entityManager?.close
-//		}
-//	}
-	
 	override getEntityType() {
 		Sesion
 	}
@@ -88,4 +73,17 @@ class SesionRepository extends AbstractRepository<Sesion> {
 		sesion
 	}
 	
+	def searchByIdMozo(Long idMozo) {
+		val entityManager = generateEntityManager
+		try {
+			val criteria = entityManager.criteriaBuilder
+			val query = criteria.createQuery(entityType)
+			val camposSesion = query.from(entityType)
+			query.select(camposSesion)
+			query.where(criteria.equal(camposSesion.get("idMozo"), idMozo))
+			entityManager.createQuery(query).singleResult
+		} finally {
+			entityManager?.close
+		}
+	}
 }

@@ -117,6 +117,9 @@ class SesionController {
 			if(!itemCarta.habilitado){
 				return ok(' { "error" : "El plato no se encuentra disponible" } ')
 			}
+			if(!itemCarta.esPremio) {
+				return ok(' { "error" : "Plato incorrecto" } ')
+			}
 			if(sesion.pedidosActivos.size() <= 0) {
 				return ok(' { "error" : "Debe tener un pedido activo" } ')
 			}

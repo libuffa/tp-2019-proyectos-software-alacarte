@@ -47,6 +47,9 @@ export default class MenuEmpleado extends Component {
       case 'empleados':
         ruta = 'empleados'
         break
+      case 'reportes':
+        ruta = 'reportes'
+        break
       default:
         ruta = 'carta'
         break
@@ -63,22 +66,24 @@ export default class MenuEmpleado extends Component {
           <CircularProgress size={80} />
         </div>
       )
+    } else {
+      return (
+        <div className="fullContainer">
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+          >
+            {opciones.map((opcion) => {
+              return (
+                <BotonMenu key={opcion} texto={opcion} handlers={{ onChange: this.irA }} />
+              )
+            })}
+          </Grid>
+          <br />
+        </div>
+      )
     }
-    return (
-      <div className="fullContainer">
-        <Grid
-          container
-          direction="column"
-          justify="center"
-          alignItems="center"
-        >
-          {opciones.map((opcion) => {
-            return (
-              <BotonMenu key={opcion} texto={opcion} handlers={{ onChange: this.irA }} />
-            )
-          })}
-        </Grid>
-      </div>
-    )
   }
 }

@@ -61,7 +61,7 @@ export default function ListaItemsCocina(props) {
               )
             } else {
               return (
-                <div></div>
+                <div key={pedido.id}></div>
               )
             }
           })}
@@ -85,7 +85,7 @@ export default function ListaItemsCocina(props) {
               )
             } else {
               return (
-                <div></div>
+                <div key={pedido.id}></div>
               )
             }
           })}

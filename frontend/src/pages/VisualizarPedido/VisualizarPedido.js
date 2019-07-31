@@ -19,6 +19,7 @@ export default class VisualizarPedido extends Component {
     super(props)
     this.state = {
       timer: setInterval(() => { this.cargarPedidos(); }, 10000),
+      idPremio: null,
       sesion: null,
       pedidos: [],
       open: false,
@@ -34,6 +35,7 @@ export default class VisualizarPedido extends Component {
 
   componentDidMount() {
     this.cargarPedidos()
+    this.cargarPremio()
   }
 
   componentWillUnmount() {
@@ -58,6 +60,23 @@ export default class VisualizarPedido extends Component {
       })
   }
 
+  cargarPremio() {
+    ServiceLocator.ItemsCartaService.getPremio()
+      .then((respuesta) => {
+        if (respuesta) {
+          if (respuesta.error) {
+            this.generarMensaje(respuesta.error, "error")
+          } else {
+            this.setState({
+              idPremio: respuesta.id,
+            })
+          }
+        } else {
+          this.generarMensaje("Error en el servidor", "error")
+        }
+      })
+  }
+
   verCarta = () => {
     this.props.history.push('/carta')
   }
@@ -65,7 +84,7 @@ export default class VisualizarPedido extends Component {
   verPremio = () => {
     this.props.history.push({
       pathname: '/detalle/item/carta',
-      state: { idItem: 13, premio: true }
+      state: { idItem: this.state.idPremio, premio: true }
     })
   }
 

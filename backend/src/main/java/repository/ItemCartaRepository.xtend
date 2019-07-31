@@ -69,4 +69,17 @@ class ItemCartaRepository extends AbstractRepository<ItemCarta> {
 		}
 	}
 
+	def searchByPremio() {
+		val entityManager = generateEntityManager
+		try {
+			val criteria = entityManager.criteriaBuilder
+			val query = criteria.createQuery(entityType)
+			val camposItemCarta = query.from(entityType)
+			query.select(camposItemCarta)
+			query.where(criteria.equal(camposItemCarta.get("esPremio"), 1))
+			entityManager.createQuery(query).singleResult
+		} finally {
+			entityManager?.close
+		}
+	}
 }

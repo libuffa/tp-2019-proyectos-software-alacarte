@@ -52,6 +52,8 @@ class Empleado {
 	@Column
 	Boolean nuevasNotificaciones = false
 	
+	transient Integer mesasAtendidas = 0
+	
 	def agregarNotificacion() {
 		if(this.tipoEmpleado === TipoEmpleado.valueOf("Mozo")) {
 			this.notificaciones = true

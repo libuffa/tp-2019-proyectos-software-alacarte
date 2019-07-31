@@ -182,4 +182,50 @@ class CartaController {
 		}
 	}
 	
+	@Post("/carta/:id/cambiarPremio")
+	def Result cambiarPremio() {
+		try {
+			var ItemCarta itemCarta
+			var ItemCarta premio = null
+			val itemsCarta = carta.allInstances()
+			try {
+				itemCarta = carta.searchById(new Long(id))
+			} catch(Exception ex) {
+				return ok('{ "error" : "Plato no encontrado" }')
+			}
+			if(itemsCarta.filter(item | item.esPremio).size() > 0){
+				premio = itemsCarta.filter(item | item.esPremio).get(0)
+			}
+			if(premio !== null){
+				if(premio.id !== itemCarta.id) {
+					premio.cambiarPremio()
+				} else {
+					return ok('{ "error" : "No puede quedar sin premio" }')
+				}
+			}
+			itemCarta.cambiarPremio()
+			return ok("Premio seleccionado")
+		} catch(Exception e) {
+			return ok('{ "error" : "Error en el servidor" }')
+		}
+	}
+	
+	@Get("/carta/premio")
+	def Result getPremio() {
+		try {
+			var ItemCarta premio = null
+			val itemsCarta = carta.allInstances()
+			if(itemsCarta.filter(item | item.esPremio).size() > 0){
+				premio = itemsCarta.filter(item | item.esPremio).get(0)
+			} else {
+				return ok('{ "id" : "13" }')
+			}
+			if(premio !== null){
+				return ok(premio.toJson)
+			}
+			return ok('{ "id" : "13" }')
+		} catch(Exception e) {
+			return ok('{ "error" : "Error en el servidor" }')
+		}
+	}
 }

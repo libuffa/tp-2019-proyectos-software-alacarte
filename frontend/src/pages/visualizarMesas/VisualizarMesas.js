@@ -20,7 +20,7 @@ export default class VisualizarMesas extends Component {
 
   componentDidMount() {
     this.cargarMesas()
-    ServiceLocator.EmpleadoService.limpiarNotificaciones()
+    ServiceLocator.EmpleadoService.limpiarNotificaciones().then()
   }
 
   componentWillUnmount() {
@@ -44,8 +44,8 @@ export default class VisualizarMesas extends Component {
       })
   }
 
-  entregarPedido = (idPedido) => {
-    ServiceLocator.SesionService.cambiarEstadoPedido(idPedido)
+  entregarPedido = (pedido) => {
+    ServiceLocator.SesionService.cambiarEstadoPedido(pedido.id)
       .then(respuesta => {
         if (respuesta) {
           if (respuesta.error) {
@@ -54,6 +54,22 @@ export default class VisualizarMesas extends Component {
           } else {
             this.cargarMesas()
             ServiceLocator.EmpleadoService.limpiarNotificaciones()
+              .then(respuesta => {
+                if (respuesta) {
+                  if (respuesta.error) {
+                    this.generarMensaje(respuesta.error, "error")
+                    this.cargarMesas()
+                  } else {
+                    this.props.history.push({
+                      pathname: '/detalle/item/pedido',
+                      state: { pedido: pedido, estado: true }
+                    })
+                  }
+                } else {
+                  this.generarMensaje("Error en el servidor", "error")
+                  this.cargarMesas()
+                }
+              })
           }
         } else {
           this.generarMensaje("Error en el servidor", "error")
@@ -92,11 +108,7 @@ export default class VisualizarMesas extends Component {
   }
 
   verItemPedido = (pedido) => {
-    this.entregarPedido(pedido.id)
-    this.props.history.push({
-      pathname: '/detalle/item/pedido',
-      state: { pedido: pedido, estado: true }
-    })
+    this.entregarPedido(pedido)
   }
 
   generarMensaje(mensaje, variant) {

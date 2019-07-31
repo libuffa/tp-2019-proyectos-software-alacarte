@@ -119,7 +119,7 @@ class ALaCarteBootstrap {
 			titulo = "Rabas a la provenzal"
 			descripcion = "rabas a la provenzal con limon"
 			categoria = Categoria.Entrada
-			subCategoria = "Para Compartir"
+			subCategoria = "Para compartir"
 			precioUnitario = 600.doubleValue
 			imagenes = #["/imagenes/rabas.jpg", "/imagenes/rabas.jpg", "/imagenes/rabas.jpg"]
 		]
@@ -127,7 +127,7 @@ class ALaCarteBootstrap {
 			titulo = "Papas fritas a la provenzal"
 			descripcion = "Papas fritas a la provenzal con limon"
 			categoria = Categoria.Entrada
-			subCategoria = "Para Compartir"
+			subCategoria = "Para compartir"
 			precioUnitario = 200.doubleValue
 			imagenes = #["/imagenes/papasFritas.jpg", "/imagenes/papasFritas.jpg", "/imagenes/papasFritas.jpg"]
 		]
