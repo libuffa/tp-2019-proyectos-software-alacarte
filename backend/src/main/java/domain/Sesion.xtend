@@ -104,6 +104,7 @@ class Sesion {
 
 	def bajaPedido(Long idPedido) {
 		val pedido = pedidos.findFirst[pedido|pedido.id.equals(idPedido)]
+		pedido.estado = Estado.Cancelado
 		pedido.cancelado = true
 		SesionRepository.instance.update(this)
 	}

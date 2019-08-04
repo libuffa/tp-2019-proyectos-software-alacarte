@@ -22,8 +22,9 @@ export default function InputEmpleado(props) {
 
   function handleChange(event) {
     if (type === "number") {
+      const num = event.target.value.slice(-1)[0]
       if (event.target.value.length <= maxLength) {
-        if (event.target.value >= 0) {
+        if ((["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(num) && event.target.value >= 0) || event.target.value === "") {
           setValue(event.target.value);
           handlers.onChange(atributo, event.target.value)
         }

@@ -13,6 +13,7 @@ import repository.EmpleadoRepository
 import repository.MesaRepository
 import repository.SesionRepository
 import domain.empleado.TipoEmpleado
+import domain.empleado.Empleado
 
 @Controller
 @Accessors
@@ -126,5 +127,36 @@ class MesaController {
 		}
 	}
 	
-	
+	@Post("/mesas/editar")
+	def Result editarMesa(@Body String body) {
+		try {
+			val idEmpleadoBody = Long.valueOf(body.getPropertyValue("idEmpleado"))
+			val idMesa = Long.valueOf(body.getPropertyValue("idMesa"))
+			val numeroMesa = Integer.valueOf(body.getPropertyValue("numero"))
+			var Mesa mesa
+			var Empleado empleado
+			try {
+				empleado = repoEmpleados.searchById(idEmpleadoBody)
+			} catch(Exception exce){
+				return ok('{ "error" : "Empleado no encontrado" }')
+			}
+			if (empleado === null || empleado.baja || empleado.tipoEmpleado !== TipoEmpleado.Administrador) {
+				return ok('{ "error" : "Empleado no autorizado" }')
+			}
+			try(
+				mesa = repoMesas.searchById(idMesa)
+			) catch(Exception ex) {
+				return ok('{ "error" : "Mesa inexistente" }')
+			}
+			val mesas = repoMesas.allInstances()
+			if(mesas.filter(mesita | mesita.numero === numeroMesa).size() !== 0){
+				return ok('{ "error" : "Numero ya utilizado" }')
+			}
+			mesa.numero = numeroMesa
+			repoMesas.update(mesa)
+			return ok('{ "ok" : "Mesa modificada correctamente" }')
+		} catch (Exception e) {
+			return ok('{ "error" : "Error en el servidor" }')
+		}
+	}
 }

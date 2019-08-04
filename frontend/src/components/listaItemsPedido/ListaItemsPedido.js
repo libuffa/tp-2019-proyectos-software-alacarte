@@ -35,7 +35,7 @@ export default function ListaItemsPedido(props) {
   const { pedidos, disabled, handlers, handlersDetalleItemPedido, llamarMozo, mozoLLamado } = props
 
   function validarBajaPedido(pedido) {
-    return (((pedido.estado !== "Creado") && (ControllerDeEmpleado.getSesionActiva() === null)) || disabled)
+    return (((pedido.estado !== "Creado") && (ControllerDeEmpleado.getSesionActiva() === null)) || disabled || pedido.cancelado)
   }
 
   return (

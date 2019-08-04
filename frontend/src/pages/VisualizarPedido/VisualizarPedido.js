@@ -50,7 +50,7 @@ export default class VisualizarPedido extends Component {
             this.generarMensaje(respuesta.error, "error")
           } else {
             this.setState({
-              pedidos: respuesta.pedidos.filter((pedido) => !pedido.cancelado),
+              pedidos: respuesta.pedidos,
               sesion: respuesta,
             })
           }
@@ -105,8 +105,8 @@ export default class VisualizarPedido extends Component {
 
   getPrecioTotal() {
     const { pedidos } = this.state
-    if (pedidos.length > 0) {
-      return pedidos.map((pedido) => (!pedido.premio && (pedido.cantidad * pedido.itemCarta.precioUnitario)))
+    if (pedidos.length > 0 && pedidos.some(pedido => pedido.estado !== "Cancelado")) {
+      return pedidos.filter(pedido => pedido.estado !== "Cancelado").map((pedido) => (!pedido.premio && (pedido.cantidad * pedido.itemCarta.precioUnitario)))
         .reduce((a, b) => a + b)
     } else {
       return 0

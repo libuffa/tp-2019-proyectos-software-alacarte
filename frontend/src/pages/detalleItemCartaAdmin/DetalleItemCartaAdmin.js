@@ -584,13 +584,13 @@ export default class DetalleItemCartaAdmin extends Component {
           />
           <DialogConfirmacion
             titulo={"Atención"}
-            descripcion={"¿Seguro que quiere eliminar el plato?"}
+            descripcion={"¿Seguro que quiere eliminar el item?"}
             handlers={{ onChange: this.eliminarItemCarta, open: this.openConfirmationDelete }}
             open={this.state.openConfirmationDelete}
           />
           <DialogConfirmacion
             titulo={"Atención"}
-            descripcion={"¿Seguro que quiere deshabilitar el plato?"}
+            descripcion={"¿Seguro que quiere deshabilitar el item?"}
             handlers={{ onChange: this.deshabilitar, open: this.openConfirmationDeshabilitar }}
             open={this.state.openConfirmationDeshabilitar}
           />

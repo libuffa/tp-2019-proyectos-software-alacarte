@@ -54,7 +54,6 @@ export default class DetalleItemPedido extends Component {
         if (resultado) {
           if (resultado.error) {
             this.generarMensaje(resultado.error, "error")
-            this.props.history.push(`/pedido`)
           } else {
             this.props.history.push(`/pedido`)
           }

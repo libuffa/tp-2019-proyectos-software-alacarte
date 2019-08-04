@@ -360,6 +360,9 @@ class SesionController {
 			if(sesion.fechaBaja !== null) {
 				return ok('{"error" : "Sesión inactiva"}')
 			}
+			if(sesion.getPedido(idPedido).cancelado) {
+				return ok('{ "error" : "Pedido no encontrado" }')
+			}
 			sesion.cambiarEstado(idPedido)
 			if(sesion.getPedido(idPedido).estado.equals(Estado.Finalizado)) {
 				try {

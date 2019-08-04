@@ -23,4 +23,7 @@ export default class MesaService {
     return client.post('/mesas/eliminar', data).then(res => { return res.data })
   }
 
+  editarMesa(data) {
+    return client.post('/mesas/editar', data).then(res => { return res.data })
+  }
 }
